@@ -31,15 +31,20 @@ class DivisaController extends Controller
         return view('admin.divisas.index', compact('divisas'));
     }
 
-    public function getDivisa()
+    public function price_divisa()
     {
-        $divisa = Divisa::latest('price')->take(1)->get(); 
-       
-        if($divisa->count()){
-            $divisa_p = $divisa[0]->price;
-        }else{
-            $divisa_p = 0;
-        } 
+        $divisa = Divisa::latest()->first()->price;      
+
+        if(request()->wantsJson())
+        {
+            if($divisa){
+                $divisa_p = $divisa;
+            }else{
+                $divisa_p = 0;
+            } 
+
+            return $divisa_p;
+        }
 
     }
 

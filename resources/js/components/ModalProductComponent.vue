@@ -1,7 +1,7 @@
 <template>
-   <div class="modal fade" id="modal-category" data-backdrop="static"  tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content  bg-secondary">
+   <div class="modal fade" id="modal-product" data-backdrop="static"  tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-secondary">
                 <div class="modal-header">
                 <h4 class="modal-title" v-text="title"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,7 +9,7 @@
                 </button>
                 </div>
                 <form role="form" method="POST">
-                    <div class="modal-body">
+                    <div v-if="!storeup" class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
@@ -22,7 +22,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Categoría</label>
                                     <div class="col-md-9">
-                                    <select class="form-control" :class="{'is-invalid' : errors}" v-model="category_id">
+                                    <select class="form-control" :class="{'is-invalid' : errors}" v-model="data.category_id">
                                         <option value="0">Seleccione</option>
                                         <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
                                     </select>
@@ -83,11 +83,11 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted" for="text-input">(%) Ganancia</label>
                                                     <div class="col-md-7">
-                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="margin_gain_u">
+                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="data.margin_gain_u">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.margin_gain_u[0]"></span>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="number" class="form-control" v-model="margin_gain_u">
+                                                        <input type="number" class="form-control" v-model="data.margin_gain_u">
 
                                                     </div>
                                                 </div>
@@ -114,11 +114,11 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted" for="text-input">(%) Ganancia</label>
                                                     <div class="col-md-7">
-                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
+                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="data.margin_gain_w">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.margin_gain_w[0]"></span>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="number" class="form-control" v-model="margin_gain_w">
+                                                        <input type="number" class="form-control" v-model="data.margin_gain_w">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -142,11 +142,11 @@
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-four-code" role="tabpanel" aria-labelledby="custom-tabs-four-code-tab">
                                                 <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label text-muted">Código</label>
+                                                    <label class="col-md-3 form-control-label text-muted">Código {{ data.code }}</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="code">
+                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.code[0]"></span>
-                                                        <barcode :value="code" :options="{ format: 'EAN-13'}">
+                                                        <barcode :value="data.code" :options="{ format: 'EAN-13'}">
                                                         </barcode>
                                                     </div>
                                                 </div>
@@ -179,6 +179,9 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else class="tbcustomer">
+                       <show-product :data="data" :divisa="divisa"></show-product>
+                    </div>
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <div v-if="action">
@@ -196,7 +199,9 @@
 
 <script>
 let user = document.head.querySelector('meta[name="user"]');
-
+import VueBarcode from 'vue-barcode';
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 export default {
     props:{
         data: {
@@ -217,10 +222,15 @@ export default {
             type: Boolean,
         }
     },
+    components:{
+        'barcode': VueBarcode,
+        'vueDropzone': vue2Dropzone,
+    },
     data(){
         return {
-            url:"api/categoria",
+            url:"api/producto",
             errors: '',
+            divisa: 0,
             categories: [],
             name:'',
             category_id: 0,
@@ -232,20 +242,24 @@ export default {
             margin_gain_u: 0,
             margin_gain_w: 0,
             dropzoneOptions: {
-            url: '/productos',
-            thumbnailWidth: 150,
-            maxFilesize: 2,
-            headers: { "My-Awesome-Header": "header value" },
-            dictDefaultMessage: 'Arrastra las imagenes para subirlas'
+                url: '/productos',
+                thumbnailWidth: 150,
+                maxFilesize: 2,
+                headers: { "My-Awesome-Header": "header value" },
+                dictDefaultMessage: 'Arrastra las imagenes para subirlas'
             },
         }
+    },
+    mounted(){
+        this.getDivisa();
+        this.getCategories();
     },
     computed:{
         user(){
             return JSON.parse(user.content);
         },
         price_gain_u: function(){
-            var result = (this.cost_price * this.margin_gain_u / 100).toFixed(2);
+            var result = (this.data.cost_price * this.data.margin_gain_u / 100).toFixed(2);
             this.p_gain_u = result;
             return result;
         },
@@ -258,13 +272,13 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.stock > 0 || this.cost_price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.cost_price)) / this.stock).toFixed(2);
+            if(this.data.stock > 0 || this.data.cost_price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.cost_price)) / this.data.stock).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.cost_price * this.margin_gain_w / 100).toFixed(2);
+            var result = (this.data.cost_price * this.data.margin_gain_w / 100).toFixed(2);
             return result;
         },
         wholesale_divisa: function(){
@@ -276,21 +290,39 @@ export default {
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.wholesale_quantity > 0 || this.cost_price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_price)).toFixed(2);
+            if(this.datawholesale_quantity > 0 || this.data.cost_price > 0){
+                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.cost_price)).toFixed(2);
             }
             return result;
         }
     },
     methods:{
+        getDivisa(){
+            var url = "api/divisa/precio";
+            axios.get(url).then(response => {
+                this.divisa = response.data;
+                console.log(this.divisa);
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
+        },
+        getCategories(){
+            var url = "api/categorias/lista";
+            axios.get(url).then(response => {
+                this.categories = response.data;
+                console.log(this.categories)
+            }).catch(error =>{
+                console.log(error.response.data)
+            });
+        },
         actionModal(action){
             if(action == "store"){
-                this.storeCategory();
+                this.storeProduct();
             }else{
-                this.updateCategory();
+                this.updateProduct();
             }
         },
-        storeCategory(){
+        storeProduct(){
             var url = this.url;
             axios.post(url,{
                 'name': this.data.name, 
@@ -298,25 +330,33 @@ export default {
             }).then(response => {
                 console.log(response.data)
                 this.$parent.reloadTable();
-                toastr.success('La categoría fue registrada.');
+                toastr.success('El producto fue registrado.');
             }).catch(error => {
                 console.log(error);
                 var errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
-        updateCategory(){
+        updateProduct(){
             var url = `${this.url}/${this.data.id}`;
-            console.log(url)
             axios.put(url,{
                 'id': this.data.id,
                 'name':this.data.name,
+                'category_id':this.data.category_id,
+                'code':this.data.code,
+                'cost_price':this.data.cost_price,
+                'stock':this.data.stock,
                 'description': this.data.description,
+                'margin_gain_u':this.data.margin_gain_u,
+                'divisa_unit':this.data.divisa_unit,
+                'wholesale_quantity':this.data.wholesale_quantity,
+                'margin_gain_w':this.data.margin_gain_w,
+                'wholesale_divisa':this.data.wholesale_divisa,
             }).then(response => {
-                toastr.info('La categoría fue actualizada.');
                 this.$parent.reloadTable();
+                toastr.info('El producto fue actualizado.');
             }).catch(error => {
-                console.log(error);
+                console.log(error.response.data);
                 var errors = error.response.data.errors;
                 this.errors = errors;
             });

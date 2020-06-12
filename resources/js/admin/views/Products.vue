@@ -54,7 +54,7 @@ Vue.use(DataTable);
 export default {
     components:{
         BtnProductsComponentVue,
-        StatusComponentVue
+        StatusComponentVue,
     },
     data(){
         return{
@@ -89,6 +89,11 @@ export default {
                 {
                     label: 'Nombre',
                     name: 'name',
+                    orderable: true,
+                },
+                {
+                    label: 'Precio',
+                    name: 'cost_price',
                     orderable: true,
                 },
                 {

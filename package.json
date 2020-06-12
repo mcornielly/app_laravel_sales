@@ -29,7 +29,9 @@
     },
     "dependencies": {
         "laravel-vue-datatable": "^0.5.12",
+        "vue-barcode": "^1.2.0",
         "vue-loading-overlay": "^3.3.2",
-        "vue-numerals": "^3.0.8"
+        "vue-numerals": "^3.0.8",
+        "vue2-dropzone": "^3.6.0"
     }
 }

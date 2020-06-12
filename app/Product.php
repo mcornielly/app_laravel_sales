@@ -30,6 +30,30 @@ class Product extends Model
         'category_id' => [
             'searchable' => true,
         ],
+        'code' => [
+            'searchable' => true,
+        ],
+        'cost_price' => [
+            'searchable' => true,
+        ],
+        'stock' => [
+            'searchable' => true,
+        ],
+        'margin_gain_u' => [
+            'searchable' => true,
+        ],
+        'divisa_unit' => [
+            'searchable' => false,
+        ],
+        'wholesale_quantity' => [
+            'searchable' => true,
+        ],
+        'margin_gain_w' => [
+            'searchable' => true,
+        ],
+        'wholesale_divisa' => [
+            'searchable' => true,
+        ],
         'description' => [
             'searchable' => true,
         ],

@@ -34,6 +34,8 @@ Vue.component('btn-products', require('./components/BtnProductsComponent.vue').d
 Vue.component('btn-providers', require('./components/BtnProvidersComponent.vue').default);
 Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue').default);
 Vue.component('status-component', require('./components/StatusComponent.vue').default);
+Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
+Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

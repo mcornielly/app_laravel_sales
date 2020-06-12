@@ -23,7 +23,7 @@ Route::post('usuario', 'Admin\UsersController@store');
 Route::put('usuario/{usuario}', 'Admin\UsersController@update');
 
 Route::get('divisas', 'Admin\DivisaController@index');
-Route::get('divisa/price', 'Admin\DivisaController@last_divisa');
+Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
 Route::post('divisas', 'Admin\DivisaController@store');
 Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
 
@@ -32,6 +32,7 @@ Route::post('categoria', 'Admin\CategoriesController@store');
 Route::put('categoria/{id}', 'Admin\CategoriesController@update');
 Route::get('categoria/restore/{id}', 'Admin\CategoriesController@restore');
 Route::delete('categoria/{id}', 'Admin\CategoriesController@destroy');
+Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
 
 Route::get('productos', 'Admin\ProductsController@index');
 Route::post('producto', 'Admin\ProductsController@store');

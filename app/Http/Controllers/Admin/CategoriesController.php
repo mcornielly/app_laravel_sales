@@ -36,6 +36,16 @@ class CategoriesController extends Controller
         return view('admin.categories.index', compact('categories'));
     }
 
+    public function list_categories()
+    {
+        $categories = Category::withTrashed()->get();
+
+        if(request()->wantsJson())
+        {
+            return $categories;
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
