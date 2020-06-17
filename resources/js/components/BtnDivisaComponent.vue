@@ -6,8 +6,7 @@
             data-toggle="modal"
             data-target="#modal-divisas"
             @click="click(data)"
-            class="btn btn-link" 
-            style="font-size: 125%">
+            class="btn btn-link btn-sm">
             <i class="fas fa-edit text-primary" aria-hidden="true"></i>
         </a>
     </div>

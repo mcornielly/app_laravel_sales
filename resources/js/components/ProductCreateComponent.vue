@@ -1,194 +1,215 @@
 <template>
-    <section> 
-        <!-- form start -->
-
-        <form role="form" @submit.prevent="storeProduct()">
-            <div class="container-fluid">
-                <div class="row">
-                    <!-- Datos del Producto -->
-                    <div class="col-md-8">
-                        <div class="card card-primary card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-store">&nbsp;</i> Datos del Producto</h3>
-                            </div>
-                            <!-- /.card-header -->                  
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Nombre del Producto</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}"  placeholder="Nombre del Producto" v-model="productName">
-                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.name[0]"></span> -->
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Categoría</label>
-                                    <div class="col-md-9">
-                                        <select class="form-control" :class="{'is-invalid' : errorsProd}" v-model="categoryId">
-                                            <option value="0">Seleccione</option>
-                                            <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
-                                        </select>
-                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.category_id[0]"></span> -->
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Descripción</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Ingresar descripción" v-model="description">
-                                        <!-- <span v-show="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.description[0]"></span> -->
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Precio Costo</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control text-right" :class="{'is-invalid' : errorsProd}" v-model="cost_price">
-                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.cost_price[0]"></span> -->
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Sctok</label>
-                                    <div class="col-md-9">
-                                        <input type="number" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Stock" v-model="stock">
-                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.stock[0]"></span> -->
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
-                                    <div class="col-md-9">
-                                        <input type="number" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Cantidad por bultor" v-model="wholesale_quantity">
-                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.wholesale_quantity[0]"></span> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Generar Coódigo -->
-                        <div class="card card-primary card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-barcode">&nbsp;</i> Generar Código del Producto</h3>
-                            </div>
-                            <div class="card-body">
-                                <!-- /.card-header -->                  
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Código</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="code">
-                                        <barcode :value="code" :options="{ format: 'EAN-13'}">
-                                        </barcode>
-                                    </div>
-                                </div>
-                            </div>    
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- Imagnes del Producto -->
-                        <div class="card card-primary card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fa fa-camera">&nbsp;</i> Imagenes del Producto</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="my-input">Text</label>
-                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
-                                    </div>     
-                                </div>
-                                <div class="col-md-8">
-                                    <!-- timeline item -->
-                                    <!-- <div class="timeline-item">
-                                        <div class="timeline-body">
-                                            <img src="http://placehold.it/150x100" alt="...">
-                                            <img src="http://placehold.it/150x100" alt="...">
-                                            <img src="http://placehold.it/150x100" alt="...">
-                                            <img src="http://placehold.it/150x100" alt="...">
-                                            <img src="http://placehold.it/150x100" alt="...">
-                                        </div>
-                                    </div> -->
-                                    <!-- END timeline item -->
-                                </div>
-                                <!-- /.card-header -->                  
-                            </div>    
-                            <!-- /.card-body -->
-                        </div>              
-                        <!-- /.card -->
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Nuevo Productos</h3>
+                    <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
+                    <router-link @click="back_page()" to="#" class="btn btn-sm btn-primary float-right">
+                    <i class="fas fa-angle-double-left"> </i>
+                    Regresar
+                    </router-link>
                     </div>
-                    <!-- Balance de Costos -->
-                    <div class="col-md-4">
-                        <div class="card card-primary card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Balance de Costos</h3>
-                            </div>
-                            <!-- /.card-header -->
-                                <div class="card-footer">
-                                    <label class="pt-2 ml-2 mb-0 text-primary">Precio al Detal</label> 
-                                </div>                  
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                        <div class="col-md-7 col-sm-6">
-                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
+                    
+                    <!-- /.card-header -->
+                    <div class="card-body">  
+                        <!-- form start -->
+                        <form role="form" @submit.prevent="storeProduct()">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <!-- Datos del Producto -->
+                                    <div class="col-md-8">
+                                        <div class="card card-primary card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fas fa-store">&nbsp;</i> Datos del Producto</h3>
+                                            </div>
+                                            <!-- /.card-header -->                  
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Nombre del Producto</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}"  placeholder="Nombre del Producto" v-model="productName">
+                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.name[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Categoría</label>
+                                                    <div class="col-md-9">
+                                                        <select class="form-control" :class="{'is-invalid' : errorsProd}" v-model="categoryId">
+                                                            <option value="0">Seleccione</option>
+                                                            <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
+                                                        </select>
+                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.category_id[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Descripción</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Ingresar descripción" v-model="description">
+                                                        <!-- <span v-show="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.description[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Precio Costo</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control text-right" :class="{'is-invalid' : errorsProd}" v-model="cost_price">
+                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.cost_price[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Sctok</label>
+                                                    <div class="col-md-9">
+                                                        <input type="number" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Stock" v-model="stock">
+                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.stock[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
+                                                    <div class="col-md-9">
+                                                        <input type="number" class="form-control" :class="{'is-invalid' : errorsProd}" placeholder="Cantidad por bultor" v-model="wholesale_quantity">
+                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.wholesale_quantity[0]"></span> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 col-sm-6">
-                                            <input type="number" class="form-control" v-model="margin_gain_u">
+                                        <!-- Generar Coódigo -->
+                                        <div class="card card-primary card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fas fa-barcode">&nbsp;</i> Generar Código del Producto</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- /.card-header -->                  
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Código</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="code">
+                                                        <barcode :value="code" :options="{ format: 'EAN-13'}">
+                                                        </barcode>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                            <!-- /.card-body -->
                                         </div>
+                                        <!-- Imagnes del Producto -->
+                                        <div class="card card-primary card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fa fa-camera">&nbsp;</i> Imagenes del Producto</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="my-input">Text</label>
+                                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+                                                    </div>     
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <!-- timeline item -->
+                                                    <!-- <div class="timeline-item">
+                                                        <div class="timeline-body">
+                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                        </div>
+                                                    </div> -->
+                                                    <!-- END timeline item -->
+                                                </div>
+                                                <!-- /.card-header -->                  
+                                            </div>    
+                                            <!-- /.card-body -->
+                                        </div>              
+                                        <!-- /.card -->
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Ganancia D.</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
+                                    <!-- Balance de Costos -->
+                                    <div class="col-md-4">
+                                        <div class="card card-primary card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Balance de Costos</h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                                <div class="card-footer">
+                                                    <label class="pt-2 ml-2 mb-0 text-primary">Precio al Detal</label> 
+                                                </div>                  
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-6">
+                                                            <input type="number" class="form-control" v-model="margin_gain_u">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">Ganancia D.</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">P. Divisa ($)</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">P.U. (Bs.)</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right" v-model="unit_price" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <label class="ml-2 mb-0 mt-0 text-primary">Precio al Mayor</label> 
+                                                </div>  
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
+                                                        <div class="col-md-7 col-sm-6">
+                                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-6">
+                                                            <input type="number" class="form-control" v-model="margin_gain_w">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">Ganancia M.</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right" v-model="price_gain_w" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">P. Divisa M. ($)</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
+                                                        </div>
+                                                    </div>                           
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 form-control-label">P.M. (Bs.)</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" class="form-control text-right" v-model="wholesale_price" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.card-body -->
+                                                <div class="card-footer">
+                                                    <button type="button" @click="storeProduct()" class="btn btn-primary btn-block"> Registrar Producto</button>
+                                                </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">P. Divisa ($)</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">P.U. (Bs.)</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right" v-model="unit_price" disabled>
-                                        </div>
-                                    </div>
+                                    </div>  
                                 </div>
-                                <div class="card-footer">
-                                    <label class="ml-2 mb-0 mt-0 text-primary">Precio al Mayor</label> 
-                                </div>  
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                        <div class="col-md-7 col-sm-6">
-                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
-                                        </div>
-                                        <div class="col-md-2 col-sm-6">
-                                            <input type="number" class="form-control" v-model="margin_gain_w">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Ganancia M.</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right" v-model="price_gain_w" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">P. Divisa M. ($)</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
-                                        </div>
-                                    </div>                           
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">P.M. (Bs.)</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control text-right" v-model="wholesale_price" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.card-body -->
-                                <div class="card-footer">
-                                    <button type="button" @click="storeProduct()" class="btn btn-primary btn-block"> Registrar Producto</button>
-                                </div>
-                        </div>
-                    </div>  
+                            </div> 
+                        </form>|
+                        <!-- Form end -->
+                    </div>
+                    <!-- /.card-body -->
                 </div>
-            </div> 
-        </form>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
     </section>
 </template>
 <script>
@@ -321,45 +342,6 @@ export default {
             }
 
         },
-        mytable(){
-            $(function(){
-                $('#tb_products').DataTable({
-                    "autoWidth": true,
-                    "paging": true,
-                    "searching": true,
-                    "ordering": true,
-                    order: [[ 0, "desc" ]],
-                    language: {
-                        "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
-                        "sZeroRecords":    "No se encontraron resultados",
-                        "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix":    "",
-                        "sSearch":         "Buscar:",
-                        "sUrl":            "",
-                        "sInfoThousands":  ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst":    "Primero",
-                            "sLast":     "Último",
-                            "sNext":     "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        },
-                        "buttons": {
-                            "copy": "Copiar",
-                            "colvis": "Visibilidad"
-                        }
-                    },     
-                });
-            });
-        },
         getDataTable(){
             var url = "/api/productos";
             axios.get(url).then(response => {
@@ -370,31 +352,9 @@ export default {
                 console.log(errors)
             });
         },
-        // getProducts(){
-        //     var url = "/api/productos";
-        //     axios.get(url).then(response => {
-        //         this.products = response.data;
-        //         console.log(this.products)
-        //         //  var tb_divisa = $('#tb_products').DataTable();
-        //         // tb_divisa.destroy();
-        //         if ( $.fn.dataTable.isDataTable('#tb_products')){
-        //             alert(1)
-        //             var table = $('#tb_products').DataTable();
-        //         }
-        //         else {
-        //             alert(2)
-        //             var table = $('#tb_products').DataTable({
-        //                 destroy: true,
-        //                 searching: false,
-        //                 order: [[ 0, "desc" ]],
-        //             }).draw();
-                                        
-        //         }
-               
-        //     }).catch(errors => {
-        //         console.log(errors)
-        //     });
-        // },
+        back_page(){
+            this.$parent.back_pag();
+        }
     }
 }
 </script>

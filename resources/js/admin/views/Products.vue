@@ -3,36 +3,39 @@
     <!-- Content Header (Page header) -->
         <bread-crumbs :titlePage="titlePage" :routePage="routePage"></bread-crumbs>
         <!-- /.content-header --> 
+        <template v-if="!vproducts">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
+                        <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                        <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
+                        </div>
+                        
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                                <data-table ref="tb"
+                                    :data="data"
+                                    :theme="theme"
+                                    :columns="columns"
+                                    :translate="translate"
+                                    @onTablePropsChanged="reloadTable">
+                                </data-table>
+                            
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
-                    <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <router-link to="/producto" class="nav-link">
-                      <i class="nav-icon fas fa-tags"></i>
-                      <p>Categorias</p>
-                    </router-link>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <template>
-                            <data-table ref="tb"
-                                :data="data"
-                                :theme="theme"
-                                :columns="columns"
-                                :translate="translate"
-                                @onTablePropsChanged="reloadTable">
-                            </data-table>
-                        </template>
-                    </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
+        </template>
+
+        <template v-else>
+            <product-create></product-create>   
+        </template>
     
         <!-- Modal-Divisa -->
         <modal-product
@@ -63,6 +66,7 @@ export default {
     },
     data(){
         return{
+            vproducts:false,
             titlePage:'Productos',
             routePage:'Productos',
             url:"api/productos",
@@ -158,6 +162,7 @@ export default {
             this.create = true;
             this.action = true;
             this.storeup = false;
+            this.vproducts = true;
         },
         modalProduct(data, action){
             switch(action){
@@ -220,7 +225,12 @@ export default {
                 var errors = error.response.data.errors;
                 this.errors = errors;
             });
+        },
+        back_pag(){
+            alert('hola');
+            this.vproducts = false;
         }
+        
 
     }
 }
