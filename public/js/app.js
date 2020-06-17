@@ -2051,14 +2051,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     },
     createCategory: function createCategory() {
       this.title = 'Nueva Categoría';
-      this.selectedRow = {
-        data: function data() {
-          return {
-            type_document: ''
-          };
-        }
-      };
-      this.create = true;
+      this.selectedRow = {}, this.create = true;
       this.action = true;
       this.storeup = false;
     },
@@ -3968,10 +3961,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
 //
 //
 //
@@ -38728,8 +38717,7 @@ var render = function() {
     _c(
       "a",
       {
-        staticClass: "btn btn-link",
-        staticStyle: { "font-size": "125%" },
+        staticClass: "btn btn-link btn-sm",
         attrs: {
           href: "#",
           title: "editar",
@@ -38754,8 +38742,7 @@ var render = function() {
     _c(
       "a",
       {
-        staticClass: "btn btn-link",
-        staticStyle: { "font-size": "125%" },
+        staticClass: "btn btn-link btn-sm",
         attrs: {
           href: "#",
           title: "ver",
@@ -38780,8 +38767,7 @@ var render = function() {
       ? _c(
           "a",
           {
-            staticClass: "btn btn-link",
-            staticStyle: { "font-size": "125%" },
+            staticClass: "btn btn-link btn-sm",
             attrs: { href: "#", title: "eliminar" },
             on: {
               click: function($event) {
@@ -38799,8 +38785,7 @@ var render = function() {
       : _c(
           "a",
           {
-            staticClass: "btn btn-link",
-            staticStyle: { "font-size": "125%" },
+            staticClass: "btn btn-link btn-sm",
             attrs: { href: "#", title: "restore" },
             on: {
               click: function($event) {
