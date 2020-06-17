@@ -9,8 +9,12 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
-                    <a href="#" @click="createCategory()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                    <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
                     </div>
+                    <router-link to="/producto" class="nav-link">
+                      <i class="nav-icon fas fa-tags"></i>
+                      <p>Categorias</p>
+                    </router-link>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <template>
@@ -33,6 +37,7 @@
         <!-- Modal-Divisa -->
         <modal-product
             :data="selectedRow"
+            :categoryName="category"
             :title="title"
             :create="create"
             :action="action"
@@ -63,6 +68,7 @@ export default {
             url:"api/productos",
             divisa: '',
             name:'',
+            category:{},
             description: '',
             create: false,
             title: '',
@@ -146,15 +152,9 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
-        createCategory(){
+        createProduct(){
             this.title = 'Nueva Producto'
-            this.selectedRow = {
-                data(){
-                    return{
-                        type_document:''
-                    }
-                }
-            };
+            this.selectedRow = {};
             this.create = true;
             this.action = true;
             this.storeup = false;
@@ -174,6 +174,7 @@ export default {
                         {
                             this.title = "Detalle de Producto";
                             this.selectedRow = data;
+                            this.category = data.category;
                             this.create = false;
                             this.action = false; 
                             this.storeup = true; 

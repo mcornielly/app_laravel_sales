@@ -61,6 +61,21 @@ class Product extends Model
             'searchable' => true,
         ]
     ];
+
+    protected $dataTableRelationships = [
+        "belongsTo" => [
+            'category' => [
+                "model" => \App\Category::class,
+                'foreign_key' => 'category_id',
+                'columns' => [
+                    'name' => [
+                        'searchable' => true,
+                        'orderable' => true,
+                    ],
+                ],
+            ],
+        ],
+    ];
     
     public function category()
     {

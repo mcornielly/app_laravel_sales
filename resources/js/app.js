@@ -26,7 +26,7 @@ Vue.component('modal-provider', require('./components/ModalProviderComponent.vue
 Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
 Vue.component('modal-product', require('./components/ModalProductComponent.vue').default);
 Vue.component('bread-crumbs', require('./components/BreadCrumbs').default);
-Vue.component('product-create', require('./components/ProductCreate.vue').default);
+// Vue.component('product-create', require('./components/ProductCreate.vue').default);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('btn-divisa', require('./components/BtnDivisaComponent.vue').default);
 Vue.component('btn-category', require('./components/BtnCategoryComponent.vue').default);

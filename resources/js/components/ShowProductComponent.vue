@@ -27,16 +27,12 @@
                                 </tr>
                                 <tr>
                                     <th width=300>Categoría</th>
-                                    <td>{{ data.category.name }}</td>
+                                    <td v-text="categoryName.name"></td>
                                 </tr>
                                 <tr>
                                     <th width=300>Descripción:</th>
                                     <td v-text="data.description"></td>
                                 </tr>
-                                <!-- <tr>
-                                    <th width=300>Dirección</th>
-                                    <td v-text="data.address"></td>
-                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -177,7 +173,7 @@
                                 <tr>
                                     <th width=300>Imagen:</th>
                                     <td>
-                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+                                        <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone> -->
                                     </td>
                                 </tr>
                             </tbody>
@@ -196,7 +192,7 @@ import VueBarcode from 'vue-barcode';
 import vue2Dropzone from 'vue2-dropzone';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 export default {
-    props: ['data', 'divisa'],
+    props: ['data','categoryName','divisa'],
     components:{
         'barcode': VueBarcode,
         'vueDropzone': vue2Dropzone,

@@ -180,7 +180,10 @@
                         </div>
                     </div>
                     <div v-else class="tbcustomer">
-                       <show-product :data="data" :divisa="divisa"></show-product>
+                       <show-product :data="data" 
+                            :divisa="divisa"
+                            :categoryName="categoryName">
+                        </show-product>
                     </div>
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
@@ -205,6 +208,10 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 export default {
     props:{
         data: {
+            type: Object,
+            default: () => ({}),
+        },
+        categoryName:{
             type: Object,
             default: () => ({}),
         },
