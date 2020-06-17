@@ -26,11 +26,6 @@ export default new Router({
             component: require('./admin/views/Products').default,
         },
         {
-            path: '/producto',
-            name: 'product',
-            component: require('./admin/views/ProductCreate').default,
-        },
-        {
             path: '/usuarios',
             name: 'users',
             component: require('./admin/views/Users').default,

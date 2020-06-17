@@ -9,15 +9,12 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
-                    <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                    <a v-if="!newProduct" href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                    <router-link v-else @click="regresar()" to="#" class="btn btn-primary float-right">regresar</router-link>
                     </div>
-                    <router-link to="/producto" class="nav-link">
-                      <i class="nav-icon fas fa-tags"></i>
-                      <p>Categorias</p>
-                    </router-link>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <template>
+                        <template v-if="!newProduct">
                             <data-table ref="tb"
                                 :data="data"
                                 :theme="theme"
@@ -25,6 +22,9 @@
                                 :translate="translate"
                                 @onTablePropsChanged="reloadTable">
                             </data-table>
+                        </template>
+                        <template v-else>
+                            <product-create></product-create> 
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -63,6 +63,7 @@ export default {
     },
     data(){
         return{
+            newProduct:false,
             titlePage:'Productos',
             routePage:'Productos',
             url:"api/productos",
@@ -136,6 +137,11 @@ export default {
         }
     },
     methods: {
+        regresar(){
+            alert(1)
+            this.newProduct=false;
+
+        },
         getData(url = this.url, options = this.tableProps) {
             axios.get(url, {
                 params: options
@@ -158,6 +164,7 @@ export default {
             this.create = true;
             this.action = true;
             this.storeup = false;
+            this.newProduct = true;
         },
         modalProduct(data, action){
             switch(action){
