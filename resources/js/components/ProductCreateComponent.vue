@@ -32,7 +32,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Categoría</label>
                                                     <div class="col-md-9">
-                                                        <select class="form-control" :class="{'is-invalid' : errorsProd}" v-model="categoryId">
+                                                        <select class="form-control" :class="{'is-invalid' : errorsProd}" v-model="category_id">
                                                             <option value="0">Seleccione</option>
                                                             <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
                                                         </select>
@@ -214,7 +214,7 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
-    props:['product','productName','categoryId','divisa', 'categories'],
+    props:['divisa','categories'],
     data(){
         return{
             name: '',
@@ -238,7 +238,6 @@ export default {
             vproducts:false
         }
     },
-    template: '<product-create v-else="vproducts==false" ></product-create>',
     components: {
         'barcode': VueBarcode,
         'vueDropzone': vue2Dropzone,
@@ -283,38 +282,12 @@ export default {
         }
     },
     methods:{
-        getProducts(){
-            var url = "/api/productos";
-            axios.get(url).then(response => {
-                this.products = response.data.data;
-                this.mytable();
-                console.log(this.products)
-                if ( $.fn.dataTable.isDataTable('#tb_products')){
-                       var table = $('#tb_products').DataTable();
-                }
-                else{
-                    var table = $('#tb_products').DataTable({
-                        paging: true,
-                        order: [[ 0, "desc" ]],
-                    }).draw();
-                }
-                table.destroy();
-                table = $('#tb_products').DataTable({
-                        paging: true,
-                        order: [[ 0, "desc" ]],
-                });
-            }).catch(errors => {
-                console.log(errors)
-            });
-        },
         storeProduct(){
             if(this.divisa > 0){
-                this.id = this.product.id;
-                var url = `api/producto/${this.id}`;
-                axios.put(url,{
-                    'product_id': this.id,
-                    'name' : this.productName,
-                    'category_id' : this.categoryId,
+                var url = `api/producto`;
+                axios.post(url,{
+                    'name' : this.name,
+                    'category_id' : this.category_id,
                     'code' : this.code,
                     'description' : this.description,
                     'cost_price' : this.cost_price,
@@ -326,8 +299,7 @@ export default {
                     'wholesale_divisa' : this.wholesale_divisa,
                 }).then(response =>{
                     console.log(response.data)
-                    this.getProducts();
-                    this.$emit('vcreate', this.vproducts);
+                    this.back_page();
                     toastr.success("El Producto ha sido registrado.");
                 }).catch(error => {
                     var errors = error.response.data;
@@ -338,16 +310,6 @@ export default {
                 toastr.error('El precio de la Divisa no se encuentra establecido.');
             }
 
-        },
-        getDataTable(){
-            var url = "/api/productos";
-            axios.get(url).then(response => {
-                this.products = response.data;
-                console.log(this.products)        
-                this.mytable();
-            }).catch(errors => {
-                console.log(errors)
-            });
         },
         back_page(){
             this.$parent.reloadTable();

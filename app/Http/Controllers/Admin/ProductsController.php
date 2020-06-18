@@ -52,20 +52,29 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $valido = $this->validate($request, [
+        $data = $this->validate($request, [
             'name' => 'required|min:3',
             'category_id' => 'required',
+            'code' => 'required',
+            'cost_price' => 'required',
+            'description' => 'required',
+            'stock' => 'required',
+            'margin_gain_u' => 'required',
+            'divisa_unit' => 'required',
+            'wholesale_quantity' => 'required',
+            'margin_gain_w' => 'required',
+            'wholesale_divisa' => 'required',
         ]);
 
-        $product = Product::create($request->all());
+        $product = Product::create($data);
 
-        if($valido && request()->wantsJson())
+        if($data && request()->wantsJson())
         {
             return $product;
 
         }else{
 
-            return $valido;
+            return $data;
         }
 
         return back()->with('message', 'La Divisa fue actualizada, con exito');
@@ -132,7 +141,10 @@ class ProductsController extends Controller
         $product = Product::find($request->id);    
         $product->update($data);
 
-        return $product;
+        if($data && request()->wantsJson())
+        {
+           return $product; 
+        }
     }
 
     /**

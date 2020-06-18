@@ -32,13 +32,18 @@
         </template>
 
         <template v-else>
-            <product-create @returned="vproducts = $event"></product-create>   
+            <product-create @returned="vproducts = $event"
+                :divisa="divisa"
+                :categories="categories"
+            ></product-create>   
         </template>
     
         <!-- Modal-Divisa -->
         <modal-product
             :data="selectedRow"
+            :divisa="divisa"
             :categoryName="category"
+            :categories="categories"
             :title="title"
             :create="create"
             :action="action"
@@ -71,7 +76,7 @@ export default {
             divisa: '',
             name:'',
             category:{},
-            description: '',
+            categories:{},
             create: false,
             title: '',
             errors: '',
@@ -131,6 +136,8 @@ export default {
     },
     created(){
         this.getData(this.url);
+        this.getDivisa();
+        this.getCategories();
     },
     computed:{
         user(){
@@ -138,10 +145,23 @@ export default {
         }
     },
     methods: {
-        regresar(){
-            alert(1)
-            this.newProduct=false;
-
+        getDivisa(){
+            var url = "api/divisa/precio";
+            axios.get(url).then(response => {
+                this.divisa = response.data;
+                console.log(this.divisa);
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
+        },
+        getCategories(){
+            var url = "api/categorias/lista";
+            axios.get(url).then(response => {
+                this.categories = response.data;
+                console.log(this.categories)
+            }).catch(error =>{
+                console.log(error.response.data)
+            });
         },
         getData(url = this.url, options = this.tableProps) {
             axios.get(url, {

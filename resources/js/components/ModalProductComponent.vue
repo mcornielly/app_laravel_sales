@@ -211,6 +211,14 @@ export default {
             type: Object,
             default: () => ({}),
         },
+        categories: {
+            type: Array,
+            default:[]
+        },
+        divisa: {
+            type: Number,
+            default: 0,
+        },
         categoryName:{
             type: Object,
             default: () => ({}),
@@ -237,8 +245,6 @@ export default {
         return {
             url:"api/producto",
             errors: '',
-            divisa: 0,
-            categories: [],
             name:'',
             category_id: 0,
             description:'',
@@ -256,10 +262,6 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas'
             },
         }
-    },
-    mounted(){
-        this.getDivisa();
-        this.getCategories();
     },
     computed:{
         user(){
@@ -304,24 +306,7 @@ export default {
         }
     },
     methods:{
-        getDivisa(){
-            var url = "api/divisa/precio";
-            axios.get(url).then(response => {
-                this.divisa = response.data;
-                console.log(this.divisa);
-            }).catch(error =>{
-                console.log(error.response.data);
-            });
-        },
-        getCategories(){
-            var url = "api/categorias/lista";
-            axios.get(url).then(response => {
-                this.categories = response.data;
-                console.log(this.categories)
-            }).catch(error =>{
-                console.log(error.response.data)
-            });
-        },
+
         actionModal(action){
             if(action == "store"){
                 this.storeProduct();

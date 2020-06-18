@@ -2940,6 +2940,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -2961,7 +2966,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       divisa: '',
       name: '',
       category: {},
-      description: '',
+      categories: {},
       create: false,
       title: '',
       errors: '',
@@ -3013,6 +3018,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
   },
   created: function created() {
     this.getData(this.url);
+    this.getDivisa();
+    this.getCategories();
   },
   computed: {
     user: function user() {
@@ -3020,20 +3027,38 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     }
   },
   methods: {
-    regresar: function regresar() {
-      alert(1);
-      this.newProduct = false;
+    getDivisa: function getDivisa() {
+      var _this = this;
+
+      var url = "api/divisa/precio";
+      axios.get(url).then(function (response) {
+        _this.divisa = response.data;
+        console.log(_this.divisa);
+      })["catch"](function (error) {
+        console.log(error.response.data);
+      });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
+
+      var url = "api/categorias/lista";
+      axios.get(url).then(function (response) {
+        _this2.categories = response.data;
+        console.log(_this2.categories);
+      })["catch"](function (error) {
+        console.log(error.response.data);
+      });
     },
     getData: function getData() {
-      var _this = this;
+      var _this3 = this;
 
       var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.tableProps;
       axios.get(url, {
         params: options
       }).then(function (response) {
-        _this.data = response.data;
-        console.log(_this.data);
+        _this3.data = response.data;
+        console.log(_this3.data);
       }) // eslint-disable-next-line
       ["catch"](function (errors) {//Handle Errors
       });
@@ -3086,35 +3111,35 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       }
     },
     deleteProduct: function deleteProduct(data) {
-      var _this2 = this;
+      var _this4 = this;
 
       this.id = data.id;
       console.log(this.id);
       var url = "/api/producto/".concat(this.id);
       axios["delete"](url).then(function (response) {
-        _this2.reloadTable();
+        _this4.reloadTable();
 
-        _this2.destroy = false;
+        _this4.destroy = false;
         toastr.error('El producto fue eliminada.'); // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
       })["catch"](function (error) {
         console.log(error);
         var errors = error.response.data.errors;
-        _this2.errors = errors;
+        _this4.errors = errors;
       });
     },
     restoreProduct: function restoreProduct(data) {
-      var _this3 = this;
+      var _this5 = this;
 
       this.id = data.id;
       var url = "/api/producto/restore/".concat(this.id);
       axios.get(url).then(function (response) {
-        _this3.reloadTable();
+        _this5.reloadTable();
 
         toastr.success('El producto fue restaurada.'); // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
       })["catch"](function (error) {
         console.log(error);
         var errors = error.response.data.errors;
-        _this3.errors = errors;
+        _this5.errors = errors;
       });
     },
     back_pag: function back_pag() {
@@ -4621,6 +4646,14 @@ var _user = document.head.querySelector('meta[name="user"]');
         return {};
       }
     },
+    categories: {
+      type: Array,
+      "default": []
+    },
+    divisa: {
+      type: Number,
+      "default": 0
+    },
     categoryName: {
       type: Object,
       "default": function _default() {
@@ -4651,8 +4684,6 @@ var _user = document.head.querySelector('meta[name="user"]');
     return {
       url: "api/producto",
       errors: '',
-      divisa: 0,
-      categories: [],
       name: '',
       category_id: 0,
       description: '',
@@ -4672,10 +4703,6 @@ var _user = document.head.querySelector('meta[name="user"]');
         dictDefaultMessage: 'Arrastra las imagenes para subirlas'
       }
     };
-  },
-  mounted: function mounted() {
-    this.getDivisa();
-    this.getCategories();
   },
   computed: {
     user: function user() {
@@ -4728,28 +4755,6 @@ var _user = document.head.querySelector('meta[name="user"]');
     }
   },
   methods: {
-    getDivisa: function getDivisa() {
-      var _this = this;
-
-      var url = "api/divisa/precio";
-      axios.get(url).then(function (response) {
-        _this.divisa = response.data;
-        console.log(_this.divisa);
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    },
-    getCategories: function getCategories() {
-      var _this2 = this;
-
-      var url = "api/categorias/lista";
-      axios.get(url).then(function (response) {
-        _this2.categories = response.data;
-        console.log(_this2.categories);
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    },
     actionModal: function actionModal(action) {
       if (action == "store") {
         this.storeProduct();
@@ -4758,7 +4763,7 @@ var _user = document.head.querySelector('meta[name="user"]');
       }
     },
     storeProduct: function storeProduct() {
-      var _this3 = this;
+      var _this = this;
 
       var url = this.url;
       axios.post(url, {
@@ -4767,17 +4772,17 @@ var _user = document.head.querySelector('meta[name="user"]');
       }).then(function (response) {
         console.log(response.data);
 
-        _this3.$parent.reloadTable();
+        _this.$parent.reloadTable();
 
         toastr.success('El producto fue registrado.');
       })["catch"](function (error) {
         console.log(error);
         var errors = error.response.data.errors;
-        _this3.errors = errors;
+        _this.errors = errors;
       });
     },
     updateProduct: function updateProduct() {
-      var _this4 = this;
+      var _this2 = this;
 
       var url = "".concat(this.url, "/").concat(this.data.id);
       axios.put(url, {
@@ -4794,13 +4799,13 @@ var _user = document.head.querySelector('meta[name="user"]');
         'margin_gain_w': this.data.margin_gain_w,
         'wholesale_divisa': this.data.wholesale_divisa
       }).then(function (response) {
-        _this4.$parent.reloadTable();
+        _this2.$parent.reloadTable();
 
         toastr.info('El producto fue actualizado.');
       })["catch"](function (error) {
         console.log(error.response.data);
         var errors = error.response.data.errors;
-        _this4.errors = errors;
+        _this2.errors = errors;
       });
     },
     closeModal: function closeModal() {
@@ -5326,7 +5331,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['product', 'productName', 'categoryId', 'divisa', 'categories'],
+  props: ['divisa', 'categories'],
   data: function data() {
     return {
       name: '',
@@ -5352,7 +5357,6 @@ __webpack_require__.r(__webpack_exports__);
       vproducts: false
     };
   },
-  template: '<product-create v-else="vproducts==false" ></product-create>',
   components: {
     'barcode': vue_barcode__WEBPACK_IMPORTED_MODULE_0___default.a,
     'vueDropzone': vue2_dropzone__WEBPACK_IMPORTED_MODULE_1___default.a
@@ -5405,45 +5409,14 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    getProducts: function getProducts() {
+    storeProduct: function storeProduct() {
       var _this = this;
 
-      var url = "/api/productos";
-      axios.get(url).then(function (response) {
-        _this.products = response.data.data;
-
-        _this.mytable();
-
-        console.log(_this.products);
-
-        if ($.fn.dataTable.isDataTable('#tb_products')) {
-          var table = $('#tb_products').DataTable();
-        } else {
-          var table = $('#tb_products').DataTable({
-            paging: true,
-            order: [[0, "desc"]]
-          }).draw();
-        }
-
-        table.destroy();
-        table = $('#tb_products').DataTable({
-          paging: true,
-          order: [[0, "desc"]]
-        });
-      })["catch"](function (errors) {
-        console.log(errors);
-      });
-    },
-    storeProduct: function storeProduct() {
-      var _this2 = this;
-
       if (this.divisa > 0) {
-        this.id = this.product.id;
-        var url = "api/producto/".concat(this.id);
-        axios.put(url, {
-          'product_id': this.id,
-          'name': this.productName,
-          'category_id': this.categoryId,
+        var url = "api/producto";
+        axios.post(url, {
+          'name': this.name,
+          'category_id': this.category_id,
           'code': this.code,
           'description': this.description,
           'cost_price': this.cost_price,
@@ -5456,32 +5429,17 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           console.log(response.data);
 
-          _this2.getProducts();
-
-          _this2.$emit('vcreate', _this2.vproducts);
+          _this.back_page();
 
           toastr.success("El Producto ha sido registrado.");
         })["catch"](function (error) {
           var errors = error.response.data;
-          _this2.errorsProd = errors;
+          _this.errorsProd = errors;
           console.log(errors);
         });
       } else {
         toastr.error('El precio de la Divisa no se encuentra establecido.');
       }
-    },
-    getDataTable: function getDataTable() {
-      var _this3 = this;
-
-      var url = "/api/productos";
-      axios.get(url).then(function (response) {
-        _this3.products = response.data;
-        console.log(_this3.products);
-
-        _this3.mytable();
-      })["catch"](function (errors) {
-        console.log(errors);
-      });
     },
     back_page: function back_page() {
       this.$parent.reloadTable();
@@ -37483,6 +37441,7 @@ var render = function() {
           ]
         : [
             _c("product-create", {
+              attrs: { divisa: _vm.divisa, categories: _vm.categories },
               on: {
                 returned: function($event) {
                   _vm.vproducts = $event
@@ -37494,7 +37453,9 @@ var render = function() {
       _c("modal-product", {
         attrs: {
           data: _vm.selectedRow,
+          divisa: _vm.divisa,
           categoryName: _vm.category,
+          categories: _vm.categories,
           title: _vm.title,
           create: _vm.create,
           action: _vm.action,
@@ -41275,8 +41236,8 @@ var render = function() {
                                       {
                                         name: "model",
                                         rawName: "v-model",
-                                        value: _vm.categoryId,
-                                        expression: "categoryId"
+                                        value: _vm.category_id,
+                                        expression: "category_id"
                                       }
                                     ],
                                     staticClass: "form-control",
@@ -41294,7 +41255,7 @@ var render = function() {
                                               "_value" in o ? o._value : o.value
                                             return val
                                           })
-                                        _vm.categoryId = $event.target.multiple
+                                        _vm.category_id = $event.target.multiple
                                           ? $$selectedVal
                                           : $$selectedVal[0]
                                       }
