@@ -5,11 +5,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Nuevo Productos</h3>
-                    <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
-                    <router-link @click="back_page()" to="#" class="btn btn-sm btn-primary float-right">
-                    <i class="fas fa-angle-double-left"> </i>
-                    Regresar
-                    </router-link>
+                    <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i> Regresar</a>
                     </div>
                     
                     <!-- /.card-header -->
@@ -238,7 +234,8 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas'
             },
             errorsProd: '',
-            vproducts:true
+            backPage:false,
+            vproducts:false
         }
     },
     template: '<product-create v-else="vproducts==false" ></product-create>',
@@ -353,7 +350,8 @@ export default {
             });
         },
         back_page(){
-            this.$parent.back_pag();
+            this.$parent.reloadTable();
+            this.$emit('returned', this.vproducts);
         }
     }
 }
