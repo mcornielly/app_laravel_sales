@@ -143,13 +143,7 @@ export default {
         },
         createCategory(){
             this.title = 'Nueva Categoría'
-            this.selectedRow = {
-                data(){
-                    return{
-                        type_document:''
-                    }
-                }
-            };
+            this.selectedRow = {},
             this.create = true;
             this.action = true;
             this.storeup = false;

@@ -6,8 +6,7 @@
             data-toggle="modal"
             data-target="#modal-provider"
             @click="click(data, 'edit')"
-            class="btn btn-link" 
-            style="font-size: 125%">
+            class="btn btn-link btn-sm">
             <i class="fas fa-edit text-primary" aria-hidden="true"></i>
         </a>
 
@@ -16,8 +15,7 @@
             data-toggle="modal"
             data-target="#modal-provider"
             @click="click(data,'show')"
-            class="btn btn-link" 
-            style="font-size: 125%">
+            class="btn btn-link btn-sm">
             <i class="fas fa-eye text-success" aria-hidden="true"></i>
         </a>
     </div>

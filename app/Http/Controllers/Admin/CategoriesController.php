@@ -64,7 +64,6 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
         $valido = $this->validate($request,[
             'name' => 'required',
             'description' => 'required'
