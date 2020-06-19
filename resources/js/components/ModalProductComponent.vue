@@ -213,7 +213,6 @@ export default {
         },
         categories: {
             type: Array,
-            default:[]
         },
         divisa: {
             type: Number,

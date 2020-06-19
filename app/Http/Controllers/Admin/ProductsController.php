@@ -52,6 +52,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = $this->validate($request, [
             'name' => 'required|min:3',
             'category_id' => 'required',
@@ -66,7 +67,7 @@ class ProductsController extends Controller
             'wholesale_divisa' => 'required',
         ]);
 
-        $product = Product::create($data);
+        $product = Product::create($request->all());
 
         if($data && request()->wantsJson())
         {
@@ -141,10 +142,7 @@ class ProductsController extends Controller
         $product = Product::find($request->id);    
         $product->update($data);
 
-        if($data && request()->wantsJson())
-        {
-           return $product; 
-        }
+        return $product;
     }
 
     /**

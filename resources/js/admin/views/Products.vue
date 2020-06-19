@@ -69,18 +69,17 @@ export default {
     },
     data(){
         return{
+            data: {},
+            divisa: 0,
+            categories:[],
             vproducts:false,
             titlePage:'Productos',
             routePage:'Productos',
             url:"api/productos",
-            divisa: '',
             name:'',
             category:{},
-            categories:{},
             create: false,
             title: '',
-            errors: '',
-            data: {},
             tableProps: {
                 search: '',
                 length: 10,

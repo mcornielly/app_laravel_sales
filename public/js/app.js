@@ -2959,18 +2959,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
   },
   data: function data() {
     return {
+      data: {},
+      divisa: 0,
+      categories: [],
       vproducts: false,
       titlePage: 'Productos',
       routePage: 'Productos',
       url: "api/productos",
-      divisa: '',
       name: '',
       category: {},
-      categories: {},
       create: false,
       title: '',
-      errors: '',
-      data: {},
       tableProps: {
         search: '',
         length: 10,
@@ -4647,8 +4646,7 @@ var _user = document.head.querySelector('meta[name="user"]');
       }
     },
     categories: {
-      type: Array,
-      "default": []
+      type: Array
     },
     divisa: {
       type: Number,
@@ -5331,12 +5329,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['divisa', 'categories'],
+  props: {
+    categories: {
+      type: Array
+    },
+    divisa: {
+      type: Number,
+      "default": 0
+    }
+  },
   data: function data() {
     return {
       name: '',
       code: '',
-      category_id: 0,
+      category_id: '',
       description: '',
       cost_price: 0,
       stock: 0,
@@ -5352,7 +5358,7 @@ __webpack_require__.r(__webpack_exports__);
         },
         dictDefaultMessage: 'Arrastra las imagenes para subirlas'
       },
-      errorsProd: '',
+      errorsProd: {},
       backPage: false,
       vproducts: false
     };
@@ -5433,9 +5439,9 @@ __webpack_require__.r(__webpack_exports__);
 
           toastr.success("El Producto ha sido registrado.");
         })["catch"](function (error) {
-          var errors = error.response.data;
+          var errors = error.response;
           _this.errorsProd = errors;
-          console.log(errors);
+          console.log(_this.errorsProd);
         });
       } else {
         toastr.error('El precio de la Divisa no se encuentra establecido.');
@@ -41198,8 +41204,8 @@ var render = function() {
                                     {
                                       name: "model",
                                       rawName: "v-model",
-                                      value: _vm.productName,
-                                      expression: "productName"
+                                      value: _vm.name,
+                                      expression: "name"
                                     }
                                   ],
                                   staticClass: "form-control",
@@ -41208,16 +41214,28 @@ var render = function() {
                                     type: "text",
                                     placeholder: "Nombre del Producto"
                                   },
-                                  domProps: { value: _vm.productName },
+                                  domProps: { value: _vm.name },
                                   on: {
                                     input: function($event) {
                                       if ($event.target.composing) {
                                         return
                                       }
-                                      _vm.productName = $event.target.value
+                                      _vm.name = $event.target.value
                                     }
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.errorsProd
+                                  ? _c("span", {
+                                      staticClass: "invalid-feedback",
+                                      attrs: { role: "alert" },
+                                      domProps: {
+                                        innerHTML: _vm._s(
+                                          _vm.errorsProd.name[0]
+                                        )
+                                      }
+                                    })
+                                  : _vm._e()
                               ])
                             ]),
                             _vm._v(" "),

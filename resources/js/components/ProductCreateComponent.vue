@@ -25,8 +25,8 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Nombre del Producto</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}"  placeholder="Nombre del Producto" v-model="productName">
-                                                        <!-- <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.name[0]"></span> -->
+                                                        <input type="text" class="form-control" :class="{'is-invalid' : errorsProd}"  placeholder="Nombre del Producto" v-model="name">
+                                                        <span v-if="errorsProd" class="invalid-feedback" role="alert" v-html="errorsProd.name[0]"></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -214,12 +214,20 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
-    props:['divisa','categories'],
+    props:{
+        categories: {
+            type: Array,
+        },
+        divisa: {
+            type: Number,
+            default: 0
+        },
+    },    
     data(){
         return{
             name: '',
             code: '',
-            category_id:0,
+            category_id: '',
             description: '',
             cost_price: 0,
             stock: 0,
@@ -233,7 +241,7 @@ export default {
                 headers: { "My-Awesome-Header": "header value" },
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas'
             },
-            errorsProd: '',
+            errorsProd:{},
             backPage:false,
             vproducts:false
         }
@@ -302,9 +310,9 @@ export default {
                     this.back_page();
                     toastr.success("El Producto ha sido registrado.");
                 }).catch(error => {
-                    var errors = error.response.data;
+                    var errors = error.response;
                     this.errorsProd = errors;
-                    console.log(errors)
+                    console.log(this.errorsProd)
                 });
             }else{
                 toastr.error('El precio de la Divisa no se encuentra establecido.');
