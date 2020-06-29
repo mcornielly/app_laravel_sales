@@ -160,15 +160,11 @@
                                                 </div>
                                                 <div class="col-md-8">
                                                     <!-- timeline item -->
-                                                    <!-- <div class="timeline-item">
-                                                        <div class="timeline-body">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                    <div class="timeline-item">
+                                                        <div v-for="image in images" :key="image.id" class="timeline-body">
+                                                            <img :src="image.url" :alt="data.name" class="img-fluid img-thumbnail">
                                                         </div>
-                                                    </div> -->
+                                                    </div>
                                                     <!-- END timeline item -->
                                                 </div>
                                             </div>
@@ -180,7 +176,8 @@
                         </div>
                     </div>
                     <div v-else class="tbcustomer">
-                       <show-product :data="data" 
+                       <show-product :data="data"
+                            :images="images"    
                             :divisa="divisa"
                             :categoryName="categoryName">
                         </show-product>
@@ -213,6 +210,7 @@ export default {
         },
         categories: {
             type: Array,
+            default: () => [],
         },
         divisa: {
             type: Number,
@@ -221,6 +219,10 @@ export default {
         categoryName:{
             type: Object,
             default: () => ({}),
+        },
+        images:{
+            type: Array,
+            default: () => [],
         },
         title:{
             type: String,
@@ -245,6 +247,7 @@ export default {
             url:"api/producto",
             errors: '',
             name:'',
+            product_id: 0,
             category_id: 0,
             description:'',
             cost_price: 0,
@@ -305,7 +308,6 @@ export default {
         }
     },
     methods:{
-
         actionModal(action){
             if(action == "store"){
                 this.storeProduct();

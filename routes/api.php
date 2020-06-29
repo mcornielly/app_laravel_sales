@@ -40,6 +40,9 @@ Route::put('producto/{id}', 'Admin\ProductsController@update');
 Route::get('producto/{id}', 'Admin\ProductsController@show');
 Route::get('producto/restore/{id}', 'Admin\ProductsController@restore');
 Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
+Route::post('producto/img', 'Admin\PhotosController@store');
+Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
+Route::get('productos/lastid', 'Admin\ProductsController@last_id');
 
 
 Route::get('proveedores', 'Admin\ProvidersController@index');

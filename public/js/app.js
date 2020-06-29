@@ -2945,6 +2945,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -3012,7 +3013,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       }],
       selectedRow: {},
       action: false,
-      storeup: true
+      storeup: true,
+      product_id: 0,
+      images: []
     };
   },
   created: function created() {
@@ -3074,14 +3077,18 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       this.vproducts = true;
     },
     modalProduct: function modalProduct(data, action) {
+      console.log(data);
+
       switch (action) {
         case 'edit':
           {
             this.title = 'Editar Producto';
             this.selectedRow = data;
+            this.product_id = data.id;
             this.create = false;
             this.action = true;
             this.storeup = false;
+            this.getImages(this.product_id);
             break;
           }
 
@@ -3089,10 +3096,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
           {
             this.title = "Detalle de Producto";
             this.selectedRow = data;
+            this.product_id = data.id;
             this.category = data.category;
             this.create = false;
             this.action = false;
             this.storeup = true;
+            this.getImages(this.product_id);
             break;
           }
 
@@ -3142,8 +3151,20 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       });
     },
     back_pag: function back_pag() {
-      alert('hola');
       this.vproducts = false;
+    },
+    getImages: function getImages(product_id) {
+      var _this6 = this;
+
+      var id = product_id;
+      console.log(id);
+      var url = "/api/producto/imagenes/".concat(id);
+      axios.get(url).then(function (response) {
+        _this6.images = response.data;
+        console.log(_this6.images);
+      })["catch"](function (error) {
+        console.log(error.response.data);
+      });
     }
   }
 });
@@ -4629,9 +4650,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -4646,7 +4664,10 @@ var _user = document.head.querySelector('meta[name="user"]');
       }
     },
     categories: {
-      type: Array
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     },
     divisa: {
       type: Number,
@@ -4656,6 +4677,12 @@ var _user = document.head.querySelector('meta[name="user"]');
       type: Object,
       "default": function _default() {
         return {};
+      }
+    },
+    images: {
+      type: Array,
+      "default": function _default() {
+        return [];
       }
     },
     title: {
@@ -4683,6 +4710,7 @@ var _user = document.head.querySelector('meta[name="user"]');
       url: "api/producto",
       errors: '',
       name: '',
+      product_id: 0,
       category_id: 0,
       description: '',
       cost_price: 0,
@@ -5325,6 +5353,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5342,7 +5379,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       name: '',
       code: '',
-      category_id: '',
+      category_id: 0,
       description: '',
       cost_price: 0,
       stock: 0,
@@ -5350,15 +5387,19 @@ __webpack_require__.r(__webpack_exports__);
       margin_gain_u: 50,
       margin_gain_w: 25,
       dropzoneOptions: {
-        url: '/productos',
+        url: 'api/producto/img',
+        paramName: 'photo',
+        acceptedFiles: 'image/*',
         thumbnailWidth: 150,
         maxFilesize: 2,
+        maxFiles: 3,
         headers: {
           "My-Awesome-Header": "header value"
         },
-        dictDefaultMessage: 'Arrastra las imagenes para subirlas'
+        dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
+
       },
-      errorsProd: {},
+      errors: '',
       backPage: false,
       vproducts: false
     };
@@ -5415,6 +5456,14 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    eventError: function eventError(file, message, xhr) {
+      var error = message.message; // console.log(message)
+
+      $('.dz-error-message:last > span').text(error);
+    },
+    eventSuccess: function eventSuccess(file, response) {
+      console.log(response);
+    },
     storeProduct: function storeProduct() {
       var _this = this;
 
@@ -5431,7 +5480,8 @@ __webpack_require__.r(__webpack_exports__);
           'divisa_unit': this.divisa_unit,
           'wholesale_quantity': this.wholesale_quantity,
           'margin_gain_w': this.margin_gain_w,
-          'wholesale_divisa': this.wholesale_divisa
+          'wholesale_divisa': this.wholesale_divisa,
+          'image': this.image
         }).then(function (response) {
           console.log(response.data);
 
@@ -5439,9 +5489,10 @@ __webpack_require__.r(__webpack_exports__);
 
           toastr.success("El Producto ha sido registrado.");
         })["catch"](function (error) {
-          var errors = error.response;
-          _this.errorsProd = errors;
-          console.log(_this.errorsProd);
+          var error = error.response.data.errors;
+          _this.errors = error;
+          toastr.error("ERROR - En la validaciones.");
+          console.log(_this.errors);
         });
       } else {
         toastr.error('El precio de la Divisa no se encuentra establecido.');
@@ -5524,10 +5575,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_barcode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-barcode */ "./node_modules/vue-barcode/index.js");
 /* harmony import */ var vue_barcode__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_barcode__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue2_dropzone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-dropzone */ "./node_modules/vue2-dropzone/dist/vue2Dropzone.js");
-/* harmony import */ var vue2_dropzone__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_dropzone__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-dropzone/dist/vue2Dropzone.min.css */ "./node_modules/vue2-dropzone/dist/vue2Dropzone.min.css");
-/* harmony import */ var vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -5714,17 +5761,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['data', 'categoryName', 'divisa'],
+  // props: ['data','categoryName','divisa','images'],
+  props: {
+    data: {
+      type: Object,
+      "default": function _default() {}
+    },
+    divisa: {
+      type: Number,
+      "default": 0
+    },
+    categoryName: {
+      type: Object,
+      "default": function _default() {}
+    },
+    images: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    }
+  },
   components: {
-    'barcode': vue_barcode__WEBPACK_IMPORTED_MODULE_0___default.a,
-    'vueDropzone': vue2_dropzone__WEBPACK_IMPORTED_MODULE_1___default.a
+    'barcode': vue_barcode__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
+  data: function data() {
+    return {
+      images: {},
+      product: 0
+    };
   },
   computed: {
     price_gain_u: function price_gain_u() {
@@ -5766,7 +5833,7 @@ __webpack_require__.r(__webpack_exports__);
     wholesale_price: function wholesale_price() {
       var result = 0;
 
-      if (this.datawholesale_quantity > 0 || this.price > 0) {
+      if (this.data.wholesale_quantity > 0 || this.price > 0) {
         result = (parseFloat(this.price_gain_w) + parseFloat(this.data.cost_price)).toFixed(2);
       }
 
@@ -37460,6 +37527,7 @@ var render = function() {
         attrs: {
           data: _vm.selectedRow,
           divisa: _vm.divisa,
+          images: _vm.images,
           categoryName: _vm.category,
           categories: _vm.categories,
           title: _vm.title,
@@ -40238,7 +40306,32 @@ var render = function() {
                                       )
                                     ]),
                                     _vm._v(" "),
-                                    _c("div", { staticClass: "col-md-8" })
+                                    _c("div", { staticClass: "col-md-8" }, [
+                                      _c(
+                                        "div",
+                                        { staticClass: "timeline-item" },
+                                        _vm._l(_vm.images, function(image) {
+                                          return _c(
+                                            "div",
+                                            {
+                                              key: image.id,
+                                              staticClass: "timeline-body"
+                                            },
+                                            [
+                                              _c("img", {
+                                                staticClass:
+                                                  "img-fluid img-thumbnail",
+                                                attrs: {
+                                                  src: image.url,
+                                                  alt: _vm.data.name
+                                                }
+                                              })
+                                            ]
+                                          )
+                                        }),
+                                        0
+                                      )
+                                    ])
                                   ]
                                 )
                               ]
@@ -40256,6 +40349,7 @@ var render = function() {
                     _c("show-product", {
                       attrs: {
                         data: _vm.data,
+                        images: _vm.images,
                         divisa: _vm.divisa,
                         categoryName: _vm.categoryName
                       }
@@ -41169,6 +41263,27 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
+            _vm.errors
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _c(
+                      "ul",
+                      _vm._l(_vm.errors, function(error) {
+                        return _c("li", { key: error.id }, [
+                          _vm._v(_vm._s(error[0]))
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "form",
               {
@@ -41209,7 +41324,7 @@ var render = function() {
                                     }
                                   ],
                                   staticClass: "form-control",
-                                  class: { "is-invalid": _vm.errorsProd },
+                                  class: { "is-invalid": _vm.errors.name },
                                   attrs: {
                                     type: "text",
                                     placeholder: "Nombre del Producto"
@@ -41225,16 +41340,15 @@ var render = function() {
                                   }
                                 }),
                                 _vm._v(" "),
-                                _vm.errorsProd
-                                  ? _c("span", {
-                                      staticClass: "invalid-feedback",
-                                      attrs: { role: "alert" },
-                                      domProps: {
-                                        innerHTML: _vm._s(
-                                          _vm.errorsProd.name[0]
-                                        )
-                                      }
-                                    })
+                                _vm.errors.name
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.name[0]))]
+                                    )
                                   : _vm._e()
                               ])
                             ]),
@@ -41259,7 +41373,9 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
-                                    class: { "is-invalid": _vm.errorsProd },
+                                    class: {
+                                      "is-invalid": _vm.errors.category_id
+                                    },
                                     on: {
                                       change: function($event) {
                                         var $$selectedVal = Array.prototype.filter
@@ -41295,7 +41411,22 @@ var render = function() {
                                     })
                                   ],
                                   2
-                                )
+                                ),
+                                _vm._v(" "),
+                                _vm.errors.category_id
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(_vm.errors.category_id[0])
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ])
                             ]),
                             _vm._v(" "),
@@ -41317,7 +41448,9 @@ var render = function() {
                                     }
                                   ],
                                   staticClass: "form-control",
-                                  class: { "is-invalid": _vm.errorsProd },
+                                  class: {
+                                    "is-invalid": _vm.errors.description
+                                  },
                                   attrs: {
                                     type: "text",
                                     placeholder: "Ingresar descripción"
@@ -41331,7 +41464,22 @@ var render = function() {
                                       _vm.description = $event.target.value
                                     }
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.errors.description
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(_vm.errors.description[0])
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ])
                             ]),
                             _vm._v(" "),
@@ -41353,7 +41501,9 @@ var render = function() {
                                     }
                                   ],
                                   staticClass: "form-control text-right",
-                                  class: { "is-invalid": _vm.errorsProd },
+                                  class: {
+                                    "is-invalid": _vm.errors.cost_price
+                                  },
                                   attrs: { type: "text" },
                                   domProps: { value: _vm.cost_price },
                                   on: {
@@ -41364,7 +41514,18 @@ var render = function() {
                                       _vm.cost_price = $event.target.value
                                     }
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.errors.cost_price
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.cost_price[0]))]
+                                    )
+                                  : _vm._e()
                               ])
                             ]),
                             _vm._v(" "),
@@ -41386,7 +41547,7 @@ var render = function() {
                                     }
                                   ],
                                   staticClass: "form-control",
-                                  class: { "is-invalid": _vm.errorsProd },
+                                  class: { "is-invalid": _vm.errors.stock },
                                   attrs: {
                                     type: "number",
                                     placeholder: "Stock"
@@ -41400,7 +41561,18 @@ var render = function() {
                                       _vm.stock = $event.target.value
                                     }
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.errors.stock
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [_vm._v(_vm._s(_vm.errors.stock[0]))]
+                                    )
+                                  : _vm._e()
                               ])
                             ]),
                             _vm._v(" "),
@@ -41422,7 +41594,9 @@ var render = function() {
                                     }
                                   ],
                                   staticClass: "form-control",
-                                  class: { "is-invalid": _vm.errorsProd },
+                                  class: {
+                                    "is-invalid": _vm.errors.wholesale_quantity
+                                  },
                                   attrs: {
                                     type: "number",
                                     placeholder: "Cantidad por bultor"
@@ -41437,7 +41611,24 @@ var render = function() {
                                         $event.target.value
                                     }
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.errors.wholesale_quantity
+                                  ? _c(
+                                      "span",
+                                      {
+                                        staticClass: "invalid-feedback",
+                                        attrs: { role: "alert" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.errors.wholesale_quantity[0]
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ])
                             ])
                           ])
@@ -41472,6 +41663,7 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
+                                    class: { "is-invalid": _vm.errors.code },
                                     attrs: {
                                       type: "text",
                                       placeholder: "Código de Barras"
@@ -41486,6 +41678,17 @@ var render = function() {
                                       }
                                     }
                                   }),
+                                  _vm._v(" "),
+                                  _vm.errors.wholesale_quantity
+                                    ? _c(
+                                        "span",
+                                        {
+                                          staticClass: "invalid-feedback",
+                                          attrs: { role: "alert" }
+                                        },
+                                        [_vm._v(_vm._s(_vm.errors.code[0]))]
+                                      )
+                                    : _vm._e(),
                                   _vm._v(" "),
                                   _c("barcode", {
                                     attrs: {
@@ -41508,7 +41711,7 @@ var render = function() {
                           _vm._m(3),
                           _vm._v(" "),
                           _c("div", { staticClass: "card-body" }, [
-                            _c("div", { staticClass: "col-md-4" }, [
+                            _c("div", { staticClass: "col-md-12" }, [
                               _c(
                                 "div",
                                 { staticClass: "form-group" },
@@ -41522,14 +41725,16 @@ var render = function() {
                                     attrs: {
                                       id: "dropzone",
                                       options: _vm.dropzoneOptions
+                                    },
+                                    on: {
+                                      "vdropzone-error": _vm.eventError,
+                                      "vdropzone-success": _vm.eventSuccess
                                     }
                                   })
                                 ],
                                 1
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-8" })
+                            ])
                           ])
                         ]
                       )
@@ -41887,8 +42092,7 @@ var render = function() {
                   ])
                 ])
               ]
-            ),
-            _vm._v("|\n                    ")
+            )
           ])
         ])
       ])
@@ -42307,7 +42511,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", {
                                 domProps: {
-                                  textContent: _vm._s(_vm.data.wholesale_divisa)
+                                  textContent: _vm._s(_vm.wholesale_divisa)
                                 }
                               })
                             ]),
@@ -42337,7 +42541,42 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(6)
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(6),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body p-0" }, [
+            _c("div", { staticClass: "col-md-8" }, [
+              _c("div", { staticClass: "timeline-item" }, [
+                _c(
+                  "div",
+                  { staticClass: "timeline-body" },
+                  _vm._l(_vm.images, function(image) {
+                    return _c(
+                      "div",
+                      { key: image.id, staticClass: "float-left" },
+                      [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          attrs: {
+                            src: image.url,
+                            alt: _vm.data.name,
+                            width: "150",
+                            height: "100"
+                          }
+                        })
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer" })
+        ])
+      ])
     ])
   ])
 }
@@ -42453,38 +42692,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6" }, [
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c("h3", { staticClass: "card-title text-muted" }, [
-            _c(
-              "i",
-              {
-                staticClass: "fas fa-camera",
-                staticStyle: { "font-size": "20px" }
-              },
-              [_vm._v("  ")]
-            ),
-            _vm._v(" "),
-            _c("strong", [_vm._v("Imagen del Producto")])
-          ])
-        ]),
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title text-muted" }, [
+        _c(
+          "i",
+          {
+            staticClass: "fas fa-camera",
+            staticStyle: { "font-size": "20px" }
+          },
+          [_vm._v("  ")]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "card-body p-0" }, [
-          _c("table", { staticClass: "table table-sm" }, [
-            _c("thead", [_c("tr")]),
-            _vm._v(" "),
-            _c("tbody", { staticClass: "text-muted" }, [
-              _c("tr", [
-                _c("th", { attrs: { width: "300" } }, [_vm._v("Imagen:")]),
-                _vm._v(" "),
-                _c("td")
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-footer" })
+        _c("strong", [_vm._v("Imagen del Producto")])
       ])
     ])
   }

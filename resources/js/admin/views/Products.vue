@@ -15,13 +15,13 @@
                         
                         <!-- /.card-header -->
                         <div class="card-body">
-                                <data-table ref="tb"
-                                    :data="data"
-                                    :theme="theme"
-                                    :columns="columns"
-                                    :translate="translate"
-                                    @onTablePropsChanged="reloadTable">
-                                </data-table>
+                            <data-table ref="tb"
+                                :data="data"
+                                :theme="theme"
+                                :columns="columns"
+                                :translate="translate"
+                                @onTablePropsChanged="reloadTable">
+                            </data-table>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -42,6 +42,7 @@
         <modal-product
             :data="selectedRow"
             :divisa="divisa"
+            :images="images"
             :categoryName="category"
             :categories="categories"
             :title="title"
@@ -131,6 +132,8 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
+            product_id: 0,
+            images:[]
         }
     },
     created(){
@@ -187,24 +190,29 @@ export default {
             this.vproducts = true;
         },
         modalProduct(data, action){
+            console.log(data)
             switch(action){
     			    case 'edit':
                         {
                             this.title = 'Editar Producto';
                             this.selectedRow = data;
+                            this.product_id = data.id;
                             this.create = false;
                             this.action = true;
                             this.storeup = false;
+                            this.getImages(this.product_id); 
                             break; 
                         }
                     case 'show':
                         {
                             this.title = "Detalle de Producto";
                             this.selectedRow = data;
+                            this.product_id = data.id;
                             this.category = data.category;
                             this.create = false;
                             this.action = false; 
-                            this.storeup = true; 
+                            this.storeup = true;
+                            this.getImages(this.product_id); 
                             break;
                         }
                     case 'delete':
@@ -249,8 +257,18 @@ export default {
             });
         },
         back_pag(){
-            alert('hola');
             this.vproducts = false;
+        },
+        getImages(product_id){
+            var id = product_id;
+            console.log(id)
+            var url = `/api/producto/imagenes/${id}`;
+            axios.get(url).then(response => {
+                this.images = response.data;
+                console.log( this.images)
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
         }
         
 

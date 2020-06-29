@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Photo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
@@ -35,7 +36,24 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate(request(),[
+            'photo' => 'image|max:2048'
+        ]);
+        
+        $photos = $request->file('photo')->store('product','public');
+        
+        if(!is_array($photos)){
+            $photos = [$photos];
+        }
+        for($i)
+        return $photos;
+        // $photoUrl = Storage::url($photos);
+
+        // $photoUrl = $photo->store('public');
+        // $imageName = $request->getClientOriginalName();
+        // $image->move(storage_path('images'), $imageName); 
+
+        // return $photoUrl;
     }
 
     /**
@@ -46,7 +64,9 @@ class PhotosController extends Controller
      */
     public function show($id)
     {
-        //
+        $photos = Photo::where('product_id', $id)->get();
+
+        return $photos;
     }
 
     /**

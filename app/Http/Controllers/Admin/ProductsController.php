@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Divisa;
 use App\Product;
+use App\Photo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
@@ -52,22 +53,27 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $this->validate($request, [
-            'name' => 'required|min:3',
-            'category_id' => 'required',
-            'code' => 'required',
-            'cost_price' => 'required',
-            'description' => 'required',
-            'stock' => 'required',
-            'margin_gain_u' => 'required',
-            'divisa_unit' => 'required',
-            'wholesale_quantity' => 'required',
-            'margin_gain_w' => 'required',
-            'wholesale_divisa' => 'required',
-        ]);
-
+                'name' => 'required|min:3',
+                'category_id' => 'required|numeric|min:1',
+                'code' => 'required',
+                'cost_price' => 'required|numeric|min:1',
+                'description' => 'required',
+                'stock' => 'required|numeric|min:10',
+                'margin_gain_u' => 'required|numeric',
+                'divisa_unit' => 'required',
+                'wholesale_quantity' => 'required|numeric|min:10',
+                'margin_gain_w' => 'required',
+                'wholesale_divisa' => 'required',
+            ]);
+        
         $product = Product::create($request->all());
+        // $product_id = $product->id;
+
+        // $photo = Photo::create([
+        //     'product_id' => $product_id,
+        //     'url' => $request->image
+        // ]);
 
         if($data && request()->wantsJson())
         {
@@ -177,5 +183,12 @@ class ProductsController extends Controller
            return $product;
   
        }
+    }
+
+    public function last_id()
+    {
+        $product_id = Product::select('id')->latest('id')->first();
+
+        return $product_id;
     }
 }

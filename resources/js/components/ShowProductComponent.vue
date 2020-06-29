@@ -136,7 +136,7 @@
                                             </tr>
                                             <tr>
                                                 <th width=300>Precio Divisa</th>
-                                                <td v-text="data.wholesale_divisa"></td>
+                                                <td v-text="wholesale_divisa"></td>
                                             </tr>
                                             <tr>
                                             <th width=300>Precio Venta</th>
@@ -164,20 +164,17 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                </tr>
-                            </thead>
-                            <tbody class="text-muted">
-                                <tr>
-                                    <th width=300>Imagen:</th>
-                                    <td>
-                                        <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone> -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-md-8">
+                            <!-- timeline item -->
+                            <div class="timeline-item">
+                                <div class="timeline-body">
+                                    <div v-for="image in images" :key="image.id" class="float-left">
+                                        <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END timeline item -->
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer"></div>
@@ -189,13 +186,34 @@
 
 <script>
 import VueBarcode from 'vue-barcode';
-import vue2Dropzone from 'vue2-dropzone';
-import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 export default {
-    props: ['data','categoryName','divisa'],
+    // props: ['data','categoryName','divisa','images'],
+    props:{
+        data:{
+            type: Object,
+            default: () => {}
+        },
+        divisa:{
+            type: Number,
+            default: 0,
+        },
+        categoryName:{
+            type: Object,
+            default: () => {},
+        },
+        images: {
+            type: Array,
+            default: () => [],
+        }
+    },
     components:{
         'barcode': VueBarcode,
-        'vueDropzone': vue2Dropzone,
+    },
+    data(){
+        return{
+            images:{},
+            product: 0
+        }
     },
     computed:{
         price_gain_u: function(){
@@ -230,7 +248,7 @@ export default {
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.datawholesale_quantity > 0 || this.price > 0){
+            if(this.data.wholesale_quantity > 0 || this.price > 0){
                 result = (parseFloat(this.price_gain_w) + parseFloat(this.data.cost_price)).toFixed(2);
             }
             return result;

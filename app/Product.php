@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 
@@ -102,7 +103,7 @@ class Product extends Model
 
     public function generateUrl()
     {
-        $url = str_slug($this->name);
+        $url = Str::slug($this->name);
 
         if($this::whereUrl($url)->exists())
         {

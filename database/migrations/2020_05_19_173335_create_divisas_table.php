@@ -16,7 +16,7 @@ class CreateDivisasTable extends Migration
         Schema::create('divisas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->decimal('price', 11,2)->nullable();
-            $table->integer('user_id')->nullable();
+            $table->unsignedInteger('user_id');
             $table->timestamps();
         });
     }

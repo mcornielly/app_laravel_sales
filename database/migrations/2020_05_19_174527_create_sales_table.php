@@ -15,8 +15,8 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('customer_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('user_id');
             $table->string('type_voucher', 20);
             $table->string('num_voucher', 7)->nullable();
             $table->string('num_bill', 10);
