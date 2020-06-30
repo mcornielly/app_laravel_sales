@@ -67,13 +67,21 @@ class ProductsController extends Controller
                 'wholesale_divisa' => 'required',
             ]);
         
-        $product = Product::create($request->all());
-        // $product_id = $product->id;
+        $product = new Product;
+        $product->name = $request->name;    
+        $product->category_id = $request->category_id;    
+        $product->code = $request->code;
+        $product->cost_price = $request->cost_price;    
+        $product->description = $request->description;    
+        $product->stock = $request->stock;    
+        $product->margin_gain_u = $request->margin_gain_u;    
+        $product->divisa_unit = $request->divisa_unit;    
+        $product->wholesale_quantity = $request->wholesale_quantity;    
+        $product->margin_gain_w = $request->margin_gain_w;    
+        $product->wholesale_divisa = $request->wholesale_divisa;    
+        $product->save();    
 
-        // $photo = Photo::create([
-        //     'product_id' => $product_id,
-        //     'url' => $request->image
-        // ]);
+        $product->photos()->attach($request->images);
 
         if($data && request()->wantsJson())
         {

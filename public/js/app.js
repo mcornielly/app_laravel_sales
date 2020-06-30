@@ -5399,6 +5399,8 @@ __webpack_require__.r(__webpack_exports__);
         dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
 
       },
+      image: '',
+      photos: [],
       errors: '',
       backPage: false,
       vproducts: false
@@ -5462,7 +5464,10 @@ __webpack_require__.r(__webpack_exports__);
       $('.dz-error-message:last > span').text(error);
     },
     eventSuccess: function eventSuccess(file, response) {
-      console.log(response);
+      this.image = response;
+      this.photos.push(this.image);
+      console.log(file);
+      console.log(this.photos);
     },
     storeProduct: function storeProduct() {
       var _this = this;
@@ -5481,7 +5486,7 @@ __webpack_require__.r(__webpack_exports__);
           'wholesale_quantity': this.wholesale_quantity,
           'margin_gain_w': this.margin_gain_w,
           'wholesale_divisa': this.wholesale_divisa,
-          'image': this.image
+          'images': this.photos
         }).then(function (response) {
           console.log(response.data);
 

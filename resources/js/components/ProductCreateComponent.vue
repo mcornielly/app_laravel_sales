@@ -255,6 +255,8 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
+            image: '',
+            photos:[],
             errors:'',
             backPage:false,
             vproducts:false
@@ -265,7 +267,6 @@ export default {
         'vueDropzone': vue2Dropzone,
     },
     computed:{
-
         price_gain_u: function(){
             var result = (this.cost_price * this.margin_gain_u / 100).toFixed(2);
             this.p_gain_u = result;
@@ -311,7 +312,10 @@ export default {
             $('.dz-error-message:last > span').text(error);
         },
         eventSuccess(file, response){
-          console.log(response)  
+          this.image = response;  
+          this.photos.push(this.image);
+          console.log(file)
+          console.log(this.photos)  
         },
         storeProduct(){
             if(this.divisa > 0){
@@ -328,7 +332,7 @@ export default {
                     'wholesale_quantity' : this.wholesale_quantity,
                     'margin_gain_w' : this.margin_gain_w,
                     'wholesale_divisa' : this.wholesale_divisa,
-                    'image':this.image
+                    'images':this.photos
                 }).then(response =>{
                     console.log(response.data)
                     this.back_page();

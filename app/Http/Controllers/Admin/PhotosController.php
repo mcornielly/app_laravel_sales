@@ -41,11 +41,7 @@ class PhotosController extends Controller
         ]);
         
         $photos = $request->file('photo')->store('product','public');
-        
-        if(!is_array($photos)){
-            $photos = [$photos];
-        }
-        for($i)
+            
         return $photos;
         // $photoUrl = Storage::url($photos);
 
