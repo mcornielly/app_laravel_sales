@@ -332,7 +332,7 @@ export default {
                     'wholesale_quantity' : this.wholesale_quantity,
                     'margin_gain_w' : this.margin_gain_w,
                     'wholesale_divisa' : this.wholesale_divisa,
-                    'images':this.photos
+                    'photos':this.photos
                 }).then(response =>{
                     console.log(response.data)
                     this.back_page();

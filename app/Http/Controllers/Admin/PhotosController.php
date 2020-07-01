@@ -42,14 +42,9 @@ class PhotosController extends Controller
         
         $photos = $request->file('photo')->store('product','public');
             
-        return $photos;
-        // $photoUrl = Storage::url($photos);
+        $photoUrl = Storage::url($photos);
 
-        // $photoUrl = $photo->store('public');
-        // $imageName = $request->getClientOriginalName();
-        // $image->move(storage_path('images'), $imageName); 
-
-        // return $photoUrl;
+        return $photoUrl;
     }
 
     /**

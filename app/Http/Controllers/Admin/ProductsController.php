@@ -79,16 +79,25 @@ class ProductsController extends Controller
         $product->wholesale_quantity = $request->wholesale_quantity;    
         $product->margin_gain_w = $request->margin_gain_w;    
         $product->wholesale_divisa = $request->wholesale_divisa;    
-        $product->save();    
+        $product->save();
+        
+        if(count($request->photos)>0){
+            foreach($request->photos as $photo)
+            {
+                $photos = new Photo;  
+                $photos->product_id = $product->id;  
+                $photos->url = $photo;
+                $photos->save();
 
-        $product->photos()->attach($request->images);
+            }
+        }    
+
+        
 
         if($data && request()->wantsJson())
         {
             return $product;
-
         }else{
-
             return $data;
         }
 

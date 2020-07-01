@@ -5486,7 +5486,7 @@ __webpack_require__.r(__webpack_exports__);
           'wholesale_quantity': this.wholesale_quantity,
           'margin_gain_w': this.margin_gain_w,
           'wholesale_divisa': this.wholesale_divisa,
-          'images': this.photos
+          'photos': this.photos
         }).then(function (response) {
           console.log(response.data);
 
@@ -42551,7 +42551,7 @@ var render = function() {
           _vm._m(6),
           _vm._v(" "),
           _c("div", { staticClass: "card-body p-0" }, [
-            _c("div", { staticClass: "col-md-8" }, [
+            _c("div", { staticClass: "col-md-12" }, [
               _c("div", { staticClass: "timeline-item" }, [
                 _c(
                   "div",
@@ -42559,7 +42559,10 @@ var render = function() {
                   _vm._l(_vm.images, function(image) {
                     return _c(
                       "div",
-                      { key: image.id, staticClass: "float-left" },
+                      {
+                        key: image.id,
+                        staticClass: "float-left pt-2 pb-2 pr-2"
+                      },
                       [
                         _c("img", {
                           staticClass: "img-thumbnail",

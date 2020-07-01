@@ -164,11 +164,11 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <!-- timeline item -->
                             <div class="timeline-item">
                                 <div class="timeline-body">
-                                    <div v-for="image in images" :key="image.id" class="float-left">
+                                    <div v-for="image in images" :key="image.id" class="float-left pt-2 pb-2 pr-2">
                                         <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
                                     </div>
                                 </div>
