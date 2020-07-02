@@ -4650,6 +4650,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -4720,14 +4725,22 @@ var _user = document.head.querySelector('meta[name="user"]');
       margin_gain_u: 0,
       margin_gain_w: 0,
       dropzoneOptions: {
-        url: '/productos',
+        url: 'api/producto/img',
+        paramName: 'photo',
+        acceptedFiles: 'image/*',
         thumbnailWidth: 150,
+        thumbnailHeight: 100,
         maxFilesize: 2,
+        maxFiles: 3,
         headers: {
           "My-Awesome-Header": "header value"
         },
-        dictDefaultMessage: 'Arrastra las imagenes para subirlas'
-      }
+        dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
+
+      },
+      files: [],
+      image: '',
+      photos: []
     };
   },
   computed: {
@@ -4781,6 +4794,22 @@ var _user = document.head.querySelector('meta[name="user"]');
     }
   },
   methods: {
+    vremoved: function vremoved(file, xhr, error) {
+      this.$refs.myVueDropzone.removeFile(this.files);
+      this.removedFile = true; // window.toastr.warning('', 'Event : vdropzone-removedFile')
+    },
+    eventError: function eventError(file, message, xhr) {
+      var error = message.message; // console.log(message)
+
+      $('.dz-error-message:last > span').text(error);
+    },
+    eventSuccess: function eventSuccess(file, response) {
+      this.files.push(file);
+      this.image = response;
+      this.photos.push(this.image);
+      console.log(this.files);
+      console.log(this.photos);
+    },
     actionModal: function actionModal(action) {
       if (action == "store") {
         this.storeProduct();
@@ -4823,9 +4852,12 @@ var _user = document.head.querySelector('meta[name="user"]');
         'divisa_unit': this.data.divisa_unit,
         'wholesale_quantity': this.data.wholesale_quantity,
         'margin_gain_w': this.data.margin_gain_w,
-        'wholesale_divisa': this.data.wholesale_divisa
+        'wholesale_divisa': this.data.wholesale_divisa,
+        'photos': this.photos
       }).then(function (response) {
         _this2.$parent.reloadTable();
+
+        _this2.vremoved();
 
         toastr.info('El producto fue actualizado.');
       })["catch"](function (error) {
@@ -4834,7 +4866,11 @@ var _user = document.head.querySelector('meta[name="user"]');
         _this2.errors = errors;
       });
     },
+    deleteImag: function deleteImag(data) {
+      console.log(data);
+    },
     closeModal: function closeModal() {
+      this.vremoved(this.files);
       this.selectedRow = {};
       this.errors = '';
     }
@@ -40284,7 +40320,7 @@ var render = function() {
                                     }
                                   },
                                   [
-                                    _c("div", { staticClass: "col-md-4" }, [
+                                    _c("div", { staticClass: "col-md-12" }, [
                                       _c(
                                         "div",
                                         { staticClass: "form-group" },
@@ -40304,6 +40340,11 @@ var render = function() {
                                             attrs: {
                                               id: "dropzone",
                                               options: _vm.dropzoneOptions
+                                            },
+                                            on: {
+                                              "vdropzone-error": _vm.eventError,
+                                              "vdropzone-success":
+                                                _vm.eventSuccess
                                             }
                                           })
                                         ],
@@ -40311,24 +40352,53 @@ var render = function() {
                                       )
                                     ]),
                                     _vm._v(" "),
-                                    _c("div", { staticClass: "col-md-8" }, [
+                                    _c("div", { staticClass: "col-md-12" }, [
                                       _c(
                                         "div",
-                                        { staticClass: "timeline-item" },
+                                        {
+                                          staticClass:
+                                            "timeline-body align-center text-center"
+                                        },
                                         _vm._l(_vm.images, function(image) {
                                           return _c(
                                             "div",
                                             {
                                               key: image.id,
-                                              staticClass: "timeline-body"
+                                              staticClass:
+                                                "float-left pt-2 pb-2 pr-2"
                                             },
                                             [
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-link btn-danger btn-sm",
+                                                  staticStyle: {
+                                                    position: "absolute"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.deleteImag(
+                                                        image.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fas fa-trash-alt"
+                                                  })
+                                                ]
+                                              ),
+                                              _vm._v(" "),
                                               _c("img", {
-                                                staticClass:
-                                                  "img-fluid img-thumbnail",
+                                                staticClass: "img-thumbnail",
                                                 attrs: {
                                                   src: image.url,
-                                                  alt: _vm.data.name
+                                                  alt: _vm.data.name,
+                                                  width: "150",
+                                                  height: "100"
                                                 }
                                               })
                                             ]
@@ -40393,7 +40463,7 @@ var render = function() {
                             {
                               staticClass: "btn btn-primary",
                               attrs: {
-                                type: "submit",
+                                type: "button",
                                 "data-dismiss": "modal",
                                 "data-backdrop": "false"
                               },
@@ -40410,7 +40480,7 @@ var render = function() {
                             {
                               staticClass: "btn btn-primary",
                               attrs: {
-                                type: "submit",
+                                type: "button",
                                 "data-dismiss": "modal",
                                 "data-backdrop": "false"
                               },

@@ -165,6 +165,17 @@ class ProductsController extends Controller
         $product = Product::find($request->id);    
         $product->update($data);
 
+        if(count($request->photos)>0){
+            foreach($request->photos as $photo)
+            {
+                $photos = new Photo;  
+                $photos->product_id = $request->id;  
+                $photos->url = $photo;
+                $photos->save();
+
+            }
+        }  
+
         return $product;
     }
 

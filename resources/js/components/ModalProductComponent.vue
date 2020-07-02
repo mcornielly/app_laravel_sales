@@ -152,17 +152,22 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-four-photo" role="tabpanel" aria-labelledby="custom-tabs-four-photo-tab">
-                                                <div class="col-md-4">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label for="my-input" class="form-control-label text-muted">Imagen del Producto</label>
-                                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+                                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"
+                                                            @vdropzone-error="eventError"
+                                                            @vdropzone-success="eventSuccess">
+                                                        </vue-dropzone>
                                                     </div>     
                                                 </div>
-                                                <div class="col-md-8">
+                                                <div class="col-md-12">
                                                     <!-- timeline item -->
-                                                    <div class="timeline-item">
-                                                        <div v-for="image in images" :key="image.id" class="timeline-body">
-                                                            <img :src="image.url" :alt="data.name" class="img-fluid img-thumbnail">
+                                                    <div class="timeline-body align-center text-center">
+                                                        <div v-for="image in images" :key="image.id" class="float-left pt-2 pb-2 pr-2">
+                                                            <a class="btn btn-link btn-danger btn-sm" style="position: absolute" @click="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></a> 
+                                                            <!-- <button type="button" class="btn btn-danger btn-sm" style="position: absolute" @click.stop="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></button> -->
+                                                            <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
                                                         </div>
                                                     </div>
                                                     <!-- END timeline item -->
@@ -185,8 +190,8 @@
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <div v-if="action">
-                            <button v-if="create" type="submit" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
-                            <button v-else type="submit" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                            <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
+                            <button v-else type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         </div>
                     </div>
                 </form>
@@ -257,12 +262,20 @@ export default {
             margin_gain_u: 0,
             margin_gain_w: 0,
             dropzoneOptions: {
-                url: '/productos',
+                url: 'api/producto/img',
+                paramName: 'photo',
+                acceptedFiles: 'image/*',
                 thumbnailWidth: 150,
+                thumbnailHeight: 100,
                 maxFilesize: 2,
+                maxFiles: 3,
                 headers: { "My-Awesome-Header": "header value" },
-                dictDefaultMessage: 'Arrastra las imagenes para subirlas'
+                dictDefaultMessage: 'Arrastra las imagenes para subirlas',
+                // autoProcessQueue:false
             },
+            files: [],
+            image: '',
+            photos:[],
         }
     },
     computed:{
@@ -308,6 +321,23 @@ export default {
         }
     },
     methods:{
+    vremoved(file, xhr, error) {
+        this.$refs.myVueDropzone.removeFile(this.files);
+        this.removedFile = true;
+      // window.toastr.warning('', 'Event : vdropzone-removedFile')
+    },
+        eventError(file, message, xhr){
+            var error = message.message;
+            // console.log(message)
+            $('.dz-error-message:last > span').text(error);
+        },
+        eventSuccess(file, response){
+            this.files.push(file);
+            this.image = response;  
+            this.photos.push(this.image);
+            console.log(this.files)
+            console.log(this.photos)  
+        },
         actionModal(action){
             if(action == "store"){
                 this.storeProduct();
@@ -345,8 +375,10 @@ export default {
                 'wholesale_quantity':this.data.wholesale_quantity,
                 'margin_gain_w':this.data.margin_gain_w,
                 'wholesale_divisa':this.data.wholesale_divisa,
+                'photos':this.photos
             }).then(response => {
                 this.$parent.reloadTable();
+                this.vremoved();
                 toastr.info('El producto fue actualizado.');
             }).catch(error => {
                 console.log(error.response.data);
@@ -354,7 +386,11 @@ export default {
                 this.errors = errors;
             });
         },
+        deleteImag(data){
+            console.log(data)
+        },
         closeModal(){
+            this.vremoved(this.files);
             this.selectedRow = {};
             this.errors = '';
         },
