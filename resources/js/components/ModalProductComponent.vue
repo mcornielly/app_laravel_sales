@@ -190,8 +190,8 @@
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <div v-if="action">
-                            <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
-                            <button v-else type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                            <!-- <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button> -->
+                            <button type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         </div>
                     </div>
                 </form>
@@ -273,9 +273,9 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
-            files: [],
             image: '',
             photos:[],
+            close: false
         }
     },
     computed:{
@@ -321,22 +321,37 @@ export default {
         }
     },
     methods:{
-    vremoved(file, xhr, error) {
-        this.$refs.myVueDropzone.removeFile(this.files);
-        this.removedFile = true;
-      // window.toastr.warning('', 'Event : vdropzone-removedFile')
-    },
+        vremoved(file, xhr, error) {
+            this.$refs.myVueDropzone.removeAllFiles();
+            if(this.close == true && !this.photos){
+                this.removeStorage();
+                this.close = false;    
+            }
+            this.photos = [];
+            // window.toastr.warning('', 'Event : vdropzone-removedFile')
+        },
+        removeStorage(){
+            console.log(this.photos)
+            var url = "api/fotos/url";
+            axios.post(url,{
+                'photos': this.photos, 
+            }).then(response => {
+                console.log(response.data)
+            }).catch(error => {
+                console.log(error);
+                var errors = error.response.data.errors;
+                this.errors = errors;
+            });
+        },
         eventError(file, message, xhr){
             var error = message.message;
             // console.log(message)
             $('.dz-error-message:last > span').text(error);
         },
         eventSuccess(file, response){
-            this.files.push(file);
             this.image = response;  
             this.photos.push(this.image);
-            console.log(this.files)
-            console.log(this.photos)  
+            // console.log(this.photos)  
         },
         actionModal(action){
             if(action == "store"){
@@ -345,21 +360,21 @@ export default {
                 this.updateProduct();
             }
         },
-        storeProduct(){
-            var url = this.url;
-            axios.post(url,{
-                'name': this.data.name, 
-                'description': this.data.description 
-            }).then(response => {
-                console.log(response.data)
-                this.$parent.reloadTable();
-                toastr.success('El producto fue registrado.');
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
-        },
+        // storeProduct(){
+        //     var url = this.url;
+        //     axios.post(url,{
+        //         'name': this.data.name, 
+        //         'description': this.data.description 
+        //     }).then(response => {
+        //         console.log(response.data)
+        //         this.$parent.reloadTable();
+        //         toastr.success('El producto fue registrado.');
+        //     }).catch(error => {
+        //         console.log(error);
+        //         var errors = error.response.data.errors;
+        //         this.errors = errors;
+        //     });
+        // },
         updateProduct(){
             var url = `${this.url}/${this.data.id}`;
             axios.put(url,{
@@ -387,12 +402,26 @@ export default {
             });
         },
         deleteImag(data){
-            console.log(data)
+            var url = `api/fotos/eliminar/${data}`;
+            axios.delete(url,{
+                'photo': this.photos
+            }).then(response => {
+                console.log(response.data)
+                this.product_id = response.data.product_id;
+                console.log(this.product_id);
+                this.$parent.getImages(this.product_id);
+                toastr.success('La foto del producto ha sido eliminada.');
+            }).catch(error => {
+                console.log(error);
+                var errors = error.response.data.errors;
+                this.errors = errors;
+            });
         },
         closeModal(){
-            this.vremoved(this.files);
+            this.close = true;
             this.selectedRow = {};
             this.errors = '';
+            this.vremoved();
         },
 
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Photo;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,8 +90,32 @@ class PhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        if($request->ajax()){
+
+            $photo = Photo::find($id);
+            $photoPath = str_replace('storage', 'public', $photo->url);
+            Storage::delete($photoPath);
+            $photo->delete();
+            
+            return $photo;
+        }
+    }
+
+    public function delete_storage(Request $request)
+    {
+        if($request->ajax()){
+
+            if(count($request->photos)>0){
+                foreach($request->photos as $photo)
+                {
+                    $photoPath = str_replace('storage', 'public', $photo);
+    
+                    Storage::delete($photoPath);
+                }
+            }
+        
+        }
     }
 }

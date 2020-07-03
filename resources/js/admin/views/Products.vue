@@ -190,7 +190,6 @@ export default {
             this.vproducts = true;
         },
         modalProduct(data, action){
-            console.log(data)
             switch(action){
     			    case 'edit':
                         {
@@ -261,11 +260,10 @@ export default {
         },
         getImages(product_id){
             var id = product_id;
-            console.log(id)
             var url = `/api/producto/imagenes/${id}`;
             axios.get(url).then(response => {
                 this.images = response.data;
-                console.log( this.images)
+                // console.log( this.images)
             }).catch(error =>{
                 console.log(error.response.data);
             });

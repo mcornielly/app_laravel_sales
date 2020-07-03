@@ -42,8 +42,9 @@ Route::get('producto/restore/{id}', 'Admin\ProductsController@restore');
 Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
 Route::post('producto/img', 'Admin\PhotosController@store');
 Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
-Route::get('productos/lastid', 'Admin\ProductsController@last_id');
 
+Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
+Route::delete('fotos/eliminar/{id}', 'Admin\PhotosController@destroy');
 
 Route::get('proveedores', 'Admin\ProvidersController@index');
 Route::post('proveedor', 'Admin\ProvidersController@store');

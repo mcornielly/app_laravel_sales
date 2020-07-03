@@ -3077,8 +3077,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       this.vproducts = true;
     },
     modalProduct: function modalProduct(data, action) {
-      console.log(data);
-
       switch (action) {
         case 'edit':
           {
@@ -3157,11 +3155,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       var _this6 = this;
 
       var id = product_id;
-      console.log(id);
       var url = "/api/producto/imagenes/".concat(id);
       axios.get(url).then(function (response) {
-        _this6.images = response.data;
-        console.log(_this6.images);
+        _this6.images = response.data; // console.log( this.images)
       })["catch"](function (error) {
         console.log(error.response.data);
       });
@@ -4738,9 +4734,9 @@ var _user = document.head.querySelector('meta[name="user"]');
         dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
 
       },
-      files: [],
       image: '',
-      photos: []
+      photos: [],
+      close: false
     };
   },
   computed: {
@@ -4795,8 +4791,29 @@ var _user = document.head.querySelector('meta[name="user"]');
   },
   methods: {
     vremoved: function vremoved(file, xhr, error) {
-      this.$refs.myVueDropzone.removeFile(this.files);
-      this.removedFile = true; // window.toastr.warning('', 'Event : vdropzone-removedFile')
+      this.$refs.myVueDropzone.removeAllFiles();
+
+      if (this.close == true && !this.photos) {
+        this.removeStorage();
+        this.close = false;
+      }
+
+      this.photos = []; // window.toastr.warning('', 'Event : vdropzone-removedFile')
+    },
+    removeStorage: function removeStorage() {
+      var _this = this;
+
+      console.log(this.photos);
+      var url = "api/fotos/url";
+      axios.post(url, {
+        'photos': this.photos
+      }).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error);
+        var errors = error.response.data.errors;
+        _this.errors = errors;
+      });
     },
     eventError: function eventError(file, message, xhr) {
       var error = message.message; // console.log(message)
@@ -4804,11 +4821,8 @@ var _user = document.head.querySelector('meta[name="user"]');
       $('.dz-error-message:last > span').text(error);
     },
     eventSuccess: function eventSuccess(file, response) {
-      this.files.push(file);
       this.image = response;
-      this.photos.push(this.image);
-      console.log(this.files);
-      console.log(this.photos);
+      this.photos.push(this.image); // console.log(this.photos)  
     },
     actionModal: function actionModal(action) {
       if (action == "store") {
@@ -4817,25 +4831,21 @@ var _user = document.head.querySelector('meta[name="user"]');
         this.updateProduct();
       }
     },
-    storeProduct: function storeProduct() {
-      var _this = this;
-
-      var url = this.url;
-      axios.post(url, {
-        'name': this.data.name,
-        'description': this.data.description
-      }).then(function (response) {
-        console.log(response.data);
-
-        _this.$parent.reloadTable();
-
-        toastr.success('El producto fue registrado.');
-      })["catch"](function (error) {
-        console.log(error);
-        var errors = error.response.data.errors;
-        _this.errors = errors;
-      });
-    },
+    // storeProduct(){
+    //     var url = this.url;
+    //     axios.post(url,{
+    //         'name': this.data.name, 
+    //         'description': this.data.description 
+    //     }).then(response => {
+    //         console.log(response.data)
+    //         this.$parent.reloadTable();
+    //         toastr.success('El producto fue registrado.');
+    //     }).catch(error => {
+    //         console.log(error);
+    //         var errors = error.response.data.errors;
+    //         this.errors = errors;
+    //     });
+    // },
     updateProduct: function updateProduct() {
       var _this2 = this;
 
@@ -4867,12 +4877,30 @@ var _user = document.head.querySelector('meta[name="user"]');
       });
     },
     deleteImag: function deleteImag(data) {
-      console.log(data);
+      var _this3 = this;
+
+      var url = "api/fotos/eliminar/".concat(data);
+      axios["delete"](url, {
+        'photo': this.photos
+      }).then(function (response) {
+        console.log(response.data);
+        _this3.product_id = response.data.product_id;
+        console.log(_this3.product_id);
+
+        _this3.$parent.getImages(_this3.product_id);
+
+        toastr.success('La foto del producto ha sido eliminada.');
+      })["catch"](function (error) {
+        console.log(error);
+        var errors = error.response.data.errors;
+        _this3.errors = errors;
+      });
     },
     closeModal: function closeModal() {
-      this.vremoved(this.files);
+      this.close = true;
       this.selectedRow = {};
       this.errors = '';
+      this.vremoved();
     }
   }
 });
@@ -40457,41 +40485,23 @@ var render = function() {
                 _vm._v(" "),
                 _vm.action
                   ? _c("div", [
-                      _vm.create
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: {
-                                type: "button",
-                                "data-dismiss": "modal",
-                                "data-backdrop": "false"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.actionModal("store")
-                                }
-                              }
-                            },
-                            [_vm._v("Agregar")]
-                          )
-                        : _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: {
-                                type: "button",
-                                "data-dismiss": "modal",
-                                "data-backdrop": "false"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.actionModal("update")
-                                }
-                              }
-                            },
-                            [_vm._v("Actualizar")]
-                          )
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            type: "button",
+                            "data-dismiss": "modal",
+                            "data-backdrop": "false"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.actionModal("update")
+                            }
+                          }
+                        },
+                        [_vm._v("Actualizar")]
+                      )
                     ])
                   : _vm._e()
               ]
