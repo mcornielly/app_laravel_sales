@@ -102,8 +102,7 @@
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.margin_gain_u[0]"></span>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="number" class="form-control" v-model="data.margin_gain_u">
-
+                                                        <input type="text" class="form-control" v-model="data.margin_gain_u">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -133,7 +132,7 @@
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.margin_gain_w[0]"></span>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="number" class="form-control" v-model="data.margin_gain_w">
+                                                        <input type="text" class="form-control" v-model="data.margin_gain_w">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">

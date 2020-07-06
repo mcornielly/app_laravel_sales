@@ -117,29 +117,47 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'Precio',
+                    label: 'Cantidad',
+                    name: 'stock',
+                    orderable: true,
+                },
+                {
+                    label: 'PV. Bs.',
                     name: 'price',
                     orderable: true,
                     component: DataTableCurrencyCell
                 },
                 {
-                    label: 'Categoría',
-                    name: 'category.name',
+                    label: 'PV. $',
+                    name: 'divisa_unit',
                     orderable: true,
+                    // component: DataTableCurrencyCell
+                },
+                {
+                    label: 'PV. Mayor Bs.',
+                    name: 'price_wholesale',
+                    orderable: true,
+                    // component: DataTableCurrencyCell
+                },
+                {
+                    label: 'PV. Mayor $',
+                    name: 'wholesale_divisa',
+                    orderable: true,
+                    // component: DataTableCurrencyCell
                 },
                 {
                     label: 'Estatus',
                     component: StatusComponentVue,
                     orderable: true,
                 },
-                {
-                    label: 'Acciones',
-                    name: '',
-                    orderable: false,
-                    component: BtnProductsComponentVue,
-                    event: "click",
-                    handler: this.modalProduct
-                },
+                // {
+                //     label: 'Acciones',
+                //     name: '',
+                //     orderable: false,
+                //     component: BtnProductsComponentVue,
+                //     event: "click",
+                //     handler: this.modalProduct
+                // },
 
             ],
             selectedRow: {},

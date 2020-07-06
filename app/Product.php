@@ -44,7 +44,7 @@ class Product extends Model
             'searchable' => true,
         ],
         'divisa_unit' => [
-            'searchable' => false,
+            'searchable' => true,
         ],
         'wholesale_quantity' => [
             'searchable' => true,
