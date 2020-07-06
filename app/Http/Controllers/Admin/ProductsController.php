@@ -57,7 +57,7 @@ class ProductsController extends Controller
                 'name' => 'required|min:3',
                 'category_id' => 'required|numeric|min:1',
                 'code' => 'required',
-                'cost_price' => 'required|numeric|min:1',
+                'price' => 'required|numeric|min:1',
                 'description' => 'required',
                 'stock' => 'required|numeric|min:10',
                 'margin_gain_u' => 'required|numeric',
@@ -71,7 +71,7 @@ class ProductsController extends Controller
         $product->name = $request->name;    
         $product->category_id = $request->category_id;    
         $product->code = $request->code;
-        $product->cost_price = $request->cost_price;    
+        $product->price = $request->price;    
         $product->description = $request->description;    
         $product->stock = $request->stock;    
         $product->margin_gain_u = $request->margin_gain_u;    
@@ -152,7 +152,7 @@ class ProductsController extends Controller
             'name' => 'required|min:3',
             'category_id' => 'required',
             'code' => 'required',
-            'cost_price' => 'required',
+            'price' => 'required',
             'description' => 'required',
             'stock' => 'required',
             'margin_gain_u' => 'required',

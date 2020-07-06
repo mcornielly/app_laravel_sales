@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('url')->nullable();
             $table->unsignedInteger('category_id');
             $table->string('code')->nullable();
-            $table->decimal('cost_price', 11, 2)->nullable();
+            $table->decimal('price', 11, 2)->nullable();
             $table->mediumText('description')->nullable();
             $table->integer('stock')->nullable();
             $table->decimal('margin_gain_u', 4, 2)->nullable();

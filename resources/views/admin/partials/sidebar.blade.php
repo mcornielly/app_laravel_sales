@@ -66,6 +66,12 @@
                   <p>Productos</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('price_list.index')}}" class="nav-link {{ setActiveRoute('price_list.index') }}">
+                  <i class="nav-icon far fa-list-alt"></i>
+                  <p>Lista de Precios</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview {{ setActiveNavDrop(['ingresos.index','proveedores.index']) }}">

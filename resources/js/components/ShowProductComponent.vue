@@ -106,19 +106,19 @@
                                         <tbody class="text-muted">
                                             <tr>
                                                 <th width=300>Precio Costo:</th>
-                                                <td v-text="data.cost_price"></td>
+                                                <td align="center">{{ data.price | numeralFormat('0.00[,]00') }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Margen de Ganancia</th>
-                                                <td v-text="data.margin_gain_u"></td>
+                                                <td align="center">{{ data.margin_gain_u/100 | numeralFormat(' %') }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Precio Divisa</th>
-                                                <td v-text="divisa_unit"></td>
+                                                <td align="center">{{ divisa_unit | numeralFormat('0.00[,]00 $') }}</td>
                                             </tr>
                                             <tr>
                                             <th width=300>Precio Venta</th>
-                                                <td v-text="unit_price"></td>
+                                                <td align="center">{{ unit_price| numeralFormat('0.00[,]00') }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -128,19 +128,19 @@
                                         <tbody class="text-muted">
                                             <tr>
                                                 <th width=300>Precio Costo:</th>
-                                                <td v-text="data.cost_price"></td>
+                                                <td align="center">{{ data.price | numeralFormat('0.00[,]00') }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Margen de Ganancia</th>
-                                                <td v-text="data.margin_gain_w"></td>
+                                                <td align="center">{{ data.margin_gain_w/100 | numeralFormat(' %') }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Precio Divisa</th>
-                                                <td v-text="wholesale_divisa"></td>
+                                                <td align="center">{{ wholesale_divisa | numeralFormat('0.00[,]00 $') }}</td>
                                             </tr>
                                             <tr>
                                             <th width=300>Precio Venta</th>
-                                                <td v-text="wholesale_price"></td>
+                                                <td align="center">{{ wholesale_price | numeralFormat('0.00[,]00') }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -159,7 +159,7 @@
                     <div class="card-header">
                         <h3 class="card-title text-muted">
                             <i class="fas fa-camera" style="font-size: 20px;">&nbsp; </i>
-                            <strong>Imagen del Producto</strong>
+                            <strong>Imagenes del Producto</strong>
                         </h3>
                     </div>
                     <!-- /.card-header -->
@@ -186,6 +186,11 @@
 
 <script>
 import VueBarcode from 'vue-barcode';
+import VueNumerals from 'vue-numerals';
+// Vue.use(VueNumerals); // default locale is 'en'
+Vue.use(VueNumerals, {
+  locale: 'es'
+});
 export default {
     // props: ['data','categoryName','divisa','images'],
     props:{
@@ -201,23 +206,17 @@ export default {
             type: Object,
             default: () => {},
         },
-        images: {
+        images:{
             type: Array,
             default: () => [],
-        }
+        },
     },
     components:{
         'barcode': VueBarcode,
     },
-    data(){
-        return{
-            images:{},
-            product: 0
-        }
-    },
     computed:{
         price_gain_u: function(){
-            var result = (this.data.cost_price * this.data.margin_gain_u / 100).toFixed(2);
+            var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
             this.p_gain_u = result;
             return result;
         },
@@ -230,13 +229,13 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.stock > 0 || this.data.cost_price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.cost_price)) / this.data.stock).toFixed(2);
+            if(this.data.stock > 0 || this.data.price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.stock).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.data.cost_price * this.data.margin_gain_w / 100).toFixed(2);
+            var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
             return result;
         },
         wholesale_divisa: function(){
@@ -249,7 +248,7 @@ export default {
         wholesale_price: function(){
             var result = 0;
             if(this.data.wholesale_quantity > 0 || this.price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.cost_price)).toFixed(2);
+                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
             }
             return result;
         }

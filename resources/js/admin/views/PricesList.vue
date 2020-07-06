@@ -8,9 +8,9 @@
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
-                        <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
-                        <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
+                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista de Precios</h3>
+                        <!-- <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
+                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-info" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
                         </div>
                         
                         <!-- /.card-header -->
@@ -31,25 +31,30 @@
             </div>
         </template>
 
-        <!-- Crear Producto -->
-        <template v-else>
-            <product-create @returned="vproducts = $event"
-                :divisa="divisa"
-                :categories="categories"
-            ></product-create>   
-        </template>
-    
+   
         <!-- Modal-Divisa -->
-        <modal-product
-            :data="selectedRow"
-            :divisa="divisa"
-            :images="images"
-            :categoryName="category"
-            :categories="categories"
-            :title="title"
-            :action="action"
-            :storeup="storeup"
-        ></modal-product>
+        <div class="modal fade" id="modal-info">
+            <div class="modal-dialog">
+                <div class="modal-content bg-info">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Info Modal</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                        <label for="">Código del Producto</label>
+                        <input type="text" class="form-control" id="input_focus" v-modal="code">
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-outline-light">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+                </div>
+            <!-- /.modal-dialog -->
+        </div>
         <!-- /.modal -->
     </section>
 </template>
@@ -65,6 +70,9 @@ import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
 
 Vue.use(DataTable);
 
+// Registra una directiva personalizada global llamada `v-focus`
+ Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
+
 export default {
     components:{
         BtnProductsComponentVue,
@@ -73,12 +81,13 @@ export default {
     },
     data(){
         return{
+            onFocus:false,
             data: {},
             divisa: 0,
             categories:[],
             vproducts:false,
-            titlePage:'Productos',
-            routePage:'Productos',
+            titlePage:'Lista de Precios',
+            routePage:'Lista de Precios',
             url:"api/productos",
             name:'',
             category:{},
@@ -145,6 +154,14 @@ export default {
         this.getDivisa();
         this.getCategories();
     },
+    directives: {
+        focus: {
+            // Definición de directiva
+            inserted: function (el) {
+            el.focus()
+            }
+        }
+    },
     computed:{
         user(){
             return JSON.parse(user.content);
@@ -186,11 +203,11 @@ export default {
             this.getData(this.url, tableProps);
         },
         createProduct(){
-            this.title = 'Nueva Producto'
-            this.selectedRow = {};
-            this.action = true;
-            this.storeup = false;
-            this.vproducts = true;
+            $('#modal-info').on('shown.bs.modal', function() {
+                $('#input_focus').focus();
+            })
+            // this.onFocus=true;
+            // this.$refs.input_focus.focus();
         },
         modalProduct(data, action){
             switch(action){

@@ -13,7 +13,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at']; //Registramos la nueva columna
 
-    protected $fillable = ['name','url','category_id','code','cost_price','description','stock','margin_gain_u',
+    protected $fillable = ['name','url','category_id','code','price','description','stock','margin_gain_u',
                            'divisa_unit','wholesale_quantity','margin_gain_w','wholesale_divisa','status'];
     
     public function getRouteKeyName()
@@ -34,7 +34,7 @@ class Product extends Model
         'code' => [
             'searchable' => true,
         ],
-        'cost_price' => [
+        'price' => [
             'searchable' => true,
         ],
         'stock' => [

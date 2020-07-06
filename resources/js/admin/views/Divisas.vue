@@ -37,6 +37,7 @@
     
         <!-- Modal-Divisa -->
         <modal-divisa
+            :amount="amount"
             :data="selectedRow"
             :title="title"
             :create="create"
@@ -52,6 +53,7 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import BtnDivisaComponentVue from '../../components/BtnDivisaComponent.vue';
 import ModalDivisaComponentVue from '../../components/ModalDivisaComponent.vue';
+import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
 // Import component
 import Loading from 'vue-loading-overlay';
 // Import stylesheet
@@ -61,10 +63,12 @@ Vue.use(DataTable);
 export default {
     components:{
         BtnDivisaComponentVue,
+        DataTableCurrencyCell,
         ModalDivisaComponentVue
     },
     data() {
         return {
+            amount: '',
             isLoading: false,
             url:"api/divisas",
             titlePage:'Divisa',
@@ -96,6 +100,7 @@ export default {
                     label: 'Precio Bs.',
                     name: 'price',
                     orderable: true,
+                    component: DataTableCurrencyCell
                 },
                 {
                     label: 'Usuario',
@@ -149,16 +154,14 @@ export default {
         createDivisa(){
             this.title = 'Nuevo Precio de la Divisa'
             this.create = true
-            this.focusInput();
         },
         editDivisa(data) {
             console.log(data)
             this.title = 'Nuevo Precio de la Divisa'
             this.create = false
             this.selectedRow = data;
-        },
-        focusInput(){
-            this.$refs.modalPrice.focus();
+            this.amount = data.price;
+
         }
       
     }

@@ -219,6 +219,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <p>Productos</p>
                       </router-link>
                   </li>
+                  <li class="nav-item">
+                    <router-link to="/precios_lista" class="nav-link">
+                      <i class="nav-icon far fa-list-alt"></i>
+                      <p>Lista de Precios</p>
+                    </router-link>
+                  </li>
                 </ul>
               </li>
               <li class="nav-item has-treeview {{ setActiveNavDrop(['ingresos.index','proveedores.index']) }}">

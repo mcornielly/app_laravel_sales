@@ -16,5 +16,6 @@ $factory->define(Customer::class, function (Faker $faker) {
         'address' => $faker->address,
         'num_phone' => $faker->tollFreePhoneNumber,
         'email' => $faker->email,
+        'user_id' => 1,
     ];
 });

@@ -14,7 +14,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'url' => Str::slug($title),
         'category_id' => rand(1,20),
         'code' => $faker->randomNumber($nbDigits = NULL, $strict = false),
-        'cost_price' => $faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL),
+        'price' => $faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL),
         'description' => $faker->text(60),
         'stock' => rand(50, 100),
         'margin_gain_u' => 50,

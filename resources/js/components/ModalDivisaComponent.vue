@@ -4,7 +4,7 @@
             <div class="modal-content  bg-secondary">
                 <div class="modal-header">
                 <h4 class="modal-title" v-text="title"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" @click="closeModal()" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
@@ -13,7 +13,22 @@
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label">Precio Divisa</label>
                             <div class="col-md-9">
-                            <input ref="modalPrice" id="nameprice" type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Cotización" v-model="data.price" autofocus>
+                            <imask-input
+                                :value="value"
+                                v-model="data.price"
+                                :mask="Number"
+                                :unmask="true"
+                                thousandsSeparator= "."
+                                :padFractionalZeros="true"
+                                :normalizeZeros="true" 
+                                radix=","
+                                @accept="onAccept" 
+                                class="form-control text-right" :class="{'is-invalid' : errors}" 
+                                placeholder="Ingrese Cotización"
+                                require
+                            >
+                            </imask-input>    
+                            <!-- <input v-model="amount" v-imask="mask.amount"  @accept="onAccept" @complete="onComplete" ref="modalPrice" id="nameprice" type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Cotización" autofocus> -->
                             <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.price[0]"></span>
                             </div>
                         </div>
@@ -35,7 +50,7 @@
 let user = document.head.querySelector('meta[name="user"]');
 import Vue from 'vue';
 import Divisas from './../admin/views/Divisas.vue';
-
+import {IMaskComponent} from 'vue-imask';
 export default {
     props:{
         data: {
@@ -54,11 +69,29 @@ export default {
         return {
             url:"api/divisas",
             user_id: 0,
+            price: 0,
             errors: '',
+            value:'',
+            // mask: {
+            //     amount: {
+            //         mask: Number,
+            //         scale: 2, 
+            //         signed: false,
+            //         thousandsSeparator: ".", 
+            //         padFractionalZeros: true, 
+            //         normalizeZeros: true,
+            //         radix: ",", 
+            //         mapToRadix: ["."], 
+            //         max: 100000000
+            //     },
+            //     lazy: false
+            // },
+
+
         }
     },
-    mounted(){
-         this.focusInput();
+    components: {
+      'imask-input': IMaskComponent
     },
     computed:{
         user(){
@@ -66,9 +99,16 @@ export default {
         }
     },
     methods:{
+        onAccept (value) {
+            console.log(value)
+            // const maskRef = e.detail;
+            // this.value = maskRef.value;
+            // console.log('accept', maskRef.value);
+        },
         actionModal(action){
             if(action == "store"){
                 this.storeDivisa();
+
             }else{
                 this.updateDivisa();
             }
@@ -86,7 +126,7 @@ export default {
                 console.log(error);
                 var errors = error.response.data.errors;
                 this.errors = errors;
-                $('#modal-divisas').modal('show');
+                $('#modal-divisas').modal('show'); 
             });
         },
         updateDivisa(){
@@ -107,11 +147,9 @@ export default {
             });
         },
         closeModal(){
-            this.data.price = '';
             this.errors = '';
-        },
-        focusInput(){
-            this.$refs.modalPrice.focus();
+            this.$parent.reloadTable();
+            this.data.price = '';
         }
 
     }

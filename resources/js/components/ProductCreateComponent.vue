@@ -29,7 +29,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Nombre del Producto</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" :class="{'is-invalid' : errors.name}"  placeholder="Nombre del Producto" v-model="name">
+                                                        <input type="text" class="form-control capitalize" :class="{'is-invalid' : errors.name}"  placeholder="Nombre del Producto" v-model="name">
                                                         <span v-if="errors.name" class="invalid-feedback" role="alert">{{ errors.name[0] }}</span>
                                                     </div>
                                                 </div>
@@ -53,21 +53,36 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Precio Costo</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right" :class="{'is-invalid' : errors.cost_price}" v-model="cost_price">
-                                                        <span v-if="errors.cost_price" class="invalid-feedback" role="alert">{{ errors.cost_price[0] }}</span>
+                                                        <imask-input
+                                                            :value="value"
+                                                            v-model="price"
+                                                            :mask="Number"
+                                                            :unmask="true"
+                                                            thousandsSeparator= "."
+                                                            :padFractionalZeros="true"
+                                                            :normalizeZeros="true" 
+                                                            radix=","
+                                                            @accept="onAccept" 
+                                                            class="form-control text-right" :class="{'is-invalid' : errors.price}" 
+                                                            placeholder="Ingrese Cotización"
+                                                            require
+                                                        >
+                                                        </imask-input>
+                                                        <!-- <input type="text" class="form-control text-right" :class="{'is-invalid' : errors.price}" v-model="price"> -->
+                                                        <span v-if="errors.price" class="invalid-feedback" role="alert">{{ errors.price[0] }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Sctok</label>
                                                     <div class="col-md-9">
-                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.stock}" placeholder="Stock" v-model="stock">
+                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.stock}" placeholder="Stock" min="0" v-model="stock">
                                                         <span v-if="errors.stock" class="invalid-feedback" role="alert">{{ errors.stock[0] }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
                                                     <div class="col-md-9">
-                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.wholesale_quantity}" placeholder="Cantidad por bultor" v-model="wholesale_quantity">
+                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.wholesale_quantity}" placeholder="Cantidad por bultor" min="0" v-model="wholesale_quantity">
                                                         <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.wholesale_quantity[0] }}</span>
                                                     </div>
                                                     
@@ -101,7 +116,7 @@
                                             <div class="card-body">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="my-input">Text</label>
+                                                        <label for="my-input">Agregar Imagenes al Producto</label>
                                                         <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" 
                                                         @vdropzone-error="eventError"
                                                         @vdropzone-success="eventSuccess">
@@ -140,29 +155,29 @@
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                                        <div class="col-md-7 col-sm-6">
+                                                        <div class="col-xl-6 col-md-5 col-sm-5">
                                                             <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
                                                         </div>
-                                                        <div class="col-md-2 col-sm-6">
+                                                        <div class="col-xl-3 col-md-4 col-sm-4">
                                                             <input type="number" class="form-control" v-model="margin_gain_u">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">Ganancia D.</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">P. Divisa ($)</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">P.U. (Bs.)</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right" v-model="unit_price" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -172,29 +187,29 @@
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                                        <div class="col-md-7 col-sm-6">
+                                                        <div class="col-xl-6 col-md-5 col-sm-5">
                                                             <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
                                                         </div>
-                                                        <div class="col-md-2 col-sm-6">
+                                                        <div class="col-xl-3 col-md-4 col-sm-4">
                                                             <input type="number" class="form-control" v-model="margin_gain_w">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">Ganancia M.</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right" v-model="price_gain_w" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">P. Divisa M. ($)</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
                                                         </div>
                                                     </div>                           
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label">P.M. (Bs.)</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" class="form-control text-right" v-model="wholesale_price" disabled>
+                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -218,10 +233,12 @@
     </section>
 </template>
 <script>
+let user = document.head.querySelector('meta[name="user"]');
+import {IMaskDirective} from 'vue-imask';
+import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-
 
 export default {
     props:{
@@ -239,7 +256,7 @@ export default {
             code: '',
             category_id: 0,
             description: '',
-            cost_price: 0,
+            price: 0,
             stock: 0,
             wholesale_quantity: 0,
             margin_gain_u: 50,
@@ -255,6 +272,23 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
+            value:'',
+            mask: {
+                amount: {
+                    mask: Number,
+                    scale: 2, 
+                    signed: false,
+                    thousandsSeparator: ".", 
+                    padFractionalZeros: true, 
+                    normalizeZeros: true,
+                    radix: ",", 
+                    mapToRadix: ["."], 
+                    max: 100000000
+                },
+                rage:{
+
+                }
+            },
             image: '',
             photos:[],
             errors:'',
@@ -265,10 +299,14 @@ export default {
     components: {
         'barcode': VueBarcode,
         'vueDropzone': vue2Dropzone,
+        'imask-input': IMaskComponent
+    },
+    directives: {
+      imask: IMaskDirective
     },
     computed:{
         price_gain_u: function(){
-            var result = (this.cost_price * this.margin_gain_u / 100).toFixed(2);
+            var result = (this.price * this.margin_gain_u / 100).toFixed(2);
             this.p_gain_u = result;
             return result;
         },
@@ -280,14 +318,14 @@ export default {
             return result;
         },
         unit_price: function(){
-            var result = 0;
+            var result = 0.00;
             if(this.stock > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.cost_price)) / this.stock).toFixed(2);
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.price)) / this.stock).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.cost_price * this.margin_gain_w / 100).toFixed(2);
+            var result = (this.price * this.margin_gain_w / 100).toFixed(2);
             return result;
         },
         wholesale_divisa: function(){
@@ -299,13 +337,19 @@ export default {
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.wholesale_quantity > 0 || this.cost_price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_price)).toFixed(2);
+            if(this.wholesale_quantity > 0 || this.price > 0){
+                result = (parseFloat(this.price_gain_w) + parseFloat(this.price)).toFixed(2);
             }
             return result;
         }
     },
     methods:{
+        onAccept (value) {
+            console.log(value)
+            // const maskRef = e.detail;
+            // this.value = maskRef.value;
+            // console.log('accept', maskRef.value);
+        },
         eventError(file, message, xhr){
             var error = message.message;
             // console.log(message)
@@ -325,7 +369,7 @@ export default {
                     'category_id' : this.category_id,
                     'code' : this.code,
                     'description' : this.description,
-                    'cost_price' : this.cost_price,
+                    'price' : this.price,
                     'stock' : this.stock,
                     'margin_gain_u' : this.margin_gain_u,
                     'divisa_unit' : this.divisa_unit,
@@ -355,3 +399,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.capitalize {
+  text-transform: capitalize;
+}
+</style>

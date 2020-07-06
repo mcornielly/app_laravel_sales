@@ -9,6 +9,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 import Vue from 'vue';
 import router from './routes';
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -36,6 +37,7 @@ Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue')
 Vue.component('status-component', require('./components/StatusComponent.vue').default);
 Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
 Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
+// Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

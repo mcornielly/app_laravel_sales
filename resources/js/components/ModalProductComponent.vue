@@ -15,7 +15,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Nombre</label>
                                     <div class="col-md-9">
-                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Producto" v-model="data.name" autofocus>
+                                    <input type="text" class="form-control capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Producto" v-model="data.name" autofocus>
                                     <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span>
                                     </div>
                                 </div>
@@ -40,8 +40,23 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Precio Costo</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control text-right" v-model="data.cost_price">
-                                        <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.cost_price[0]"></span>
+                                        <imask-input
+                                            :value="value"
+                                            v-model="data.price"
+                                            :mask="Number"
+                                            :unmask="true"
+                                            thousandsSeparator= "."
+                                            :padFractionalZeros="true"
+                                            :normalizeZeros="true" 
+                                            radix=","
+                                            @accept="onAccept" 
+                                            class="form-control text-right" :class="{'is-invalid' : errors}" 
+                                            placeholder="Ingrese Cotización"
+                                            require
+                                        >
+                                        </imask-input>    
+                                        <!-- <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="data.price"> -->
+                                        <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.price[0]"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -94,19 +109,19 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">Ganancia D.</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">P. Divisa ($)</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">P.U. (Bs.)</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right" v-model="unit_price" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -124,25 +139,25 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">Ganancia M.</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right" v-model="price_gain_w" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">P. Divisa M. ($)</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
                                                     </div>
                                                 </div>                           
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">P.M. (Bs.)</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control text-right" v-model="wholesale_price" disabled>
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-four-code" role="tabpanel" aria-labelledby="custom-tabs-four-code-tab">
                                                 <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label text-muted">Código {{ data.code }}</label>
+                                                    <label class="col-md-3 form-control-label text-muted">Código</label>
                                                     <div class="col-md-9">
                                                         <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.code[0]"></span>
@@ -153,8 +168,8 @@
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-four-photo" role="tabpanel" aria-labelledby="custom-tabs-four-photo-tab">
                                                 <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="my-input" class="form-control-label text-muted">Imagen del Producto</label>
+                                                    <div class="form-group" v-show="images.length < 3">
+                                                        <label for="my-input" class="form-control-label text-muted">Agregar Imagenes al Producto: </label>
                                                         <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"
                                                             @vdropzone-error="eventError"
                                                             @vdropzone-success="eventSuccess">
@@ -162,10 +177,12 @@
                                                     </div>     
                                                 </div>
                                                 <div class="col-md-12">
+                                                    <label for="my-input" class="form-control-label text-muted">Imagenes del Producto: </label>
                                                     <!-- timeline item -->
                                                     <div class="timeline-body align-center text-center">
                                                         <div v-for="image in images" :key="image.id" class="float-left pt-2 pb-2 pr-2">
-                                                            <a class="btn btn-link btn-danger btn-sm" style="position: absolute" @click="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></a> 
+                                                            <router-link to="" class="btn btn-link btn-danger btn-sm" style="position: absolute" @click.native="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></router-link>
+                                                            <!-- <a href="#" class="btn btn-link btn-danger btn-sm" style="position: absolute; text-decoration:none;" @click="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></a>  -->
                                                             <!-- <button type="button" class="btn btn-danger btn-sm" style="position: absolute" @click.stop="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></button> -->
                                                             <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
                                                         </div>
@@ -181,7 +198,8 @@
                         </div>
                     </div>
                     <div v-else class="tbcustomer">
-                       <show-product :data="data"
+                       <show-product 
+                            :data="data"
                             :images="images"    
                             :divisa="divisa"
                             :categoryName="categoryName">
@@ -189,10 +207,8 @@
                     </div>
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
-                        <div v-if="action">
-                            <!-- <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button> -->
-                            <button type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
-                        </div>
+                        <button v-show="action" type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                        <!-- <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button> -->
                     </div>
                 </form>
             </div>
@@ -204,9 +220,12 @@
 
 <script>
 let user = document.head.querySelector('meta[name="user"]');
+import {IMaskDirective} from 'vue-imask';
+import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode';
 import vue2Dropzone from 'vue2-dropzone';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+
 export default {
     props:{
         data: {
@@ -233,19 +252,12 @@ export default {
             type: String,
             default: () => ({}),
         },
-        create:{
-            type: Boolean,
-        },
         action:{
             type: Boolean,
         },
         storeup:{
             type: Boolean,
         }
-    },
-    components:{
-        'barcode': VueBarcode,
-        'vueDropzone': vue2Dropzone,
     },
     data(){
         return {
@@ -255,7 +267,7 @@ export default {
             product_id: 0,
             category_id: 0,
             description:'',
-            cost_price: 0,
+            price: 0,
             stock: 0,
             code:0,
             wholesale_quantity: 0,
@@ -273,17 +285,39 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
+            value:'',
+            mask: {
+                amount: {
+                    mask: Number,
+                    scale: 2, 
+                    signed: false,
+                    thousandsSeparator: ".", 
+                    padFractionalZeros: true, 
+                    normalizeZeros: true,
+                    radix: ",", 
+                    mapToRadix: ["."], 
+                    max: 100000000
+                }
+            },
             image: '',
             photos:[],
             close: false
         }
+    },
+    components:{
+        'barcode': VueBarcode,
+        'vueDropzone': vue2Dropzone,
+        'imask-input': IMaskComponent
+    },
+    directives: {
+      imask: IMaskDirective
     },
     computed:{
         user(){
             return JSON.parse(user.content);
         },
         price_gain_u: function(){
-            var result = (this.data.cost_price * this.data.margin_gain_u / 100).toFixed(2);
+            var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
             this.p_gain_u = result;
             return result;
         },
@@ -296,13 +330,13 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.stock > 0 || this.data.cost_price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.cost_price)) / this.data.stock).toFixed(2);
+            if(this.data.stock > 0 || this.data.price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.stock).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.data.cost_price * this.data.margin_gain_w / 100).toFixed(2);
+            var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
             return result;
         },
         wholesale_divisa: function(){
@@ -314,13 +348,19 @@ export default {
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.datawholesale_quantity > 0 || this.data.cost_price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.cost_price)).toFixed(2);
+            if(this.datawholesale_quantity > 0 || this.data.price > 0){
+                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
             }
             return result;
         }
     },
     methods:{
+        onAccept (value) {
+            console.log(value)
+            // const maskRef = e.detail;
+            // this.value = maskRef.value;
+            // console.log('accept', maskRef.value);
+        },
         vremoved(file, xhr, error) {
             this.$refs.myVueDropzone.removeAllFiles();
             if(this.close == true && !this.photos){
@@ -382,7 +422,7 @@ export default {
                 'name':this.data.name,
                 'category_id':this.data.category_id,
                 'code':this.data.code,
-                'cost_price':this.data.cost_price,
+                'price':this.data.price,
                 'stock':this.data.stock,
                 'description': this.data.description,
                 'margin_gain_u':this.data.margin_gain_u,
@@ -422,8 +462,16 @@ export default {
             this.selectedRow = {};
             this.errors = '';
             this.vremoved();
+            this.$parent.reloadTable();
+            this.data.price = '';
         },
 
     }
 }
 </script>
+
+<style>
+.capitalize {
+  text-transform: capitalize;
+}
+</style>
