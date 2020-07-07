@@ -2959,7 +2959,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -2970,22 +2969,21 @@ var _user = document.head.querySelector('meta[name="user"]');
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a); // Registra una directiva personalizada global llamada `v-focus`
+//  Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.directive('focus', {
-  inserted: function inserted(el) {
-    el.focus();
-  }
-});
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     BtnProductsComponentVue: _components_BtnProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     StatusComponentVue: _components_StatusComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    DataTableCurrencyCell: _components_DataTableCurrencyCell_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    DataTableCurrencyCell: _components_DataTableCurrencyCell_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    DataTableCurrencyWholesale: _components_DataTableCurrencyWholesale_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    DataTableCurrencyUnit: _components_DataTableCurrencyUnit_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   data: function data() {
     return {
       data: {},
       divisa: 0,
+      code: '',
       titlePage: 'Lista de Precios',
       routePage: 'Lista de Precios',
       url: "api/productos",
@@ -3059,20 +3057,24 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.directive('focus', {
     this.getDivisa();
     this.getCategories();
   },
-  directives: {
-    focus: {
-      // Definición de directiva
-      inserted: function inserted(el) {
-        el.focus();
-      }
-    }
-  },
+  // directives: {
+  //     focus: {
+  //         // Definición de directiva
+  //         inserted: function (el) {
+  //         el.focus()
+  //         }
+  //     }
+  // },
   computed: {
     user: function user() {
       return JSON.parse(_user.content);
     }
   },
   methods: {
+    searchCode: function searchCode() {
+      alert(this.code);
+      console.log(this.code);
+    },
     getDivisa: function getDivisa() {
       var _this = this;
 
@@ -3113,7 +3115,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.directive('focus', {
       this.getData(this.url, tableProps);
     },
     createProduct: function createProduct() {
-      $('#modal-info').on('shown.bs.modal', function () {
+      $('#modal-ex').on('shown.bs.modal', function () {
         $('#input_focus').focus();
       });
     },
@@ -43396,74 +43398,70 @@ var render = function() {
         attrs: { titlePage: _vm.titlePage, routePage: _vm.routePage }
       }),
       _vm._v(" "),
-      !_vm.vproducts
-        ? [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-12" }, [
-                _c("div", { staticClass: "card card-primary card-outline" }, [
-                  _c("div", { staticClass: "card-header" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "card card-primary card-outline" }, [
+              _c("div", { staticClass: "card-header" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-sm btn-primary float-right",
+                    attrs: {
+                      href: "#",
+                      "data-toggle": "modal",
+                      "data-target": "#modal-ex"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.createProduct()
+                      }
+                    }
+                  },
+                  [
                     _c(
-                      "a",
+                      "i",
                       {
-                        staticClass: "btn btn-sm btn-primary float-right",
-                        attrs: {
-                          href: "#",
-                          "data-toggle": "modal",
-                          "data-target": "#modal-info"
-                        },
-                        on: {
-                          click: function($event) {
-                            return _vm.createProduct()
-                          }
-                        }
+                        staticClass: "fa fa-plus",
+                        attrs: { "aria-hidden": "true" }
                       },
-                      [
-                        _c(
-                          "i",
-                          {
-                            staticClass: "fa fa-plus",
-                            attrs: { "aria-hidden": "true" }
-                          },
-                          [_vm._v(" ")]
-                        ),
-                        _vm._v(" Consultar Producto")
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "card-body" },
-                    [
-                      _c("data-table", {
-                        ref: "tb",
-                        attrs: {
-                          data: _vm.data,
-                          theme: _vm.theme,
-                          columns: _vm.columns,
-                          translate: _vm.translate
-                        },
-                        on: { onTablePropsChanged: _vm.reloadTable }
-                      })
-                    ],
-                    1
-                  )
-                ])
-              ])
+                      [_vm._v(" ")]
+                    ),
+                    _vm._v(" Consultar Producto")
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c("data-table", {
+                    ref: "tb",
+                    attrs: {
+                      data: _vm.data,
+                      theme: _vm.theme,
+                      columns: _vm.columns,
+                      translate: _vm.translate
+                    },
+                    on: { onTablePropsChanged: _vm.reloadTable }
+                  })
+                ],
+                1
+              )
             ])
-          ]
-        : _vm._e(),
+          ])
+        ])
+      ],
       _vm._v(" "),
-      _c("div", { staticClass: "modal fade", attrs: { id: "modal-info" } }, [
+      _c("div", { staticClass: "modal fade", attrs: { id: "modal-ex" } }, [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content bg-info" }, [
             _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "modal-body" }, [
-              _c("p", [_vm._v("One fine body…")]),
-              _vm._v(" "),
               _c("label", { attrs: { for: "" } }, [
                 _vm._v("Código del Producto")
               ]),

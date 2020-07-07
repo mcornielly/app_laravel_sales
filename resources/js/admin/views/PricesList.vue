@@ -3,14 +3,14 @@
     <!-- Content Header (Page header) -->
         <bread-crumbs :titlePage="titlePage" :routePage="routePage"></bread-crumbs>
         <!-- /.content-header --> 
-        <template v-if="!vproducts">
+        <template>
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista de Precios</h3>
                         <!-- <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
-                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-info" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
+                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-ex" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
                         </div>
                         
                         <!-- /.card-header -->
@@ -33,7 +33,7 @@
 
    
         <!-- Modal-Divisa -->
-        <div class="modal fade" id="modal-info">
+        <div class="modal fade" id="modal-ex">
             <div class="modal-dialog">
                 <div class="modal-content bg-info">
                     <div class="modal-header">
@@ -42,7 +42,6 @@
                         <span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                        <p>One fine body&hellip;</p>
                         <label for="">Código del Producto</label>
                         <input type="text" class="form-control" id="input_focus" v-modal="code">
                     </div>
@@ -52,7 +51,7 @@
                     </div>
                 </div>
                 <!-- /.modal-content -->
-                </div>
+            </div>
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
@@ -73,18 +72,21 @@ import DataTableCurrencyUnit from '../../components/DataTableCurrencyUnit.vue';
 Vue.use(DataTable);
 
 // Registra una directiva personalizada global llamada `v-focus`
- Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
+//  Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
 
 export default {
     components:{
         BtnProductsComponentVue,
         StatusComponentVue,
-        DataTableCurrencyCell
+        DataTableCurrencyCell,
+        DataTableCurrencyWholesale,
+        DataTableCurrencyUnit
     },
     data(){
         return{
             data: {},
             divisa: 0,
+            code:'',
             titlePage:'Lista de Precios',
             routePage:'Lista de Precios',
             url:"api/productos",
@@ -169,20 +171,24 @@ export default {
         this.getDivisa();
         this.getCategories();
     },
-    directives: {
-        focus: {
-            // Definición de directiva
-            inserted: function (el) {
-            el.focus()
-            }
-        }
-    },
+    // directives: {
+    //     focus: {
+    //         // Definición de directiva
+    //         inserted: function (el) {
+    //         el.focus()
+    //         }
+    //     }
+    // },
     computed:{
         user(){
             return JSON.parse(user.content);
         }
     },
     methods: {
+        searchCode(){
+            alert(this.code)
+            console.log(this.code)
+        },
         getDivisa(){
             var url = "api/divisa/precio";
             axios.get(url).then(response => {
@@ -218,7 +224,7 @@ export default {
             this.getData(this.url, tableProps);
         },
         createProduct(){
-            $('#modal-info').on('shown.bs.modal', function() {
+            $('#modal-ex').on('shown.bs.modal', function() {
                 $('#input_focus').focus();
             })
         },
