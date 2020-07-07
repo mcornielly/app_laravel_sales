@@ -154,6 +154,9 @@ export default {
         createDivisa(){
             this.title = 'Nuevo Precio de la Divisa'
             this.create = true
+            $('#modal-divisas').on('shown.bs.modal', function() {
+                $('#input_focus').focus();
+            })
         },
         editDivisa(data) {
             console.log(data)

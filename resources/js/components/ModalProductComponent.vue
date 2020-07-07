@@ -261,6 +261,7 @@ export default {
     data(){
         return {
             url:"api/producto",
+            user_id:0,
             errors: '',
             name:'',
             product_id: 0,
@@ -347,7 +348,7 @@ export default {
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.datawholesale_quantity > 0 || this.data.price > 0){
+            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
                 result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
             }
             return result;
@@ -425,10 +426,11 @@ export default {
                 'stock':this.data.stock,
                 'description': this.data.description,
                 'margin_gain_u':this.data.margin_gain_u,
-                'divisa_unit':this.data.divisa_unit,
+                'divisa_unit':this.divisa_unit,
                 'wholesale_quantity':this.data.wholesale_quantity,
                 'margin_gain_w':this.data.margin_gain_w,
-                'wholesale_divisa':this.data.wholesale_divisa,
+                'wholesale_divisa':this.wholesale_divisa,
+                'user_id':this.user.id,
                 'photos':this.photos
             }).then(response => {
                 this.$parent.reloadTable();

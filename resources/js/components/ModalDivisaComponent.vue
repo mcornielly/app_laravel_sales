@@ -14,6 +14,7 @@
                             <label class="col-md-3 form-control-label">Precio Divisa</label>
                             <div class="col-md-9">
                             <imask-input
+                                id="input_focus"
                                 :value="value"
                                 v-model="data.price"
                                 :mask="Number"

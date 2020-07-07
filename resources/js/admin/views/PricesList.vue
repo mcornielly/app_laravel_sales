@@ -10,7 +10,7 @@
                         <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista de Precios</h3>
                         <!-- <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
-                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-info" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
+                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-info" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
                         </div>
                         
                         <!-- /.card-header -->
@@ -67,6 +67,8 @@ import DataTable from 'laravel-vue-datatable';
 import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
 import StatusComponentVue from '../../components/StatusComponent.vue';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+import DataTableCurrencyWholesale from '../../components/DataTableCurrencyWholesale.vue';
+import DataTableCurrencyUnit from '../../components/DataTableCurrencyUnit.vue';
 
 Vue.use(DataTable);
 
@@ -81,17 +83,11 @@ export default {
     },
     data(){
         return{
-            onFocus:false,
             data: {},
             divisa: 0,
-            categories:[],
-            vproducts:false,
             titlePage:'Lista de Precios',
             routePage:'Lista de Precios',
             url:"api/productos",
-            name:'',
-            category:{},
-            create: false,
             title: '',
             tableProps: {
                 search: '',
@@ -112,6 +108,11 @@ export default {
                     orderable: true,
                 },
                 {
+                    label: 'Código',
+                    name: 'code',
+                    orderable: false,
+                },
+                {
                     label: 'Nombre',
                     name: 'name',
                     orderable: true,
@@ -125,25 +126,23 @@ export default {
                     label: 'PV. Bs.',
                     name: 'price',
                     orderable: true,
-                    component: DataTableCurrencyCell
+                    component: DataTableCurrencyUnit
                 },
                 {
                     label: 'PV. $',
                     name: 'divisa_unit',
                     orderable: true,
-                    // component: DataTableCurrencyCell
                 },
                 {
                     label: 'PV. Mayor Bs.',
                     name: 'price_wholesale',
                     orderable: true,
-                    // component: DataTableCurrencyCell
+                    component: DataTableCurrencyWholesale
                 },
                 {
                     label: 'PV. Mayor $',
                     name: 'wholesale_divisa',
                     orderable: true,
-                    // component: DataTableCurrencyCell
                 },
                 {
                     label: 'Estatus',
@@ -161,8 +160,6 @@ export default {
 
             ],
             selectedRow: {},
-            action: false,
-            storeup: true,
             product_id: 0,
             images:[]
         }
@@ -224,8 +221,6 @@ export default {
             $('#modal-info').on('shown.bs.modal', function() {
                 $('#input_focus').focus();
             })
-            // this.onFocus=true;
-            // this.$refs.input_focus.focus();
         },
         modalProduct(data, action){
             switch(action){
