@@ -28,6 +28,7 @@
         "vuetable-2": "^1.7.5"
     },
     "dependencies": {
+        "@fullcalendar/core": "^5.1.0",
         "laravel-vue-datatable": "^0.5.12",
         "numeral": ">=2",
         "vue-barcode": "^1.2.0",

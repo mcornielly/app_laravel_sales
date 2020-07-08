@@ -32,28 +32,17 @@
         </template>
 
    
-        <!-- Modal-Divisa -->
-        <div class="modal fade" id="modal-ex">
-            <div class="modal-dialog">
-                <div class="modal-content bg-info">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Info Modal</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Código del Producto</label>
-                        <input type="text" class="form-control" id="input_focus" v-modal="code">
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-light">Save changes</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+        <!-- Modal-Searh-Product -->
+        <modal-searh-product></modal-searh-product>
+        <!-- /.modal -->
+
+        <!-- Modal-Show PricesList -->
+        <modal-show-priceslist
+            :data="selectedRow"
+            :title="title"
+            :images="images"
+            :imgshow="imgshow"
+        ></modal-show-priceslist>
         <!-- /.modal -->
     </section>
 </template>
@@ -68,6 +57,7 @@ import StatusComponentVue from '../../components/StatusComponent.vue';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
 import DataTableCurrencyWholesale from '../../components/DataTableCurrencyWholesale.vue';
 import DataTableCurrencyUnit from '../../components/DataTableCurrencyUnit.vue';
+import BtnPricesListComponent from '../../components/BtnPricesListComponent.vue';
 
 Vue.use(DataTable);
 
@@ -80,7 +70,8 @@ export default {
         StatusComponentVue,
         DataTableCurrencyCell,
         DataTableCurrencyWholesale,
-        DataTableCurrencyUnit
+        DataTableCurrencyUnit,
+        BtnPricesListComponent
     },
     data(){
         return{
@@ -120,29 +111,29 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'Cantidad',
+                    label: 'Cant',
                     name: 'stock',
                     orderable: true,
                 },
                 {
-                    label: 'PV. Bs.',
+                    label: 'P. Bs.',
                     name: 'price',
                     orderable: true,
                     component: DataTableCurrencyUnit
                 },
                 {
-                    label: 'PV. $',
+                    label: 'P. $',
                     name: 'divisa_unit',
                     orderable: true,
                 },
                 {
-                    label: 'PV. Mayor Bs.',
+                    label: 'P. Mayor Bs.',
                     name: 'price_wholesale',
                     orderable: true,
                     component: DataTableCurrencyWholesale
                 },
                 {
-                    label: 'PV. Mayor $',
+                    label: 'P. Mayor $',
                     name: 'wholesale_divisa',
                     orderable: true,
                 },
@@ -151,19 +142,20 @@ export default {
                     component: StatusComponentVue,
                     orderable: true,
                 },
-                // {
-                //     label: 'Acciones',
-                //     name: '',
-                //     orderable: false,
-                //     component: BtnProductsComponentVue,
-                //     event: "click",
-                //     handler: this.modalProduct
-                // },
+                {
+                    label: '',
+                    name: '',
+                    orderable: false,
+                    component: BtnPricesListComponent,
+                    event: "click",
+                    handler: this.modalProduct
+                },
 
             ],
             selectedRow: {},
             product_id: 0,
-            images:[]
+            images:[],
+            imgshow:false
         }
     },
     created(){
@@ -171,14 +163,6 @@ export default {
         this.getDivisa();
         this.getCategories();
     },
-    // directives: {
-    //     focus: {
-    //         // Definición de directiva
-    //         inserted: function (el) {
-    //         el.focus()
-    //         }
-    //     }
-    // },
     computed:{
         user(){
             return JSON.parse(user.content);
@@ -224,45 +208,13 @@ export default {
             this.getData(this.url, tableProps);
         },
         createProduct(){
-            $('#modal-ex').on('shown.bs.modal', function() {
-                $('#input_focus').focus();
-            })
+
         },
-        modalProduct(data, action){
-            switch(action){
-    			    case 'edit':
-                        {
-                            this.title = 'Editar Producto';
-                            this.selectedRow = data;
-                            this.product_id = data.id;
-                            this.getImages(this.product_id); 
-                            this.action = true;
-                            this.storeup = false;
-                            break;
-                        }
-                    case 'show':
-                        {
-                            this.title = "Detalle de Producto";
-                            this.selectedRow = data;
-                            this.product_id = data.id;
-                            this.getImages(this.product_id); 
-                            this.category = data.category;
-                            this.create = false;
-                            this.action = false;
-                            this.storeup = true;
-                            break;
-                        }
-                    case 'delete':
-                        {                           
-                            this.deleteProduct(data);
-                            break;
-                        }
-                    case 'restore':
-                        {                           
-                            this.restoreProduct(data);
-                            break;
-                        }
-            }
+        modalProduct(data){
+            this.title = "Detalle de Producto";
+            this.selectedRow = data;
+            this.product_id = data.id;
+            this.getImages(this.product_id); 
         },
         deleteProduct(data){
             this.id = data.id;

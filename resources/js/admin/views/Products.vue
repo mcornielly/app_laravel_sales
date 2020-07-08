@@ -39,7 +39,7 @@
             ></product-create>   
         </template>
     
-        <!-- Modal-Divisa -->
+        <!-- Modal-Producto -->
         <modal-product
             :data="selectedRow"
             :divisa="divisa"

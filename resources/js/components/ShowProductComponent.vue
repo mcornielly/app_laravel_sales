@@ -155,7 +155,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
+                <div class="card" style="height: 323px;">
                     <div class="card-header">
                         <h3 class="card-title text-muted">
                             <i class="fas fa-camera" style="font-size: 20px;">&nbsp; </i>
@@ -163,13 +163,13 @@
                         </h3>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body p-0">
+                    <div class="card-body p-0" style="height: 100%; width: 100%;text-align: center;">
                         <div class="col-md-12">
                             <!-- timeline item -->
-                            <div class="timeline-item">
-                                <div class="timeline-body">
+                            <div class="timeline-item" style="width: max-content;margin: auto; margin-top: auto;margin-top: 9%;">
+                                <div class="timeline-body text-muted">
                                     <div v-for="image in images" :key="image.id" class="float-left pt-2 pb-2 pr-2">
-                                        <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
+                                        <img style="height: 160px;" :src="image.url" :alt="data.name" class="img-thumbnail" width="150">
                                     </div>
                                 </div>
                             </div>
@@ -229,8 +229,8 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.stock > 0 || this.data.price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.stock).toFixed(2);
+            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
             }
             return result;
         },

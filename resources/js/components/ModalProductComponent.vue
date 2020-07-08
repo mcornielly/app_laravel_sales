@@ -212,8 +212,8 @@
                 </form>
             </div>
             <!-- /.modal-content -->
-        </div>
         <!-- /.modal-dialog -->
+        </div>
     </div>
 </template>
 
@@ -330,8 +330,8 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.stock > 0 || this.data.price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.stock).toFixed(2);
+            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
             }
             return result;
         },
