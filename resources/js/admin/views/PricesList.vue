@@ -211,7 +211,7 @@ export default {
 
         },
         modalProduct(data){
-            this.title = "Detalle de Producto";
+            this.title = "Consulta de Producto";
             this.selectedRow = data;
             this.product_id = data.id;
             this.getImages(this.product_id); 

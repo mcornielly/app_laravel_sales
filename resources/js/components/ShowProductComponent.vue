@@ -2,7 +2,7 @@
     <div class="container pt-2">
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card" style="height: 238px;">
                     <div class="card-header">
                         <h3 class="card-title text-muted">
                             <i class="fas fa-tag" style="font-size: 20px;">&nbsp;</i>
@@ -155,7 +155,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card" style="height: 323px;">
+                <div class="card" style="height: 329px;">
                     <div class="card-header">
                         <h3 class="card-title text-muted">
                             <i class="fas fa-camera" style="font-size: 20px;">&nbsp; </i>
@@ -187,10 +187,10 @@
 <script>
 import VueBarcode from 'vue-barcode';
 import VueNumerals from 'vue-numerals';
-// Vue.use(VueNumerals); // default locale is 'en'
-Vue.use(VueNumerals, {
-  locale: 'es'
-});
+Vue.use(VueNumerals); // default locale is 'en'
+// Vue.use(VueNumerals, {
+//   locale: 'es'
+// });
 export default {
     // props: ['data','categoryName','divisa','images'],
     props:{

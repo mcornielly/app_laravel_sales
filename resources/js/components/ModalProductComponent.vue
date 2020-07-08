@@ -33,7 +33,8 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Descripción</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="Ingresar descripción" v-model="data.description">
+                                        <textarea class="form-control" v-model="data.description" placeholder="Ingresar descripción"></textarea>
+                                        <!-- <input type="texarea" class="form-control" placeholder="Ingresar descripción" v-model="data.description"> -->
                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.description[0]"></span>
                                     </div>
                                 </div>
@@ -166,8 +167,8 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-four-photo" role="tabpanel" aria-labelledby="custom-tabs-four-photo-tab">
-                                                <div class="col-md-12">
-                                                    <div class="form-group" v-show="images.length < 3">
+                                                <div class="col-md-12" v-show="images.length < 3">
+                                                    <div class="form-group" >
                                                         <label for="my-input" class="form-control-label text-muted">Agregar Imagenes al Producto: </label>
                                                         <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"
                                                             @vdropzone-error="eventError"
@@ -175,15 +176,15 @@
                                                         </vue-dropzone>
                                                     </div>     
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <label for="my-input" class="form-control-label text-muted">Imagenes del Producto: </label>
+                                                <div class="col-md-12 text-muted">
+                                                    <label v-show="images.length" for="my-input" class="form-control-label text-muted">Imagenes del Producto: </label>
                                                     <!-- timeline item -->
-                                                    <div class="timeline-body align-center text-center">
+                                                    <div class="timeline-body mx-auto d-block">
                                                         <div v-for="image in images" :key="image.id" class="float-left pt-2 pb-2 pr-2">
                                                             <router-link to="" class="btn btn-link btn-danger btn-sm" style="position: absolute" @click.native="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></router-link>
+                                                            <img style="height: 160px;" :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
                                                             <!-- <a href="#" class="btn btn-link btn-danger btn-sm" style="position: absolute; text-decoration:none;" @click="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></a>  -->
                                                             <!-- <button type="button" class="btn btn-danger btn-sm" style="position: absolute" @click.stop="deleteImag(image.id)"><i class="fas fa-trash-alt"></i></button> -->
-                                                            <img :src="image.url" :alt="data.name" class="img-thumbnail" width="150" height="100">
                                                         </div>
                                                     </div>
                                                     <!-- END timeline item -->

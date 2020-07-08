@@ -13515,7 +13515,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     },
     createProduct: function createProduct() {},
     modalProduct: function modalProduct(data) {
-      this.title = "Detalle de Producto";
+      this.title = "Consulta de Producto";
       this.selectedRow = data;
       this.product_id = data.id;
       this.getImages(this.product_id);
@@ -15349,7 +15349,14 @@ var _user = document.head.querySelector('meta[name="user"]');
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
+/* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-numerals */ "./node_modules/vue-numerals/dist/vue-numerals.min.js");
+/* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_numerals__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15426,6 +15433,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_0___default.a); // default locale is 'en'
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     data: {
@@ -15452,11 +15462,45 @@ __webpack_require__.r(__webpack_exports__);
       imgProduct: ''
     };
   },
-  // computed:{
-  //     img(){
-  //         return this.images[0].url 
-  //     }
-  // },
+  computed: {
+    price_gain_u: function price_gain_u() {
+      var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+      this.p_gain_u = result;
+      return result;
+    },
+    unit_price: function unit_price() {
+      var result = 0;
+
+      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
+        var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+      }
+
+      return result;
+    },
+    price_gain_w: function price_gain_w() {
+      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      return result;
+    },
+    wholesale_price: function wholesale_price() {
+      var result = 0;
+
+      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
+        result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+      }
+
+      return result;
+    },
+    tax_wholesale: function tax_wholesale() {
+      var tax = 0.16;
+      var priceTax = this.wholesale_price * tax;
+      return (this.wholesale_price - priceTax).toFixed(2);
+    },
+    tax: function tax() {
+      var tax = 0.16;
+      var priceTax = this.unit_price * tax;
+      return (this.unit_price - priceTax).toFixed(2);
+    }
+  },
   methods: {
     imageShow: function imageShow(data) {
       this.imgshow = true;
@@ -15489,6 +15533,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_dropzone__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue2_dropzone__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-dropzone/dist/vue2Dropzone.min.css */ "./node_modules/vue2-dropzone/dist/vue2Dropzone.min.css");
 /* harmony import */ var vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_3__);
+//
 //
 //
 //
@@ -17247,11 +17292,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
- // Vue.use(VueNumerals); // default locale is 'en'
 
-Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_1___default.a, {
-  locale: 'es'
-});
+Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_1___default.a); // default locale is 'en'
+// Vue.use(VueNumerals, {
+//   locale: 'es'
+// });
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: ['data','categoryName','divisa','images'],
   props: {
@@ -17428,7 +17474,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.product-image {\r\n  max-width: 60%!important;\r\n  height: auto;\r\n  width: 100%;\r\n  margin-left: 20%!important;\r\n  margin-top: 5%!important;\n}\r\n", ""]);
+exports.push([module.i, "\n.product-image {\r\n  max-width: 60%!important;\r\n  height: auto;\r\n  width: 100%;\r\n  margin-left: 15%!important;\r\n  margin-top: 5%!important;\n}\r\n", ""]);
 
 // exports
 
@@ -56549,7 +56595,7 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "div",
-                            { staticClass: "col-12" },
+                            { staticClass: "col-12 mx-auto d-block" },
                             _vm._l(_vm.images, function(image, index) {
                               return _c("div", { key: image.id }, [
                                 _c(
@@ -56567,7 +56613,12 @@ var render = function() {
                                   [
                                     _vm.imgshow == false
                                       ? _c("img", {
-                                          staticClass: "product-image",
+                                          staticClass:
+                                            "product-image img-fluid",
+                                          staticStyle: {
+                                            height: "315px",
+                                            "object-fit": "contain"
+                                          },
                                           attrs: {
                                             src: image.url,
                                             alt: "Product Image"
@@ -56589,7 +56640,10 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "div",
-                            { staticClass: "col-12 product-image-thumbs" },
+                            {
+                              staticClass: "col-12 product-image-thumbs mb-3",
+                              staticStyle: { "margin-left": "54px" }
+                            },
                             _vm._l(_vm.images, function(image) {
                               return _c("div", { key: image.id }, [
                                 _c(
@@ -56604,6 +56658,7 @@ var render = function() {
                                   },
                                   [
                                     _c("img", {
+                                      staticStyle: { height: "110px" },
                                       attrs: { src: image.url, alt: image.id }
                                     })
                                   ]
@@ -56614,7 +56669,116 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
-                        _vm._m(1)
+                        _c(
+                          "div",
+                          { staticClass: "col-12 col-sm-6 text-muted" },
+                          [
+                            _c("h3", {
+                              staticClass: "my-3",
+                              domProps: { textContent: _vm._s(_vm.data.name) }
+                            }),
+                            _vm._v(" "),
+                            _c("p", {
+                              domProps: {
+                                textContent: _vm._s(_vm.data.description)
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("h4", [_vm._v("Precios del Producto")]),
+                            _vm._v(" "),
+                            _c("h6", [
+                              _vm._v(
+                                "Stock Disponible : " + _vm._s(_vm.data.stock)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "bg-gray py-2 px-3 mt-4" },
+                              [
+                                _c("h4", { staticClass: "mt-0" }, [
+                                  _c("small", [
+                                    _vm._v(
+                                      "Sin IVA: " +
+                                        _vm._s(
+                                          _vm._f("numeralFormat")(
+                                            _vm.tax,
+                                            "0.00[,]00"
+                                          )
+                                        )
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("h3", { staticClass: "mb-0" }, [
+                                  _vm._v(
+                                    "Bs. " +
+                                      _vm._s(
+                                        _vm._f("numeralFormat")(
+                                          _vm.unit_price,
+                                          "0.00[,]00"
+                                        )
+                                      ) +
+                                      " | $. " +
+                                      _vm._s(
+                                        _vm._f("numeralFormat")(
+                                          _vm.data.divisa_unit,
+                                          "0.00[,]00"
+                                        )
+                                      )
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "bg-gray disabled color-palette py-2 px-3 mt-4"
+                              },
+                              [
+                                _c("h4", { staticClass: "mt-0" }, [
+                                  _c("small", [
+                                    _vm._v(
+                                      "Sin IVA: " +
+                                        _vm._s(
+                                          _vm._f("numeralFormat")(
+                                            _vm.tax_wholesale,
+                                            "0.00[,]00"
+                                          )
+                                        ) +
+                                        " "
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("h3", { staticClass: "mb-0" }, [
+                                  _vm._v(
+                                    "Bs. " +
+                                      _vm._s(
+                                        _vm._f("numeralFormat")(
+                                          _vm.wholesale_price,
+                                          "0.00[,]00"
+                                        )
+                                      ) +
+                                      " | $. " +
+                                      _vm._s(
+                                        _vm._f("numeralFormat")(
+                                          _vm.data.wholesale_divisa,
+                                          "0.00[,]00"
+                                        )
+                                      ) +
+                                      " | Pack. " +
+                                      _vm._s(_vm.data.wholesale_quantity)
+                                  )
+                                ])
+                              ]
+                            )
+                          ]
+                        )
                       ])
                     ]),
                     _vm._v(" "),
@@ -56669,38 +56833,6 @@ var staticRenderFns = [
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-sm-6 text-muted" }, [
-      _c("h3", { staticClass: "my-3" }, [
-        _vm._v("LOWA Men’s Renegade GTX Mid Hiking Boots Review")
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v(
-          "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr."
-        )
-      ]),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c("h4", [_vm._v("Available Colors")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "bg-gray py-2 px-3 mt-4" }, [
-        _c("h2", { staticClass: "mb-0" }, [
-          _vm._v(
-            "\n                                                $80.00\n                                                "
-          )
-        ]),
-        _vm._v(" "),
-        _c("h4", { staticClass: "mt-0" }, [
-          _c("small", [_vm._v("Ex Tax: $80.00 ")])
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -56879,7 +57011,7 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-9" }, [
-                          _c("input", {
+                          _c("textarea", {
                             directives: [
                               {
                                 name: "model",
@@ -56889,10 +57021,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: {
-                              type: "text",
-                              placeholder: "Ingresar descripción"
-                            },
+                            attrs: { placeholder: "Ingresar descripción" },
                             domProps: { value: _vm.data.description },
                             on: {
                               input: function($event) {
@@ -57702,119 +57831,139 @@ var render = function() {
                                     }
                                   },
                                   [
-                                    _c("div", { staticClass: "col-md-12" }, [
-                                      _c(
-                                        "div",
-                                        {
-                                          directives: [
-                                            {
-                                              name: "show",
-                                              rawName: "v-show",
-                                              value: _vm.images.length < 3,
-                                              expression: "images.length < 3"
-                                            }
-                                          ],
-                                          staticClass: "form-group"
-                                        },
-                                        [
-                                          _c(
-                                            "label",
-                                            {
-                                              staticClass:
-                                                "form-control-label text-muted",
-                                              attrs: { for: "my-input" }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "Agregar Imagenes al Producto: "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("vue-dropzone", {
-                                            ref: "myVueDropzone",
-                                            attrs: {
-                                              id: "dropzone",
-                                              options: _vm.dropzoneOptions
-                                            },
-                                            on: {
-                                              "vdropzone-error": _vm.eventError,
-                                              "vdropzone-success":
-                                                _vm.eventSuccess
-                                            }
-                                          })
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.images.length < 3,
+                                            expression: "images.length < 3"
+                                          }
                                         ],
-                                        1
-                                      )
-                                    ]),
+                                        staticClass: "col-md-12"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "form-group" },
+                                          [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "form-control-label text-muted",
+                                                attrs: { for: "my-input" }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "Agregar Imagenes al Producto: "
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("vue-dropzone", {
+                                              ref: "myVueDropzone",
+                                              attrs: {
+                                                id: "dropzone",
+                                                options: _vm.dropzoneOptions
+                                              },
+                                              on: {
+                                                "vdropzone-error":
+                                                  _vm.eventError,
+                                                "vdropzone-success":
+                                                  _vm.eventSuccess
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    ),
                                     _vm._v(" "),
-                                    _c("div", { staticClass: "col-md-12" }, [
-                                      _c(
-                                        "label",
-                                        {
-                                          staticClass:
-                                            "form-control-label text-muted",
-                                          attrs: { for: "my-input" }
-                                        },
-                                        [_vm._v("Imagenes del Producto: ")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "timeline-body align-center text-center"
-                                        },
-                                        _vm._l(_vm.images, function(image) {
-                                          return _c(
-                                            "div",
-                                            {
-                                              key: image.id,
-                                              staticClass:
-                                                "float-left pt-2 pb-2 pr-2"
-                                            },
-                                            [
-                                              _c(
-                                                "router-link",
-                                                {
-                                                  staticClass:
-                                                    "btn btn-link btn-danger btn-sm",
-                                                  staticStyle: {
-                                                    position: "absolute"
-                                                  },
-                                                  attrs: { to: "" },
-                                                  nativeOn: {
-                                                    click: function($event) {
-                                                      return _vm.deleteImag(
-                                                        image.id
-                                                      )
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _c("i", {
-                                                    staticClass:
-                                                      "fas fa-trash-alt"
-                                                  })
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("img", {
-                                                staticClass: "img-thumbnail",
-                                                attrs: {
-                                                  src: image.url,
-                                                  alt: _vm.data.name,
-                                                  width: "150",
-                                                  height: "100"
-                                                }
-                                              })
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-12 text-muted" },
+                                      [
+                                        _c(
+                                          "label",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value: _vm.images.length,
+                                                expression: "images.length"
+                                              }
                                             ],
-                                            1
-                                          )
-                                        }),
-                                        0
-                                      )
-                                    ])
+                                            staticClass:
+                                              "form-control-label text-muted",
+                                            attrs: { for: "my-input" }
+                                          },
+                                          [_vm._v("Imagenes del Producto: ")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "timeline-body mx-auto d-block"
+                                          },
+                                          _vm._l(_vm.images, function(image) {
+                                            return _c(
+                                              "div",
+                                              {
+                                                key: image.id,
+                                                staticClass:
+                                                  "float-left pt-2 pb-2 pr-2"
+                                              },
+                                              [
+                                                _c(
+                                                  "router-link",
+                                                  {
+                                                    staticClass:
+                                                      "btn btn-link btn-danger btn-sm",
+                                                    staticStyle: {
+                                                      position: "absolute"
+                                                    },
+                                                    attrs: { to: "" },
+                                                    nativeOn: {
+                                                      click: function($event) {
+                                                        return _vm.deleteImag(
+                                                          image.id
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-trash-alt"
+                                                    })
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("img", {
+                                                  staticClass: "img-thumbnail",
+                                                  staticStyle: {
+                                                    height: "160px"
+                                                  },
+                                                  attrs: {
+                                                    src: image.url,
+                                                    alt: _vm.data.name,
+                                                    width: "150",
+                                                    height: "100"
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          }),
+                                          0
+                                        )
+                                      ]
+                                    )
                                   ]
                                 )
                               ]
@@ -59900,7 +60049,7 @@ var render = function() {
   return _c("div", { staticClass: "container pt-2" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-6" }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card", staticStyle: { height: "238px" } }, [
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title text-muted" }, [
               _c(
@@ -60201,7 +60350,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-6" }, [
-        _c("div", { staticClass: "card", staticStyle: { height: "323px" } }, [
+        _c("div", { staticClass: "card", staticStyle: { height: "329px" } }, [
           _vm._m(6),
           _vm._v(" "),
           _c(
