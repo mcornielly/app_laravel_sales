@@ -62,7 +62,7 @@ import BtnPricesListComponent from '../../components/BtnPricesListComponent.vue'
 Vue.use(DataTable);
 
 // Registra una directiva personalizada global llamada `v-focus`
-//  Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
+// Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
 
 export default {
     components:{
@@ -208,7 +208,10 @@ export default {
             this.getData(this.url, tableProps);
         },
         createProduct(){
-
+            this.title = "Consulta Precio del Producto";
+            $('#modal-ex').on('shown.bs.modal', function() {
+                $('#input_focus').focus();
+            })
         },
         modalProduct(data){
             this.title = "Consulta de Producto";

@@ -39,6 +39,7 @@ Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue')
 Vue.component('status-component', require('./components/StatusComponent.vue').default);
 Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
 Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
+Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
 
 /**
