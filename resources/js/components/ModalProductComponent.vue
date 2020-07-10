@@ -159,7 +159,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">Código</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code">
+                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code" maxlength="13">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.code[0]"></span>
                                                         <barcode :value="data.code" :options="{ format: 'EAN-13'}">
                                                         </barcode>

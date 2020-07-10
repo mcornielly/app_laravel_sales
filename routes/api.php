@@ -42,6 +42,7 @@ Route::get('producto/restore/{id}', 'Admin\ProductsController@restore');
 Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
 Route::post('producto/img', 'Admin\PhotosController@store');
 Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
+Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
 
 Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
 Route::delete('fotos/eliminar/{id}', 'Admin\PhotosController@destroy');

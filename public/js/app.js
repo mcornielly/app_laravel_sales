@@ -16261,6 +16261,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -16270,22 +16294,13 @@ var _user = document.head.querySelector('meta[name="user"]');
   data: function data() {
     return {
       url: "api/producto/search/",
-      user_id: 0,
+      data: {},
       errors: '',
-      name: '',
-      product_id: 0,
-      category_id: 0,
-      description: '',
-      price: 0,
-      stock: 0,
       code: '',
-      wholesale_quantity: 0,
-      margin_gain_u: 0,
-      margin_gain_w: 0,
-      value: '',
-      image: '',
-      photos: [],
-      close: false
+      images: [],
+      resultProduct: false,
+      resultFail: false,
+      imgshow: false
     };
   },
   components: {
@@ -16295,65 +16310,58 @@ var _user = document.head.querySelector('meta[name="user"]');
     user: function user() {
       return JSON.parse(_user.content);
     },
-    price_gain_u: function price_gain_u() {
-      var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
-      this.p_gain_u = result;
-      return result;
-    },
-    divisa_unit: function divisa_unit() {
-      var result = 0;
+    inputListeners: function inputListeners() {
+      var vm = this; // `Object.assign` merges objects together to form a new object
 
-      if (this.divisa > 0 || this.unit_price > 0) {
-        var result = (this.unit_price / this.divisa).toFixed(2);
-      }
-
-      return result;
-    },
-    unit_price: function unit_price() {
-      var result = 0;
-
-      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
-      }
-
-      return result;
-    },
-    price_gain_w: function price_gain_w() {
-      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
-      return result;
-    },
-    wholesale_divisa: function wholesale_divisa() {
-      var result = 0;
-
-      if (this.divisa > 0 || this.wholesale_price > 0) {
-        result = (this.wholesale_price / this.divisa).toFixed(2);
-      }
-
-      return result;
-    },
-    wholesale_price: function wholesale_price() {
-      var result = 0;
-
-      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
-      }
-
-      return result;
+      return Object.assign({}, // We add all the listeners from the parent
+      this.$listeners, console.log(this.$listeners) // Then we can add custom listeners or override the
+      // behavior of some listeners.
+      , {
+        // This ensures that the component works with v-model
+        input: function input(event) {
+          vm.$emit('input', event.target.value);
+          console.log(event.target.value);
+        }
+      });
     }
   },
   methods: {
     getDataProduct: function getDataProduct() {
-      console.log(this.code);
-      var url = "".concat(this.url).concat(this.code);
-      console.log(url);
+      var _this = this;
+
+      var leng_code = this.code.length;
+      var code = this.code;
+
+      if (leng_code == 13 && code != '') {
+        var url = "".concat(this.url).concat(this.code);
+        axios.get(url).then(function (response) {
+          console.log(response.data[0]);
+          _this.data = response.data[0];
+          _this.images = response.data[0].photos;
+          _this.resultProduct = true;
+        })["catch"](function (error) {
+          console.log(error.response);
+          _this.errors = error.response;
+
+          _this.clearSearch();
+
+          _this.resultProduct = true;
+        });
+      } else {
+        if (this.code == '') {
+          this.clearSearch();
+          this.resultProduct = false;
+        }
+      }
+    },
+    clearSearch: function clearSearch() {
+      this.data = {};
+      this.images = [];
     },
     closeModal: function closeModal() {
-      this.close = true;
-      this.selectedRow = {};
-      this.errors = '';
-      this.vremoved();
-      this.$parent.reloadTable();
-      this.data.price = '';
+      this.code = '';
+      this.clearSearch();
+      this.resultProduct = false;
     }
   }
 });
@@ -16372,6 +16380,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-numerals */ "./node_modules/vue-numerals/dist/vue-numerals.min.js");
 /* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_numerals__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16453,13 +16473,33 @@ Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_0___default.a); // default locale 
   },
   data: function data() {
     return {
-      imgProduct: ''
+      imgProduct: '/images/img/noimagen.jpg',
+      noProduct: 'Producto No Registrado'
     };
   },
   computed: {
+    stock: function stock() {
+      if (!this.data.stock) {
+        return 0;
+      } else {
+        return this.data.stock;
+      }
+    },
+    wholesale_quantity: function wholesale_quantity() {
+      if (!this.data.wholesale_quantity) {
+        return 0;
+      } else {
+        return this.data.wholesale_quantity;
+      }
+    },
     price_gain_u: function price_gain_u() {
-      var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
-      this.p_gain_u = result;
+      var result = 0;
+
+      if (this.price > 0) {
+        var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+        this.p_gain_u = result;
+      }
+
       return result;
     },
     unit_price: function unit_price() {
@@ -16472,7 +16512,12 @@ Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_0___default.a); // default locale 
       return result;
     },
     price_gain_w: function price_gain_w() {
-      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      var result = 0;
+
+      if (this.price > 0) {
+        var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      }
+
       return result;
     },
     wholesale_price: function wholesale_price() {
@@ -57502,7 +57547,8 @@ var render = function() {
                                               staticClass: "form-control",
                                               attrs: {
                                                 type: "text",
-                                                placeholder: "Código de Barras"
+                                                placeholder: "Código de Barras",
+                                                maxlength: "13"
                                               },
                                               domProps: {
                                                 value: _vm.data.code
@@ -58595,43 +58641,86 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-body" }, [
-              _c("label", { attrs: { for: "" } }, [
-                _vm._v("Código del Producto")
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "" } }, [
+                  _vm._v("Código del Producto")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-group" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.code,
+                        expression: "code"
+                      }
+                    ],
+                    staticClass: "form-control text-center",
+                    attrs: {
+                      type: "text",
+                      on: _vm.inputListeners(),
+                      id: "input_focus",
+                      maxlength: "13",
+                      placeholder: "Ingrese Código del Producto",
+                      autocomplete: "off"
+                    },
+                    domProps: { value: _vm.code },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.code = $event.target.value
+                      }
+                    }
+                  })
+                ])
               ]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.code,
-                    expression: "code"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "input_focus", maxlength: "10" },
-                domProps: { value: _vm.code },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.resultProduct,
+                      expression: "resultProduct"
                     }
-                    _vm.code = $event.target.value
-                  }
-                }
-              })
+                  ]
+                },
+                [
+                  _c("hr", { staticClass: "bg-light disabled color-palette" }),
+                  _vm._v(" "),
+                  _c("prices-product", {
+                    attrs: {
+                      data: _vm.data,
+                      images: _vm.images,
+                      imgshow: _vm.imgshow
+                    }
+                  })
+                ],
+                1
+              )
             ]),
-            _vm._v(" "),
-            _c("hr"),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer justify-content-between" }, [
               _c(
                 "button",
                 {
                   staticClass: "btn btn-outline-light",
-                  attrs: { type: "button", "data-dismiss": "modal" }
+                  attrs: { type: "button", "data-dismiss": "modal" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.closeModal()
+                    }
+                  }
                 },
-                [_vm._v("Close")]
+                [_vm._v("Cerrar")]
               ),
               _vm._v(" "),
               _c(
@@ -58646,7 +58735,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Save changes")]
+                [_vm._v("Consultar")]
               )
             ])
           ]
@@ -58661,7 +58750,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Info Modal")]),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Consultar Producto")]),
       _vm._v(" "),
       _c(
         "button",
@@ -58675,6 +58764,16 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _c("i", { staticClass: "fas fa-barcode" })
+      ])
     ])
   }
 ]
@@ -58709,50 +58808,75 @@ var render = function() {
             [_vm._v(" ")]
           ),
           _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.data.name))])
+          _vm.data.name
+            ? _c("strong", [_vm._v(_vm._s(_vm.data.name))])
+            : _c("strong", { domProps: { innerHTML: _vm._s(_vm.noProduct) } })
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body p-0 text-muted" }, [
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 col-sm-6" }, [
-            _c(
-              "div",
-              { staticClass: "col-12 mx-auto d-block" },
-              _vm._l(_vm.images, function(image, index) {
-                return _c("div", { key: image.id }, [
-                  _c(
+            _c("div", { staticClass: "col-12 mx-auto d-block" }, [
+              _vm.images.length
+                ? _c(
+                    "div",
+                    _vm._l(_vm.images, function(image, index) {
+                      return _c("div", { key: image.id }, [
+                        _c(
+                          "div",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: index == 0,
+                                expression: "index==0"
+                              }
+                            ]
+                          },
+                          [
+                            _vm.imgshow == false
+                              ? _c("img", {
+                                  staticClass: "product-image img-fluid",
+                                  staticStyle: {
+                                    height: "25%",
+                                    "object-fit": "contain"
+                                  },
+                                  attrs: {
+                                    src: image.url,
+                                    alt: "Product Image"
+                                  }
+                                })
+                              : _c("img", {
+                                  staticClass: "product-image",
+                                  attrs: {
+                                    src: _vm.imgProduct,
+                                    alt: "Product Image"
+                                  }
+                                })
+                          ]
+                        )
+                      ])
+                    }),
+                    0
+                  )
+                : _c(
                     "div",
                     {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: index == 0,
-                          expression: "index==0"
-                        }
-                      ]
+                      staticClass: "col-12 product-image-thumbs mb-3",
+                      staticStyle: { "margin-left": "5%" }
                     },
                     [
-                      _vm.imgshow == false
-                        ? _c("img", {
-                            staticClass: "product-image img-fluid",
-                            staticStyle: {
-                              height: "25%",
-                              "object-fit": "contain"
-                            },
-                            attrs: { src: image.url, alt: "Product Image" }
-                          })
-                        : _c("img", {
-                            staticClass: "product-image",
-                            attrs: { src: _vm.imgProduct, alt: "Product Image" }
-                          })
+                      _c("div", { staticClass: "product-image active" }, [
+                        _c("img", {
+                          staticClass: "img-responsive",
+                          attrs: { src: _vm.imgProduct, alt: "noimagen" }
+                        })
+                      ])
                     ]
                   )
-                ])
-              }),
-              0
-            ),
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -58794,22 +58918,33 @@ var render = function() {
                 attrs: { data: _vm.data }
               }),
               _vm._v(" "),
-              _c("h3", {
-                staticClass: "my-3",
-                domProps: { textContent: _vm._s(_vm.data.name) }
-              }),
+              _vm.data.name
+                ? _c("h3", {
+                    staticClass: "my-3",
+                    domProps: { textContent: _vm._s(_vm.data.name) }
+                  })
+                : _c("h3", {
+                    staticClass: "my-3 text-danger",
+                    domProps: { textContent: _vm._s(_vm.noProduct) }
+                  }),
               _vm._v(" "),
-              _c("p", {
-                domProps: { textContent: _vm._s(_vm.data.description) }
-              }),
+              _c("div", [
+                _vm.data.description
+                  ? _c("p", {
+                      domProps: { textContent: _vm._s(_vm.data.description) }
+                    })
+                  : _c("p", [
+                      _vm._v(
+                        "El producto debe ser registrado y agregarse una breve descripción."
+                      )
+                    ])
+              ]),
               _vm._v(" "),
               _c("hr"),
               _vm._v(" "),
               _c("h4", [_vm._v("Precios del Producto")]),
               _vm._v(" "),
-              _c("h6", [
-                _vm._v("Stock Disponible : " + _vm._s(_vm.data.stock))
-              ]),
+              _c("h6", [_vm._v("Stock Disponible : " + _vm._s(_vm.stock))]),
               _vm._v(" "),
               _c("div", { staticClass: "bg-gray py-2 px-3 mt-4" }, [
                 _c("h4", { staticClass: "mt-0" }, [
@@ -58876,7 +59011,7 @@ var render = function() {
                           )
                         ) +
                         " | Pack. " +
-                        _vm._s(_vm.data.wholesale_quantity)
+                        _vm._s(_vm.wholesale_quantity)
                     )
                   ])
                 ]

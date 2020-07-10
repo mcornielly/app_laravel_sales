@@ -121,6 +121,19 @@ class ProductsController extends Controller
         }
     }
 
+    public function product_search($code)
+    {
+        $product = Product::with('category','photos')
+                    ->withTrashed()
+                    ->where('code', $code)
+                    ->get();
+        
+        if(request()->wantsJson())
+        {
+            return $product;
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

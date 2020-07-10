@@ -4,7 +4,8 @@
             <div class="card-header">
                 <h3 class="card-title text-muted">
                     <i class="fas fa-tag" style="font-size: 20px;">&nbsp;</i>
-                    <strong>{{data.name}}</strong>
+                    <strong v-if="data.name">{{data.name}}</strong>
+                    <strong v-else v-html="noProduct"></strong>
                 </h3>
             </div>
             <!-- /.card-header -->
@@ -13,11 +14,17 @@
                     <div class="col-12 col-sm-6">
                         <!-- <h3 class="d-inline-block d-sm-none text-muted">LOWA Men’s Renegade GTX Mid Hiking Boots Review</h3> -->
                         <div class="col-12 mx-auto d-block">
-                            <div v-for="(image,index) in images" :key="image.id">
-                                <div v-show="index==0">
-                                <img v-if="imgshow==false" :src="image.url" class="product-image img-fluid" alt="Product Image" style="height: 25%; object-fit: cover; object-fit: contain;">
-                                <img v-else :src="imgProduct" class="product-image" alt="Product Image">
+                            
+                            <div v-if="images.length">
+                                <div  v-for="(image,index) in images" :key="image.id">
+                                    <div v-show="index==0">
+                                    <img v-if="imgshow==false" :src="image.url" class="product-image img-fluid" alt="Product Image" style="height: 25%; object-fit: cover; object-fit: contain;">
+                                    <img v-else :src="imgProduct" class="product-image" alt="Product Image">
+                                    </div>
                                 </div>
+                            </div>
+                            <div v-else class="col-12 product-image-thumbs mb-3" style="margin-left: 5%;">
+                                <div class="product-image active"><img class="img-responsive" :src="imgProduct" alt="noimagen"></div>
                             </div>
                         </div>
                         <div class="col-12 product-image-thumbs mb-3" style="margin-left: 5%;">
@@ -29,11 +36,16 @@
                     <div class="col-12 col-sm-6 text-muted">
                         <!-- Descripción del producto -->
                         <status-component class="float-right mr-3 pt-4" :data="data"></status-component>
-                        <h3 class="my-3" v-text="data.name"></h3>
-                        <p v-text="data.description"></p>
+                        <h3 v-if="data.name" class="my-3" v-text="data.name"></h3>
+                        <h3 v-else class="my-3 text-danger" v-text="noProduct"></h3>
+                        <div>
+                        <p v-if="data.description" v-text="data.description"></p>
+                        <p v-else>El producto debe ser registrado y agregarse una breve descripción.</p>
+
+                        </div>
                         <hr>
                         <h4>Precios del Producto</h4>
-                        <h6>Stock Disponible : {{ data.stock }}</h6>
+                        <h6>Stock Disponible : {{ stock }}</h6>
 
                         <div class="bg-gray py-2 px-3 mt-4">
                             <h4 class="mt-0">
@@ -45,7 +57,7 @@
                             <h4 class="mt-0">
                             <small>Sin IVA: {{ tax_wholesale | numeralFormat('0.00[,]00') }} </small>
                             </h4>
-                            <h3 class="mb-0">Bs. {{ wholesale_price | numeralFormat('0.00[,]00') }} | $. {{ data.wholesale_divisa | numeralFormat('0.00[,]00') }} | Pack. {{ data.wholesale_quantity }}</h3>
+                            <h3 class="mb-0">Bs. {{ wholesale_price | numeralFormat('0.00[,]00') }} | $. {{ data.wholesale_divisa | numeralFormat('0.00[,]00') }} | Pack. {{ wholesale_quantity }}</h3>
                         </div>
                     </div>
                 </div>
@@ -78,13 +90,31 @@ export default {
     },
     data(){
         return{
-            imgProduct: '',
+            imgProduct: '/images/img/noimagen.jpg',
+            noProduct: 'Producto No Registrado'
         }
     },
     computed:{
+        stock: function(){
+            if(!this.data.stock){               
+                return 0;
+            }else{
+                return this.data.stock;
+            }
+        },
+        wholesale_quantity: function(){
+            if(!this.data.wholesale_quantity){               
+                return 0;
+            }else{
+                return this.data.wholesale_quantity;
+            }
+        },
         price_gain_u: function(){
-            var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
-            this.p_gain_u = result;
+            var result = 0;
+            if(this.price > 0){
+                var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+                this.p_gain_u = result;
+            }    
             return result;
         },
         unit_price: function(){
@@ -95,7 +125,10 @@ export default {
             return result;
         },
         price_gain_w: function(){
-            var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+            var result = 0;
+            if(this.price > 0){
+                var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+            }
             return result;
         },
         wholesale_price: function(){
