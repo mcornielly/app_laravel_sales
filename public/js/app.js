@@ -13364,6 +13364,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
@@ -13470,10 +13472,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     }
   },
   methods: {
-    searchCode: function searchCode() {
-      alert(this.code);
-      console.log(this.code);
-    },
     getDivisa: function getDivisa() {
       var _this = this;
 
@@ -13513,14 +13511,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     reloadTable: function reloadTable(tableProps) {
       this.getData(this.url, tableProps);
     },
-    createProduct: function createProduct() {
-      this.title = "Consulta Precio del Producto";
-      $('#modal-ex').on('shown.bs.modal', function () {
+    searchProduct: function searchProduct() {
+      this.title = "Consulta de Precio del Producto";
+      $('#modal-search').on('shown.bs.modal', function () {
         $('#input_focus').focus();
       });
     },
     modalProduct: function modalProduct(data) {
-      this.title = "Consulta de Producto";
+      this.title = "Consulta del Producto";
       this.selectedRow = data;
       this.product_id = data.id;
       this.getImages(this.product_id);
@@ -16284,13 +16282,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 var _user = document.head.querySelector('meta[name="user"]');
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    title: {
+      type: String,
+      "default": ''
+    }
+  },
   data: function data() {
     return {
       url: "api/producto/search/",
@@ -16309,36 +16312,28 @@ var _user = document.head.querySelector('meta[name="user"]');
   computed: {
     user: function user() {
       return JSON.parse(_user.content);
-    },
-    inputListeners: function inputListeners() {
-      var vm = this; // `Object.assign` merges objects together to form a new object
-
-      return Object.assign({}, // We add all the listeners from the parent
-      this.$listeners, console.log(this.$listeners) // Then we can add custom listeners or override the
-      // behavior of some listeners.
-      , {
-        // This ensures that the component works with v-model
-        input: function input(event) {
-          vm.$emit('input', event.target.value);
-          console.log(event.target.value);
-        }
-      });
     }
   },
   methods: {
     getDataProduct: function getDataProduct() {
       var _this = this;
 
+      var x = 0;
       var leng_code = this.code.length;
       var code = this.code;
 
-      if (leng_code == 13 && code != '') {
-        var url = "".concat(this.url).concat(this.code);
+      if (leng_code == 13 && x == 0) {
+        var url = "".concat(this.url).concat(code);
         axios.get(url).then(function (response) {
+          console.log(x = x + 1);
           console.log(response.data[0]);
           _this.data = response.data[0];
           _this.images = response.data[0].photos;
           _this.resultProduct = true;
+          _this.code = '';
+          $('#modal-search').on('shown.bs.modal', function () {
+            $('#input_focus').focus();
+          });
         })["catch"](function (error) {
           console.log(error.response);
           _this.errors = error.response;
@@ -16346,6 +16341,7 @@ var _user = document.head.querySelector('meta[name="user"]');
           _this.clearSearch();
 
           _this.resultProduct = true;
+          _this.code = '';
         });
       } else {
         if (this.code == '') {
@@ -16380,6 +16376,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-numerals */ "./node_modules/vue-numerals/dist/vue-numerals.min.js");
 /* harmony import */ var vue_numerals__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_numerals__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/main.js");
+//
+//
 //
 //
 //
@@ -54412,11 +54410,11 @@ var render = function() {
                     attrs: {
                       href: "#",
                       "data-toggle": "modal",
-                      "data-target": "#modal-ex"
+                      "data-target": "#modal-search"
                     },
                     on: {
                       click: function($event) {
-                        return _vm.createProduct()
+                        return _vm.searchProduct()
                       }
                     }
                   },
@@ -54456,7 +54454,7 @@ var render = function() {
         ])
       ],
       _vm._v(" "),
-      _c("modal-searh-product"),
+      _c("modal-searh-product", { attrs: { title: _vm.title } }),
       _vm._v(" "),
       _c("modal-show-priceslist", {
         attrs: {
@@ -58623,149 +58621,164 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "modal fade", attrs: { id: "modal-ex" } }, [
-    _c("div", { staticClass: "modal-dialog modal-xl" }, [
-      _c("div", { staticClass: "modal-content bg-secondary" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            attrs: { role: "form", method: "POST" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.getDataProduct()
+  return _c(
+    "div",
+    { staticClass: "modal fade", attrs: { id: "modal-search" } },
+    [
+      _c("div", { staticClass: "modal-dialog modal-xl" }, [
+        _c("div", { staticClass: "modal-content bg-secondary" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", {
+              staticClass: "modal-title",
+              domProps: { textContent: _vm._s(_vm.title) }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: {
+                  type: "button",
+                  "data-dismiss": "modal",
+                  "aria-label": "Close"
+                },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.closeModal()
+                  }
+                }
+              },
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              attrs: { role: "form", method: "POST" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.getDataProduct()
+                }
               }
-            }
-          },
-          [
-            _c("div", { staticClass: "modal-body" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "" } }, [
-                  _vm._v("Código del Producto")
+            },
+            [
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [
+                    _vm._v("Código del Producto")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.code,
+                          expression: "code"
+                        }
+                      ],
+                      staticClass: "form-control text-center",
+                      attrs: {
+                        type: "text",
+                        id: "input_focus",
+                        maxlength: "13",
+                        placeholder: "Ingrese Código del Producto",
+                        autocomplete: "off"
+                      },
+                      domProps: { value: _vm.code },
+                      on: {
+                        keyup: function($event) {
+                          return _vm.getDataProduct()
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.code = $event.target.value
+                        }
+                      }
+                    })
+                  ])
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "input-group" }, [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("input", {
+                _c(
+                  "div",
+                  {
                     directives: [
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.code,
-                        expression: "code"
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.resultProduct,
+                        expression: "resultProduct"
                       }
-                    ],
-                    staticClass: "form-control text-center",
-                    attrs: {
-                      type: "text",
-                      on: _vm.inputListeners(),
-                      id: "input_focus",
-                      maxlength: "13",
-                      placeholder: "Ingrese Código del Producto",
-                      autocomplete: "off"
-                    },
-                    domProps: { value: _vm.code },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.code = $event.target.value
+                    ]
+                  },
+                  [
+                    _c("hr", {
+                      staticClass: "bg-light disabled color-palette"
+                    }),
+                    _vm._v(" "),
+                    _c("prices-product", {
+                      attrs: {
+                        data: _vm.data,
+                        images: _vm.images,
+                        imgshow: _vm.imgshow
                       }
-                    }
-                  })
-                ])
+                    })
+                  ],
+                  1
+                )
               ]),
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.resultProduct,
-                      expression: "resultProduct"
-                    }
-                  ]
-                },
+                { staticClass: "modal-footer justify-content-between" },
                 [
-                  _c("hr", { staticClass: "bg-light disabled color-palette" }),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-light",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.closeModal()
+                        }
+                      }
+                    },
+                    [_vm._v("Cerrar")]
+                  ),
                   _vm._v(" "),
-                  _c("prices-product", {
-                    attrs: {
-                      data: _vm.data,
-                      images: _vm.images,
-                      imgshow: _vm.imgshow
-                    }
-                  })
-                ],
-                1
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-light",
+                      attrs: { type: "submit" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.getDataProduct()
+                        }
+                      }
+                    },
+                    [_vm._v("Consultar")]
+                  )
+                ]
               )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer justify-content-between" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-light",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.closeModal()
-                    }
-                  }
-                },
-                [_vm._v("Cerrar")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-light",
-                  attrs: { type: "submit" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.getDataProduct()
-                    }
-                  }
-                },
-                [_vm._v("Consultar")]
-              )
-            ])
-          ]
-        )
+            ]
+          )
+        ])
       ])
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Consultar Producto")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -58929,6 +58942,15 @@ var render = function() {
                   }),
               _vm._v(" "),
               _c("div", [
+                _c("p", [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _c("i", { staticClass: "fas fa-barcode" }, [_vm._v(" ")]),
+                    _c("span", { staticClass: "ml-2" }, [
+                      _vm._v(_vm._s(_vm.data.code))
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
                 _vm.data.description
                   ? _c("p", {
                       domProps: { textContent: _vm._s(_vm.data.description) }

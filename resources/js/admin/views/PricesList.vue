@@ -10,7 +10,7 @@
                         <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista de Precios</h3>
                         <!-- <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
-                        <a href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-ex" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
+                        <a href="#" @click="searchProduct()" data-toggle="modal" data-target="#modal-search" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
                         </div>
                         
                         <!-- /.card-header -->
@@ -33,7 +33,9 @@
 
    
         <!-- Modal-Searh-Product -->
-        <modal-searh-product></modal-searh-product>
+        <modal-searh-product
+            :title="title"
+        ></modal-searh-product>
         <!-- /.modal -->
 
         <!-- Modal-Show PricesList -->
@@ -169,10 +171,6 @@ export default {
         }
     },
     methods: {
-        searchCode(){
-            alert(this.code)
-            console.log(this.code)
-        },
         getDivisa(){
             var url = "api/divisa/precio";
             axios.get(url).then(response => {
@@ -207,14 +205,14 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
-        createProduct(){
-            this.title = "Consulta Precio del Producto";
-            $('#modal-ex').on('shown.bs.modal', function() {
+        searchProduct(){
+            this.title = "Consulta de Precio del Producto";
+            $('#modal-search').on('shown.bs.modal', function() {
                 $('#input_focus').focus();
             })
         },
         modalProduct(data){
-            this.title = "Consulta de Producto";
+            this.title = "Consulta del Producto";
             this.selectedRow = data;
             this.product_id = data.id;
             this.getImages(this.product_id); 

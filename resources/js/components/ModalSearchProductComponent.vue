@@ -1,10 +1,10 @@
 <template>
-    <div class="modal fade" id="modal-ex">
+    <div class="modal fade" id="modal-search">
         <div class="modal-dialog modal-xl">
             <div class="modal-content bg-secondary">
                 <div class="modal-header">
-                    <h4 class="modal-title">Consultar Producto</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="modal-title" v-text="title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"@click.prevent="closeModal()">
                     <span aria-hidden="true">&times;</span></button>
                 </div>
                 <form role="form" @submit.prevent="getDataProduct()" method="POST">
@@ -15,8 +15,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                 </div>
-                                <input type="text" :on="inputListeners()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
-                                <!-- <input type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off"> -->
+                                <input type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                                 <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors"></span> -->
                             </div>
                         </div>
@@ -56,6 +55,12 @@ import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode';
 
 export default {
+    props:{
+        title:{
+            type: String,
+            default: ''
+        }
+    },
     data(){
         return {
             url:"api/producto/search/",
@@ -74,49 +79,39 @@ export default {
     computed:{
         user(){
             return JSON.parse(user.content);
-        },
-        inputListeners: function () {
-            var vm = this
-            // `Object.assign` merges objects together to form a new object
-            return Object.assign({},
-                // We add all the listeners from the parent
-                this.$listeners,
-                console.log(this.$listeners)
-                // Then we can add custom listeners or override the
-                // behavior of some listeners.
-                ,{
-                // This ensures that the component works with v-model
-                input: function (event) {
-                    vm.$emit('input', event.target.value)
-
-                    console.log(event.target.value);
-                }
-            })
         }
     },
     methods:{
         getDataProduct(){
+            var x = 0;
             var leng_code = this.code.length;
             var code = this.code;
-           if(leng_code == 13 && code != ''){
-               var url = `${this.url}${this.code}`;
-               axios.get(url).then(response => {
-                   console.log(response.data[0]);
-                    this.data = response.data[0];
-                    this.images = response.data[0].photos;
-                    this.resultProduct = true;
-               }).catch(error =>{
-                    console.log(error.response);
-                    this.errors = error.response;
-                    this.clearSearch();
-                    this.resultProduct = true;
-               });
-           }else{
-               if(this.code == ''){
-                    this.clearSearch();
-                    this.resultProduct = false;
-               }
-           }
+            
+            if(leng_code == 13 && x == 0){
+                var url = `${this.url}${code}`;
+                axios.get(url).then(response => {
+                        console.log(x=x+1);
+                        console.log(response.data[0]);
+                        this.data = response.data[0];
+                        this.images = response.data[0].photos;
+                        this.resultProduct = true;
+                        this.code = '';
+                        $('#modal-search').on('shown.bs.modal', function() {
+                            $('#input_focus').focus();
+                        });
+                }).catch(error =>{
+                        console.log(error.response);
+                        this.errors = error.response;
+                        this.clearSearch();
+                        this.resultProduct = true;
+                        this.code = '';
+                });
+            }else{
+                if(this.code == ''){
+                        this.clearSearch();
+                        this.resultProduct = false;
+                }
+            }
         },
         clearSearch(){
             this.data = {};

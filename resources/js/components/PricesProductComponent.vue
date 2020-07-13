@@ -39,6 +39,8 @@
                         <h3 v-if="data.name" class="my-3" v-text="data.name"></h3>
                         <h3 v-else class="my-3 text-danger" v-text="noProduct"></h3>
                         <div>
+                            
+                        <p><span class="input-group-text"><i class="fas fa-barcode">&nbsp;</i><span class="ml-2">{{ data.code }}</span></span></p>
                         <p v-if="data.description" v-text="data.description"></p>
                         <p v-else>El producto debe ser registrado y agregarse una breve descripción.</p>
 
