@@ -306,8 +306,11 @@ export default {
     },
     computed:{
         price_gain_u: function(){
-            var result = (this.price * this.margin_gain_u / 100).toFixed(2);
-            this.p_gain_u = result;
+            var result = 0;
+             if(this.price > 0){
+                 var result = (this.price * this.margin_gain_u / 100).toFixed(2);
+                 this.p_gain_u = result;
+             }
             return result;
         },
         divisa_unit: function(){
@@ -319,13 +322,16 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+            if(this.wholesale_quantity > 0 || this.price > 0){
+                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.price)) / this.wholesale_quantity).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.price * this.margin_gain_w / 100).toFixed(2);
+            var result = 0;
+            if(this.price > 0){
+                var result = (this.price * this.margin_gain_w / 100).toFixed(2);
+            }
             return result;
         },
         wholesale_divisa: function(){
