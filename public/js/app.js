@@ -16797,7 +16797,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 var user = document.head.querySelector('meta[name="user"]');
 
 
@@ -16820,7 +16819,7 @@ var user = document.head.querySelector('meta[name="user"]');
       code: '',
       category_id: 0,
       description: '',
-      price: 0,
+      price: '0',
       stock: 0,
       wholesale_quantity: 0,
       margin_gain_u: 50,
@@ -16850,8 +16849,10 @@ var user = document.head.querySelector('meta[name="user"]');
           radix: ",",
           mapToRadix: ["."],
           max: 100000000
-        },
-        rage: {}
+        }
+      },
+      models: {
+        code: ''
       },
       image: '',
       photos: [],
@@ -16939,7 +16940,6 @@ var user = document.head.querySelector('meta[name="user"]');
     eventSuccess: function eventSuccess(file, response) {
       this.image = response;
       this.photos.push(this.image);
-      console.log(file);
       console.log(this.photos);
     },
     storeProduct: function storeProduct() {
@@ -59522,7 +59522,8 @@ var render = function() {
                                     class: { "is-invalid": _vm.errors.code },
                                     attrs: {
                                       type: "text",
-                                      placeholder: "Código de Barras"
+                                      placeholder: "Código de Barras",
+                                      maxlength: "13"
                                     },
                                     domProps: { value: _vm.code },
                                     on: {
@@ -59534,6 +59535,12 @@ var render = function() {
                                       }
                                     }
                                   }),
+                                  _vm._v(" "),
+                                  _c("small", [
+                                    _vm._v(
+                                      "Los números de código debe ser de 13 dígitos."
+                                    )
+                                  ]),
                                   _vm._v(" "),
                                   _vm.errors.wholesale_quantity
                                     ? _c(
@@ -59590,7 +59597,9 @@ var render = function() {
                                 ],
                                 1
                               )
-                            ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-12" })
                           ])
                         ]
                       )

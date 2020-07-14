@@ -99,7 +99,8 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label">Código</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code">
+                                                        <input type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
+                                                        <small>Los números de código debe ser de 13 dígitos.</small>
                                                         <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>
                                                         <barcode :value="code" :options="{ format: 'EAN-13'}">
                                                         </barcode>
@@ -123,19 +124,17 @@
                                                         </vue-dropzone>
                                                     </div>     
                                                 </div>
-                                                <!-- <div class="col-md-8"> -->
+                                                <div class="col-md-12">
                                                     <!-- timeline item -->
-                                                    <!-- <div class="timeline-item">
-                                                        <div class="timeline-body">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
-                                                            <img src="http://placehold.it/150x100" alt="...">
+                                                   <!-- <div class="timeline-item" style="width: max-content;margin: auto; margin-top: auto;margin-top: 9%;">
+                                                        <div class="timeline-body text-muted">
+                                                            <div v-for="image in photos" :key="image.id" class="float-left pt-2 pb-2 pr-2">
+                                                                <img style="height: 160px;" :src="image.url" :alt="data.name" class="img-thumbnail" width="150">
+                                                            </div>
                                                         </div>
                                                     </div> -->
                                                     <!-- END timeline item -->
-                                                <!-- </div> -->
+                                                </div>
                                                 <!-- /.card-header -->                  
                                             </div>    
                                             <!-- /.card-body -->
@@ -256,7 +255,7 @@ export default {
             code: '',
             category_id: 0,
             description: '',
-            price: 0,
+            price: '0',
             stock: 0,
             wholesale_quantity: 0,
             margin_gain_u: 50,
@@ -272,7 +271,7 @@ export default {
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
-            value:'',
+            value: '',
             mask: {
                 amount: {
                     mask: Number,
@@ -284,10 +283,10 @@ export default {
                     radix: ",", 
                     mapToRadix: ["."], 
                     max: 100000000
-                },
-                rage:{
-
                 }
+            },
+            models: {
+                code: '',
             },
             image: '',
             photos:[],
@@ -364,7 +363,6 @@ export default {
         eventSuccess(file, response){
           this.image = response;  
           this.photos.push(this.image);
-          console.log(file)
           console.log(this.photos)  
         },
         storeProduct(){
