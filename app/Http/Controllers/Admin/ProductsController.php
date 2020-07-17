@@ -6,6 +6,7 @@ use App\Divisa;
 use App\Product;
 use App\Photo;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use Illuminate\Http\Request;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
@@ -45,28 +46,39 @@ class ProductsController extends Controller
         //
     }
 
+    public function validate_step(Request $request)
+    {
+
+        $this->validate($request, [
+            'name' => 'required|min:3|unique:products',
+            'category_id' => 'required|numeric|min:1',
+            'price' => 'required|numeric|not_in:0',
+            'description' => 'required',
+            'stock' => 'required|numeric|not_in:0',
+            'wholesale_quantity' => 'required|numeric|not_in:0',
+        ]);
+
+    }
+
+
+    public function validate_code(Request $request)
+    {
+
+        $this->validate($request, [
+            'code' => 'required|numeric|min:13|unique:products',
+        ]);
+
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $data = $this->validate($request, [
-                'name' => 'required|min:3',
-                'category_id' => 'required|numeric|min:1',
-                'code' => 'required',
-                'price' => 'required|numeric|min:1',
-                'description' => 'required',
-                'stock' => 'required|numeric|min:10',
-                'margin_gain_u' => 'required|numeric',
-                'divisa_unit' => 'required',
-                'wholesale_quantity' => 'required|numeric|min:10',
-                'margin_gain_w' => 'required',
-                'wholesale_divisa' => 'required',
-            ]);
-        
         $product = new Product;
         $product->name = $request->name;    
         $product->category_id = $request->category_id;    
@@ -92,13 +104,10 @@ class ProductsController extends Controller
             }
         }    
 
-        
-
-        if($data && request()->wantsJson())
+        if(request()->wantsJson())
         {
             return $product;
-        }else{
-            return $data;
+
         }
 
         return back()->with('message', 'La Divisa fue actualizada, con exito');
@@ -159,22 +168,23 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Product $product, $id)
+    public function update(StoreProductRequest $request,Product $product, $id)
     {
-        $data = $this->validate($request, [
-            'name' => 'required|min:3',
-            'category_id' => 'required',
-            'code' => 'required',
-            'price' => 'required',
-            'description' => 'required',
-            'stock' => 'required',
-            'margin_gain_u' => 'required',
-            'divisa_unit' => 'required',
-            'wholesale_quantity' => 'required',
-            'margin_gain_w' => 'required',
-            'wholesale_divisa' => 'required',
-        ]);
-
+        // $data = $this->validate($request, [
+        //     'name' => 'required|min:3',
+        //     'category_id' => 'required',
+        //     'code' => 'required',
+        //     'price' => 'required',
+        //     'description' => 'required',
+        //     'stock' => 'required',
+        //     'margin_gain_u' => 'required',
+        //     'divisa_unit' => 'required',
+        //     'wholesale_quantity' => 'required',
+        //     'margin_gain_w' => 'required',
+        //     'wholesale_divisa' => 'required',
+        // ]);
+         
+        $data = $request->all();
         $product = Product::find($request->id);    
         $product->update($data);
 

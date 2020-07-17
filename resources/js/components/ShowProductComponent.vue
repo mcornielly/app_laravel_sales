@@ -5,8 +5,15 @@
                 <div class="card" style="height: 238px;">
                     <div class="card-header">
                         <h3 class="card-title text-muted">
-                            <i class="fas fa-tag" style="font-size: 20px;">&nbsp;</i>
-                            <strong>{{data.name}}</strong>
+                            <div class="row justify-content-between">
+                                <div class="col-md-10">
+                                    <i class="fas fa-tag" style="font-size: 20px;">&nbsp;</i>
+                                    <strong>{{data.name}}</strong>
+                                </div>
+                                <div class="col-md-2">
+                                    <status-component :data="data"></status-component>
+                                </div>
+                            </div>
                         </h3>
                     </div>
                     <!-- /.card-header -->
@@ -191,6 +198,7 @@ Vue.use(VueNumerals); // default locale is 'en'
 // Vue.use(VueNumerals, {
 //   locale: 'es'
 // });
+
 export default {
     // props: ['data','categoryName','divisa','images'],
     props:{

@@ -4,153 +4,105 @@
             <div class="col-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Nuevo Productos</h3>
+                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Nuevo Producto</h3>
                     <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i> Regresar</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">  
-                    <div class="alert alert-danger" role="alert" v-if="errors">
-                        <ul>
-                            <li v-for="error in errors" :key="error.id">{{ error[0] }}</li>  
-                        </ul>
-                    </div>
-                        <!-- form start -->
-                        <form role="form" @submit.prevent="storeProduct()">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <!-- Datos del Producto -->
-                                    <div class="col-md-8">
-                                        <div class="card card-primary card-primary">
-                                            <div class="card-header">
-                                                <h3 class="card-title"><i class="fas fa-store">&nbsp;</i> Datos del Producto</h3>
-                                            </div>
-                                            <!-- /.card-header -->                  
-                                            <div class="card-body">
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Nombre del Producto</label>
-                                                    <div class="col-md-9">
-                                                        <input type="text" class="form-control capitalize" :class="{'is-invalid' : errors.name}"  placeholder="Nombre del Producto" v-model="name">
-                                                        <span v-if="errors.name" class="invalid-feedback" role="alert">{{ errors.name[0] }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Categoría</label>
-                                                    <div class="col-md-9">
-                                                        <select class="form-control" :class="{'is-invalid' : errors.category_id}" v-model="category_id">
-                                                            <option value="0">Seleccione</option>
-                                                            <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
-                                                        </select>
-                                                        <span v-if="errors.category_id" class="invalid-feedback" role="alert">{{ errors.category_id[0] }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Descripción</label>
-                                                    <div class="col-md-9">
-                                                        <input type="text" class="form-control" :class="{'is-invalid' : errors.description}" placeholder="Ingresar descripción" v-model="description">
-                                                        <span v-if="errors.description" class="invalid-feedback" role="alert">{{errors.description[0]}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Precio Costo</label>
-                                                    <div class="col-md-9">
-                                                        <imask-input
-                                                            :value="value"
-                                                            v-model="price"
-                                                            :mask="Number"
-                                                            :unmask="true"
-                                                            thousandsSeparator= "."
-                                                            :padFractionalZeros="true"
-                                                            :normalizeZeros="true" 
-                                                            radix=","
-                                                            @accept="onAccept" 
-                                                            class="form-control text-right" :class="{'is-invalid' : errors.price}" 
-                                                            placeholder="Ingrese Cotización"
-                                                            require
-                                                        >
-                                                        </imask-input>
-                                                        <!-- <input type="text" class="form-control text-right" :class="{'is-invalid' : errors.price}" v-model="price"> -->
-                                                        <span v-if="errors.price" class="invalid-feedback" role="alert">{{ errors.price[0] }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Sctok</label>
-                                                    <div class="col-md-9">
-                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.stock}" placeholder="Stock" min="0" v-model="stock">
-                                                        <span v-if="errors.stock" class="invalid-feedback" role="alert">{{ errors.stock[0] }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
-                                                    <div class="col-md-9">
-                                                        <input type="number" class="form-control" :class="{'is-invalid' : errors.wholesale_quantity}" placeholder="Cantidad por bultor" min="0" v-model="wholesale_quantity">
-                                                        <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.wholesale_quantity[0] }}</span>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Generar Coódigo -->
-                                        <div class="card card-primary card-primary">
-                                            <div class="card-header">
-                                                <h3 class="card-title"><i class="fas fa-barcode">&nbsp;</i> Generar Código del Producto</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <!-- /.card-header -->                  
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 form-control-label">Código</label>
-                                                    <div class="col-md-9">
-                                                        <input type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
-                                                        <small>Los números de código debe ser de 13 dígitos.</small>
-                                                        <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>
-                                                        <barcode :value="code" :options="{ format: 'EAN-13'}">
-                                                        </barcode>
-                                                    </div>
-                                                </div>
-                                            </div>    
-                                            <!-- /.card-body -->
-                                        </div>
-                                        <!-- Imagnes del Producto -->
-                                        <div class="card card-primary card-primary">
-                                            <div class="card-header">
-                                                <h3 class="card-title"><i class="fa fa-camera">&nbsp;</i> Imagenes del Producto</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label for="my-input">Agregar Imagenes al Producto</label>
-                                                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" 
-                                                        @vdropzone-error="eventError"
-                                                        @vdropzone-success="eventSuccess">
-                                                        </vue-dropzone>
-                                                    </div>     
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <!-- timeline item -->
-                                                   <!-- <div class="timeline-item" style="width: max-content;margin: auto; margin-top: auto;margin-top: 9%;">
-                                                        <div class="timeline-body text-muted">
-                                                            <div v-for="image in photos" :key="image.id" class="float-left pt-2 pb-2 pr-2">
-                                                                <img style="height: 160px;" :src="image.url" :alt="data.name" class="img-thumbnail" width="150">
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
-                                                    <!-- END timeline item -->
-                                                </div>
-                                                <!-- /.card-header -->                  
-                                            </div>    
-                                            <!-- /.card-body -->
-                                        </div>              
-                                        <!-- /.card -->
+                        <form-wizard
+                            @on-complete="onComplete"
+                            @on-loading="setLoading"
+                            @on-validate="handleValidation"
+                            @on-error="handleErrorMessage" 
+                            next-button-text="Siguiente"
+                            back-button-text="Regresar"
+                            finish-button-text="Finalizar"
+                            title="" subtitle=""
+                            step-size="md"
+                            color="#007bff" shape="square">
+                            <tab-content title="Producto"  icon="ti-bag" :before-change="validateAsync">
+                                <div class="card card-default card-default">
+                                    <div class="card-header">
+                                        <h3 class="card-title"><i class="fas fa-store">&nbsp;</i> Datos del Producto</h3>
                                     </div>
-                                    <!-- Balance de Costos -->
-                                    <div class="col-md-4">
-                                        <div class="card card-primary card-primary">
-                                            <div class="card-header">
-                                                <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Balance de Costos</h3>
+                                    <!-- /.card-header -->                  
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Nombre del Producto</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control capitalize" :class="{'is-invalid' : errors.name}"  placeholder="Nombre del Producto" v-model="name" v-focus>
+                                                <span v-if="errors.name" class="invalid-feedback" role="alert">{{ errors.name[0] }}</span>
                                             </div>
-                                            <!-- /.card-header -->
-                                                <div class="card-footer">
-                                                    <label class="pt-2 ml-2 mb-0 text-primary">Precio al Detal</label> 
-                                                </div>                  
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Categoría</label>
+                                            <div class="col-md-9">
+                                                <select class="form-control" :class="{'is-invalid' : errors.category_id}" v-model="category_id">
+                                                    <option value="0">Seleccione</option>
+                                                    <option v-for="category in categories" :key="category.id" :value="category.id" v-text="category.name"></option>
+                                                </select>
+                                                <span v-if="errors.category_id" class="invalid-feedback" role="alert">{{ errors.category_id[0] }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Descripción</label>
+                                            <div class="col-md-9">
+                                                <textarea class="form-control" :class="{'is-invalid' : errors.description}" v-model="description" placeholder="Ingresar descripción"></textarea>
+                                                <!-- <input type="text" class="form-control" :class="{'is-invalid' : errors.description}" placeholder="Ingresar descripción" v-model="description"> -->
+                                                <span v-if="errors.description" class="invalid-feedback" role="alert">{{errors.description[0]}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Precio Costo</label>
+                                            <div class="col-md-9 input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                </div>
+                                                    <imask-input
+                                                        :value="value"
+                                                        v-model="price"
+                                                        :mask="Number"
+                                                        :unmask="true"
+                                                        thousandsSeparator= "."
+                                                        :padFractionalZeros="true"
+                                                        :normalizeZeros="true" 
+                                                        radix=","
+                                                        @accept="onAccept" 
+                                                        class="form-control text-right" :class="{'is-invalid' : errors.price}" 
+                                                        placeholder="Ingrese Cotización"
+                                                        require
+                                                    >
+                                                    </imask-input>
+                                                    <!-- <input type="text" class="form-control text-right" :class="{'is-invalid' : errors.price}" v-model="price"> -->
+                                                    <span v-if="errors.price" class="invalid-feedback" role="alert">{{ errors.price[0] }}</span>
+                                            </div> 
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Sctok</label>
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control" :class="{'is-invalid' : errors.stock}" placeholder="Stock" min="0" v-model="stock">
+                                                <span v-if="errors.stock" class="invalid-feedback" role="alert">{{ errors.stock[0] }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control" :class="{'is-invalid' : errors.wholesale_quantity}" placeholder="Cantidad por bultor" min="0" v-model="wholesale_quantity">
+                                                <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.wholesale_quantity[0] }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab-content>
+                            <tab-content title="Ganancia" icon="ti-panel">
+                                    <!-- Balance de Costos -->
+                                    <div class="row col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="card card-default card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Detal</h3>
+                                                </div>
+                                                <!-- /.card-header -->
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
@@ -162,27 +114,32 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Ganancia D.</label>
+                                                        <label class="col-md-3 form-control-label">Ganancia</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">P. Divisa ($)</label>
+                                                        <label class="col-md-3 form-control-label">Precio ($)</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">P.U. (Bs.)</label>
+                                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="card-footer">
-                                                    <label class="ml-2 mb-0 mt-0 text-primary">Precio al Mayor</label> 
-                                                </div>  
+                                                <!-- /.card-body -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card card-default card-default">
+                                                <div class="card-header">
+                                                    <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Mayor</h3>
+                                                </div>
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
@@ -194,36 +151,92 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Ganancia M.</label>
+                                                        <label class="col-md-3 form-control-label">Ganancia</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">P. Divisa M. ($)</label>
+                                                        <label class="col-md-3 form-control-label">Precio ($)</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
                                                         </div>
                                                     </div>                           
                                                     <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">P.M. (Bs.)</label>
+                                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
                                                         <div class="col-md-9">
                                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- /.card-body -->
-                                                <div class="card-footer">
-                                                    <button type="button" @click="storeProduct()" class="btn btn-primary btn-block"> Registrar Producto</button>
-                                                </div>
+                                            </div>
                                         </div>
                                     </div>  
+                            </tab-content>
+                            <tab-content title="Código" icon="ti-layout-column4" :before-change="validateCode">
+                            <!-- Generar Coódigo -->
+                                <div class="card card-default card-default">
+                                    <div class="card-header">
+                                        <h3 class="card-title"><i class="fas fa-barcode">&nbsp;</i> Generar Código del Producto</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- /.card-header -->                  
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Código</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
+                                                <small>Los números de código debe ser de 13 dígitos.</small>
+                                                <span v-if="errors.code" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>
+                                            </div>   
+                                                <div class="col-md-3">
+                                                    <img class="mediana" :src="imgLector" alt=""> 
+                                                </div> 
+                                                <div class="col-md-4 border_code text-center">
+                                                    <barcode :value="code" :options="{ format: 'EAN-13'}">
+                                                    </barcode>
+                                                </div>
+                                        </div>
+                                    </div>    
+                                    <!-- /.card-body -->
                                 </div>
-                            </div> 
-                        </form>
-                        <!-- Form end -->
+                            </tab-content>
+                            <tab-content title="Imagen" icon="ti-camera">
+                                <!-- Imagnes del Producto -->
+                                <div class="card card-default card-default">
+                                    <div class="card-header">
+                                        <h3 class="card-title"><i class="fa fa-camera">&nbsp;</i> Imagenes del Producto</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="my-input">Agregar Imagenes al Producto</label>
+                                                <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" 
+                                                @vdropzone-error="eventError"
+                                                @vdropzone-success="eventSuccess">
+                                                </vue-dropzone>
+                                            </div>     
+                                        </div>
+                                        <div class="col-md-12">
+                                            <!-- timeline item -->
+                                            <!-- <div class="timeline-item" style="width: max-content;margin: auto; margin-top: auto;margin-top: 9%;">
+                                                <div class="timeline-body text-muted">
+                                                    <div v-for="image in photos" :key="image.id" class="float-left pt-2 pb-2 pr-2">
+                                                        <img style="height: 160px;" :src="image.url" :alt="data.name" class="img-thumbnail" width="150">
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                            <!-- END timeline item -->
+                                        </div>
+                                        <!-- /.card-header -->                  
+                                    </div>    
+                                    <!-- /.card-body -->
+                                </div>              
+                                <!-- /.card -->
+                            </tab-content>
+                        </form-wizard>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer"></div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -233,11 +246,24 @@
 </template>
 <script>
 let user = document.head.querySelector('meta[name="user"]');
+
 import {IMaskDirective} from 'vue-imask';
 import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
+import {FormWizard, TabContent} from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+
+// autofocus
+Vue.directive('focus', {
+    // Cuando el elemento enlazado se inserta en el DOM...
+    inserted: function (el) {
+        // Enfoca el elemento
+        el.focus();
+    }
+})
 
 export default {
     props:{
@@ -247,10 +273,11 @@ export default {
         divisa: {
             type: Number,
             default: 0
-        },
+        }
     },    
     data(){
         return{
+            imgLector: '/images/img/lector-codigo.jpg',
             name: '',
             code: '',
             category_id: 0,
@@ -285,23 +312,30 @@ export default {
                     max: 100000000
                 }
             },
-            models: {
-                code: '',
-            },
             image: '',
             photos:[],
-            errors:'',
+            errors: '',
             backPage:false,
-            vproducts:false
+            vproducts:false,
+            loadingWizard: false,
+            errorMsg: null,
+            // count: 0
         }
     },
     components: {
         'barcode': VueBarcode,
         'vueDropzone': vue2Dropzone,
-        'imask-input': IMaskComponent
+        'imask-input': IMaskComponent,
+        'form-wizard': FormWizard,
+        'tab-content': TabContent,
     },
     directives: {
-      imask: IMaskDirective
+      imask: IMaskDirective,
+      focus:{
+          inserted: function(el){
+              el.focus()
+          }
+      }
     },
     computed:{
         price_gain_u: function(){
@@ -349,6 +383,68 @@ export default {
         }
     },
     methods:{
+        onComplete(){
+            toastr["info"]("Formulario completado con exito..!!", "Nuevo Producto");
+            setTimeout(() => {
+            this.storeProduct();
+            }, 1000)
+            
+        },
+        setLoading: function(value) {
+            this.loadingWizard = value
+            console.log(this.loadingWizard)
+        },
+        handleValidation: function(isValid, tabIndex){
+           console.log('Tab: '+tabIndex+ ' valid: '+isValid)
+        },
+        handleErrorMessage: function(errorMsg){
+          this.errorMsg = errorMsg
+        },
+        validateAsync:function() {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                var url = `api/producto/validate`;
+                axios.post(url,{
+                    'name' : this.name,
+                    'category_id' : this.category_id,
+                    'description' : this.description,
+                    'price' : this.price,
+                    'stock' : this.stock,
+                    'wholesale_quantity' : this.wholesale_quantity,
+                }).then(response =>{
+                    // console.log(response.data)
+                    resolve(true)
+                }).catch(error => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors)
+                        toastr.error("ERROR - En la validaciones.");
+                        reject(this.errors);
+                    }
+                });   
+            }, 1000)
+          })
+        },
+        validateCode(){
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                var url = `api/producto/validate/code`;
+                axios.post(url,{
+                    'code' : this.code,
+                }).then(response =>{
+                    // console.log(response.data)
+                    resolve(true)
+                }).catch(error => {
+                    if (error.response.status == 422) {
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors)
+                        toastr.error("ERROR - En la validaciones.");
+                        reject(this.errors);
+                    }
+                });   
+            }, 1000)
+          })
+        },
         onAccept (value) {
             console.log(value)
             // const maskRef = e.detail;
@@ -407,5 +503,16 @@ export default {
 <style>
 .capitalize {
   text-transform: capitalize;
+}
+.border_code {
+    border: 1px solid gray;
+    -moz-border-radius: 9px;
+    -webkit-border-radius:9px;
+    padding: 10px;
+    margin-left: 7px;
+    margin-top: 10px;                                            
+}
+img.mediana{
+  width: 100px; height: 100px;
 }
 </style>

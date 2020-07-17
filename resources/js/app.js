@@ -9,6 +9,10 @@ require('./bootstrap');
 window.Vue = require('vue');
 import Vue from 'vue';
 import router from './routes';
+import VueFormWizard from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+Vue.use(VueFormWizard)
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -51,4 +55,5 @@ Vue.component('prices-product', require('./components/PricesProductComponent.vue
 const app = new Vue({
     el: '#app',
     router,
+    
 });

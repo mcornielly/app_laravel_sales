@@ -43,6 +43,8 @@ Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
 Route::post('producto/img', 'Admin\PhotosController@store');
 Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
 Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
+Route::post('producto/validate', 'Admin\ProductsController@validate_step');
+Route::post('producto/validate/code', 'Admin\ProductsController@validate_code');
 
 Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
 Route::delete('fotos/eliminar/{id}', 'Admin\PhotosController@destroy');

@@ -14,6 +14,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css">
+    {{-- Themify Icons --}}
+  {{-- <link rel="stylesheet" href="/themify_icons/themify_icons.css"> --}}
+  <link rel="stylesheet" href="https://rawgit.com/lykmapipo/themify-icons/master/css/themify-icons.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
