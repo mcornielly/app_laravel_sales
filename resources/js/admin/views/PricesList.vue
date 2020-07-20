@@ -20,8 +20,15 @@
                                 :theme="theme"
                                 :columns="columns"
                                 :translate="translate"
-                                @onTablePropsChanged="reloadTable">
+                                @onTablePropsChanged="reloadTable"
+                                @loading="isLoading = true"
+                                @finishedLoading="isLoading = false">
                             </data-table>
+                            <!-- Animation -->
+                            <loading
+                                :is-full-page="true"
+                                :active.sync="isLoading">
+                            </loading>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -63,6 +70,11 @@ import BtnPricesListComponent from '../../components/BtnPricesListComponent.vue'
 
 Vue.use(DataTable);
 
+// Import component
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 // Registra una directiva personalizada global llamada `v-focus`
 // Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
 
@@ -73,7 +85,8 @@ export default {
         DataTableCurrencyCell,
         DataTableCurrencyWholesale,
         DataTableCurrencyUnit,
-        BtnPricesListComponent
+        BtnPricesListComponent,
+        Loading
     },
     data(){
         return{
@@ -157,7 +170,8 @@ export default {
             selectedRow: {},
             product_id: 0,
             images:[],
-            imgshow:false
+            imgshow:false,
+            isLoading: false
         }
     },
     created(){
@@ -171,6 +185,26 @@ export default {
         }
     },
     methods: {
+        getData(url = this.url, options = this.tableProps) {
+            this.isLoading = true;
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                })
+                this.isLoading = false;
+            },1000)
+        },
+        reloadTable(tableProps){
+            this.getData(this.url, tableProps);
+        },
         getDivisa(){
             var url = "api/divisa/precio";
             axios.get(url).then(response => {
@@ -188,22 +222,6 @@ export default {
             }).catch(error =>{
                 console.log(error.response.data)
             });
-        },
-        getData(url = this.url, options = this.tableProps) {
-            axios.get(url, {
-                params: options
-            })
-            .then(response => {
-                this.data = response.data;
-                console.log(this.data)
-            })
-            // eslint-disable-next-line
-            .catch(errors => {
-                //Handle Errors
-            })
-        },
-        reloadTable(tableProps){
-            this.getData(this.url, tableProps);
         },
         searchProduct(){
             this.title = "Consulta de Precio del Producto";

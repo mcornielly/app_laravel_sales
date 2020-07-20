@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use DB;
 use App\Divisa;
 use App\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB as FacadesDB;
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class IncomesController extends Controller
 {
@@ -14,19 +17,35 @@ class IncomesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $incomes = Income::all();
+        //Propiedades del DataTble
+        $searchValue = $request->input('search');
+        $orderBy = $request->input('column'); //Index
+        $orderBydir = $request->input('dir');
+        $length = $request->input('length');
 
-        $divisa = Divisa::latest('price')->take(1)->get();
-
-        if($divisa->count()){
-            $divisa_p = $divisa[0]->price;
-        }else{
-            $divisa_p = 0;
-        } 
+        // $query = Income::with('provider','user','customer')->eloquentQuery($orderBy, $orderBydir, $searchValue);
         
-        return view('admin.incomes.index', compact('incomes', 'divisa_p'));
+        $data = Income::with('user','provider')
+            ->join('customers','incomes.provider_id','=','customers.id')
+            ->select('incomes.*','customers.name as customer_name') 
+            ->where("incomes.id", "LIKE", "%$searchValue%")
+            ->orWhere('customers.name', "LIKE", "%$searchValue%")
+            ->orWhere('incomes.type_voucher', "LIKE", "%$searchValue%")
+            ->orWhere('incomes.num_voucher', "LIKE", "%$searchValue%")
+            ->orWhere('incomes.num_bill', "LIKE", "%$searchValue%")
+            ->orWhere('incomes.total', "LIKE", "%$searchValue%")
+            ->orWhere('incomes.status', "LIKE", "%$searchValue%")
+            ->orderBy($orderBy, $orderBydir)
+            ->paginate($length);
+
+        if(request()->wantsJson())
+        {
+            // $data = $query->paginate($length);         
+            return new DataTableCollectionResource($data);
+        }
+
     }
 
     /**

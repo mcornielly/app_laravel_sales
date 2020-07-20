@@ -8,7 +8,7 @@
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Productos</h3>
+                        <h3 class="card-title" v-text="titlePage"><i class="fas fa-bars">&nbsp;</i></h3>
                         <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a>
                         <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
                         </div>
@@ -16,7 +16,6 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <data-table ref="tb"
-                                v-show="!code"
                                 :data="data"
                                 :theme="theme"
                                 :columns="columns"
@@ -25,6 +24,7 @@
                                 @loading="isLoading = true"
                                 @finishedLoading="isLoading = false">
                             </data-table>
+                            <!-- Animation -->
                             <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
@@ -69,12 +69,11 @@ import DataTable from 'laravel-vue-datatable';
 import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
 import StatusComponentVue from '../../components/StatusComponent.vue';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+Vue.use(DataTable);
 // Import component
 import Loading from 'vue-loading-overlay';
 // Import stylesheet
 import 'vue-loading-overlay/dist/vue-loading.css';
-
-Vue.use(DataTable);
 
 export default {
     components:{
@@ -86,14 +85,14 @@ export default {
     data(){
         return{
             data: {},
+            url:"api/productos",
+            titlePage:'Productos',
+            routePage:'Productos',
+            name:'',
+            category:{},
             divisa: 0,
             categories:[],
             vproducts:false,
-            titlePage:'Productos',
-            routePage:'Productos',
-            url:"api/productos",
-            name:'',
-            category:{},
             create: false,
             title: '',
             tableProps: {
@@ -150,7 +149,7 @@ export default {
             storeup: true,
             product_id: 0,
             images:[],
-            isLoading: false,
+            isLoading: false
         }
     },
     created(){
@@ -164,24 +163,6 @@ export default {
         }
     },
     methods: {
-        getDivisa(){
-            var url = "api/divisa/precio";
-            axios.get(url).then(response => {
-                this.divisa = response.data;
-                console.log(this.divisa);
-            }).catch(error =>{
-                console.log(error.response.data);
-            });
-        },
-        getCategories(){
-            var url = "api/categorias/lista";
-            axios.get(url).then(response => {
-                this.categories = response.data;
-                console.log(this.categories)
-            }).catch(error =>{
-                console.log(error.response.data)
-            });
-        },
         getData(url = this.url, options = this.tableProps) {
             this.isLoading = true;
             setTimeout(() => {
@@ -196,11 +177,29 @@ export default {
                 .catch(errors => {
                     //Handle Errors
                 })
-            this.isLoading = false
+            this.isLoading = false;
             },1000)
+        },
+        getDivisa(){
+            var url = "api/divisa/precio";
+            axios.get(url).then(response => {
+                this.divisa = response.data;
+                console.log(this.divisa);
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
+        },
+        getCategories(){
+            var url = "api/categorias/lista";
+            axios.get(url).then(response => {
+                this.categories = response.data;
+                console.log(this.categories)
+            }).catch(error =>{
+                console.log(error.response.data)
+            });
         },
         createProduct(){
             this.title = 'Nueva Producto'

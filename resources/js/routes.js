@@ -41,9 +41,19 @@ export default new Router({
             component: require('./admin/views/Providers').default,
         },
         {
+            path: '/ingresos',
+            name: 'incomes',
+            component: require('./admin/views/Incomes').default,
+        },
+        {
             path: '/clientes',
             name: 'clients',
             component: require('./admin/views/Customers').default,
+        },
+        {
+            path: '/ventas',
+            name: 'sales',
+            component: require('./admin/views/Sales').default,
         },
         {
             path: '*',

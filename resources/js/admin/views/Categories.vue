@@ -19,8 +19,15 @@
                                 :theme="theme"
                                 :columns="columns"
                                 :translate="translate"
-                                @onTablePropsChanged="reloadTable">
+                                @onTablePropsChanged="reloadTable"
+                                @loading="isLoading = true"
+                                @finishedLoading="isLoading = false">
                             </data-table>
+                            <!-- Animation -->
+                            <loading
+                                :is-full-page="true"
+                                :active.sync="isLoading">
+                            </loading>
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -50,11 +57,16 @@ import DataTable from 'laravel-vue-datatable';
 import BtnCategoryComponentVue from '../../components/BtnCategoryComponent.vue';
 import StatusComponentVue from '../../components/StatusComponent.vue';
 Vue.use(DataTable);
+// Import component
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnCategoryComponentVue,
-        StatusComponentVue
+        StatusComponentVue,
+        Loading
     },
     data(){
         return{
@@ -114,6 +126,7 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
+            isLoading: false
         }
     },
     created(){
@@ -126,17 +139,21 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            axios.get(url, {
-                params: options
-            })
-            .then(response => {
-                this.data = response.data;
-                console.log(this.data)
-            })
-            // eslint-disable-next-line
-            .catch(errors => {
-                //Handle Errors
-            })
+            this.isLoading = true;
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                })
+            this.isLoading = false;
+            },1000)
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);

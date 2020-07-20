@@ -21,6 +21,11 @@
                                 :translate="translate"
                                 @onTablePropsChanged="reloadTable">
                             </data-table>
+                            <!-- Animation -->
+                            <loading
+                                :is-full-page="true"
+                                :active.sync="isLoading">
+                            </loading>
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -49,10 +54,15 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import BtnCustomersComponentVue from '../../components/BtnCustomersComponent.vue';
 Vue.use(DataTable);
+// Import component
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnCustomersComponentVue,
+        Loading
     },
     data(){
         return{
@@ -128,7 +138,9 @@ export default {
             email: '',
             address: '',
             name_contact: '',
-            contact_phone: ''
+            contact_phone: '',
+            isLoading: false
+
         }
     },
     created(){
@@ -141,17 +153,21 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            axios.get(url, {
-                params: options
-            })
-            .then(response => {
-                this.data = response.data;
-                console.log(this.data)
-            })
-            // eslint-disable-next-line
-            .catch(errors => {
-                //Handle Errors
-            })
+            this.isLoading = true;
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                })
+            this.isLoading = false;    
+            },1000)
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);

@@ -6,6 +6,7 @@ use App\Divisa;
 use App\Http\Controllers\Controller;
 use App\Sale;
 use Illuminate\Http\Request;
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class SalesController extends Controller
 {
@@ -14,19 +15,22 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sales = Sale::all();
+        //Propiedades del DataTble
+        $searchValue = $request->input('search');
+        $orderBy = $request->input('column'); //Index
+        $orderByDir = $request->input('dir');
+        $length = $request->input('length');
 
-        $divisa = Divisa::latest('price')->take(1)->get();
+        $query = Sale::with('customer','user')->eloquentQuery($orderBy, $orderByDir, $searchValue);
 
-        if($divisa->count()){
-            $divisa_p = $divisa[0]->price;
-        }else{
-            $divisa_p = 0;
-        } 
-        
-        return view('admin.sales.index', compact('sales', 'divisa_p'));
+        if(request()->wantsJson())
+        {
+            $data = $query->paginate($length);         
+            return new DataTableCollectionResource($data);
+        }
+
     }
 
     /**

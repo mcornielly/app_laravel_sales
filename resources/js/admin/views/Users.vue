@@ -8,7 +8,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista Usuarios</h3>
-                    <a href="#" @click="createDivisa()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
+                    <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -18,8 +18,15 @@
                                 :theme="theme"
                                 :columns="columns"
                                 :translate="translate"
-                                @onTablePropsChanged="reloadTable">
+                                @onTablePropsChanged="reloadTable"
+                                @loading="isLoading = true"
+                                @finishedLoading="isLoading = false">
                             </data-table>
+                            <!-- Animation -->
+                            <loading
+                                :is-full-page="true"
+                                :active.sync="isLoading">
+                            </loading>
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -69,16 +76,25 @@ let user = document.head.querySelector('meta[name="user"]');
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 Vue.use(DataTable);
+// Import component
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
+    components:{
+        Loading
+    },
     data() {
         return {
             url:"api/usuarios",
-            titlePage:'Divisa',
-            routePage:'Divisa',
+            titlePage:'Usuarios',
+            routePage:'Usuarios',
             create:false,
             title: '',
-            price:'',
+            name: '',
+            email: '',
+            password: '',
             errors: '',
             data: {},
             tableProps: {
@@ -86,12 +102,13 @@ export default {
                 length: 10,
                 column: 'id',
                 dir: 'desc',
-                placeholderSearch: 'Buscar'
             },
             translate:{
-                nextButton: 'Siguiente', previousButton: 'Anterior', placeholderSearch: 'Buscar..'
+                nextButton: 'Siguiente', 
+                previousButton: 'Anterior', 
+                placeholderSearch: 'Buscar..'
             },
-            theme: "light",
+            theme: "dark",
             columns: [
                 {
                     label: 'ID',
@@ -108,7 +125,11 @@ export default {
                     name: 'email',
                     orderable: true,
                 },
-            ]
+            ],
+            selectedRow: {},
+            action: false,
+            storeup: true,
+            isLoading: false
 
         }
     },
@@ -122,24 +143,27 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            axios.get(url, {
-                params: options
-            })
-            .then(response => {
-                this.data = response.data;
-                console.log(this.data)
-            })
-            // eslint-disable-next-line
-            .catch(errors => {
-                //Handle Errors
-            })
+            this.isLoading = true;
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                })
+            this.isLoading = false;
+            }, 1000);
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
-        createDivisa(){
-            this.title = 'Nuevo Precio de la Divisa'
-            this.price = '';
+        createUser(){
+            this.title = 'Nuevo Usuario'
             this.create = true
         },
         actionDivisa(action){

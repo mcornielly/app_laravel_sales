@@ -3,17 +3,18 @@
     <!-- Content Header (Page header) -->
         <bread-crumbs :titlePage="titlePage" :routePage="routePage"></bread-crumbs>
         <!-- /.content-header --> 
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Proveedores</h3>
-                    <a href="#" @click="createProvider()" data-toggle="modal" data-target="#modal-provider" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Proveedor</a>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <template>
+        <template v-if="!vproducts">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                        <h3 class="card-title" v-text="titlePage"><i class="fas fa-bars">&nbsp;</i></h3>
+                        <a href="#" @click="createVenta()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Venta</a>
+                        <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
+                        </div>
+                        
+                        <!-- /.card-header -->
+                        <div class="card-body">
                             <data-table ref="tb"
                                 :data="data"
                                 :theme="theme"
@@ -28,25 +29,23 @@
                                 :is-full-page="true"
                                 :active.sync="isLoading">
                             </loading>
-                        </template>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
+        </template>
+
+        <!-- Crear Producto -->
+        <template v-else>
+            <product-create @returned="vproducts = $event"
+                :divisa="divisa"
+                :categories="categories"
+            ></product-create>   
+        </template>
     
-        <!-- Modal-Divisa -->
-        <modal-provider
-            :data="selectedRow"
-            :provider="provider"
-            :title="title"
-            :create="create"
-            :action="action"
-            :storeup="storeup"
-        ></modal-provider>
-        <!-- /.modal -->
     </section>
 </template>
 
@@ -55,7 +54,9 @@ let user = document.head.querySelector('meta[name="user"]');
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnProvidersComponentVue from '../../components/BtnProvidersComponent.vue';
+import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
+import StatusComponentVue from '../../components/StatusComponent.vue';
+import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
 Vue.use(DataTable);
 // Import component
 import Loading from 'vue-loading-overlay';
@@ -64,27 +65,23 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
-        BtnProvidersComponentVue,
+        BtnProductsComponentVue,
+        StatusComponentVue,
+        DataTableCurrencyCell,
         Loading
     },
     data(){
         return{
             data: {},
-            url:"api/proveedores",
-            titlePage:'Proveedores',
-            routePage:'Proveedores',
-            title: '',
-            name: '',
-            type_document: "",
-            num_document: '',
-            num_phone: '',
-            email: '',
-            address: '',
-            name_contact: '',
-            contact_phone: '',
-            divisa: '',
+            url:"api/ventas",
+            titlePage:'Ventas',
+            routePage:'Ventas',
+            divisa: 0,
+            categories:[],
+            name:'',
+            vproducts:false,
             create: false,
-            errors: '',
+            title: '',
             tableProps: {
                 search: '',
                 length: 10,
@@ -104,49 +101,57 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'Nombre',
+                    label: 'Cliente',
                     name: 'customer.name',
-                    orderable: false,
+                    orderable: true,
                 },
                 {
-                    label: '',
-                    name: 'customer.type_document',
-                    orderable: false,
+                    label: 'Tipo Doc',
+                    name: 'type_voucher',
+                    orderable: true,
                 },
                 {
-                    label: 'N° RIF/CI',
-                    name: 'customer.num_document',
-                    orderable: false,
+                    label: 'N° Factura',
+                    name: 'num_voucher',
+                    orderable: true,
                 },
                 {
-                    label: 'N° Teléfono',
-                    name: 'customer.num_phone',
-                    orderable: false,
+                    label: 'N° Comprobante',
+                    name: 'num_bill',
+                    orderable: true,
                 },
                 {
-                    label: 'Email',
-                    name: 'customer.email',
-                    orderable: false,
+                    label: 'Monto',
+                    name: 'total',
+                    orderable: true,
+                },     
+                {
+                    label: 'Estatus',
+                    component: StatusComponentVue,
+                    orderable: true,
                 },
                 {
                     label: 'Acciones',
                     name: '',
                     orderable: false,
-                    component: BtnProvidersComponentVue,
+                    component: BtnProductsComponentVue,
                     event: "click",
-                    handler: this.modalProvider
+                    handler: this.modalProduct
                 },
 
             ],
             selectedRow: {},
-            provider: {},
             action: false,
             storeup: true,
+            product_id: 0,
+            images:[],
             isLoading: false
         }
     },
     created(){
         this.getData(this.url);
+        this.getDivisa();
+        this.getCategories();
     },
     computed:{
         user(){
@@ -174,57 +179,75 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
-        createProvider(){
-            this.title = 'Nuevo Proveedor';
+        getDivisa(){
+            var url = "api/divisa/precio";
+            axios.get(url).then(response => {
+                this.divisa = response.data;
+                console.log(this.divisa);
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
+        },
+        getCategories(){
+            var url = "api/categorias/lista";
+            axios.get(url).then(response => {
+                this.categories = response.data;
+                console.log(this.categories)
+            }).catch(error =>{
+                console.log(error.response.data)
+            });
+        },
+        createVenta(){
+            this.title = 'Nueva Producto'
             this.selectedRow = {};
-            this.provider = {};
-            this.create = true;
             this.action = true;
             this.storeup = false;
+            this.vproducts = true;
         },
-        modalProvider(data, action){
-            this.type_document = data.customer.type_document;
+        modalProduct(data, action){
             switch(action){
     			    case 'edit':
                         {
-                            this.title = 'Editar Proveedor';
+                            this.title = 'Editar Producto';
                             this.selectedRow = data;
-                            this.provider = data.customer;
-                            this.create = false;
+                            this.product_id = data.id;
+                            this.getImages(this.product_id); 
                             this.action = true;
                             this.storeup = false;
-                            break; 
+                            break;
                         }
                     case 'show':
                         {
-                            this.title = "Detalle de Proveedor";
+                            this.title = "Detalle de Producto";
                             this.selectedRow = data;
-                            this.provider = data.customer;
+                            this.product_id = data.id;
+                            this.getImages(this.product_id); 
+                            this.category = data.category;
                             this.create = false;
-                            this.action = false; 
-                            this.storeup = true; 
+                            this.action = false;
+                            this.storeup = true;
                             break;
                         }
                     case 'delete':
                         {                           
-                            this.deleteProvider(data);
+                            this.deleteProduct(data);
                             break;
                         }
                     case 'restore':
                         {                           
-                            this.restoreProvider(data);
+                            this.restoreProduct(data);
                             break;
                         }
             }
         },
-        deleteProvider(data){
+        deleteProduct(data){
             this.id = data.id;
             console.log(this.id)
-            var url = `/api/proveedor/${this.id}`;
+            var url = `/api/producto/eliminar/${this.id}`;
             axios.delete(url).then(response => {
                 this.reloadTable();
                 this.destroy = false;
-                toastr.error('Lo Proveedor fue eliminada.');
+                toastr.error('El producto fue eliminada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
 
             }).catch(error => {
@@ -233,19 +256,33 @@ export default {
                 this.errors = errors;
             });
         },
-        restoreProvider(data){
+        restoreProduct(data){
             this.id = data.id;
-            var url = `/api/proveedor/restore/${this.id}`;
+            var url = `/api/producto/restore/${this.id}`;
             axios.get(url).then(response => {
                 this.reloadTable();
-                toastr.success('Lo Proveedor fue restaurada.');
+                toastr.success('El producto fue restaurada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
             }).catch(error => {
                 console.log(error);
                 var errors = error.response.data.errors;
                 this.errors = errors;
             });
+        },
+        back_pag(){
+            this.vproducts = false;
+        },
+        getImages(product_id){
+            var id = product_id;
+            var url = `/api/producto/imagenes/${id}`;
+            axios.get(url).then(response => {
+                this.images = response.data;
+                console.log( this.images)
+            }).catch(error =>{
+                console.log(error.response.data);
+            });
         }
+        
 
     }
 }

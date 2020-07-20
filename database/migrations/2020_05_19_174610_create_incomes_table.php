@@ -17,8 +17,8 @@ class CreateIncomesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('provider_id');
             $table->unsignedInteger('user_id');
-            $table->string('type_vaucher', 20);
-            $table->string('num_vaucher', 7)->nullable();
+            $table->string('type_voucher', 20);
+            $table->string('num_voucher', 7)->nullable();
             $table->string('num_bill', 7)->nullable();
             $table->decimal('tax', 4,2);
             $table->decimal('total', 11,2);

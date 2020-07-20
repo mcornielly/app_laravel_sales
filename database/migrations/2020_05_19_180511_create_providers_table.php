@@ -14,8 +14,7 @@ class CreateProvidersTable extends Migration
     public function up()
     {
         Schema::create('providers', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('id');
             $table->string('name')->nullable();
             $table->string('url')->nullable();
             $table->string('contact_phone')->nullable();

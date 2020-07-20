@@ -240,10 +240,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ route('ingresos.index') }}" class="nav-link {{ setActiveRoute('ingresos.index') }}">
+                    <router-link to="/ingresos" class="nav-link">
                       <i class="nav-icon fas fa-piggy-bank"></i>
                       <p>Ingresos</p>
-                    </a>
+                    </router-link>
                   </li>
                   <li class="nav-item">
                     <router-link to="/proveedores" class="nav-link">
@@ -263,10 +263,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ route('ventas.index') }}" class="nav-link {{ setActiveRoute('ventas.index') }}">
+                    <router-link to="/ventas" class="nav-link">
                       <i class="nav-icon fas fa-cash-register"></i>
                       <p>Ventas</p>
-                    </a>
+                    </router-link>
                   </li>
                   <li class="nav-item">
                     <router-link to="/clientes" class="nav-link">

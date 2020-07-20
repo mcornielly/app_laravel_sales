@@ -20,7 +20,7 @@ class CustomersController extends Controller
     {
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
-        $orderByDir = $request->input('dir', 'asc');
+        $orderByDir = $request->input('dir');
         $searchValue = $request->input('search');
         
         $query = Customer::eloquentQuery($orderBy, $orderByDir, $searchValue);

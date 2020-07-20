@@ -12,6 +12,6 @@ class IncomeTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Income::class, 50)->create();
+        factory(Income::class, 60)->create();
     }
 }

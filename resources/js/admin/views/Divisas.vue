@@ -22,6 +22,7 @@
                                 @loading="isLoading = true"
                                 @finishedLoading="isLoading = false">
                             </data-table>
+                            <!-- Animation -->
                             <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
@@ -54,22 +55,22 @@ import DataTable from 'laravel-vue-datatable';
 import BtnDivisaComponentVue from '../../components/BtnDivisaComponent.vue';
 import ModalDivisaComponentVue from '../../components/ModalDivisaComponent.vue';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+Vue.use(DataTable);
 // Import component
 import Loading from 'vue-loading-overlay';
 // Import stylesheet
 import 'vue-loading-overlay/dist/vue-loading.css';
-Vue.use(DataTable);
 
 export default {
     components:{
         BtnDivisaComponentVue,
         DataTableCurrencyCell,
-        ModalDivisaComponentVue
+        ModalDivisaComponentVue,
+        Loading
     },
     data() {
         return {
             amount: '',
-            isLoading: false,
             url:"api/divisas",
             titlePage:'Divisa',
             routePage:'Divisa',
@@ -122,6 +123,7 @@ export default {
                 },
             ],
             selectedRow: {},
+            isLoading: false
 
         }
     },
@@ -136,17 +138,21 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            axios.get(url, {
-                params: options
-            })
-            .then(response => {
-                this.data = response.data;
-                console.log(this.data)
-            })
-            // eslint-disable-next-line
-            .catch(errors => {
-                //Handle Errors
-            })
+            this.isLoading = true;
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                })
+            this.isLoading = false;
+            },1000)
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
