@@ -37,7 +37,7 @@
             </div>
         </template>
 
-        <!-- Crear Producto -->
+        <!-- Crear Ingreso -->
         <template v-else>
             <div class="row">
                 <div class="col-12">
@@ -126,7 +126,7 @@
                                                                                         <i class="far fa-address-card"></i>
                                                                                     </span>
                                                                                 </div>
-                                                                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="provider.num_document" :disabled="storeup">
+                                                                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="provider.num_document" maxlength="10" :disabled="storeup">
                                                                                 <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.num_document[0]"></span>
                                                                             </div>
                                                                         </div>
@@ -269,7 +269,7 @@ export default {
             provider_id: 0,
             providers:[],
             name:'',
-            vincome:true,
+            vincome:false,
             create: false,
             title: 'Nuevo Ingreso',
             provider:{
@@ -387,6 +387,9 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
+        createIncome(){
+            this.vincome = true;
+        },
         getDivisa(){
             var url = "api/divisa/precio";
             axios.get(url).then(response => {
@@ -496,8 +499,9 @@ export default {
             }, 1000)
           })
         },
-        back_pag(){
+        back_page(){
             this.vincome = false;
+            this.$parent.reloadTable();
         }
     }
 }

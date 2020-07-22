@@ -13644,7 +13644,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('v-select', vue_select__WEB
       provider_id: 0,
       providers: [],
       name: '',
-      vincome: true,
+      vincome: false,
       create: false,
       title: 'Nuevo Ingreso',
       provider: {
@@ -13749,6 +13749,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('v-select', vue_select__WEB
     },
     reloadTable: function reloadTable(tableProps) {
       this.getData(this.url, tableProps);
+    },
+    createIncome: function createIncome() {
+      this.vincome = true;
     },
     getDivisa: function getDivisa() {
       var _this2 = this;
@@ -13865,8 +13868,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('v-select', vue_select__WEB
         }, 1000);
       });
     },
-    back_pag: function back_pag() {
+    back_page: function back_page() {
       this.vincome = false;
+      this.$parent.reloadTable();
     }
   }
 });
@@ -18418,6 +18422,10 @@ Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_1___default.a); // default locale 
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
 //
 //
 //
@@ -56364,6 +56372,8 @@ var render = function() {
                                                                         "text",
                                                                       placeholder:
                                                                         "Ingrese N° Docuemnto",
+                                                                      maxlength:
+                                                                        "10",
                                                                       disabled:
                                                                         _vm.storeup
                                                                     },
@@ -63765,21 +63775,28 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm.data.status == "ACTIVO"
-      ? _c("span", {
-          staticClass: "badge badge-success",
-          domProps: { textContent: _vm._s(_vm.data.status) }
-        })
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.data.status == "PAGADO"
-      ? _c("span", {
-          staticClass: "badge badge-success",
-          domProps: { textContent: _vm._s(_vm.data.status) }
-        })
-      : _c("span", {
-          staticClass: "badge badge-danger",
-          domProps: { textContent: _vm._s(_vm.data.status) }
-        })
+      ? _c("div", [
+          _vm.data.status == "ACTIVO"
+            ? _c("span", {
+                staticClass: "badge badge-success",
+                domProps: { textContent: _vm._s(_vm.data.status) }
+              })
+            : _c("span", {
+                staticClass: "badge badge-danger",
+                domProps: { textContent: _vm._s(_vm.data.status) }
+              })
+        ])
+      : _c("div", [
+          _vm.data.status == "PAGADO"
+            ? _c("span", {
+                staticClass: "badge badge-success",
+                domProps: { textContent: _vm._s(_vm.data.status) }
+              })
+            : _c("span", {
+                staticClass: "badge badge-danger",
+                domProps: { textContent: _vm._s(_vm.data.status) }
+              })
+        ])
   ])
 }
 var staticRenderFns = []

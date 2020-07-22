@@ -31,6 +31,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- CSS pages -->
+  <style>
+    /* transition */
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini">
 
@@ -363,7 +372,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div>
 
           <div class="content">
-            <router-view></router-view>
+            <transition name="fade">
+              <router-view></router-view>
+            </transition>
           </div>  
       </div> 
 
