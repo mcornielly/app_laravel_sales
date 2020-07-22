@@ -63,6 +63,7 @@ Route::put('proveedor/{id}', 'Admin\ProvidersController@update');
 Route::get('proveedor/{id}', 'Admin\ProvidersController@show');
 Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
 Route::delete('proveedor/eliminar/{id}', 'Admin\ProvidersController@destroy');
+Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
 
 // Ingresos
 Route::get('ingresos', 'Admin\IncomesController@index');

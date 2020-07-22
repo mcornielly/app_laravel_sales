@@ -19,6 +19,7 @@ class IncomesController extends Controller
      */
     public function index(Request $request)
     {
+        
         //Propiedades del DataTble
         $searchValue = $request->input('search');
         $orderBy = $request->input('column'); //Index

@@ -18,7 +18,7 @@ class ProvidersController extends Controller
      */
     public function index(Request $request)
     {
-     
+
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir', 'desc');
@@ -69,8 +69,8 @@ class ProvidersController extends Controller
 
             $customer = Customer::create($request->all());
 
-            $provider = new Provider();
-            $provider->customer_id = $customer->id;
+
+            $provider->id = $customer->id;
             $provider->name = $request->name_contact;
             $provider->contact_phone = $request->contact_phone;
             $provider->save();
@@ -147,6 +147,30 @@ class ProvidersController extends Controller
         }else{
             return $valido;
         }
+    }
+
+    public function select_provider(Request $request)
+    {
+
+        $filter = $request->filter;
+        
+        $providers = Provider::join('customers', 'providers.id', 'customers.id')
+            ->where('customers.name', 'like', '%' . $filter . '%')
+            ->orWhere('customers.num_document', 'like', '%' . $filter . '%')
+            ->select('customers.id', 'customers.name', 'customers.num_document')
+            ->get();
+
+        // $providers = Provider::join('customers', 'providers.id', 'customers.id')
+        //                 ->select('customers.id', 'customers.name', 'customers.num_document')
+        //                 ->get();
+
+        
+        if(request()->wantsJson())
+        {
+            return $providers;
+        }
+
+
     }
 
     /**
