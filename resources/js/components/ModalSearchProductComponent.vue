@@ -83,7 +83,6 @@ export default {
     },
     methods:{
         getDataProduct(){
-            var x = 0;
             var leng_code = this.code.length;
             var code = this.code;
             

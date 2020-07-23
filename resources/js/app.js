@@ -44,6 +44,9 @@ Vue.component('status-component', require('./components/StatusComponent.vue').de
 Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
 Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
 Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
+Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
+Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);
+Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
 
 /**
