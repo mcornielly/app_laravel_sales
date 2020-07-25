@@ -139,7 +139,7 @@ class ProductsController extends Controller
         
         if(request()->wantsJson())
         {
-            return $product;
+            return ['product' => $product];
         }
     }
 

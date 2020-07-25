@@ -61,24 +61,14 @@
                                 step-size="md"
                                 color="#007bff" shape="square">
 
-                                <tab-content title="Proveedor"  icon="ti-briefcase" :before-change="validateAsync">
-                                    <income-provider></income-provider>
-                                     <div @selected_provider="selectedProvider(data)"></div>   
+                                <!-- <tab-content title="Proveedor"  icon="ti-briefcase" :before-change="validateProvider">
+                                    <income-provider @selectedProvider="provider_id = $event"></income-provider>
+                                </tab-content> -->
+
+                                <tab-content title="Producto"  icon="ti-bag" :before-change="validateProduct">
+                                    <income-product @selectedProducts="products = $event"></income-product>
                                 </tab-content>
-                                <tab-content title="Producto"  icon="ti-bag" :before-change="validateAsync">
-                                    <div class="card card-default card-outline">
-                                        <div class="card-header">
-                                            <h3 class="card-title"><i class="fas fa-industry">&nbsp;</i>Producto</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <input type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
-                                                </div>     
-                                            </div>            
-                                        </div>
-                                    </div>                
-                                </tab-content>
+
                             </form-wizard>    
                         </div>
                         <!-- /.card-body -->
@@ -200,12 +190,11 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
-            product_id: 0,
-            images:[],
             isLoading: false,
             loadingWizard: false,
             errorMsg: null,
-            provider_id:0
+            provider_id:0,
+            products: []
         }
     },
     created(){
@@ -219,10 +208,6 @@ export default {
         }
     },
     methods: {
-        selectedProvider(data){
-            console.log(data)
-            this.product_id = data;
-        },
         getData(url = this.url, options = this.tableProps) {
             this.isLoading = true;
             setTimeout(() => {
@@ -281,8 +266,7 @@ export default {
         handleErrorMessage: function(errorMsg){
           this.errorMsg = errorMsg
         },
-        validateAsync:function(product_id) {
-          alert(product_id)       
+        validateProvider:function(product_id) {
           return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if(this.provider_id){
@@ -294,6 +278,9 @@ export default {
                 }
             }, 1000)
           })
+        },
+        validateProduct(){
+
         },
         back_page(){
             this.vincome = false;

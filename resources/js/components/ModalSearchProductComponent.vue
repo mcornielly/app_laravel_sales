@@ -85,7 +85,7 @@ export default {
         getDataProduct(){
             var leng_code = this.code.length;
             var code = this.code;
-            
+            var x = 0;
             if(leng_code == 13 && x == 0){
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
@@ -103,7 +103,7 @@ export default {
                         this.errors = error.response;
                         this.clearSearch();
                         this.resultProduct = true;
-                        this.code = '';
+                       
                 });
             }else{
                 if(this.code == ''){
@@ -115,9 +115,9 @@ export default {
         clearSearch(){
             this.data = {};
             this.images = [];
+             this.code = '';
         },
         closeModal(){
-            this.code='';
             this.clearSearch();
             this.resultProduct = false;
         },

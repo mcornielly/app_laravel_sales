@@ -147,15 +147,8 @@ import {mask} from 'vue-the-mask'
 
 export default {
     directives: {mask},
-    props:{
-          data: {
-            type: Object,
-            default: () => ({}),
-        },
-    },    
     data(){
         return {
-            storeup: true,
             provider:{
                 name:'',
                 type_document:'',
@@ -176,6 +169,7 @@ export default {
             errors:''
         }
     },
+
     computed:{
         user(){
             let user = document.head.querySelector('meta[name="user"]');
@@ -210,12 +204,13 @@ export default {
         setSelected(value){
             if(value){  
                 this.provider_id = value.id;
-                this.$emit('selected_provider', this.provider_id);    
+                this.$emit('selectedProvider', this.provider_id);    
                 console.log(this.provider_id)
             }
         },
         inputChange(){
-            this.selected = null;   
+            this.selected = null;
+            this.storeup = false;   
         },
         closeForm(){
             this.checked = false;
