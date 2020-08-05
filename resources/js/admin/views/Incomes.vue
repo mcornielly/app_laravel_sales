@@ -3,7 +3,7 @@
     <!-- Content Header (Page header) -->
         <bread-crumbs :titlePage="titlePage" :routePage="routePage"></bread-crumbs>
         <!-- /.content-header --> 
-        <template v-if="!vincome">
+        <template v-if="vincome==1">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
@@ -38,7 +38,7 @@
         </template>
 
         <!-- Crear Ingreso -->
-        <template v-else>
+        <template v-else-if="vincome==2">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
@@ -61,12 +61,21 @@
                                 step-size="md"
                                 color="#007bff" shape="square">
 
-                                <!-- <tab-content title="Proveedor"  icon="ti-briefcase" :before-change="validateProvider">
-                                    <income-provider @selectedProvider="provider_id = $event"></income-provider>
-                                </tab-content> -->
+                                <tab-content title="Proveedor"  icon="ti-briefcase" :before-change="validateProvider">
+                                    <income-provider @selectedProvider="provider = $event"></income-provider>
+                                </tab-content>
 
-                                <tab-content title="Producto"  icon="ti-bag" :before-change="validateProduct">
-                                    <income-product @selectedProducts="products = $event"></income-product>
+                                <tab-content title="Producto" icon="ti-bag" :before-change="validateProduct">
+                                    <income-product :divisa="divisa" @addProduct="detail_incomes = $event"></income-product>
+                                </tab-content>
+
+                                <tab-content title="Ingreso" icon="ti-receipt" :before-change="validateInvoice">
+                                    <income-invoice :detail_incomes="detail_incomes" :provider="provider" 
+                                    @selectType="type_voucher = $event" 
+                                    @numVoucher="num_voucher = $event"
+                                    @numBill="num_bill = $event"
+                                    @invoiceTotal="total = $event"
+                                    @tax="iva = $event"></income-invoice>
                                 </tab-content>
 
                             </form-wizard>    
@@ -77,24 +86,128 @@
                 </div>
                 <!-- /.col -->
             </div>
-
-
-            <!-- <product-create @returned="vincome = $event"
-                :divisa="divisa"
-                :categories="categories"
-            ></product-create>    -->
         </template>
-    
+
+        <!-- Detail Income -->
+        <template v-else>
+                <div id="canvas" class="invoice p-3 mb-3">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ title }} | {{ income.num_voucher }}</h3>
+                        <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar</a>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-sm-4 invoice-col">
+                                    Proveedor:
+                                    <address>
+                                        <strong>{{ income.customer_name }}</strong><br>
+                                        {{ income.address }}<br>
+                                        <b>Phone: </b> <span> {{ income.num_phone }}</span> <br>
+                                        <b>Email: </b> <span> {{ income.email }}</span>
+                                    </address>
+                                </div>
+                                <div class="col-sm-4 invoice-col">
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col">
+                                <b>N° <span>{{ income.type_voucher }}</span> <span>#{{ income.num_voucher }}</span> </b><br>
+                                <br>
+                                <b>N° Comprobante :</b> <span>{{ income.num_bill }}</span><br>
+                                <b>Fecha de Pago :</b> <span>{{ income.created_at }}</span><br>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+                            <!-- Table row -->
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                    <th>#</th>
+                                    <th>Código</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad </th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(detail_income, index) in detail_incomes" :key="detail_income.id">
+                                    <td>{{ index+1 }}</td>
+                                    <td>{{ detail_income.code }}</td>
+                                    <td>{{ detail_income.name }}</td>
+                                    <td>{{ detail_income.quantity }}</td>
+                                    <td>{{ detail_income.price }}</td>
+                                    <td>{{ detail_income.price * detail_income.quantity | numeralFormat('0.00[,]00')}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+                            <div class="row">
+                                <!-- accepted payments column -->
+                                <div class="col-6">
+
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-6">
+                                <p class="lead">Balance </p>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                    <tbody><tr>
+                                        <th style="width:50%">Subtotal:</th>
+                                        <td class="text-right">Bs.{{ (calculateTotal-totalTax).toFixed(2) | numeralFormat('0.00[,]00') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>IVA <span>({{ income.tax*100 }}%)</span></th>
+                                        <td class="text-right">Bs.{{ totalTax=(total*income.tax).toFixed(2) | numeralFormat('0.00[,]00') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total:</th>
+                                        <td class="text-right">Bs.{{ (total=calculateTotal).toFixed(2) | numeralFormat('0.00[,]00')}}</td>
+                                    </tr>
+                                    </tbody></table>
+                                </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </div>
+                        <div class="card-footer clearfix">
+                            <!-- this row will not appear when printing -->
+                            <div class="row no-print">
+                                <div class="col-12">
+                                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;" @click="createPDF()">
+                                    <i class="fas fa-download"></i> Generate PDF
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+        </template>
+
     </section>
 </template>
 
 <script>
 let user = document.head.querySelector('meta[name="user"]');
 
+
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
-import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
+import BtnIncomesComponentVue from '../../components/BtnIncomesComponent.vue';
 import StatusComponentVue from '../../components/StatusComponent.vue';
 Vue.use(DataTable);
 // Import component
@@ -111,10 +224,14 @@ import 'vue-select/dist/vue-select.css';
 import {FormWizard, TabContent} from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+
 export default {
     components:{
-        BtnProductsComponentVue,
+        BtnIncomesComponentVue,
         StatusComponentVue,
+        DataTableCurrencyCell,
         FormWizard,
         TabContent,
         Loading
@@ -126,7 +243,7 @@ export default {
             titlePage:'Ingresos',
             routePage:'Ingresos',
             divisa: 0,
-            vincome:false,
+            vincome: 1,
             create: false,
             title: 'Nuevo Ingreso',
             tableProps: {
@@ -171,6 +288,7 @@ export default {
                     label: 'Monto',
                     name: 'total',
                     orderable: true,
+                    component: DataTableCurrencyCell
                 },     
                 {
                     label: 'Estatus',
@@ -181,9 +299,9 @@ export default {
                     label: 'Acciones',
                     name: '',
                     orderable: false,
-                    component: BtnProductsComponentVue,
+                    component: BtnIncomesComponentVue,
                     event: "click",
-                    handler: this.modalProduct
+                    handler: this.showIncome
                 },
 
             ],
@@ -193,18 +311,33 @@ export default {
             isLoading: false,
             loadingWizard: false,
             errorMsg: null,
-            provider_id:0,
-            products: []
+            provider: {},
+            income_id:0,
+            income: {},
+            products: [],
+            detail_incomes: [],
+            type_voucher: '',
+            num_bill:'',
+            num_voucher:'',
+            total: 0.00,
+            totalTax: 0.00,
+            iva:''
         }
     },
     created(){
         this.getData(this.url);
         this.getDivisa();
-        this.getCategories();
     },
     computed:{
         user(){
             return JSON.parse(user.content);
+        },
+        calculateTotal: function(){
+            var result = 0.0;
+            for(var i=0; i<this.detail_incomes.length; i++){
+                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
+            }
+            return result;
         }
     },
     methods: {
@@ -229,7 +362,7 @@ export default {
             this.getData(this.url, tableProps);
         },
         createIncome(){
-            this.vincome = true;
+            this.vincome = 2;
         },
         getDivisa(){
             var url = "api/divisa/precio";
@@ -240,19 +373,10 @@ export default {
                 console.log(error.response.data);
             });
         },
-        getCategories(){
-            var url = "api/categorias/lista";
-            axios.get(url).then(response => {
-                this.categories = response.data;
-                console.log(this.categories)
-            }).catch(error =>{
-                console.log(error.response.data)
-            });
-        },
         onComplete(){
-            toastr["info"]("Formulario completado con exito..!!", "Nuevo Producto");
+            toastr["info"]("Ingreso de Productos completados con exito..!!", "Comprobante de Ingreso");
             setTimeout(() => {
-            
+                this.storeIncome();
             }, 1000)
             
         },
@@ -266,10 +390,10 @@ export default {
         handleErrorMessage: function(errorMsg){
           this.errorMsg = errorMsg
         },
-        validateProvider:function(product_id) {
-          return new Promise((resolve, reject) => {
+        validateProvider:function() {
+            return new Promise((resolve, reject) => {
             setTimeout(() => {
-                if(this.provider_id){
+                if(Object.keys(this.provider).length > 0){
                     resolve(true)
                 }else{
                     var errors = "validate";
@@ -280,11 +404,117 @@ export default {
           })
         },
         validateProduct(){
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.detail_incomes.length > 0){
+                    resolve(true)
+                }else{
+                    var errors = "validate";
+                    toastr.error("ERROR - Debe agregar los productos.");
+                    reject(errors);
+                }
+            }, 1000)
+          })
+        },
+        validateInvoice(){
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.num_bill != '' && this.type_voucher != ''){
+                    resolve(true)
+                }else{
+                    var errors = "validate";
+                    toastr.error("ERROR - Debe completar los campos.");
+                    reject(errors);
+                }
+            }, 1000)
+          }) 
+        },
+        storeIncome(){
+                var url = `api/ingreso`;
+                axios.post(url,{
+                    'provider_id' : this.provider.id,
+                    'user_id': this.user.id,
+                    'type_voucher' : this.type_voucher,
+                    'num_voucher' : this.num_voucher,
+                    'num_bill' : this.num_bill,
+                    'tax':this.iva,
+                    'total':this.total,
+                    'detail_incomes': this.detail_incomes
+                }).then(response =>{
+                    console.log(response.data)
+                    this.back_page();
+                    toastr.success("El Ingreso ha sido registrado.");
+                }).catch(error => {
+                    var error = error.response.data.errors;
+                    this.errors = error;
+                    toastr.error("ERROR - En la validaciones.");
+                    console.log(this.errors)
+                });
 
         },
+        showIncome(data){
+            console.log(data)
+            this.title= "Ingreso";
+            this.vincome = 3;
+            this.income = data;
+            this.income_id = data.id;
+                var url = `api/ingreso/detalles/${this.income_id}`;
+                axios.get(url).then(response =>{
+                    this.detail_incomes = response.data.detail_incomes;
+                    console.log(this.detail_incomes);
+                }).catch(error => {
+                    var error = error;
+                    this.errors = error;
+                    toastr.error("ERROR - En la validaciones.");
+                    console.log(this.errors)
+                });
+        },
         back_page(){
-            this.vincome = false;
-            this.$parent.reloadTable();
+            this.vincome = 1;
+            // this.$parent.reloadTable();
+            this.reloadTable();
+        },
+        createPDF(){
+            window.open('api/ingreso/pdf/' + this.income_id);
+            // console.log(this.income_id)
+            // axios.get('api/ingreso/pdf/' + this.income_id)
+            // var url = `api/ingreso/pdf/${this.income_id}`;
+            //     axios.get(url).then(response =>{
+            //         console.log(response);
+            //     }).catch(error => {
+            //         console.log(this.error)
+            //         toastr.error("ERROR - En la validaciones.");
+            //     });
+
+            //   const doc = new jsPDF();
+            //   const contentHtml = this.$refs.content.innerHTML;
+            //   doc.fromHTML(contentHtml, 15, 15, {
+            //     width: 170
+            //   });
+            //   doc.save("sample.pdf");
+
+            /** WITH CSS */
+            // var canvas = document.getElementById('canvas');
+            //     html2canvas(canvas).then(function (canvas) { 
+            //     const img = canvas.toDataURL("image/jpeg");
+            //     const doc = new jsPDF('p','pt','a4');
+            //     // var width = doc.internal.pageSize.getWidth();    
+            //     // var height = doc.internal.pageSize.getHeight();
+            //     doc.addImage(img,'JPEG',0,0);
+            //     doc.save("sample.pdf");
+            //     // window.open(img);            
+            // });
+            // var canvas = document.getElementById('canvas');
+            //             html2canvas(canvas, {
+            //                 onrendered: function(canvas){
+            //                     var img = canvas.toDataURL("image/jpeg");
+            //                     var doc = new jsPDF('p','pt','a4');
+            //                     doc.addImage(img,'JPEG',0,0);
+            //                     doc.save("sample.pdf"); 
+            //                     window.open(img); 
+            //                 }
+            //             }); 
+
         }
     }
 }

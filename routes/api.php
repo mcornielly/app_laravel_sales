@@ -51,6 +51,7 @@ Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
 Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
 Route::post('producto/validate', 'Admin\ProductsController@validate_step');
 Route::post('producto/validate/code', 'Admin\ProductsController@validate_code');
+Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
 
 // Fotos-Imagenes del Producto
 Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
@@ -67,6 +68,13 @@ Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider')
 
 // Ingresos
 Route::get('ingresos', 'Admin\IncomesController@index');
+Route::post('ingreso', 'Admin\IncomesController@store');
+Route::get('ingreso/{id}', 'Admin\IncomesController@show');
+Route::get('ingresos/num_factura', 'Admin\IncomesController@count_record');
+
+//
+Route::get('ingreso/detalles/{id}', 'Admin\IncomesController@get_detail');
+Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
 
 // Clientes
 Route::get('clientes', 'Admin\CustomersController@index');
@@ -77,3 +85,5 @@ Route::get('cliente/restore/{id}', 'Admin\CustomersController@restore');
 Route::delete('cliente/eliminar/{id}', 'Admin\CustomersController@destroy');
 
 Route::get('ventas', 'Admin\SalesController@index');
+
+

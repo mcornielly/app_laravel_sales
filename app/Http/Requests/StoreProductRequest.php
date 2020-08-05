@@ -26,11 +26,11 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|min:3|unique:products',
             'category_id' => 'required|numeric|min:1',
-            'price' => 'required|numeric|not_in:0',
             'description' => 'required',
-            'stock' => 'required|numeric|not_in:0',
-            'wholesale_quantity' => 'required|numeric|not_in:0',
             'code' => 'required'
+            // 'price' => 'required|numeric|not_in:0',
+            // 'stock' => 'required|numeric|not_in:0',
+            // 'wholesale_quantity' => 'required|numeric|not_in:0',
         ];
     }
 }

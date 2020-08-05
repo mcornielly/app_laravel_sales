@@ -1,6 +1,7 @@
 <template>
     <div>
-        <span class="text-right">{{ data.price | numeralFormat('0.00[,]00') }}</span>    
+        <span v-if="data.price" class="text-right">{{ data.price | numeralFormat('0.00[,]00') }}</span>    
+        <span class="text-right">{{ data.total | numeralFormat('0.00[,]00') }}</span>    
     </div>
 </template>
 <script>

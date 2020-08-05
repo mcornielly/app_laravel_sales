@@ -52,10 +52,7 @@ class ProductsController extends Controller
         $this->validate($request, [
             'name' => 'required|min:3|unique:products',
             'category_id' => 'required|numeric|min:1',
-            'price' => 'required|numeric|not_in:0',
             'description' => 'required',
-            'stock' => 'required|numeric|not_in:0',
-            'wholesale_quantity' => 'required|numeric|not_in:0',
         ]);
 
     }
@@ -83,14 +80,8 @@ class ProductsController extends Controller
         $product->name = $request->name;    
         $product->category_id = $request->category_id;    
         $product->code = $request->code;
-        $product->price = $request->price;    
         $product->description = $request->description;    
-        $product->stock = $request->stock;    
-        $product->margin_gain_u = $request->margin_gain_u;    
-        $product->divisa_unit = $request->divisa_unit;    
-        $product->wholesale_quantity = $request->wholesale_quantity;    
-        $product->margin_gain_w = $request->margin_gain_w;    
-        $product->wholesale_divisa = $request->wholesale_divisa;    
+        $product->user_id = $request->user_id;
         $product->save();
         
         if(count($request->photos)>0){
@@ -170,19 +161,6 @@ class ProductsController extends Controller
      */
     public function update(StoreProductRequest $request,Product $product, $id)
     {
-        // $data = $this->validate($request, [
-        //     'name' => 'required|min:3',
-        //     'category_id' => 'required',
-        //     'code' => 'required',
-        //     'price' => 'required',
-        //     'description' => 'required',
-        //     'stock' => 'required',
-        //     'margin_gain_u' => 'required',
-        //     'divisa_unit' => 'required',
-        //     'wholesale_quantity' => 'required',
-        //     'margin_gain_w' => 'required',
-        //     'wholesale_divisa' => 'required',
-        // ]);
          
         $data = $request->all();
         $product = Product::find($request->id);    
@@ -200,6 +178,16 @@ class ProductsController extends Controller
         }  
 
         return $product;
+    }
+
+    public function update_cost(Request $request){
+        $product = Product::find($request->id);
+        $product->update($request->all());
+
+        if(request()->wantsJson())
+        {
+            return $product;
+        }
     }
 
     /**

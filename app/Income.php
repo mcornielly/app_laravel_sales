@@ -71,6 +71,18 @@ class Income extends Model
                 ],
             ],
         ],
+        "hasMany" => [
+            "deatil_incomes" => [
+                "model" => \App\DetailIncome::class,
+                'foreign_key' => 'income_id',
+                'columns' => [
+                    'income_id' => [
+                        'searchable' => true,
+                        'orderable' => true,
+                    ],
+                ],    
+            ],
+        ],    
     ];
     
     public function provider()
@@ -88,6 +100,11 @@ class Income extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function detail_incomes()
+    {    
+        return $this->hasMany(DetailIncome::class);
+    }
+
     public function scopebyYearAndMonthIncomes($query)
     {
         return $query->selectRaw('year(created_at) year')
@@ -96,5 +113,15 @@ class Income extends Model
                 ->selectRaw('sum(total) sum')
                 ->selectRaw('count(*) sales')
                 ->groupBy('year','month','monthname');
+    }
+
+    public function getStatusAttribute($status)
+    {
+        if($status == 1){
+            return "PAGADO";
+        }else{
+            return "PENDIENTE";
+        }
+
     }
 }

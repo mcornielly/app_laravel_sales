@@ -52,7 +52,7 @@
                                                 <span v-if="errors.description" class="invalid-feedback" role="alert">{{errors.description[0]}}</span>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <!-- <div class="form-group row">
                                             <label class="col-md-3 form-control-label">Precio Costo</label>
                                             <div class="col-md-9 input-group">
                                                 <div class="input-group-prepend">
@@ -73,7 +73,6 @@
                                                         require
                                                     >
                                                     </imask-input>
-                                                    <!-- <input type="text" class="form-control text-right" :class="{'is-invalid' : errors.price}" v-model="price"> -->
                                                     <span v-if="errors.price" class="invalid-feedback" role="alert">{{ errors.price[0] }}</span>
                                             </div> 
                                         </div>
@@ -90,89 +89,89 @@
                                                 <input type="number" class="form-control" :class="{'is-invalid' : errors.wholesale_quantity}" placeholder="Cantidad por bultor" min="0" v-model="wholesale_quantity">
                                                 <span v-if="errors.wholesale_quantity" class="invalid-feedback" role="alert">{{ errors.wholesale_quantity[0] }}</span>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </tab-content>
-                            <tab-content title="Ganancia" icon="ti-panel">
-                                    <!-- Balance de Costos -->
-                                    <div class="row col-md-12">
-                                        <div class="col-md-6">
-                                            <div class="card card-default card-default">
-                                                <div class="card-header">
-                                                    <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Detal</h3>
-                                                </div>
-                                                <!-- /.card-header -->
-                                                <div class="card-body">
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                                        <div class="col-xl-6 col-md-5 col-sm-5">
-                                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
-                                                        </div>
-                                                        <div class="col-xl-3 col-md-4 col-sm-4">
-                                                            <input type="number" class="form-control" v-model="margin_gain_u">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Ganancia</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Precio ($)</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.card-body -->
+                            <!-- <tab-content title="Ganancia" icon="ti-panel"> -->
+                                <!-- Balance de Costos -->
+                                <!-- <div class="row col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="card card-default card-default">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Detal</h3>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card card-default card-default">
-                                                <div class="card-header">
-                                                    <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Mayor</h3>
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
+                                                    <div class="col-xl-6 col-md-5 col-sm-5">
+                                                        <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
+                                                    </div>
+                                                    <div class="col-xl-3 col-md-4 col-sm-4">
+                                                        <input type="number" class="form-control" v-model="margin_gain_u">
+                                                    </div>
                                                 </div>
-                                                <div class="card-body">
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                                        <div class="col-xl-6 col-md-5 col-sm-5">
-                                                            <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
-                                                        </div>
-                                                        <div class="col-xl-3 col-md-4 col-sm-4">
-                                                            <input type="number" class="form-control" v-model="margin_gain_w">
-                                                        </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Ganancia</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Ganancia</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Precio ($)</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Precio ($)</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
-                                                        </div>
-                                                    </div>                           
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
-                                                        <div class="col-md-9">
-                                                            <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Precio (Bs.)</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>  
-                            </tab-content>
+                                    </div> -->
+                                    <!-- /.card-body -->
+                                    <!-- <div class="col-md-6">
+                                        <div class="card card-default card-default">
+                                            <div class="card-header">
+                                                <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Mayor</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
+                                                    <div class="col-xl-6 col-md-5 col-sm-5">
+                                                        <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
+                                                    </div>
+                                                    <div class="col-xl-3 col-md-4 col-sm-4">
+                                                        <input type="number" class="form-control" v-model="margin_gain_w">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Ganancia</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Precio ($)</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
+                                                    </div>
+                                                </div>                           
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Precio (Bs.)</label>
+                                                    <div class="col-md-9">
+                                                        <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>   -->
+                            <!-- </tab-content> -->
+                            
                             <tab-content title="Código" icon="ti-layout-column4" :before-change="validateCode">
                             <!-- Generar Coódigo -->
                                 <div class="card card-default card-default">
@@ -184,7 +183,12 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 form-control-label">Código</label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                                                    </div>
+                                                    <input ref="code" type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
+                                                </div>   
                                                 <small>Los números de código debe ser de 13 dígitos.</small>
                                                 <span v-if="errors.code" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>
                                             </div>   
@@ -322,6 +326,9 @@ export default {
             // count: 0
         }
     },
+    created(){
+        this.setFocus();
+    },
     components: {
         'barcode': VueBarcode,
         'vueDropzone': vue2Dropzone,
@@ -338,11 +345,13 @@ export default {
       }
     },
     computed:{
+        user(){
+            return JSON.parse(user.content);
+        },
         price_gain_u: function(){
             var result = 0;
              if(this.price > 0){
                  var result = (this.price * this.margin_gain_u / 100).toFixed(2);
-                 this.p_gain_u = result;
              }
             return result;
         },
@@ -383,10 +392,13 @@ export default {
         }
     },
     methods:{
+        setFocus(){
+            this.$nextTick(() => this.$refs.code.focus());
+        },
         onComplete(){
             toastr["info"]("Formulario completado con exito..!!", "Nuevo Producto");
             setTimeout(() => {
-            this.storeProduct();
+                this.storeProduct();
             }, 1000)
             
         },
@@ -407,12 +419,10 @@ export default {
                 axios.post(url,{
                     'name' : this.name,
                     'category_id' : this.category_id,
-                    'description' : this.description,
-                    'price' : this.price,
-                    'stock' : this.stock,
-                    'wholesale_quantity' : this.wholesale_quantity,
+                    'description' : this.description
                 }).then(response =>{
                     // console.log(response.data)
+                    this.setFocus();
                     resolve(true)
                 }).catch(error => {
                     if (error.response.status == 422) {
@@ -469,13 +479,7 @@ export default {
                     'category_id' : this.category_id,
                     'code' : this.code,
                     'description' : this.description,
-                    'price' : this.price,
-                    'stock' : this.stock,
-                    'margin_gain_u' : this.margin_gain_u,
-                    'divisa_unit' : this.divisa_unit,
-                    'wholesale_quantity' : this.wholesale_quantity,
-                    'margin_gain_w' : this.margin_gain_w,
-                    'wholesale_divisa' : this.wholesale_divisa,
+                    'user_id': this.user.id,
                     'photos':this.photos
                 }).then(response =>{
                     console.log(response.data)
@@ -506,7 +510,7 @@ export default {
 }
 .border_code {
     border: 1px solid gray;
-    -moz-border-radius: 9px;
+    border-radius: 9px;
     -webkit-border-radius:9px;
     padding: 10px;
     margin-left: 7px;

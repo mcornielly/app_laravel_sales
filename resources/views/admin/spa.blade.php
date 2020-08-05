@@ -25,7 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/adminlte/plugins/toastr/toastr.min.css">
   <link rel="stylesheet" href="/adminlte/css/adminlte.min.css">
-
+ 
   <link rel="stylesheet" href="{{ mix('css/app.css') }}>
 
   <!-- Google Font: Source Sans Pro -->
@@ -395,6 +395,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/adminlte/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{ mix('js/app.js') }}"></script>
 </body>

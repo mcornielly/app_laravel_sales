@@ -7,12 +7,12 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.jsPDF = require('jspdf');
 import Vue from 'vue';
 import router from './routes';
 import VueFormWizard from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 Vue.use(VueFormWizard)
-
 
 /**
  * The following block of code may be used to automatically register your
@@ -25,6 +25,7 @@ Vue.use(VueFormWizard)
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
 Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
@@ -46,7 +47,9 @@ Vue.component('show-product', require('./components/ShowProductComponent.vue').d
 Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
 Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
 Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);
+Vue.component('income-invoice', require('./components/IncomeInvoiceComponent.vue').default);
 Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
+Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
 
 /**

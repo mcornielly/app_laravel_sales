@@ -14,6 +14,6 @@ $factory->define(Income::class, function (Faker $faker) {
         'num_bill' => $faker->numberBetween($min = 1000000, $max = 9000000),
         'tax' => 16,
         'total' => $faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL),
-        'status' => $faker->randomElement($array = array ('PAGADO','PENDIENTE')),
+        'status' => $faker->randomElement($array = array ('1','0')),
     ];
 });

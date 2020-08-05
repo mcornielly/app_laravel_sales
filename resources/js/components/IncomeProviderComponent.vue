@@ -161,6 +161,7 @@ export default {
             },
             search:'',
             provider_id: 0,
+            provider: [],
             providers:[],
             selected:'',
             value:'',
@@ -202,10 +203,16 @@ export default {
             },1000);
         },
         setSelected(value){
-            if(value){  
-                this.provider_id = value.id;
-                this.$emit('selectedProvider', this.provider_id);    
-                console.log(this.provider_id)
+            if(value){
+                console.log(value)  
+                // this.provider_id = value.id;
+                this.provider.push({
+                    id: value.id,
+                    name: value.name,
+                    num_document: value.num_document,
+                });
+                this.$emit('selectedProvider', this.provider[0]);    
+                console.log(this.provider[0])
             }
         },
         inputChange(){
