@@ -44,7 +44,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 form-control-label">Tipo de Documento</label>
                                         <div class="col-md-9">
-                                            <select class="form-control" :class="{'is-invalid' : errors}" v-model="provider.type_document" :disabled="storeup">
+                                            <select class="form-control" :class="{'is-invalid' : errors}" v-model="type_document" :disabled="storeup">
                                                 <option value="">Seleccione un Tipo de Documento</option>
                                                 <option>V</option>
                                                 <option>E</option>
@@ -159,11 +159,12 @@ export default {
                 contact_name:'',
                 contact_phone:''
             },
+            type_document:'',
             search:'',
             provider_id: 0,
-            provider: [],
+            selectedProvider:{},
             providers:[],
-            selected:'',
+            selected: null,
             value:'',
             checked:false,
             storeup:false,
@@ -204,15 +205,17 @@ export default {
         },
         setSelected(value){
             if(value){
-                console.log(value)  
-                // this.provider_id = value.id;
-                this.provider.push({
-                    id: value.id,
-                    name: value.name,
-                    num_document: value.num_document,
-                });
-                this.$emit('selectedProvider', this.provider[0]);    
-                console.log(this.provider[0])
+                console.log(value)
+                this.selectedProvider = value;
+                this.provider_id = value.id;
+                this.$emit('selectedProvider', this.selectedProvider);    
+                // console.log(this.selectedProvider)  
+                // this.provider.push({
+                //     id: value.id,
+                //     name: value.name,
+                //     num_document: value.num_document,
+                // });
+                // console.log(this.provider[0])
             }
         },
         inputChange(){
@@ -228,12 +231,12 @@ export default {
             var url = 'api/proveedor';
             axios.post(url,{
                 'name': this.provider.name,
-                'type_document':  this.provider.type_document,
+                'type_document':  this.type_document,
                 'num_document': this.provider.num_document, 
                 'num_phone': this.provider.num_phone, 
                 'email': this.provider.email, 
                 'address': this.provider.address, 
-                'name_contact': this.provider.name, 
+                'name_contact': this.provider.contact_name, 
                 'contact_phone': this.provider.contact_phone,
                 'user_id': this.user.id,  
             }).then(response => {

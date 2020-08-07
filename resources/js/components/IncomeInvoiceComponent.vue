@@ -78,10 +78,10 @@
                                 <tr v-for="(detail_income, index) in detail_incomes" :key="detail_income.id">
                                     <td>{{ index+1 }}</td>
                                     <td>{{ detail_income.name }}</td>
-                                    <td>{{ detail_income.stock }}</td>
+                                    <td>{{ detail_income.quantity }}</td>
                                     <td>{{ detail_income.wholesale_quantity }}</td>
                                     <td>{{ detail_income.price | numeralFormat('0.00[,]00') }}</td>
-                                    <td class="text-right">{{  detail_income.price*detail_income.stock | numeralFormat('0.00[,]00') }}</td>
+                                    <td class="text-right">{{  detail_income.price*detail_income.quantity | numeralFormat('0.00[,]00') }}</td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Parcial</strong></td>
@@ -150,7 +150,6 @@ export default {
         },
         total: function(){
             this.$emit('invoiceTotal', this.total);
-            this.$emit('tax', this.iva);
         }
     },
     computed:{
@@ -175,6 +174,7 @@ export default {
                 this.checked = false;
                 this.iva=0.16;
             }
+            this.$emit('tax', this.iva);
         },
         getCount(){
             var url = "api/ingresos/num_factura";

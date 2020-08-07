@@ -248,19 +248,13 @@ export default {
             var url = `api/producto/actualizar_costo/${this.id}`;
             axios.put(url,{
                 'id' : this.id,
-                'name' : this.data.name,
-                'category_id' : this.data.category_id,
-                'code' : this.data.code,
-                'description' : this.data.description,
                 'price' : this.price,
-                'stock' : this.stock,
                 'margin_gain_u' : this.margin_gain_u,
                 'divisa_unit' : this.divisa_unit,
                 'wholesale_quantity' : this.wholesale_quantity,
                 'margin_gain_w' : this.margin_gain_w,
                 'wholesale_divisa' : this.wholesale_divisa,
                 'user_id': this.user.id,
-                'status': this.status, 
             }).then(response =>{
                 // console.log(response.data)
                 toastr.success("La Ganacia del Producto ha sido actualizado.");

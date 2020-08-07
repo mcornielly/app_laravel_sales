@@ -150,7 +150,7 @@ class IncomesController extends Controller
                 $detail_income->income_id = $income->id;
                 $detail_income->product_id = $detail['id'];
                 $detail_income->price = $detail['price'];
-                $detail_income->quantity = $detail['stock'];
+                $detail_income->quantity = $detail['quantity'];
                 $detail_income->save();
             }
         }

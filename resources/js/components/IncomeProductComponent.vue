@@ -13,7 +13,7 @@
                             </div>
                             <input ref="code" type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                             <div class="input-group-append">
-                                <a href="" class="btn btn-default" @click.prevent="test()"><i class="fas fa-search" aria-hidden="true">&nbsp;</i> Buscar Producto</a>
+                                <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal-list-prod"><i class="fas fa-search" aria-hidden="true">&nbsp;</i> Buscar Producto</a>
                             </div>
                         </div>
                     </div>     
@@ -51,7 +51,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Cantidad <span class="text-danger">(*)</span></label>
-                            <input type="number" min="0" class="form-control" v-model="stock" placeholder="0">
+                            <input type="number" min="0" class="form-control" v-model="quantity" placeholder="0">
                             <span v-show="product.stock"><small class="text-primary">Stock actual:{{ product.stock }}</small></span>
                         </div>
                     </div>
@@ -104,10 +104,10 @@
                                         </button>
                                     </td>
                                     <td>{{ detail_income.name }}</td>
-                                    <td>{{ detail_income.stock }}</td>
+                                    <td>{{ detail_income.quantity }}</td>
                                     <td>{{ detail_income.wholesale_quantity }}</td>
                                     <td>{{ detail_income.price | numeralFormat('0.00[,]00') }}</td>
-                                    <td style="text-align: right;">{{  detail_income.price*detail_income.stock | numeralFormat('0.00[,]00') }}</td>
+                                    <td style="text-align: right;">{{  detail_income.price*detail_income.quantity | numeralFormat('0.00[,]00') }}</td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
@@ -128,12 +128,16 @@
             <modal-cost 
                 :data="product"
                 :price="price" 
-                :stock="stock"
+                :stock="quantity"
                 :wholesale_quantity="wholesale_quantity"
                 :title="title"
                 :divisa="divisa"
                 @updateCost="btnAdd = $event"
                 ></modal-cost>
+        </div>
+
+        <div>
+           <modal-list-prod @selectProduct="product = $event" :item="item"></modal-list-prod> 
         </div>     
     </div>
 </template>
@@ -163,16 +167,7 @@ export default {
             url:"api/producto/search/",
             code:'',
             products:[],
-            product:{
-                name:'',
-                category_id:0,
-                price:0,
-                description:'',
-                stock:0,
-                margin_gain_u:0,
-                divisa_unit: 0,
-                wholesale_quantity:0,
-            },
+            product:{},
             money: {
                 decimal: ',',
                 thousands: '.',
@@ -184,13 +179,15 @@ export default {
             value: '',
             price: '',
             stock: '',
+            quantity: '',
             wholesale_quantity: '',
             detail_incomes:[],
             modalCost: false,
             btnCost: true,
             btnAdd: true,
             title:'',
-            errors:''
+            errors:'',
+            item:false
         }
     },
     created(){
@@ -198,14 +195,14 @@ export default {
     },
     watch: {
         price: function(){
-            if(this.price != '' && this.stock != ''){
+            if(this.price != '' && this.quantity != ''){
                 this.btnCost = false;
             }else{
                 this.btnCost = true;
             }
         },
-        stock: function(){
-            if(this.price != '' && this.stock != ''){
+        quantity: function(){
+            if(this.price != '' && this.quantity != ''){
                 this.btnCost = false;
             }else{
                 this.btnCost = true;
@@ -233,18 +230,19 @@ export default {
                 x=x+1;
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
-                        console.log(response.data.product);
-                        var product = response.data.product;
+                    var product = response.data.product;
+                    if(this.findProduct(product[0].id)==false){
                         if(product.length){
                             this.product = response.data.product[0];
                             this.btnCost=false;     
-                            console.log(this.product)
-                            // this.code = '';
                         }else{
                             toastr.error("ERROR - Producto no registrado.");
                             this.btnCost=true;     
                             this.clearSearch();
                         }
+                    }else{
+                        toastr.error("El producto ya se encuentra en la lista.");
+                    }
                 }).catch(error =>{
                         // console.log(error.response);
                         // this.errors = error.response;
@@ -261,27 +259,44 @@ export default {
             // this.code = '';
         },
         addListProducts(data){
-           if(this.stock > 0 && this.wholesale_quantity > 0){
-               this.btnAdd=false;
-               this.detail_incomes.push({
-                   id: this.product.id,
-                   name: this.product.name,
-                   price: this.price,
-                   stock: this.stock,
-                   wholesale_quantity: this.wholesale_quantity,
-               });
-               this.$emit('addProduct', this.detail_incomes); 
-               //Se limpia el proceso
-               this.product={};
-               this.stock='';     
-               this.price='';     
-               this.wholesale_quantity='';
-               this.code='';
-               this.btnAdd=true;          
+           if(this.quantity > 0 && this.wholesale_quantity > 0){
+               if(this.findProduct(this.product.id)==false){
+                   this.btnAdd=false;
+                   this.detail_incomes.push({
+                       id: this.product.id,
+                       name: this.product.name,
+                       price: this.price,
+                       quantity: this.quantity,
+                       wholesale_quantity: this.wholesale_quantity,
+                   });
+                   this.$emit('addProduct', this.detail_incomes); 
+                   //Se limpia el proceso
+                   this.product={};
+                   this.stock='';     
+                   this.quantity='';     
+                   this.price='';     
+                   this.wholesale_quantity='';
+                   this.code='';
+                   this.btnAdd=true;          
+               }else{
+                   toastr.error("El producto ya se encuentra en la lista.");
+               }
            }else{
                 toastr["info"]("Debe completar los campos requeridos, para dar ingreso al Producto.");
            } 
 
+        },
+        findProduct(id){
+            var item=false;
+
+            for(var i=0; i<this.detail_incomes.length; i++){
+                if(this.detail_incomes[i].id==id){
+                    item = true;
+                    this.item = item;
+                }
+            }
+            return this.item = item;
+                
         },
         deleteListProduct(index)
         {

@@ -55,7 +55,6 @@ class ProvidersController extends Controller
      */
     public function store(Request $request, Provider $provider)
     {
- 
         $valido = $this->validate($request,[
             'name' => 'required|min:3|unique:customers',
             'type_document' => 'required',

@@ -194,7 +194,6 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
         </template>
 
     </section>
@@ -321,7 +320,7 @@ export default {
             num_voucher:'',
             total: 0.00,
             totalTax: 0.00,
-            iva:''
+            iva:0.16
         }
     },
     created(){
@@ -391,6 +390,7 @@ export default {
           this.errorMsg = errorMsg
         },
         validateProvider:function() {
+            console.log(this.provider)
             return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if(Object.keys(this.provider).length > 0){
@@ -473,48 +473,9 @@ export default {
             this.vincome = 1;
             // this.$parent.reloadTable();
             this.reloadTable();
-        },
+        },  
         createPDF(){
             window.open('api/ingreso/pdf/' + this.income_id);
-            // console.log(this.income_id)
-            // axios.get('api/ingreso/pdf/' + this.income_id)
-            // var url = `api/ingreso/pdf/${this.income_id}`;
-            //     axios.get(url).then(response =>{
-            //         console.log(response);
-            //     }).catch(error => {
-            //         console.log(this.error)
-            //         toastr.error("ERROR - En la validaciones.");
-            //     });
-
-            //   const doc = new jsPDF();
-            //   const contentHtml = this.$refs.content.innerHTML;
-            //   doc.fromHTML(contentHtml, 15, 15, {
-            //     width: 170
-            //   });
-            //   doc.save("sample.pdf");
-
-            /** WITH CSS */
-            // var canvas = document.getElementById('canvas');
-            //     html2canvas(canvas).then(function (canvas) { 
-            //     const img = canvas.toDataURL("image/jpeg");
-            //     const doc = new jsPDF('p','pt','a4');
-            //     // var width = doc.internal.pageSize.getWidth();    
-            //     // var height = doc.internal.pageSize.getHeight();
-            //     doc.addImage(img,'JPEG',0,0);
-            //     doc.save("sample.pdf");
-            //     // window.open(img);            
-            // });
-            // var canvas = document.getElementById('canvas');
-            //             html2canvas(canvas, {
-            //                 onrendered: function(canvas){
-            //                     var img = canvas.toDataURL("image/jpeg");
-            //                     var doc = new jsPDF('p','pt','a4');
-            //                     doc.addImage(img,'JPEG',0,0);
-            //                     doc.save("sample.pdf"); 
-            //                     window.open(img); 
-            //                 }
-            //             }); 
-
         }
     }
 }
