@@ -36,6 +36,24 @@ class CustomersController extends Controller
         return view('admin.customers.index', compact('customers'));
     }
 
+    public function select_customer(Request $request)
+    {
+
+        $filter = $request->filter;
+        
+        $customer = Customer::where('customers.name', 'like', '%' . $filter . '%')
+            ->orWhere('customers.num_document', 'like', '%' . $filter . '%')
+            ->select('customers.id', 'customers.name', 'customers.num_document')
+            ->get();
+
+        if(request()->wantsJson())
+        {
+            return $customer;
+        }
+
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

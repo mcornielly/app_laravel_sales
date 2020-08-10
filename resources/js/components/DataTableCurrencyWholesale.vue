@@ -1,13 +1,10 @@
 <template>
-    <div>
-        <span class="text-right">{{ wholesale_price | numeralFormat('0.00[,]00') }}</span>    
+    <div class="text-right">
+        <span>{{ wholesale_price | currency }}</span>    
     </div>
 </template>
 <script>
 import Vue from 'vue';
-import VueNumerals from 'vue-numerals';
- 
-Vue.use(VueNumerals); // default locale is 'en'
  
 export default {
     props: {

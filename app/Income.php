@@ -118,9 +118,9 @@ class Income extends Model
     public function getStatusAttribute($status)
     {
         if($status == 1){
-            return "PAGADO";
+            return "REGISTRADO";
         }else{
-            return "PENDIENTE";
+            return "ANULADO";
         }
 
     }

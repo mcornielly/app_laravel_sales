@@ -80,20 +80,20 @@
                                     <td>{{ detail_income.name }}</td>
                                     <td>{{ detail_income.quantity }}</td>
                                     <td>{{ detail_income.wholesale_quantity }}</td>
-                                    <td>{{ detail_income.price | currency }}</td>
-                                    <td class="text-right">{{  detail_income.price*detail_income.quantity | currency }}</td>
+                                    <td>{{ detail_income.price | numeralFormat('0.00[,]00') }}</td>
+                                    <td class="text-right">{{  detail_income.price*detail_income.quantity | numeralFormat('0.00[,]00') }}</td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Parcial</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ (calculateTotal-totalTax).toFixed(2) | currency }} </td>
+                                    <td class="text-right">Bs. {{ (calculateTotal-totalTax).toFixed(2) | numeralFormat('0.00[,]00') }} </td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Impuesto</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax = (total * iva).toFixed(2) | currency }} </td>
+                                    <td class="text-right">Bs. {{ totalTax = (total * iva).toFixed(2) | numeralFormat('0.00[,]00') }} </td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ total=calculateTotal | currency }}</td>
+                                    <td class="text-right">Bs. {{ total=calculateTotal | numeralFormat('0.00[,]00') }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -119,9 +119,6 @@ export default {
         provider: {},
         detail_incomes: {
             type: Array,
-        },
-        typeCurrency: {
-            type: String,
         }
     },  
     directives: {mask},  

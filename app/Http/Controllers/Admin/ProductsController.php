@@ -36,6 +36,25 @@ class ProductsController extends Controller
         return view('admin.products.index', compact('products', 'divisa_p'));
     }
 
+    public function price_list(Request $request)
+    {
+        //Propiedades del DataTble
+        $length = $request->input('length');
+        $orderBy = $request->input('column'); //Index
+        $orderByDir = $request->input('dir', 'asc');
+        $searchValue = $request->input('search');
+
+        $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue)
+                ->where('products.price', '>', 0);
+                
+        if(request()->wantsJson())
+        {
+            $data = $query->paginate($length);
+            return new DataTableCollectionResource($data);
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -76,13 +95,15 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = new Product;
-        $product->name = $request->name;    
-        $product->category_id = $request->category_id;    
-        $product->code = $request->code;
-        $product->description = $request->description;    
-        $product->user_id = $request->user_id;
-        $product->save();
+
+        $product = Product::create($request->all());
+        // $product = new Product;
+        // $product->name = $request->name;    
+        // $product->category_id = $request->category_id;    
+        // $product->code = $request->code;
+        // $product->description = $request->description;    
+        // $product->user_id = $request->user_id;
+        // $product->save();
         
         if(count($request->photos)>0){
             foreach($request->photos as $photo)

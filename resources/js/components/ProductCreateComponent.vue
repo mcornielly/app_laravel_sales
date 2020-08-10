@@ -249,8 +249,6 @@
     </section>
 </template>
 <script>
-let user = document.head.querySelector('meta[name="user"]');
-
 import {IMaskDirective} from 'vue-imask';
 import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode'
@@ -346,6 +344,7 @@ export default {
     },
     computed:{
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         },
         price_gain_u: function(){
@@ -480,7 +479,14 @@ export default {
                     'code' : this.code,
                     'description' : this.description,
                     'user_id': this.user.id,
-                    'photos':this.photos
+                    'photos':this.photos,
+                    'stock': 0,
+                    'price' : 0,
+                    'margin_gain_u' : 0,
+                    'divisa_unit' : 0,
+                    'wholesale_quantity' : 0,
+                    'margin_gain_w' : 0,
+                    'wholesale_divisa' : 0
                 }).then(response =>{
                     console.log(response.data)
                     this.back_page();

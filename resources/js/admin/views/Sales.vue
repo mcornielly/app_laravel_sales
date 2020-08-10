@@ -3,13 +3,13 @@
     <!-- Content Header (Page header) -->
         <bread-crumbs :titlePage="titlePage" :routePage="routePage"></bread-crumbs>
         <!-- /.content-header --> 
-        <template v-if="!vproducts">
+        <template v-if="vsale==1">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                         <h3 class="card-title" v-text="titlePage"><i class="fas fa-bars">&nbsp;</i></h3>
-                        <a href="#" @click="createVenta()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Venta</a>
+                        <a href="#" @click="createSale()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Venta</a>
                         <!-- <a v-if="!vproducts"  href="#" @click="createProduct()" data-toggle="modal" data-target="#modal-product" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
                         </div>
                         
@@ -38,12 +38,55 @@
             </div>
         </template>
 
-        <!-- Crear Producto -->
-        <template v-else>
-            <product-create @returned="vproducts = $event"
-                :divisa="divisa"
-                :categories="categories"
-            ></product-create>   
+        <!-- Crear Venta-->
+        <template v-else-if="vsale==2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ title }}</h3>
+                        <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar</a>
+                        </div>
+                        
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <form-wizard
+                                @on-complete="onComplete"
+                                @on-loading="setLoading"
+                                @on-validate="handleValidation"
+                                @on-error="handleErrorMessage" 
+                                next-button-text="Siguiente"
+                                back-button-text="Regresar"
+                                finish-button-text="Finalizar"
+                                title="" subtitle=""
+                                step-size="md"
+                                color="#007bff" shape="square">
+
+                                <!-- <tab-content title="Cliente"  icon="ti-id-badge" :before-change="validateCustomer">
+                                    <sale-customer @selectedCustomer="customer = $event"></sale-customer>
+                                </tab-content> -->
+
+                                <tab-content title="Producto" icon="ti-bag" :before-change="validateProduct">
+                                    <sale-product :divisa="divisa" :typeCurrency="typeCurrency" @addProduct="detail_incomes = $event"></sale-product>
+                                </tab-content>
+<!-- 
+                                <tab-content title="Ingreso" icon="ti-receipt" :before-change="validateInvoice">
+                                    <sale-invoice :detail_incomes="detail_incomes" :customer="custumer" 
+                                    @selectType="type_voucher = $event" 
+                                    @numVoucher="num_voucher = $event"
+                                    @numBill="num_bill = $event"
+                                    @invoiceTotal="total = $event"
+                                    @tax="iva = $event"></sale-invoice>
+                                </tab-content> -->
+
+                            </form-wizard>    
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
         </template>
     
     </section>
@@ -78,8 +121,9 @@ export default {
             routePage:'Ventas',
             divisa: 0,
             categories:[],
+            typeCurrency: 'Bs.',
             name:'',
-            vproducts:false,
+            vsale: 1,
             create: false,
             title: '',
             tableProps: {
@@ -124,6 +168,7 @@ export default {
                     label: 'Monto',
                     name: 'total',
                     orderable: true,
+                    component: DataTableCurrencyCell
                 },     
                 {
                     label: 'Estatus',
@@ -136,14 +181,14 @@ export default {
                     orderable: false,
                     component: BtnProductsComponentVue,
                     event: "click",
-                    handler: this.modalProduct
+                    handler: this.selectAction
                 },
 
             ],
             selectedRow: {},
             action: false,
             storeup: true,
-            product_id: 0,
+            customer:{},
             images:[],
             isLoading: false
         }
@@ -197,14 +242,67 @@ export default {
                 console.log(error.response.data)
             });
         },
-        createVenta(){
-            this.title = 'Nueva Producto'
-            this.selectedRow = {};
-            this.action = true;
-            this.storeup = false;
-            this.vproducts = true;
+        createSale(){
+            this.vsale = 2;
         },
-        modalProduct(data, action){
+        onComplete(){
+            toastr["info"]("Venta de Productos completados con exito..!!", "Comprobante de Venta");
+            setTimeout(() => {
+                this.storeCustomer();
+            }, 1000)
+            
+        },
+        setLoading: function(value) {
+            this.loadingWizard = value
+            console.log(this.loadingWizard)
+        },
+        handleValidation: function(isValid, tabIndex){
+           console.log('Tab: '+tabIndex+ ' valid: '+isValid)
+        },
+        handleErrorMessage: function(errorMsg){
+          this.errorMsg = errorMsg
+        },
+        validateCustomer:function() {
+            console.log(this.customer)
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(Object.keys(this.customer).length > 0){
+                    resolve(true)
+                }else{
+                    var errors = "validate";
+                    toastr.error("ERROR - Debe seleccionar un Cliemte.");
+                    reject(errors);
+                }
+            }, 1000)
+          })
+        },
+        validateProduct(){
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.detail_incomes.length > 0){
+                    resolve(true)
+                }else{
+                    var errors = "validate";
+                    toastr.error("ERROR - Debe agregar los productos.");
+                    reject(errors);
+                }
+            }, 1000)
+          })
+        },
+        validateInvoice(){
+            return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(this.num_bill != '' && this.type_voucher != ''){
+                    resolve(true)
+                }else{
+                    var errors = "validate";
+                    toastr.error("ERROR - Debe completar los campos.");
+                    reject(errors);
+                }
+            }, 1000)
+          }) 
+        },
+        selectAction(data, action){
             switch(action){
     			    case 'edit':
                         {
@@ -269,8 +367,9 @@ export default {
                 this.errors = errors;
             });
         },
-        back_pag(){
-            this.vproducts = false;
+        back_page(){
+            this.vsale = 1;
+            this.reloadTable();
         },
         getImages(product_id){
             var id = product_id;

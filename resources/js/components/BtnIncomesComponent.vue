@@ -7,13 +7,14 @@
             <i class="fas fa-eye text-success" aria-hidden="true"></i>
         </a>
 
-        <a href="#"
-            title="anular"
-            @click="click(data,'delete')"
-            class="btn btn-link btn-sm">
-            <i class="fas fa-trash text-danger" aria-hidden="true"></i>
-        </a>
-        
+       <template v-if="data.status=='REGISTRADO'">
+            <a href="#"
+                title="anular"
+                @click="click(data,'delete')"
+                class="btn btn-link btn-sm">
+                <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+            </a>
+        </template> 
     </div>
 </template>
 

@@ -37,7 +37,7 @@
             <!-- /.col -->
         </div>
     
-        <!-- Modal-Divisa -->
+        <!-- Modal- Provider -->
         <modal-provider
             :data="selectedRow"
             :provider="provider"
@@ -105,27 +105,27 @@ export default {
                 },
                 {
                     label: 'Nombre',
-                    name: 'customer.name',
+                    name: 'name',
                     orderable: false,
                 },
                 {
                     label: '',
-                    name: 'customer.type_document',
+                    name: 'type_document',
                     orderable: false,
                 },
                 {
                     label: 'N° RIF/CI',
-                    name: 'customer.num_document',
+                    name: 'num_document',
                     orderable: false,
                 },
                 {
                     label: 'N° Teléfono',
-                    name: 'customer.num_phone',
+                    name: 'num_phone',
                     orderable: false,
                 },
                 {
                     label: 'Email',
-                    name: 'customer.email',
+                    name: 'email',
                     orderable: false,
                 },
                 {
@@ -134,7 +134,7 @@ export default {
                     orderable: false,
                     component: BtnProvidersComponentVue,
                     event: "click",
-                    handler: this.modalProvider
+                    handler: this.selectAction
                 },
 
             ],
@@ -182,14 +182,14 @@ export default {
             this.action = true;
             this.storeup = false;
         },
-        modalProvider(data, action){
-            this.type_document = data.customer.type_document;
+        selectAction(data, action){
+            this.type_document = data.type_document;
             switch(action){
     			    case 'edit':
                         {
                             this.title = 'Editar Proveedor';
                             this.selectedRow = data;
-                            this.provider = data.customer;
+                            this.provider = data;
                             this.create = false;
                             this.action = true;
                             this.storeup = false;
@@ -199,7 +199,7 @@ export default {
                         {
                             this.title = "Detalle de Proveedor";
                             this.selectedRow = data;
-                            this.provider = data.customer;
+                            this.provider = data;
                             this.create = false;
                             this.action = false; 
                             this.storeup = true; 

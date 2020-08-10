@@ -21,14 +21,28 @@ class ProvidersController extends Controller
 
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
-        $orderByDir = $request->input('dir', 'desc');
+        $orderBydir = $request->input('dir', 'desc');
         $searchValue = $request->input('search');
         
-        $query = Provider::with('customer')->eloquentQuery($orderBy, $orderByDir, $searchValue);
-          
+        // $query = Provider::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        // $query = Provider::with('customer')->eloquentQuery($orderBy, $orderByDir, $searchValue)
+        //             ->select('customers.*','providers.name as provider_name','provider.contact_phone','provider.id');
+        
+        $data = Provider::join('customers','providers.id','=','customers.id')
+        ->select('customers.*','providers.id as provider_id','providers.name as contact_name','providers.contact_phone') 
+        ->where("providers.id", "LIKE", "%$searchValue%")
+        ->orWhere('customers.name', "LIKE", "%$searchValue%")
+        ->orWhere('customers.type_document', "LIKE", "%$searchValue%")
+        ->orWhere('customers.num_document', "LIKE", "%$searchValue%")
+        ->orWhere('customers.num_phone', "LIKE", "%$searchValue%")
+        ->orWhere('customers.email', "LIKE", "%$searchValue%")
+        ->orderBy($orderBy, $orderBydir)
+        ->paginate($length);
+
+
         if(request()->wantsJson())
         {
-            $data = $query->paginate($length);         
+            // $data = $query->paginate($length);         
             return new DataTableCollectionResource($data);
         }
 
@@ -62,18 +76,21 @@ class ProvidersController extends Controller
             'num_phone' => 'required',
             'email' => 'required|email|unique:customers',
             'address' => 'required',
-            'name_contact' => 'required', 
+            'contact_name' => 'required', 
             'contact_phone' => 'required', 
         ]);  
 
             $customer = Customer::create($request->all());
 
+            $request['id'] = $customer->id;
+            $request['name'] = $request->contact_name;
 
-            $provider->id = $customer->id;
-            $provider->name = $request->name_contact;
-            $provider->contact_phone = $request->contact_phone;
-            $provider->save();
+            $provider = Provider::create($request->all());
 
+            // $data = [
+            //     'customer' => $customer,
+            //     'provider' => $provider,
+            // ];
             
             if($valido && request()->wantsJson())
             {

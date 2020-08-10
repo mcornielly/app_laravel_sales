@@ -41,6 +41,7 @@ Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
 
 // Productos
 Route::get('productos', 'Admin\ProductsController@index');
+Route::get('productos/lista_precios', 'Admin\ProductsController@price_list');
 Route::post('producto', 'Admin\ProductsController@store');
 Route::put('producto/{id}', 'Admin\ProductsController@update');
 Route::get('producto/{id}', 'Admin\ProductsController@show');
@@ -75,6 +76,7 @@ Route::get('ingresos/num_factura', 'Admin\IncomesController@count_record');
 //
 Route::get('ingreso/detalles/{id}', 'Admin\IncomesController@get_detail');
 Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
+Route::delete('ingreso/anular/{id}', 'Admin\IncomesController@destroy');
 
 // Clientes
 Route::get('clientes', 'Admin\CustomersController@index');
@@ -83,6 +85,7 @@ Route::put('cliente/{id}', 'Admin\CustomersController@update');
 Route::get('cliente/{id}', 'Admin\CustomersController@show');
 Route::get('cliente/restore/{id}', 'Admin\CustomersController@restore');
 Route::delete('cliente/eliminar/{id}', 'Admin\CustomersController@destroy');
+Route::get('seleccionar-cliente', 'Admin\CustomersController@select_customer');
 
 Route::get('ventas', 'Admin\SalesController@index');
 

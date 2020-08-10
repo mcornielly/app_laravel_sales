@@ -10,41 +10,10 @@ class Provider extends Model
 {
     use LaravelVueDatatableTrait;
     
-    protected $fillable = ['customer_id','name','url','contact_phone'];
-    
-    public function getRouteKeyName()
-    {
-        return 'url';
-    }
-
-    public static function create(array $attributes = [])
-    {
-        $category = static::query()->create($attributes);
-        $category->generateUrl();
-
-        return $category;
-    }
-    
-    public function generateUrl()
-    {
-    
-        $url = Str::slug($this->name, '-');
-       
-        if($this::whereUrl($url)->exists())
-        {
-            $url = $url ."-" . $this->id;
-        }
-
-        $this->url = $url;
-
-        $this->save();
-    }
+    protected $fillable = ['id','name','contact_phone'];
     
     protected $dataTableColumns = [
         'id' => [
-            'searchable' => true,
-        ],
-        'customer_id' => [
             'searchable' => true,
         ],
         'name' => [
@@ -60,7 +29,7 @@ class Provider extends Model
         "belongsTo" => [
             'customer' => [
                 "model" => \App\Customer::class,
-                'foreign_key' => 'customer_id',
+                'foreign_key' => 'id',
                 'columns' => [
                     'name' => [
                         'searchable' => true,
@@ -87,5 +56,15 @@ class Provider extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords($value);
+    }
+
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
     }
 }

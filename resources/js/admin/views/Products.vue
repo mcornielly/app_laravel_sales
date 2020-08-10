@@ -119,15 +119,15 @@ export default {
                     orderable: true,
                 },
                 {
+                    label: 'Categoría',
+                    name: 'category.name',
+                    orderable: true,
+                },
+                {
                     label: 'Precio',
                     name: 'price',
                     orderable: true,
                     component: DataTableCurrencyCell
-                },
-                {
-                    label: 'Categoría',
-                    name: 'category.name',
-                    orderable: true,
                 },
                 {
                     label: 'Estatus',

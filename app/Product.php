@@ -14,11 +14,31 @@ class Product extends Model
     protected $dates = ['deleted_at']; //Registramos la nueva columna
 
     protected $fillable = ['name','url','category_id','code','price','description','stock','margin_gain_u',
-                           'divisa_unit','wholesale_quantity','margin_gain_w','wholesale_divisa','status'];
+                           'divisa_unit','wholesale_quantity','margin_gain_w','wholesale_divisa','status', 'user_id'];
     
     public function getRouteKeyName()
     {
         return 'url';
+    }
+
+    public static function create(array $attributes = [])
+    {
+        $product = static::query()->create($attributes);
+        $product->generateUrl();
+        return $product;
+    }
+
+    public function generateUrl()
+    {
+        $url = Str::slug($this->name, '-');
+
+        if($this::whereUrl($url)->exists())
+        {
+            $url = $url ."-" . $this->id;
+        }
+
+        $this->url = $url;
+        $this->save();
     }
 
     protected $dataTableColumns = [
@@ -91,28 +111,6 @@ class Product extends Model
             return "INACTIVO";
         }
 
-    }
-
-    public static function create(array $attributes = [])
-    {
-        // $attributes['user_id'] = auth()->id();
-        $product = static::query()->create($attributes);
-        $product->generateUrl();
-        return $product;
-    }
-
-    public function generateUrl()
-    {
-        $url = Str::slug($this->name);
-
-        if($this::whereUrl($url)->exists())
-        {
-            $url = $url ."-" . $this->id;
-        }
-
-        $this->url = $url;
-
-        $this->save();
     }
 
     public function photos()

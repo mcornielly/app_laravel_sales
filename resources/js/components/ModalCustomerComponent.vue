@@ -13,9 +13,14 @@
                         <div id="form-provider">
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label">Cliente</label>
-                                <div class="col-md-9">
-                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Cliente" v-model="data.name" :disabled="storeup">
-                                <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span>
+                                 <div class="input-group col-md-9">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user-tag"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Cliente" v-model="data.name" :disabled="storeup">
+                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -35,29 +40,44 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label">N° Documento</label>
-                                <div class="col-md-9">
-                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="data.num_document" :disabled="storeup">
-                                <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_document[0]"></span>
+                                <div class="input-group col-md-9">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-address-card"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="data.num_document" maxlength="10" :disabled="storeup">
+                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_document[0]"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label">N° de Teléfono</label>
-                                <div class="col-md-9">
-                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Documento" v-model="data.num_phone" :disabled="storeup">
-                                <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_phone[0]"></span>
+                                <div class="input-group col-md-9">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-phone"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-mask="'(###) ###-##-##'" placeholder="(###) ###-##-##" v-model="data.num_phone" :disabled="storeup">
+                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_phone[0]"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label">Email</label>
-                                <div class="col-md-9">
-                                <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="data.email" :disabled="storeup">
-                                <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span>
+                                <div class="input-group col-md-9">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-envelope"></i>
+                                            </span>
+                                        </div>
+                                    <input type="text" class="form-control text-lowercase" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="data.email" :disabled="storeup">
+                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label">Dirección</label>
                                 <div class="col-md-9">
-                                <textarea class="form-control" :class="{'is-invalid' : errors}" cols="60" rows="3" v-model="data.address" :disabled="storeup" placeholder="Ingrese dirección"></textarea>
+                                <textarea class="form-control text-capitalize" :class="{'is-invalid' : errors}" cols="60" rows="3" v-model="data.address" :disabled="storeup" placeholder="Ingrese dirección"></textarea>
                                 <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.address[0]"></span>
                                 </div>
                             </div>
@@ -80,7 +100,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+import {mask} from 'vue-the-mask'
 
 export default {
     props:{
@@ -129,6 +149,7 @@ export default {
     },
     computed:{
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         }
     },

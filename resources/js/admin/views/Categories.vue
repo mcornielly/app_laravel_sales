@@ -119,7 +119,7 @@ export default {
                     orderable: false,
                     component: BtnCategoryComponentVue,
                     event: "click",
-                    handler: this.modalCategory
+                    handler: this.selectAction
                 },
 
             ],
@@ -165,7 +165,7 @@ export default {
             this.action = true;
             this.storeup = false;
         },
-        modalCategory(data, action){
+        selectAction(data, action){
             switch(action){
     			    case 'edit':
                         {

@@ -203,6 +203,13 @@ class IncomesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $income = Income::findOrFail($id);
+        $income->status = '0';
+        $income->save();
+
+        if(request()->wantsJson())
+        {
+            return $income;
+        }
     }
 }

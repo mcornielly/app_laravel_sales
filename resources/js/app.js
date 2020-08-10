@@ -49,6 +49,9 @@ Vue.component('prices-product', require('./components/PricesProductComponent.vue
 Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
 Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);
 Vue.component('income-invoice', require('./components/IncomeInvoiceComponent.vue').default);
+Vue.component('sale-customer', require('./components/SaleCustomerComponent.vue').default);
+Vue.component('sale-product', require('./components/SaleProductComponent.vue').default);
+Vue.component('sale-invoice', require('./components/SaleInvoiceComponent.vue').default);
 Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
 Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
@@ -58,6 +61,17 @@ Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').d
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.filter('currency', function (value) {
+
+    if(!value) return ''
+    // var formatter = new Intl.NumberFormat('es-ES',{
+    //     minimumFractionDigits: 2 
+    // });
+    let val = (value/1).toFixed(2).replace('.', ',');
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    // return formatter.format(value);
+}); 
 
 const app = new Vue({
     el: '#app',

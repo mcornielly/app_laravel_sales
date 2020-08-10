@@ -63,7 +63,8 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
 import StatusComponentVue from '../../components/StatusComponent.vue';
-import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+import DataTableCurrencyUnitDivisa from '../../components/DataTableCurrencyUnitDivisa.vue';
+import DataTableCurrencyWholeDivisa from '../../components/DataTableCurrencyWholeDivisa.vue';
 import DataTableCurrencyWholesale from '../../components/DataTableCurrencyWholesale.vue';
 import DataTableCurrencyUnit from '../../components/DataTableCurrencyUnit.vue';
 import BtnPricesListComponent from '../../components/BtnPricesListComponent.vue';
@@ -82,7 +83,8 @@ export default {
     components:{
         BtnProductsComponentVue,
         StatusComponentVue,
-        DataTableCurrencyCell,
+        DataTableCurrencyUnitDivisa,
+        DataTableCurrencyWholeDivisa,
         DataTableCurrencyWholesale,
         DataTableCurrencyUnit,
         BtnPricesListComponent,
@@ -95,7 +97,7 @@ export default {
             code:'',
             titlePage:'Lista de Precios',
             routePage:'Lista de Precios',
-            url:"api/productos",
+            url:"api/productos/lista_precios",
             title: '',
             tableProps: {
                 search: '',
@@ -131,26 +133,28 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'P. Bs.',
+                    label: 'P.U Bs.',
                     name: 'price',
                     orderable: true,
                     component: DataTableCurrencyUnit
                 },
                 {
-                    label: 'P. $',
+                    label: 'P.U.$',
                     name: 'divisa_unit',
                     orderable: true,
+                    component: DataTableCurrencyUnitDivisa
                 },
                 {
-                    label: 'P. Mayor Bs.',
+                    label: 'P.M Bs.',
                     name: 'price_wholesale',
                     orderable: true,
                     component: DataTableCurrencyWholesale
                 },
                 {
-                    label: 'P. Mayor $',
+                    label: 'P.M.$',
                     name: 'wholesale_divisa',
                     orderable: true,
+                    component: DataTableCurrencyWholeDivisa
                 },
                 {
                     label: 'Estatus',

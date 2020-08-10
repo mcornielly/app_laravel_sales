@@ -16,7 +16,6 @@ class CreateProvidersTable extends Migration
         Schema::create('providers', function (Blueprint $table) {
             $table->unsignedInteger('id');
             $table->string('name')->nullable();
-            $table->string('url')->nullable();
             $table->string('contact_phone')->nullable();
             $table->timestamps();
         });

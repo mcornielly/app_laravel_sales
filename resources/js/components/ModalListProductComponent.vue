@@ -95,6 +95,8 @@ export default {
             ],
             selectedRow: {},
             product:{},
+            wholesale_quantity: 0,
+            price: 0,
             isLoading: false
         }
     },
@@ -106,6 +108,8 @@ export default {
     methods:{
         selectProduct(data){
             this.product = data;
+            this.wholesale_quantity = this.product.wholesale_quantity;
+            this.price = this.product.price;
             console.log(this.product.id)
             //se consulta el producto exitente en la lista
             this.$parent.findProduct(this.product.id);
@@ -113,6 +117,8 @@ export default {
             setTimeout(() => {
                 if(this.item == false){
                     this.$emit('selectProduct', this.product);
+                    this.$emit('saleWhole', this.wholesale_quantity);
+                    this.$emit('salePrice', this.price);
                     toastr.success("El producto fue agregado.");
                     this.closeModal();
                 }else{

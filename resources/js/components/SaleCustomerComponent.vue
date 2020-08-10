@@ -1,20 +1,20 @@
 <template>
     <div class="card card-default card-outline">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-industry">&nbsp;</i>Proveedor</h3>
+            <h3 class="card-title"><i class="fas fa-user-circle">&nbsp;</i>Cliente</h3>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-9">
                     <v-select
                         ref="theSelect"
-                        @search="selectProvider"
+                        @search="selectCliente"
                         @input="setSelected"
                         v-model="selected"
                         :value="value.selected"
                         label="name"
-                        :options="providers"
-                        placeholder="Buscar Proveedores">
+                        :options="customers"
+                        placeholder="Buscar Clientes">
                         <span slot="no-options" @click="$refs.select.open=false">
                             Lo sentimos. No existe coincidencia, en la busqueda.
                         </span>
@@ -23,7 +23,7 @@
                 <div class="col-md-3">
                     <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success float-right" style="padding-top: 6px;">
                         <input type="checkbox" class="custom-control-input" id="customSwitch3" v-model="checked" @click="inputChange">
-                        <label class="custom-control-label" for="customSwitch3">Nuevo Proveedor </label>
+                        <label class="custom-control-label" for="customSwitch3">Nuevo Cliente</label>
                     </div>
                 </div>
             </div>
@@ -32,17 +32,17 @@
                     <transition name="fade">
                         <div v-show="checked">
                             <hr>
-                            <form role="form" method="POST" @submit.prevent="storeProvider()">
+                            <form role="form" method="POST" @submit.prevent="storeCustomer()">
                                 <div id="form-provider">
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Proveedor</label>
+                                        <label class="col-md-3 form-control-label">Cliente</label>
                                         <div class="input-group col-md-9">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <i class="fas fa-industry"></i>
+                                                    <i class="fas fa-user-tag"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Proveedor" v-model="provider.name" :disabled="storeup">
+                                            <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Cliente" v-model="customer.name" :disabled="storeup">
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.name[0]"></span>
                                         </div>
                                     </div>
@@ -68,7 +68,7 @@
                                                     <i class="far fa-address-card"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="provider.num_document" maxlength="10" :disabled="storeup">
+                                            <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese N° Docuemnto" v-model="customer.num_document" maxlength="10" :disabled="storeup">
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.num_document[0]"></span>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                                     <i class="fas fa-phone"></i>
                                                 </span>
                                             </div>
-                                            <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                            <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="customer.num_phone" :disabled="storeup">
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.num_phone[0]"></span>
                                         </div>
                                     </div>
@@ -92,40 +92,15 @@
                                                     <i class="fas fa-envelope"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="provider.email" :disabled="storeup">
+                                            <input type="text" class="form-control" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="customer.email" :disabled="storeup">
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.email[0]"></span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-md-3 form-control-label">Dirección</label>
                                         <div class="col-md-9">
-                                        <textarea class="form-control text-capitalize" :class="{'is-invalid' : errors}" cols="60" rows="3" v-model="provider.address" placeholder="Ingrese dirección" :disabled="storeup"></textarea>
+                                        <textarea class="form-control text-capitalize" :class="{'is-invalid' : errors}" cols="60" rows="3" v-model="customer.address" placeholder="Ingrese dirección" :disabled="storeup"></textarea>
                                         <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.address[0]"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Persona Contacto</label>
-            
-                                        <div class="input-group col-md-9">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-user"></i>
-                                                </span>
-                                            </div>
-                                            <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Contacto" v-model="provider.contact_name" :disabled="storeup">
-                                            <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.name_contact[0]"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">N° Tlf de Contacto</label>
-                                        <div class="input-group col-md-9">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-phone"></i>
-                                                </span>
-                                            </div>
-                                            <input type="tel" v-mask="'(###) ###-##-##'"  class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.contact_phone" :disabled="storeup">
-                                            <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.contact_phone[0]"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +114,7 @@
             <!-- /.card-body -->
             <div v-show="checked" class="card-footer">
                 <button type="submit" class="btn btn-default btn-sm" @click.prevent="closeForm()">Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm float-right" @click.prevent="storeProvider()">Agregar</button>
+                <button type="submit" class="btn btn-info btn-sm float-right" @click.prevent="storeCustomer()">Agregar</button>
             </div>
             <!-- /.card-footer -->
         </transition>
@@ -154,21 +129,19 @@ export default {
     directives: {mask},
     data(){
         return {
-            provider:{
+            customer:{
                 name:'',
                 type_document:'',
                 num_document:'',
                 num_phone:'',
                 email:'',
                 address:'',
-                contact_name:'',
-                contact_phone:''
             },
             type_document:'',
             search:'',
-            provider_id: 0,
+            customer_id: 0,
             selectedProvider:{},
-            providers:[],
+            customers:[],
             selected: null,
             value:'',
             checked:false,
@@ -183,17 +156,17 @@ export default {
         }
     },
     methods:{
-        selectProvider(search, loading){
+        selectCliente(search, loading){
             let me = this;
             loading(true);
             setTimeout(() => {            
-                var url = '/api/seleccionar-proveedor?filter='+search;
+                var url = '/api/seleccionar-cliente?filter='+search;
                 axios.get(url).then(function (response){
 
                     var result = response.data;
                     q: search
                     if(result.length > 0){
-                        me.providers = result;
+                        me.customers = result;
                     }else{
                         me.selected=null;
                     }
@@ -210,16 +183,9 @@ export default {
         setSelected(value){
             if(value){
                 console.log(value)
-                this.selectedProvider = value;
-                this.provider_id = value.id;
-                this.$emit('selectedProvider', this.selectedProvider);    
-                // console.log(this.selectedProvider)  
-                // this.provider.push({
-                //     id: value.id,
-                //     name: value.name,
-                //     num_document: value.num_document,
-                // });
-                // console.log(this.provider[0])
+                this.selectedCustomer = value;
+                this.customer_id = value.id;
+                this.$emit('selectedCustomer', this.selectedCustomer);    
             }
         },
         inputChange(){
@@ -228,23 +194,21 @@ export default {
         },
         closeForm(){
             this.checked = false;
-            this.provider={};
+            this.customer={};
             this.errors='';
         },
-        storeProvider(){
-            var url = 'api/proveedor';
+        storeCustomer(){
+            var url = 'api/cliente';
             axios.post(url,{
-                'name': this.provider.name,
+                'name': this.customer.name,
                 'type_document':  this.type_document,
-                'num_document': this.provider.num_document, 
-                'num_phone': this.provider.num_phone, 
-                'email': this.provider.email, 
-                'address': this.provider.address, 
-                'name_contact': this.provider.contact_name, 
-                'contact_phone': this.provider.contact_phone,
+                'num_document': this.customer.num_document, 
+                'num_phone': this.customer.num_phone, 
+                'email': this.customer.email, 
+                'address': this.customer.address, 
                 'user_id': this.user.id,  
             }).then(response => {
-                toastr.success('El Proveedor fue registrado.');
+                toastr.success('El Cliente fue registrado.');
                 this.closeForm();
             }).catch(error => {
                 var errors = error.response.data.errors;

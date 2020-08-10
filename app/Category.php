@@ -45,9 +45,7 @@ class Category extends Model
         $category->generateUrl();
 
         return $category;
-    }
-
-    
+    }  
 
     public function generateUrl()
     {

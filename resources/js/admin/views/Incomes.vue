@@ -66,11 +66,13 @@
                                 </tab-content>
 
                                 <tab-content title="Producto" icon="ti-bag" :before-change="validateProduct">
-                                    <income-product :divisa="divisa" @addProduct="detail_incomes = $event"></income-product>
+                                    <income-product :divisa="divisa" :typeCurrency="typeCurrency" @addProduct="detail_incomes = $event"></income-product>
                                 </tab-content>
 
                                 <tab-content title="Ingreso" icon="ti-receipt" :before-change="validateInvoice">
-                                    <income-invoice :detail_incomes="detail_incomes" :provider="provider" 
+                                    <income-invoice :detail_incomes="detail_incomes" 
+                                    :provider="provider"
+                                    :typeCurrency="typeCurrency" 
                                     @selectType="type_voucher = $event" 
                                     @numVoucher="num_voucher = $event"
                                     @numBill="num_bill = $event"
@@ -143,7 +145,7 @@
                                     <td>{{ detail_income.name }}</td>
                                     <td>{{ detail_income.quantity }}</td>
                                     <td>{{ detail_income.price }}</td>
-                                    <td>{{ detail_income.price * detail_income.quantity | numeralFormat('0.00[,]00')}}</td>
+                                    <td>{{ detail_income.price * detail_income.quantity | currency }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -165,15 +167,15 @@
                                     <table class="table">
                                     <tbody><tr>
                                         <th style="width:50%">Subtotal:</th>
-                                        <td class="text-right">Bs.{{ (calculateTotal-totalTax).toFixed(2) | numeralFormat('0.00[,]00') }}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ (calculateTotal-totalTax).toFixed(2) | currency }}</td>
                                     </tr>
                                     <tr>
                                         <th>IVA <span>({{ income.tax*100 }}%)</span></th>
-                                        <td class="text-right">Bs.{{ totalTax=(total*income.tax).toFixed(2) | numeralFormat('0.00[,]00') }}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax=(total*income.tax).toFixed(2) | currency }}</td>
                                     </tr>
                                     <tr>
                                         <th>Total:</th>
-                                        <td class="text-right">Bs.{{ (total=calculateTotal).toFixed(2) | numeralFormat('0.00[,]00')}}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ (total=calculateTotal).toFixed(2) | currency}}</td>
                                     </tr>
                                     </tbody></table>
                                 </div>
@@ -200,7 +202,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 
 
 import Vue from 'vue';
@@ -243,8 +245,10 @@ export default {
             routePage:'Ingresos',
             divisa: 0,
             vincome: 1,
+            typeCurrency: 'Bs.',
             create: false,
             title: 'Nuevo Ingreso',
+            id:0,
             tableProps: {
                 search: '',
                 length: 10,
@@ -300,7 +304,7 @@ export default {
                     orderable: false,
                     component: BtnIncomesComponentVue,
                     event: "click",
-                    handler: this.showIncome
+                    handler: this.selectAction
                 },
 
             ],
@@ -311,7 +315,6 @@ export default {
             loadingWizard: false,
             errorMsg: null,
             provider: {},
-            income_id:0,
             income: {},
             products: [],
             detail_incomes: [],
@@ -329,6 +332,7 @@ export default {
     },
     computed:{
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         },
         calculateTotal: function(){
@@ -360,9 +364,6 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
-        createIncome(){
-            this.vincome = 2;
-        },
         getDivisa(){
             var url = "api/divisa/precio";
             axios.get(url).then(response => {
@@ -371,6 +372,9 @@ export default {
             }).catch(error =>{
                 console.log(error.response.data);
             });
+        },
+        createIncome(){
+            this.vincome = 2;
         },
         onComplete(){
             toastr["info"]("Ingreso de Productos completados con exito..!!", "Comprobante de Ingreso");
@@ -429,6 +433,25 @@ export default {
             }, 1000)
           }) 
         },
+        selectAction(data, action){
+            switch(action){
+                case 'show':
+                    {
+                        this.title = "Ingreso";
+                        this.id = data.id;    
+                        this.vincome = 3;
+                        this.income = data;
+                        this.showIncome(this.id);
+                        break;
+                    }
+                case 'delete':
+                    {         
+                        this.id = data.id;                   
+                        this.deleteIncome(this.id);
+                        break;
+                    }
+            }
+        },
         storeIncome(){
                 var url = `api/ingreso`;
                 axios.post(url,{
@@ -452,13 +475,8 @@ export default {
                 });
 
         },
-        showIncome(data){
-            console.log(data)
-            this.title= "Ingreso";
-            this.vincome = 3;
-            this.income = data;
-            this.income_id = data.id;
-                var url = `api/ingreso/detalles/${this.income_id}`;
+        showIncome(id){
+                var url = `api/ingreso/detalles/${id}`;
                 axios.get(url).then(response =>{
                     this.detail_incomes = response.data.detail_incomes;
                     console.log(this.detail_incomes);
@@ -469,13 +487,25 @@ export default {
                     console.log(this.errors)
                 });
         },
+        deleteIncome(id){
+            var url = `/api/ingreso/anular/${id}`;
+            axios.delete(url).then(response => {
+                this.reloadTable();
+                toastr.error('El ingreso fue anulado.');
+                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+
+            }).catch(error => {
+                console.log(error);
+                var errors = error.response.data.errors;
+                this.errors = errors;
+            });
+        },
         back_page(){
             this.vincome = 1;
-            // this.$parent.reloadTable();
             this.reloadTable();
         },  
         createPDF(){
-            window.open('api/ingreso/pdf/' + this.income_id);
+            window.open('api/ingreso/pdf/' + this.id);
         }
     }
 }

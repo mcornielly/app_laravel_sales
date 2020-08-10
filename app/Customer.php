@@ -44,10 +44,10 @@ class Customer extends Model
 
     public static function create(array $attributes = [])
     {
-        $category = static::query()->create($attributes);
-        $category->generateUrl();
+        $customer = static::query()->create($attributes);
+        $customer->generateUrl();
 
-        return $category;
+        return $customer;
     }
     
     public function generateUrl()
@@ -73,5 +73,10 @@ class Customer extends Model
     public function sales()
     {
         return $this->hasMany(Sale::class);
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords($value);
     }
 }
