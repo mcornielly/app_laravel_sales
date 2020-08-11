@@ -12,6 +12,5 @@ $factory->define(Provider::class, function (Faker $faker) {
         'id' => rand(1,25),  
         'name' => $name,
         'contact_phone' => $faker->tollFreePhoneNumber,
-        'url' => Str::slug($name),
     ];
 });

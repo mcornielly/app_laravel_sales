@@ -56,8 +56,8 @@
                         </div>
                     </div>
                     <div class="col-md-2">
+                        <label for="">Cantidad Mayor <span class="text-danger">(*)</span></label>
                         <div class="input-group">
-                            <label for="">Cantidad Mayor <span class="text-danger">(*)</span></label>
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
                                 <input type="checkbox">
