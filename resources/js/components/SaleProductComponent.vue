@@ -74,7 +74,7 @@
                     </div>
                     <div class="col-md-1" style="margin-block: inherit; padding-top: 7px;">
                         <div class="form-group">
-                            <button :disabled="btnDiscount" @click="costBalance(product)" data-toggle="modal" data-target="#modal-cost" class="btn btn-block btn-primary float-right" title="Descuento %">
+                            <button :disabled="btnDiscount" @click.stop="costBalance(product)" data-toggle="modal" data-target="#modal-cost" class="btn btn-block btn-primary float-right" title="Descuento %">
                                 <i class="fas fa-percentage" aria-hidden="true">&nbsp;</i>
                             </button>
                         </div>    
@@ -178,6 +178,7 @@ export default {
         return{
             url:"api/producto/search/",
             code:'',
+            codeSearched:'',
             products:[],
             product:{},
             value: '',
@@ -242,7 +243,6 @@ export default {
         calculateTotal: function(){
             var result = 0.0;
             for(var i=0; i<this.detail_incomes.length; i++){
-
                 this.subTotal = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
                 result = this.subTotal;
             }
@@ -296,31 +296,41 @@ export default {
         },
         getDataProduct(){
             var leng_code = this.code.length;
+            var counter = 0;
             var code = this.code;
-            var x = 0;
-            if(leng_code == 13 && x == 0){
-                x=x+1;
-                var url = `${this.url}${code}`;
-                axios.get(url).then(response => {
-                    var product = response.data.product;
-                    var price = product[0].price;
-                    this.wholesale_quantity = product[0].wholesale_quantity;
-                    console.log(product)
-                    if(this.findProduct(product[0].id)==false){
-                        if(product.length){
-                            this.product = response.data.product[0];
-                        }else{
-                            toastr.error("ERROR - Producto no registrado.");
-                            this.clearSearch();
-                        }
-                    }else{
-                        toastr.error("El producto ya se encuentra en la lista.");
-                    }
-                    this.isPrice(price);
-                }).catch(error =>{
-                        // console.log(error.response);
-
-                });
+            this.codeSearched = code;
+            if(leng_code == 13){
+                counter = counter + 1;
+                if(counter == 1){
+                    counter == 0;
+                    console.log(counter)
+                    setTimeout(() => {
+                        var url = `${this.url}${code}`;
+                        axios.get(url).then(response => {
+                            var product = response.data.product;
+                            var price = product[0].price;
+                            var codeSearched = product[0].code;
+                            this.wholesale_quantity = product[0].wholesale_quantity;
+                            console.log(product)
+                            if(this.findProduct(product[0].id)==false){
+                                if(product.length){
+                                    this.product = response.data.product[0];
+                                    this.addQuantity(this.code);
+                                    this.code='';
+                                    
+                                }else{
+                                    toastr.error("ERROR - Producto no registrado.");
+                                    this.clearSearch();
+                                }
+                            }else{
+                                toastr.error("El producto ya se encuentra en la lista.");
+                            }
+                            this.isPrice(price);
+                        }).catch(error =>{
+                                // console.log(error.response);
+                        });
+                    }, 500)
+                }
             }else{
                 if(this.code == ''){
                         this.clearSearch();
@@ -336,6 +346,13 @@ export default {
                 priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
                 console.log(priceSale)
                 this.price = parseFloat(priceSale).toFixed(2);
+            }
+        },
+        addQuantity(code){
+            if(code == this.code){
+                this.quantity += 1;
+            }else{
+                this.quantity = 1;
             }
         },
         clearSearch(){
