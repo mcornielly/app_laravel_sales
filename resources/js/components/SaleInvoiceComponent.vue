@@ -80,20 +80,20 @@
                                     <td>{{ detail_income.name }}</td>
                                     <td>{{ detail_income.quantity }}</td>
                                     <td>{{ detail_income.wholesale_quantity }}</td>
-                                    <td>{{ detail_income.price | numeralFormat('0.00[,]00') }}</td>
-                                    <td class="text-right">{{  detail_income.price*detail_income.quantity | numeralFormat('0.00[,]00') }}</td>
+                                    <td>{{ detail_income.price | currency }}</td>
+                                    <td class="text-right">{{  detail_income.price*detail_income.quantity | currency }}</td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Parcial</strong></td>
-                                    <td class="text-right">Bs. {{ (calculateTotal-totalTax).toFixed(2) | numeralFormat('0.00[,]00') }} </td>
+                                    <td class="text-right">Bs. {{ (calculateTotal-totalTax).toFixed(2) | currency }} </td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Impuesto</strong></td>
-                                    <td class="text-right">Bs. {{ totalTax = (total * iva).toFixed(2) | numeralFormat('0.00[,]00') }} </td>
+                                    <td class="text-right">Bs. {{ totalTax = (total * iva).toFixed(2) | currency }} </td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
-                                    <td class="text-right">Bs. {{ total=calculateTotal | numeralFormat('0.00[,]00') }}</td>
+                                    <td class="text-right">Bs. {{ total=calculateTotal | currency }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -160,7 +160,7 @@ export default {
         calculateTotal: function(){
             var result = 0.0;
             for(var i=0; i<this.detail_incomes.length; i++){
-                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].wholesale_quantity)
+                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
             }
             return result;
         }

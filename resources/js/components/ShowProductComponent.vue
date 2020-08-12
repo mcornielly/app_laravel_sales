@@ -113,7 +113,7 @@
                                         <tbody class="text-muted">
                                             <tr>
                                                 <th width=300>Precio Costo:</th>
-                                                <td align="center">{{ data.price | numeralFormat('0.00[,]00') }}</td>
+                                                <td align="center">{{ data.price | currency }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Margen de Ganancia</th>
@@ -121,11 +121,11 @@
                                             </tr>
                                             <tr>
                                                 <th width=300>Precio Divisa</th>
-                                                <td align="center">{{ divisa_unit | numeralFormat('0.00[,]00 $') }}</td>
+                                                <td align="center">{{ divisa_unit | currency }}</td>
                                             </tr>
                                             <tr>
                                             <th width=300>Precio Venta</th>
-                                                <td align="center">{{ unit_price| numeralFormat('0.00[,]00') }}</td>
+                                                <td align="center">{{ unit_price | currency }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -135,7 +135,7 @@
                                         <tbody class="text-muted">
                                             <tr>
                                                 <th width=300>Precio Costo:</th>
-                                                <td align="center">{{ data.price | numeralFormat('0.00[,]00') }}</td>
+                                                <td align="center">{{ cost_pack | currency }}</td>
                                             </tr>
                                             <tr>
                                                 <th width=300>Margen de Ganancia</th>
@@ -143,11 +143,11 @@
                                             </tr>
                                             <tr>
                                                 <th width=300>Precio Divisa</th>
-                                                <td align="center">{{ wholesale_divisa | numeralFormat('0.00[,]00 $') }}</td>
+                                                <td align="center">{{ wholesale_divisa | currency }}</td>
                                             </tr>
                                             <tr>
                                             <th width=300>Precio Venta</th>
-                                                <td align="center">{{ wholesale_price | numeralFormat('0.00[,]00') }}</td>
+                                                <td align="center">{{ wholesale_price | currency }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -237,26 +237,36 @@ export default {
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+            if(this.data.price > 0){
+                var result = (parseFloat(this.price_gain_u) + parseFloat(this.data.price)).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+            var result = 0.0;
+            if(this.data.price > 0){
+                result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
+            }
             return result;
         },
         wholesale_divisa: function(){
             var result = 0;
             if(this.divisa > 0 || this.wholesale_price > 0){
-                result = (this.wholesale_price / this.divisa).toFixed(2);
+                result = (parseFloat(this.wholesale_price) / this.divisa).toFixed(2);
             }
             return result;
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0 || this.price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+            if(this.data.wholesale_quantity > 0){
+                result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_pack)).toFixed(2);
+            }
+            return result;
+        },
+        cost_pack: function(){
+            var result = 0.0;
+            if(this.data.price){
+                result = this.data.price*this.data.wholesale_quantity;
             }
             return result;
         }

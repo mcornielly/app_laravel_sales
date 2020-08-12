@@ -144,7 +144,7 @@
                                     <td>{{ detail_income.code }}</td>
                                     <td>{{ detail_income.name }}</td>
                                     <td>{{ detail_income.quantity }}</td>
-                                    <td>{{ detail_income.price }}</td>
+                                    <td>{{ detail_income.price | currency }}</td>
                                     <td>{{ detail_income.price * detail_income.quantity | currency }}</td>
                                     </tr>
                                     </tbody>
@@ -167,15 +167,15 @@
                                     <table class="table">
                                     <tbody><tr>
                                         <th style="width:50%">Subtotal:</th>
-                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ (calculateTotal-totalTax).toFixed(2) | currency }}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal-totalTax | currency }}</td>
                                     </tr>
                                     <tr>
                                         <th>IVA <span>({{ income.tax*100 }}%)</span></th>
-                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax=(total*income.tax).toFixed(2) | currency }}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax=total*income.tax | currency }}</td>
                                     </tr>
                                     <tr>
                                         <th>Total:</th>
-                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ (total=calculateTotal).toFixed(2) | currency}}</td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ total=calculateTotal | currency}}</td>
                                     </tr>
                                     </tbody></table>
                                 </div>

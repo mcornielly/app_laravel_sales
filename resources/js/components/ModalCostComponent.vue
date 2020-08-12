@@ -48,8 +48,7 @@
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
-                            </div>
-                            <span><small class="text-white" Monto de Inversión : {{ amount_inv | numeralFormat('0.00[,]00') }}</small></span>    
+                            </div>  
                         </div>
                         <div class="col-md-6">
                             <div class="card card-default card-default">
@@ -104,7 +103,6 @@
 import Vue from 'vue'
 import {IMaskDirective} from 'vue-imask';
 import VueNumerals from 'vue-numerals';
-let user = document.head.querySelector('meta[name="user"]');
 
 export default {
     directives: {
@@ -159,14 +157,15 @@ export default {
     },
     computed:{
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         },
         price_gain_u: {
             get: function(){
                 var result = 0;
                 if(this.price > 0){
-                    this.amount_inv = this.price * this.stock; 
-                    result = (Math.round(this.amount_inv * this.margin_gain_u / 100)).toFixed(2);
+                    // this.amount_inv = this.price * this.stock; 
+                    result = (Math.round(this.price * this.margin_gain_u / 100)).toFixed(2);
                 }
                 return result;
             },
@@ -191,8 +190,8 @@ export default {
         unit_price: {
             get: function(){
                 var result = 0;
-                if(this.stock > 0 || this.price > 0){
-                    var result = ((parseFloat(this.price_gain_u) + parseFloat(this.amount_inv)) / this.stock).toFixed(2);
+                if(this.price > 0){
+                    var result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
                 }
                 return result;
             },
@@ -203,9 +202,11 @@ export default {
         },
         price_gain_w: {
             get: function(){
-                var result = 0;
-                if(this.amount_inv > 0){
-                    var result = (Math.round(this.amount_inv * this.margin_gain_w / 100)).toFixed(2);
+                var result = 0.0;
+                var cost_pack = 0.0;
+                if(this.price > 0){
+                    cost_pack = this.price*this.wholesale_quantity;
+                    result = (Math.round(cost_pack * this.margin_gain_w / 100)).toFixed(2);
                 }
                 return result;
             },
@@ -231,8 +232,10 @@ export default {
         wholesale_price: {
             get: function(){
                 var result = 0;
-                if(this.wholesale_quantity > 0 || this.amount_inv > 0){
-                    result = Math.round((parseFloat(this.price_gain_w) + parseFloat(this.amount_inv))).toFixed(2);
+                var cost_pack = 0.0;
+                if(this.wholesale_quantity > 0 && this.price > 0){
+                    cost_pack = this.price*this.wholesale_quantity;
+                    result = Math.round(parseFloat(this.price_gain_w) + (parseFloat(cost_pack))).toFixed(2);
                 }
                 return result;
             },

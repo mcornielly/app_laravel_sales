@@ -188,7 +188,7 @@ export default {
             btnAdd: true,
             title:'',
             errors:'',
-            item:false
+            item:false,
         }
     },
     created(){
@@ -214,7 +214,7 @@ export default {
         calculateTotal: function(){
             var result = 0.0;
             for(var i=0; i<this.detail_incomes.length; i++){
-                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].wholesale_quantity)
+                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
             }
             return result;
         }

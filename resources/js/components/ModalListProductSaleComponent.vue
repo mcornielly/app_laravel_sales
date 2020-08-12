@@ -37,7 +37,7 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import BtnListProductsComponentVue from './BtnListProductsComponent.vue';
 import StatusComponentVue from './StatusComponent.vue';
-import DataTableCurrencyCell from './DataTableCurrencyCell.vue';
+import DataTableCurrencyUnit from './DataTableCurrencyUnit.vue';
 
 
 Vue.use(DataTable);
@@ -47,7 +47,7 @@ export default {
     components:{
         BtnListProductsComponentVue,
         StatusComponentVue,
-        DataTableCurrencyCell,
+        DataTableCurrencyUnit,
     },
     data(){
         return {
@@ -81,7 +81,7 @@ export default {
                     label: 'Precio',
                     name: 'price',
                     orderable: true,
-                    component: DataTableCurrencyCell
+                    component: DataTableCurrencyUnit
                 },
                 {
                     label: 'Stock',
@@ -106,17 +106,31 @@ export default {
         user(){
             let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
+        },
+        price_gain_u: {
+            get: function(){
+                var result = 0;
+                if(this.product.price){
+                    result = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
+                }
+                return result;
+            },
+            set: function(){
+                var result = 0;
+                return result;
+            }
         }
     },
     methods:{
         selectProduct(data){
             this.product = data;
             this.wholesale_quantity = this.product.wholesale_quantity;
-            this.price = this.product.price;
+            // this.price = this.product.price;
             console.log(this.product.id)
             //se consulta el producto exitente en la lista
             this.$parent.findProduct(this.product.id);
             this.isLoading = true;
+            this.isPrice(this.product.price);
             setTimeout(() => {
                 if(this.item == false){
                     this.$emit('selectProduct', this.product);
@@ -132,7 +146,15 @@ export default {
         },
         closeModal(){
             $('#modal-list-prod').modal('hide');
-        }
+        },
+        isPrice(price){
+            var priceSale = 0.0;
+            this.price_sale = price;
+            console.log(this.price_sale)
+            priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
+            console.log(priceSale)
+            this.price = parseFloat(priceSale).toFixed(2);
+        },
 
     },
 

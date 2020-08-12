@@ -42,21 +42,22 @@
                                 @accept="onAccept" 
                                 class="form-control text-right" 
                                 placeholder="0,00"
+                                readonly
                                 require
                             >
                             </imask-input>    
-                            <span v-show="product.price"><small class="text-primary">Precio act.: {{ product.divisa_unit | currency }}</small></span>
+                            <span v-show="product.price"><small class="text-primary">Precio $ : {{ divisa_product | currency }}</small></span>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="">Cantidad <span class="text-danger">(*)</span></label>
+                            <label for="">Cant. <span class="text-danger">(*)</span></label>
                             <input type="number" min="0" class="form-control text-center" v-model="quantity" placeholder="0">
-                            <span v-show="product.stock"><small class="text-primary">Stock actual:{{ product.stock }}</small></span>
+                            <span v-show="product.stock"><small class="text-primary">Stock actual : {{ product.stock }}</small></span>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <label for="">Cantidad Mayor <span class="text-danger">(*)</span></label>
+                        <label for="">Pack <span class="text-danger">(*)</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -89,56 +90,68 @@
                 <div class="row" v-if="detail_incomes.length">
                     <div class="col-12">
                         <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Productos Agragados</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
-                            <table class="table table-striped text-nowrap">
-                            <thead>
-                                <tr>
-                                <th>Opción</th>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Pack</th>
-                                <th>Precio</th>
-                                <th style="text-align: center;">Sub-Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(detail_income, index) in detail_incomes" :key="detail_income.id">
-                                    <td>
-                                        <button @click="deleteListProduct(index)" type="button" class="btn btn-danger btn-sm" title="Quitar Producto">
-                                            <i class="fas fa-minus-circle"></i>
-                                        </button>
-                                    </td>
-                                    <td>{{ detail_income.name }}</td>
-                                    <td>{{ detail_income.quantity }}</td>
-                                    <td>{{ detail_income.wholesale_quantity }}</td>
-                                    <td>{{ detail_income.price | currency }}</td>
-                                    <td style="text-align: right;">{{ detail_income.price*detail_income.quantity | currency }}</td>
-                                </tr>
-                                <tr style="background-color: #CEECF5;">
-                                    <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal | currency }} </td>
-                                </tr>
-                            </tbody>
-                            </table>
-                        </div>
+                            <div class="card-header">
+                                <h3 class="card-title">Productos Agragados</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-striped text-nowrap">
+                                <thead>
+                                    <tr>
+                                    <th>Opción</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Pack</th>
+                                    <th>Precio</th>
+                                    <th style="text-align: center;">Sub-Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(detail_income, index) in detail_incomes" :key="detail_income.id">
+                                        <td>
+                                            <button @click="deleteListProduct(index)" type="button" class="btn btn-danger btn-sm" title="Quitar Producto">
+                                                <i class="fas fa-minus-circle"></i>
+                                            </button>
+                                        </td>
+                                        <td>{{ detail_income.name }}</td>
+                                        <td>{{ detail_income.quantity }}</td>
+                                        <td>{{ detail_income.wholesale_quantity }}</td>
+                                        <td>{{ detail_income.price | currency }}</td>
+                                        <td style="text-align: right;">{{ detail_income.price*detail_income.quantity | currency }}</td>
+                                    </tr>
+                                    <tr style="background-color: #CEECF5;">
+                                        <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal | currency }} </td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
                         <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
+
+                        <!-- <div class="row" v-if="detail_incomes.length"> -->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control text-right" v-model="divisa_price">
+                                <div class="input-group-append">
+                                    <span class="input-group-text ">.00</span>
+                                </div>
+                            </div>
+                        <!-- </div> -->
                     </div>
                 </div>            
             </div>
         </div>
 
         <div>
-           <modal-list-prod 
+           <modal-list-prod-sale 
                 @selectProduct="product = $event" 
                 @saleWhole="wholesale_quantity = $event" 
-                @salePrice="price = $event" 
-                :item="item"></modal-list-prod> 
+                @salePrice="price = $event"
+                :item="item"></modal-list-prod-sale> 
         </div>     
     </div>
 </template>
@@ -177,8 +190,10 @@ export default {
                 masked: false /* doesn't work with directive */
             },
             price: '',
+            price_sale: 0,
             stock: '',
-            quantity: '',
+            quantity: 0,
+            margin_gain_u: 0,
             wholesale_quantity: 0,
             detail_incomes:[],
             modalCost: false,
@@ -187,29 +202,31 @@ export default {
             title:'',
             errors:'',
             item:false,
+            subTotal: 0,
+            saleUnit:true,
             onAccept (value) {
                 console.log(value)
                 // const maskRef = e.detail;
                 // this.value = maskRef.value;
                 // console.log('accept', maskRef.value);
-            },
+            }
         }
     },
     created(){
         this.setFocus();
     },
     watch: {
-        price: function(){
-            if(this.price != '' && this.quantity != ''){
-                this.btnDiscount = false;
-                this.btnAdd = false;
-            }else{
-                this.btnDiscount = true;
-                this.btnAdd = true;
-            }
-        },
+        // price: function(){
+        //     if(this.price != '' && this.quantity != ''){
+        //         this.btnDiscount = false;
+        //         this.btnAdd = false;
+        //     }else{
+        //         this.btnDiscount = true;
+        //         this.btnAdd = true;
+        //     }
+        // },
         quantity: function(){
-            if(this.price != '' && this.quantity != ''){
+            if(this.quantity > 0){
                 this.btnDiscount = false;
                 this.btnAdd = false;
             }else{
@@ -225,9 +242,44 @@ export default {
         calculateTotal: function(){
             var result = 0.0;
             for(var i=0; i<this.detail_incomes.length; i++){
-                result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
+
+                this.subTotal = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
+                result = this.subTotal;
             }
             return result;
+        },
+        divisa_price: function(){
+            var result = 0.0;
+            if(this.subTotal){
+                result = Math.round(this.subTotal / this.divisa).toFixed();
+            }
+
+            return result;
+        },
+        divisa_product: function(){
+            var result = 0.0;
+            if(this.product.divisa_unit){
+                result = Math.round(this.product.divisa_unit)
+            }
+            return result;
+        },
+        numDecimal: function(){
+            var decimal = Math.floor(parseFloat(this.divisa_price)) - Math.floor(this.divisa_price)
+            console.log(this.divisa_price)
+            return decimal.toFixed(2);
+        },
+        price_gain_u: {
+            get: function(){
+                var result = 0;
+                if(this.product.price){
+                    result = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
+                }
+                return result;
+            },
+            set: function(){
+                var result = 0;
+                return result;
+            }
         }
 
     },
@@ -251,21 +303,20 @@ export default {
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
                     var product = response.data.product;
-                    this.price = product[0].price;
+                    var price = product[0].price;
                     this.wholesale_quantity = product[0].wholesale_quantity;
                     console.log(product)
                     if(this.findProduct(product[0].id)==false){
                         if(product.length){
                             this.product = response.data.product[0];
-                            // this.btnDiscount=false;     
                         }else{
                             toastr.error("ERROR - Producto no registrado.");
-                            // this.btnDiscount=true;     
                             this.clearSearch();
                         }
                     }else{
                         toastr.error("El producto ya se encuentra en la lista.");
                     }
+                    this.isPrice(price);
                 }).catch(error =>{
                         // console.log(error.response);
 
@@ -277,9 +328,19 @@ export default {
                 }
             }
         },
+        isPrice(price){
+            if(this.saleUnit){
+                var priceSale = 0.0;
+                this.price_sale = price;
+                console.log(this.price_sale)
+                priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
+                console.log(priceSale)
+                this.price = parseFloat(priceSale).toFixed(2);
+            }
+        },
         clearSearch(){
             this.product = {};
-            this.price = 0;
+            this.price = '';
             this.wholesale_quantity = 0;
             // this.errors = error.response;
             // this.code = '';

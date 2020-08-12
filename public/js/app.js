@@ -16103,14 +16103,13 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     price_gain_u: function price_gain_u() {
       var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
-      this.p_gain_u = result;
       return result;
     },
     unit_price: function unit_price() {
       var result = 0;
 
-      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+      if (this.data.price > 0) {
+        var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
       }
 
       return result;
@@ -16208,14 +16207,28 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     price_gain_w: function price_gain_w() {
-      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      var result = 0.0;
+
+      if (this.data.price > 0) {
+        result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
+      }
+
       return result;
     },
     wholesale_price: function wholesale_price() {
       var result = 0;
 
-      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+      if (this.data.wholesale_quantity > 0) {
+        result = parseFloat(this.price_gain_w) + parseFloat(this.cost_pack);
+      }
+
+      return result;
+    },
+    cost_pack: function cost_pack() {
+      var result = 0.0;
+
+      if (this.data.price) {
+        result = this.data.price * this.data.wholesale_quantity;
       }
 
       return result;
@@ -16852,7 +16865,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_numerals__WEBPACK_IMPORTED_MO
       var result = 0.0;
 
       for (var i = 0; i < this.detail_incomes.length; i++) {
-        result = result + this.detail_incomes[i].price * this.detail_incomes[i].wholesale_quantity;
+        result = result + this.detail_incomes[i].price * this.detail_incomes[i].quantity;
       }
 
       return result;
@@ -17498,12 +17511,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
-
-
-var _user = document.head.querySelector('meta[name="user"]');
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   directives: {
@@ -17560,15 +17569,16 @@ var _user = document.head.querySelector('meta[name="user"]');
   },
   computed: {
     user: function user() {
-      return JSON.parse(_user.content);
+      var user = document.head.querySelector('meta[name="user"]');
+      return JSON.parse(user.content);
     },
     price_gain_u: {
       get: function get() {
         var result = 0;
 
         if (this.price > 0) {
-          this.amount_inv = this.price * this.stock;
-          result = Math.round(this.amount_inv * this.margin_gain_u / 100).toFixed(2);
+          // this.amount_inv = this.price * this.stock; 
+          result = Math.round(this.price * this.margin_gain_u / 100).toFixed(2);
         }
 
         return result;
@@ -17597,8 +17607,8 @@ var _user = document.head.querySelector('meta[name="user"]');
       get: function get() {
         var result = 0;
 
-        if (this.stock > 0 || this.price > 0) {
-          var result = ((parseFloat(this.price_gain_u) + parseFloat(this.amount_inv)) / this.stock).toFixed(2);
+        if (this.price > 0) {
+          var result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
         }
 
         return result;
@@ -17610,10 +17620,12 @@ var _user = document.head.querySelector('meta[name="user"]');
     },
     price_gain_w: {
       get: function get() {
-        var result = 0;
+        var result = 0.0;
+        var cost_pack = 0.0;
 
-        if (this.amount_inv > 0) {
-          var result = Math.round(this.amount_inv * this.margin_gain_w / 100).toFixed(2);
+        if (this.price > 0) {
+          cost_pack = this.price * this.wholesale_quantity;
+          result = Math.round(cost_pack * this.margin_gain_w / 100).toFixed(2);
         }
 
         return result;
@@ -17641,9 +17653,11 @@ var _user = document.head.querySelector('meta[name="user"]');
     wholesale_price: {
       get: function get() {
         var result = 0;
+        var cost_pack = 0.0;
 
-        if (this.wholesale_quantity > 0 || this.amount_inv > 0) {
-          result = Math.round(parseFloat(this.price_gain_w) + parseFloat(this.amount_inv)).toFixed(2);
+        if (this.wholesale_quantity > 0 && this.price > 0) {
+          cost_pack = this.price * this.wholesale_quantity;
+          result = Math.round(parseFloat(this.price_gain_w) + parseFloat(cost_pack)).toFixed(2);
         }
 
         return result;
@@ -18155,8 +18169,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _user = document.head.querySelector('meta[name="user"]');
-
 
 
 
@@ -18164,7 +18176,7 @@ var _user = document.head.querySelector('meta[name="user"]');
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['item'],
+  props: ['item', 'priceCost'],
   components: {
     BtnListProductsComponentVue: _BtnListProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     StatusComponentVue: _StatusComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -18217,7 +18229,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
   },
   computed: {
     user: function user() {
-      return JSON.parse(_user.content);
+      var user = document.head.querySelector('meta[name="user"]');
+      return JSON.parse(user.content);
     }
   },
   methods: {
@@ -18251,6 +18264,180 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     },
     closeModal: function closeModal() {
       $('#modal-list-prod').modal('hide');
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! laravel-vue-datatable */ "./node_modules/laravel-vue-datatable/dist/laravel-vue-datatable.common.js");
+/* harmony import */ var laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _BtnListProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BtnListProductsComponent.vue */ "./resources/js/components/BtnListProductsComponent.vue");
+/* harmony import */ var _StatusComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./StatusComponent.vue */ "./resources/js/components/StatusComponent.vue");
+/* harmony import */ var _DataTableCurrencyUnit_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DataTableCurrencyUnit.vue */ "./resources/js/components/DataTableCurrencyUnit.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['item', 'priceCost'],
+  components: {
+    BtnListProductsComponentVue: _BtnListProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    StatusComponentVue: _StatusComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    DataTableCurrencyUnit: _DataTableCurrencyUnit_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  data: function data() {
+    return {
+      title: 'Lista de Productos',
+      translate: {
+        nextButton: 'Siguiente',
+        previousButton: 'Anterior',
+        placeholderSearch: 'Buscar..'
+      },
+      theme: "dark",
+      columns: [{
+        label: 'Accióm',
+        name: '',
+        orderable: false,
+        component: _BtnListProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+        event: "click",
+        handler: this.selectProduct
+      }, {
+        label: 'Código',
+        name: 'code',
+        orderable: true
+      }, {
+        label: 'Nombre',
+        name: 'name',
+        orderable: true
+      }, {
+        label: 'Precio',
+        name: 'price',
+        orderable: true,
+        component: _DataTableCurrencyUnit_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+      }, {
+        label: 'Stock',
+        name: 'stock',
+        orderable: true
+      }, {
+        label: 'Estatus',
+        component: _StatusComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+        orderable: true
+      }],
+      selectedRow: {},
+      product: {},
+      wholesale_quantity: 0,
+      price: 0,
+      isLoading: false
+    };
+  },
+  computed: {
+    user: function user() {
+      var user = document.head.querySelector('meta[name="user"]');
+      return JSON.parse(user.content);
+    },
+    price_gain_u: {
+      get: function get() {
+        var result = 0;
+
+        if (this.product.price) {
+          result = Math.round(this.product.price * this.product.margin_gain_u / 100).toFixed(2);
+        }
+
+        return result;
+      },
+      set: function set() {
+        var result = 0;
+        return result;
+      }
+    }
+  },
+  methods: {
+    selectProduct: function selectProduct(data) {
+      var _this = this;
+
+      this.product = data;
+      this.wholesale_quantity = this.product.wholesale_quantity; // this.price = this.product.price;
+
+      console.log(this.product.id); //se consulta el producto exitente en la lista
+
+      this.$parent.findProduct(this.product.id);
+      this.isLoading = true;
+      this.isPrice(this.product.price);
+      setTimeout(function () {
+        if (_this.item == false) {
+          _this.$emit('selectProduct', _this.product);
+
+          _this.$emit('saleWhole', _this.wholesale_quantity);
+
+          _this.$emit('salePrice', _this.price);
+
+          toastr.success("El producto fue agregado.");
+
+          _this.closeModal();
+        } else {
+          toastr.error("El producto ya se encuentra en la lista.");
+        }
+
+        _this.isLoading = false;
+      }, 500);
+    },
+    closeModal: function closeModal() {
+      $('#modal-list-prod').modal('hide');
+    },
+    isPrice: function isPrice(price) {
+      var priceSale = 0.0;
+      this.price_sale = price;
+      console.log(this.price_sale);
+      priceSale = parseFloat(this.price_sale) + parseFloat(this.price_gain_u);
+      console.log(priceSale);
+      this.price = parseFloat(priceSale).toFixed(2);
     }
   }
 });
@@ -18695,13 +18882,18 @@ var _user = document.head.querySelector('meta[name="user"]');
       var result = 0;
 
       if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+        var result = (parseFloat(this.price_gain_u) + parseFloat(this.data.price)).toFixed(2);
       }
 
       return result;
     },
     price_gain_w: function price_gain_w() {
-      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      var result = 0.0;
+
+      if (this.data.price > 0) {
+        result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
+      }
+
       return result;
     },
     wholesale_divisa: function wholesale_divisa() {
@@ -18717,7 +18909,16 @@ var _user = document.head.querySelector('meta[name="user"]');
       var result = 0;
 
       if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+        result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_pack)).toFixed(2);
+      }
+
+      return result;
+    },
+    cost_pack: function cost_pack() {
+      var result = 0.0;
+
+      if (this.data.price) {
+        result = this.data.price * this.data.wholesale_quantity;
       }
 
       return result;
@@ -20466,7 +20667,7 @@ __webpack_require__.r(__webpack_exports__);
       var result = 0.0;
 
       for (var i = 0; i < this.detail_incomes.length; i++) {
-        result = result + this.detail_incomes[i].price * this.detail_incomes[i].wholesale_quantity;
+        result = result + this.detail_incomes[i].price * this.detail_incomes[i].quantity;
       }
 
       return result;
@@ -20661,6 +20862,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -20692,8 +20906,10 @@ __webpack_require__.r(__webpack_exports__);
 
       },
       price: '',
+      price_sale: 0,
       stock: '',
-      quantity: '',
+      quantity: 0,
+      margin_gain_u: 0,
       wholesale_quantity: 0,
       detail_incomes: [],
       modalCost: false,
@@ -20702,6 +20918,8 @@ __webpack_require__.r(__webpack_exports__);
       title: '',
       errors: '',
       item: false,
+      subTotal: 0,
+      saleUnit: true,
       onAccept: function onAccept(value) {
         console.log(value); // const maskRef = e.detail;
         // this.value = maskRef.value;
@@ -20713,17 +20931,17 @@ __webpack_require__.r(__webpack_exports__);
     this.setFocus();
   },
   watch: {
-    price: function price() {
-      if (this.price != '' && this.quantity != '') {
-        this.btnDiscount = false;
-        this.btnAdd = false;
-      } else {
-        this.btnDiscount = true;
-        this.btnAdd = true;
-      }
-    },
+    // price: function(){
+    //     if(this.price != '' && this.quantity != ''){
+    //         this.btnDiscount = false;
+    //         this.btnAdd = false;
+    //     }else{
+    //         this.btnDiscount = true;
+    //         this.btnAdd = true;
+    //     }
+    // },
     quantity: function quantity() {
-      if (this.price != '' && this.quantity != '') {
+      if (this.quantity > 0) {
         this.btnDiscount = false;
         this.btnAdd = false;
       } else {
@@ -20740,10 +20958,49 @@ __webpack_require__.r(__webpack_exports__);
       var result = 0.0;
 
       for (var i = 0; i < this.detail_incomes.length; i++) {
-        result = result + this.detail_incomes[i].price * this.detail_incomes[i].quantity;
+        this.subTotal = result + this.detail_incomes[i].price * this.detail_incomes[i].quantity;
+        result = this.subTotal;
       }
 
       return result;
+    },
+    divisa_price: function divisa_price() {
+      var result = 0.0;
+
+      if (this.subTotal) {
+        result = Math.round(this.subTotal / this.divisa).toFixed();
+      }
+
+      return result;
+    },
+    divisa_product: function divisa_product() {
+      var result = 0.0;
+
+      if (this.product.divisa_unit) {
+        result = Math.round(this.product.divisa_unit);
+      }
+
+      return result;
+    },
+    numDecimal: function numDecimal() {
+      var decimal = Math.floor(parseFloat(this.divisa_price)) - Math.floor(this.divisa_price);
+      console.log(this.divisa_price);
+      return decimal.toFixed(2);
+    },
+    price_gain_u: {
+      get: function get() {
+        var result = 0;
+
+        if (this.product.price) {
+          result = Math.round(this.product.price * this.product.margin_gain_u / 100).toFixed(2);
+        }
+
+        return result;
+      },
+      set: function set() {
+        var result = 0;
+        return result;
+      }
     }
   },
   methods: {
@@ -20773,21 +21030,23 @@ __webpack_require__.r(__webpack_exports__);
         var url = "".concat(this.url).concat(code);
         axios.get(url).then(function (response) {
           var product = response.data.product;
-          _this2.price = product[0].price;
+          var price = product[0].price;
           _this2.wholesale_quantity = product[0].wholesale_quantity;
           console.log(product);
 
           if (_this2.findProduct(product[0].id) == false) {
             if (product.length) {
-              _this2.product = response.data.product[0]; // this.btnDiscount=false;     
+              _this2.product = response.data.product[0];
             } else {
-              toastr.error("ERROR - Producto no registrado."); // this.btnDiscount=true;     
+              toastr.error("ERROR - Producto no registrado.");
 
               _this2.clearSearch();
             }
           } else {
             toastr.error("El producto ya se encuentra en la lista.");
           }
+
+          _this2.isPrice(price);
         })["catch"](function (error) {// console.log(error.response);
         });
       } else {
@@ -20797,9 +21056,19 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
+    isPrice: function isPrice(price) {
+      if (this.saleUnit) {
+        var priceSale = 0.0;
+        this.price_sale = price;
+        console.log(this.price_sale);
+        priceSale = parseFloat(this.price_sale) + parseFloat(this.price_gain_u);
+        console.log(priceSale);
+        this.price = parseFloat(priceSale).toFixed(2);
+      }
+    },
     clearSearch: function clearSearch() {
       this.product = {};
-      this.price = 0;
+      this.price = '';
       this.wholesale_quantity = 0; // this.errors = error.response;
       // this.code = '';
     },
@@ -21160,21 +21429,26 @@ Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_1___default.a); // default locale 
     unit_price: function unit_price() {
       var result = 0;
 
-      if (this.data.wholesale_quantity > 0 || this.data.price > 0) {
-        var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+      if (this.data.price > 0) {
+        var result = (parseFloat(this.price_gain_u) + parseFloat(this.data.price)).toFixed(2);
       }
 
       return result;
     },
     price_gain_w: function price_gain_w() {
-      var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+      var result = 0.0;
+
+      if (this.data.price > 0) {
+        result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
+      }
+
       return result;
     },
     wholesale_divisa: function wholesale_divisa() {
       var result = 0;
 
       if (this.divisa > 0 || this.wholesale_price > 0) {
-        result = (this.wholesale_price / this.divisa).toFixed(2);
+        result = (parseFloat(this.wholesale_price) / this.divisa).toFixed(2);
       }
 
       return result;
@@ -21182,8 +21456,17 @@ Vue.use(vue_numerals__WEBPACK_IMPORTED_MODULE_1___default.a); // default locale 
     wholesale_price: function wholesale_price() {
       var result = 0;
 
-      if (this.data.wholesale_quantity > 0 || this.price > 0) {
-        result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+      if (this.data.wholesale_quantity > 0) {
+        result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_pack)).toFixed(2);
+      }
+
+      return result;
+    },
+    cost_pack: function cost_pack() {
+      var result = 0.0;
+
+      if (this.data.price) {
+        result = this.data.price * this.data.wholesale_quantity;
       }
 
       return result;
@@ -66150,7 +66433,13 @@ var render = function() {
                                   _vm._v(_vm._s(detail_income.quantity))
                                 ]),
                                 _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(detail_income.price))]),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("currency")(detail_income.price)
+                                    )
+                                  )
+                                ]),
                                 _vm._v(" "),
                                 _c("td", [
                                   _vm._v(
@@ -66195,9 +66484,7 @@ var render = function() {
                                     " " +
                                       _vm._s(
                                         _vm._f("currency")(
-                                          (
-                                            _vm.calculateTotal - _vm.totalTax
-                                          ).toFixed(2)
+                                          _vm.calculateTotal - _vm.totalTax
                                         )
                                       )
                                   )
@@ -66225,9 +66512,8 @@ var render = function() {
                                     " " +
                                       _vm._s(
                                         _vm._f("currency")(
-                                          (_vm.totalTax = (
-                                            _vm.total * _vm.income.tax
-                                          ).toFixed(2))
+                                          (_vm.totalTax =
+                                            _vm.total * _vm.income.tax)
                                         )
                                       )
                                   )
@@ -66248,8 +66534,7 @@ var render = function() {
                                     " " +
                                       _vm._s(
                                         _vm._f("currency")(
-                                          (_vm.total =
-                                            _vm.calculateTotal).toFixed(2)
+                                          (_vm.total = _vm.calculateTotal)
                                         )
                                       )
                                   )
@@ -71234,9 +71519,7 @@ var render = function() {
                       ])
                     ])
                   ])
-                ]),
-                _vm._v(" "),
-                _c("span", [_vm._v("'0.00[,]00') }}")])
+                ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
@@ -72202,6 +72485,101 @@ render._withStripped = true
 /*!****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalListProductComponent.vue?vue&type=template&id=451df77e& ***!
   \****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: { id: "modal-list-prod", tabindex: "-1", role: "dialog" }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog modal-xl" }, [
+        _c("div", { staticClass: "modal-content  bg-secondary" }, [
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", {
+              staticClass: "modal-title",
+              domProps: { textContent: _vm._s(_vm.title) }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: {
+                  type: "button",
+                  "data-dismiss": "modal",
+                  "aria-label": "Close"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.closeModal()
+                  }
+                }
+              },
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+            )
+          ]),
+          _vm._v(" "),
+          _c("form", { attrs: { role: "form", method: "POST" } }, [
+            _c(
+              "div",
+              { staticClass: "modal-body" },
+              [
+                _c("data-table", {
+                  ref: "tb",
+                  attrs: {
+                    theme: _vm.theme,
+                    columns: _vm.columns,
+                    translate: _vm.translate,
+                    url: "api/productos"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: { type: "button", "data-dismiss": "modal" },
+                  on: {
+                    click: function($event) {
+                      return _vm.closeModal()
+                    }
+                  }
+                },
+                [_vm._v("Cerrar")]
+              )
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412& ***!
+  \********************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -76350,22 +76728,14 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("numeralFormat")(
-                              detail_income.price,
-                              "0.00[,]00"
-                            )
-                          )
-                        )
+                        _vm._v(_vm._s(_vm._f("currency")(detail_income.price)))
                       ]),
                       _vm._v(" "),
                       _c("td", { staticClass: "text-right" }, [
                         _vm._v(
                           _vm._s(
-                            _vm._f("numeralFormat")(
-                              detail_income.price * detail_income.quantity,
-                              "0.00[,]00"
+                            _vm._f("currency")(
+                              detail_income.price * detail_income.quantity
                             )
                           )
                         )
@@ -76380,9 +76750,8 @@ var render = function() {
                       _vm._v(
                         "Bs. " +
                           _vm._s(
-                            _vm._f("numeralFormat")(
-                              (_vm.calculateTotal - _vm.totalTax).toFixed(2),
-                              "0.00[,]00"
+                            _vm._f("currency")(
+                              (_vm.calculateTotal - _vm.totalTax).toFixed(2)
                             )
                           ) +
                           " "
@@ -76397,9 +76766,8 @@ var render = function() {
                       _vm._v(
                         "Bs. " +
                           _vm._s(
-                            _vm._f("numeralFormat")(
-                              (_vm.totalTax = (_vm.total * _vm.iva).toFixed(2)),
-                              "0.00[,]00"
+                            _vm._f("currency")(
+                              (_vm.totalTax = (_vm.total * _vm.iva).toFixed(2))
                             )
                           ) +
                           " "
@@ -76414,10 +76782,7 @@ var render = function() {
                       _vm._v(
                         "Bs. " +
                           _vm._s(
-                            _vm._f("numeralFormat")(
-                              (_vm.total = _vm.calculateTotal),
-                              "0.00[,]00"
-                            )
+                            _vm._f("currency")((_vm.total = _vm.calculateTotal))
                           )
                       )
                     ])
@@ -76691,6 +77056,7 @@ var render = function() {
                     normalizeZeros: true,
                     radix: ",",
                     placeholder: "0,00",
+                    readonly: "",
                     require: ""
                   },
                   on: { accept: _vm.onAccept },
@@ -76718,8 +77084,8 @@ var render = function() {
                   [
                     _c("small", { staticClass: "text-primary" }, [
                       _vm._v(
-                        "Precio act.: " +
-                          _vm._s(_vm._f("currency")(_vm.product.divisa_unit))
+                        "Precio $ : " +
+                          _vm._s(_vm._f("currency")(_vm.divisa_product))
                       )
                     ])
                   ]
@@ -76769,7 +77135,7 @@ var render = function() {
                 },
                 [
                   _c("small", { staticClass: "text-primary" }, [
-                    _vm._v("Stock actual:" + _vm._s(_vm.product.stock))
+                    _vm._v("Stock actual : " + _vm._s(_vm.product.stock))
                   ])
                 ]
               )
@@ -76983,6 +77349,34 @@ var render = function() {
                       ]
                     )
                   ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-group" }, [
+                  _vm._m(9),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.divisa_price,
+                        expression: "divisa_price"
+                      }
+                    ],
+                    staticClass: "form-control text-right",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.divisa_price },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.divisa_price = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(10)
                 ])
               ])
             ])
@@ -76993,7 +77387,7 @@ var render = function() {
     _c(
       "div",
       [
-        _c("modal-list-prod", {
+        _c("modal-list-prod-sale", {
           attrs: { item: _vm.item },
           on: {
             selectProduct: function($event) {
@@ -77048,7 +77442,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "" } }, [
-      _vm._v("Cantidad "),
+      _vm._v("Cant. "),
       _c("span", { staticClass: "text-danger" }, [_vm._v("(*)")])
     ])
   },
@@ -77057,7 +77451,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "" } }, [
-      _vm._v("Cantidad Mayor "),
+      _vm._v("Pack "),
       _c("span", { staticClass: "text-danger" }, [_vm._v("(*)")])
     ])
   },
@@ -77107,6 +77501,22 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("td", { staticClass: "text-right", attrs: { colspan: "5" } }, [
       _c("strong", [_vm._v("Total Neto")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("$")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c("span", { staticClass: "input-group-text " }, [_vm._v(".00")])
     ])
   }
 ]
@@ -77369,12 +77779,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.data.price,
-                                      "0.00[,]00"
-                                    )
-                                  )
+                                  _vm._s(_vm._f("currency")(_vm.data.price))
                                 )
                               ])
                             ]),
@@ -77403,12 +77808,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.divisa_unit,
-                                      "0.00[,]00 $"
-                                    )
-                                  )
+                                  _vm._s(_vm._f("currency")(_vm.divisa_unit))
                                 )
                               ])
                             ]),
@@ -77420,12 +77820,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.unit_price,
-                                      "0.00[,]00"
-                                    )
-                                  )
+                                  _vm._s(_vm._f("currency")(_vm.unit_price))
                                 )
                               ])
                             ])
@@ -77454,12 +77849,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.data.price,
-                                      "0.00[,]00"
-                                    )
-                                  )
+                                  _vm._s(_vm._f("currency")(_vm.cost_pack))
                                 )
                               ])
                             ]),
@@ -77489,10 +77879,7 @@ var render = function() {
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
                                   _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.wholesale_divisa,
-                                      "0.00[,]00 $"
-                                    )
+                                    _vm._f("currency")(_vm.wholesale_divisa)
                                   )
                                 )
                               ])
@@ -77506,10 +77893,7 @@ var render = function() {
                               _c("td", { attrs: { align: "center" } }, [
                                 _vm._v(
                                   _vm._s(
-                                    _vm._f("numeralFormat")(
-                                      _vm.wholesale_price,
-                                      "0.00[,]00"
-                                    )
+                                    _vm._f("currency")(_vm.wholesale_price)
                                   )
                                 )
                               ])
@@ -93851,6 +94235,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-provider', __webpack
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-customer', __webpack_require__(/*! ./components/ModalCustomerComponent.vue */ "./resources/js/components/ModalCustomerComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-product', __webpack_require__(/*! ./components/ModalProductComponent.vue */ "./resources/js/components/ModalProductComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-list-prod', __webpack_require__(/*! ./components/ModalListProductComponent.vue */ "./resources/js/components/ModalListProductComponent.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-list-prod-sale', __webpack_require__(/*! ./components/ModalListProductSaleComponent.vue */ "./resources/js/components/ModalListProductSaleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-searh-product', __webpack_require__(/*! ./components/ModalSearchProductComponent.vue */ "./resources/js/components/ModalSearchProductComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('modal-show-priceslist', __webpack_require__(/*! ./components/ModalPricesListComponent.vue */ "./resources/js/components/ModalPricesListComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('bread-crumbs', __webpack_require__(/*! ./components/BreadCrumbs */ "./resources/js/components/BreadCrumbs.vue")["default"]);
@@ -95658,6 +96043,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductComponent_vue_vue_type_template_id_451df77e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductComponent_vue_vue_type_template_id_451df77e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ModalListProductSaleComponent.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/ModalListProductSaleComponent.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412& */ "./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412&");
+/* harmony import */ var _ModalListProductSaleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalListProductSaleComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ModalListProductSaleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ModalListProductSaleComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductSaleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ModalListProductSaleComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductSaleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalListProductSaleComponent.vue?vue&type=template&id=5bfa1412&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ModalListProductSaleComponent_vue_vue_type_template_id_5bfa1412___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
