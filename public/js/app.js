@@ -21023,65 +21023,63 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var leng_code = this.code.length;
-      var counter = 0;
       var code = this.code;
-      this.codeSearched = code;
+      var counter = 0;
 
       if (leng_code == 13) {
-        counter = counter + 1;
+        if (code != this.codeSearched) {
+          this.clearSearch();
+        }
 
-        if (counter == 1) {
-          counter == 0;
-          console.log(counter);
-          setTimeout(function () {
+        setTimeout(function () {
+          if (counter == 0) {
             var url = "".concat(_this2.url).concat(code);
             axios.get(url).then(function (response) {
               var product = response.data.product;
               var price = product[0].price;
-              var codeSearched = product[0].code;
+              _this2.codeSearched = product[0].code;
               _this2.wholesale_quantity = product[0].wholesale_quantity;
               console.log(product);
 
-              if (_this2.findProduct(product[0].id) == false) {
-                if (product.length) {
+              if (product.length) {
+                if (_this2.findProduct(product[0].id) == false) {
                   _this2.product = response.data.product[0];
 
-                  _this2.addQuantity(_this2.code);
+                  _this2.addQuantity(code, counter);
 
-                  _this2.code = '';
+                  counter = counter + 1;
                 } else {
-                  toastr.error("ERROR - Producto no registrado.");
-
-                  _this2.clearSearch();
+                  toastr.error("El producto ya se encuentra en la lista.");
                 }
-              } else {
-                toastr.error("El producto ya se encuentra en la lista.");
               }
 
               _this2.isPrice(price);
-            })["catch"](function (error) {// console.log(error.response);
+            })["catch"](function (error) {
+              // console.log(error.response);
+              toastr.error("ERROR - Producto no registrado.");
+
+              _this2.clearSearch();
             });
-          }, 500);
-        }
-      } else {
-        if (this.code == '') {
-          this.clearSearch();
-          this.resultProduct = false;
-        }
+          }
+
+          _this2.code = '';
+        }, 500);
       }
     },
     isPrice: function isPrice(price) {
       if (this.saleUnit) {
         var priceSale = 0.0;
         this.price_sale = price;
-        console.log(this.price_sale);
         priceSale = parseFloat(this.price_sale) + parseFloat(this.price_gain_u);
-        console.log(priceSale);
         this.price = parseFloat(priceSale).toFixed(2);
       }
     },
-    addQuantity: function addQuantity(code) {
-      if (code == this.code) {
+    addQuantity: function addQuantity(code, counter) {
+      console.log(code);
+      console.log(this.codeSearched);
+      console.log(counter);
+
+      if (code == this.codeSearched && counter == 0) {
         this.quantity += 1;
       } else {
         this.quantity = 1;
@@ -21090,6 +21088,7 @@ __webpack_require__.r(__webpack_exports__);
     clearSearch: function clearSearch() {
       this.product = {};
       this.price = '';
+      this.quantity = 0;
       this.wholesale_quantity = 0; // this.errors = error.response;
       // this.code = '';
     },
@@ -76985,7 +76984,13 @@ var render = function() {
                 },
                 domProps: { value: _vm.code },
                 on: {
-                  keyup: function($event) {
+                  keypress: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
                     return _vm.getDataProduct()
                   },
                   input: function($event) {

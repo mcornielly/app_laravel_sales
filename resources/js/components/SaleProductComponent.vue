@@ -11,7 +11,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                             </div>
-                            <input ref="code" type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
+                            <input ref="code" type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                             <div class="input-group-append">
                                 <a href="" @click="clearCode()" class="btn btn-default" data-toggle="modal" data-target="#modal-list-prod"><i class="fas fa-search" aria-hidden="true">&nbsp;</i> Buscar Producto</a>
                             </div>
@@ -296,60 +296,55 @@ export default {
         },
         getDataProduct(){
             var leng_code = this.code.length;
-            var counter = 0;
             var code = this.code;
-            this.codeSearched = code;
+            var counter = 0;
+            
             if(leng_code == 13){
-                counter = counter + 1;
-                if(counter == 1){
-                    counter == 0;
-                    console.log(counter)
-                    setTimeout(() => {
+                if(code != this.codeSearched){
+                    this.clearSearch();
+                }
+                setTimeout(() => {
+                    if(counter == 0){
                         var url = `${this.url}${code}`;
                         axios.get(url).then(response => {
                             var product = response.data.product;
                             var price = product[0].price;
-                            var codeSearched = product[0].code;
+                            this.codeSearched = product[0].code;
                             this.wholesale_quantity = product[0].wholesale_quantity;
                             console.log(product)
-                            if(this.findProduct(product[0].id)==false){
-                                if(product.length){
+                            if(product.length){
+                                if(this.findProduct(product[0].id)==false){
                                     this.product = response.data.product[0];
-                                    this.addQuantity(this.code);
-                                    this.code='';
-                                    
+                                    this.addQuantity(code, counter);
+                                    counter = counter + 1;
                                 }else{
-                                    toastr.error("ERROR - Producto no registrado.");
-                                    this.clearSearch();
+                                    toastr.error("El producto ya se encuentra en la lista.");
                                 }
-                            }else{
-                                toastr.error("El producto ya se encuentra en la lista.");
                             }
                             this.isPrice(price);
                         }).catch(error =>{
-                                // console.log(error.response);
+                            // console.log(error.response);
+                            toastr.error("ERROR - Producto no registrado.");
+                            this.clearSearch();
                         });
-                    }, 500)
-                }
-            }else{
-                if(this.code == ''){
-                        this.clearSearch();
-                        this.resultProduct = false;
-                }
+                    }
+                    this.code='';
+                }, 500)
             }
         },
         isPrice(price){
             if(this.saleUnit){
                 var priceSale = 0.0;
                 this.price_sale = price;
-                console.log(this.price_sale)
                 priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
-                console.log(priceSale)
                 this.price = parseFloat(priceSale).toFixed(2);
             }
         },
-        addQuantity(code){
-            if(code == this.code){
+        addQuantity(code, counter){
+            console.log(code)
+            console.log(this.codeSearched)
+            console.log(counter)
+            if(code == this.codeSearched && counter == 0){
                 this.quantity += 1;
             }else{
                 this.quantity = 1;
@@ -358,6 +353,7 @@ export default {
         clearSearch(){
             this.product = {};
             this.price = '';
+            this.quantity = 0;
             this.wholesale_quantity = 0;
             // this.errors = error.response;
             // this.code = '';
