@@ -61,7 +61,7 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                <input type="checkbox">
+                                <input type="checkbox" v-model="checked" @click="cahngeSale">
                                 </span>
                             </div>
                             <input type="text" class="form-control text-center" v-model="wholesale_quantity" readonly>
@@ -191,7 +191,8 @@ export default {
                 masked: false /* doesn't work with directive */
             },
             price: '',
-            price_sale: 0,
+            price_sale_u: 0,
+            price_sale_w: 0,
             stock: '',
             quantity: 0,
             margin_gain_u: 0,
@@ -205,6 +206,7 @@ export default {
             item:false,
             subTotal: 0,
             saleUnit:true,
+            checked:false,
             onAccept (value) {
                 console.log(value)
                 // const maskRef = e.detail;
@@ -271,8 +273,11 @@ export default {
         price_gain_u: {
             get: function(){
                 var result = 0;
+                var gain_u = 0.0;
                 if(this.product.price){
-                    result = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
+                    gain_u = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
+                    result = parseFloat(this.product.price) + parseFloat(gain_u);
+                    // result = this.price_sale_u;
                 }
                 return result;
             },
@@ -280,7 +285,25 @@ export default {
                 var result = 0;
                 return result;
             }
-        }
+        },
+        price_gain_w: {
+            get: function(){
+                var result = 0.0;
+                var gain_w = 0.0;
+                var cost_pack = 0.0;
+                if(this.product.price > 0){
+                    cost_pack = this.product.price*this.product.wholesale_quantity;
+                    gain_w = (Math.round(cost_pack * this.product.margin_gain_w / 100)).toFixed(2);
+                    result  = parseFloat(cost_pack) + parseFloat(gain_w);
+                    // result = this.price_sale_w;
+                }
+                return result;
+            },
+            set: function(){
+                var result = 0;
+                return result;
+            }
+        },
 
     },
     methods:{
@@ -321,7 +344,7 @@ export default {
                                     toastr.error("El producto ya se encuentra en la lista.");
                                 }
                             }
-                            this.isPrice(price);
+                            this.price = parseFloat(this.price_sale_u);
                         }).catch(error =>{
                             // console.log(error.response);
                             toastr.error("ERROR - Producto no registrado.");
@@ -332,14 +355,14 @@ export default {
                 }, 500)
             }
         },
-        isPrice(price){
-            if(this.saleUnit){
-                var priceSale = 0.0;
-                this.price_sale = price;
-                priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
-                this.price = parseFloat(priceSale).toFixed(2);
-            }
-        },
+        // isPrice(price){
+        //     if(this.saleUnit){
+        //         var priceSale = 0.0;
+        //         this.price_sale = price;
+        //         priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
+        //         this.price = parseFloat(priceSale).toFixed(2);
+        //     }
+        // },
         addQuantity(code, counter){
             console.log(code)
             console.log(this.codeSearched)
@@ -398,6 +421,15 @@ export default {
         deleteListProduct(index)
         {
             this.detail_incomes.splice(index,1)
+        },
+        cahngeSale(){
+            if(this.product.length){
+                if(this.checked){
+                    this.price = parseFloat(this.price_sale_u);
+                }else{
+                    this.price = parseFloat(this.price_sale_w);
+                }
+            }
         }
 
     }

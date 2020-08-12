@@ -20907,7 +20907,8 @@ __webpack_require__.r(__webpack_exports__);
 
       },
       price: '',
-      price_sale: 0,
+      price_sale_u: 0,
+      price_sale_w: 0,
       stock: '',
       quantity: 0,
       margin_gain_u: 0,
@@ -20921,6 +20922,7 @@ __webpack_require__.r(__webpack_exports__);
       item: false,
       subTotal: 0,
       saleUnit: true,
+      checked: false,
       onAccept: function onAccept(value) {
         console.log(value); // const maskRef = e.detail;
         // this.value = maskRef.value;
@@ -20991,9 +20993,30 @@ __webpack_require__.r(__webpack_exports__);
     price_gain_u: {
       get: function get() {
         var result = 0;
+        var gain_u = 0.0;
 
         if (this.product.price) {
-          result = Math.round(this.product.price * this.product.margin_gain_u / 100).toFixed(2);
+          gain_u = Math.round(this.product.price * this.product.margin_gain_u / 100).toFixed(2);
+          result = parseFloat(this.product.price) + parseFloat(gain_u); // result = this.price_sale_u;
+        }
+
+        return result;
+      },
+      set: function set() {
+        var result = 0;
+        return result;
+      }
+    },
+    price_gain_w: {
+      get: function get() {
+        var result = 0.0;
+        var gain_w = 0.0;
+        var cost_pack = 0.0;
+
+        if (this.product.price > 0) {
+          cost_pack = this.product.price * this.product.wholesale_quantity;
+          gain_w = Math.round(cost_pack * this.product.margin_gain_w / 100).toFixed(2);
+          result = parseFloat(cost_pack) + parseFloat(gain_w); // result = this.price_sale_w;
         }
 
         return result;
@@ -21053,7 +21076,7 @@ __webpack_require__.r(__webpack_exports__);
                 }
               }
 
-              _this2.isPrice(price);
+              _this2.price = parseFloat(_this2.price_sale_u);
             })["catch"](function (error) {
               // console.log(error.response);
               toastr.error("ERROR - Producto no registrado.");
@@ -21066,14 +21089,14 @@ __webpack_require__.r(__webpack_exports__);
         }, 500);
       }
     },
-    isPrice: function isPrice(price) {
-      if (this.saleUnit) {
-        var priceSale = 0.0;
-        this.price_sale = price;
-        priceSale = parseFloat(this.price_sale) + parseFloat(this.price_gain_u);
-        this.price = parseFloat(priceSale).toFixed(2);
-      }
-    },
+    // isPrice(price){
+    //     if(this.saleUnit){
+    //         var priceSale = 0.0;
+    //         this.price_sale = price;
+    //         priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
+    //         this.price = parseFloat(priceSale).toFixed(2);
+    //     }
+    // },
     addQuantity: function addQuantity(code, counter) {
       console.log(code);
       console.log(this.codeSearched);
@@ -21130,6 +21153,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteListProduct: function deleteListProduct(index) {
       this.detail_incomes.splice(index, 1);
+    },
+    cahngeSale: function cahngeSale() {
+      if (this.product.length) {
+        if (this.checked) {
+          this.price = parseFloat(this.price_sale_u);
+        } else {
+          this.price = parseFloat(this.price_sale_w);
+        }
+      }
     }
   }
 });
@@ -77172,7 +77204,48 @@ var render = function() {
             _vm._m(4),
             _vm._v(" "),
             _c("div", { staticClass: "input-group" }, [
-              _vm._m(5),
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.checked,
+                        expression: "checked"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.checked)
+                        ? _vm._i(_vm.checked, null) > -1
+                        : _vm.checked
+                    },
+                    on: {
+                      click: _vm.cahngeSale,
+                      change: function($event) {
+                        var $$a = _vm.checked,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.checked = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.checked = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.checked = $$c
+                        }
+                      }
+                    }
+                  })
+                ])
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -77268,14 +77341,14 @@ var render = function() {
           ? _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-12" }, [
                 _c("div", { staticClass: "card" }, [
-                  _vm._m(6),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body table-responsive p-0" }, [
                     _c(
                       "table",
                       { staticClass: "table table-striped text-nowrap" },
                       [
-                        _vm._m(7),
+                        _vm._m(6),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -77351,7 +77424,7 @@ var render = function() {
                                 staticStyle: { "background-color": "#CEECF5" }
                               },
                               [
-                                _vm._m(8),
+                                _vm._m(7),
                                 _vm._v(" "),
                                 _c("td", { staticClass: "text-right" }, [
                                   _c("span", {
@@ -77379,7 +77452,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "input-group" }, [
-                  _vm._m(9),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -77403,7 +77476,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _vm._m(10)
+                  _vm._m(9)
                 ])
               ])
             ])
@@ -77480,16 +77553,6 @@ var staticRenderFns = [
     return _c("label", { attrs: { for: "" } }, [
       _vm._v("Pack "),
       _c("span", { staticClass: "text-danger" }, [_vm._v("(*)")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
-      _c("span", { staticClass: "input-group-text" }, [
-        _c("input", { attrs: { type: "checkbox" } })
-      ])
     ])
   },
   function() {
