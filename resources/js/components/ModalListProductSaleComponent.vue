@@ -97,6 +97,7 @@ export default {
             ],
             selectedRow: {},
             product:{},
+            quantity: 0,
             wholesale_quantity: 0,
             price: 0,
             isLoading: false
@@ -125,21 +126,26 @@ export default {
         selectProduct(data){
             this.product = data;
             this.wholesale_quantity = this.product.wholesale_quantity;
-            // this.price = this.product.price;
-            console.log(this.product.id)
+
             //se consulta el producto exitente en la lista
             this.$parent.findProduct(this.product.id);
             this.isLoading = true;
             this.isPrice(this.product.price);
+            this.quantity = 1;
             setTimeout(() => {
-                if(this.item == false){
+                if(this.item == false && this.product.stock > 0){
                     this.$emit('selectProduct', this.product);
                     this.$emit('saleWhole', this.wholesale_quantity);
                     this.$emit('salePrice', this.price);
+                    this.$emit('addQuantity', this.quantity);
                     toastr.success("El producto fue agregado.");
                     this.closeModal();
                 }else{
-                    toastr.error("El producto ya se encuentra en la lista.");
+                    if(this.product.stock == 0){
+                        toastr["error"]("No hay en Invetario. Producto agotado.!")
+                    }else{
+                        toastr.error("El producto ya se encuentra en la lista.");
+                    }
                 }
                 this.isLoading = false;
             },500)        

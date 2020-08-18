@@ -121,7 +121,6 @@ class Income extends Model
             return "REGISTRADO";
         }else{
             return "ANULADO";
-        }
-
+        }     
     }
 }

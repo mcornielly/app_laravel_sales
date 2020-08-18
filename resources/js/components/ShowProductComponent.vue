@@ -230,43 +230,43 @@ export default {
         },
         divisa_unit: function(){
             var result = 0;
-            if(this.divisa > 0 || this.unit_price > 0){
+            if(this.divisa > 0 && this.unit_price > 0){
                 var result = (this.unit_price / this.divisa).toFixed(2);
             }
             return result;
         },
         unit_price: function(){
             var result = 0;
-            if(this.data.price > 0){
+            if(this.divisa > 0 && this.data.price > 0){
                 var result = (parseFloat(this.price_gain_u) + parseFloat(this.data.price)).toFixed(2);
             }
             return result;
         },
         price_gain_w: function(){
             var result = 0.0;
-            if(this.data.price > 0){
+            if(this.divisa > 0 && this.data.price > 0){
                 result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
             }
             return result;
         },
         wholesale_divisa: function(){
             var result = 0;
-            if(this.divisa > 0 || this.wholesale_price > 0){
+            if(this.divisa > 0 && this.wholesale_price > 0){
                 result = (parseFloat(this.wholesale_price) / this.divisa).toFixed(2);
             }
             return result;
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0){
+            if(this.divisa > 0 && this.data.wholesale_quantity > 0){
                 result = (parseFloat(this.price_gain_w) + parseFloat(this.cost_pack)).toFixed(2);
             }
             return result;
         },
         cost_pack: function(){
             var result = 0.0;
-            if(this.data.price){
-                result = this.data.price*this.data.wholesale_quantity;
+            if(this.divisa > 0 && this.data.price){
+                result = parseFloat(this.data.price*this.data.wholesale_quantity).toFixed(2);
             }
             return result;
         }

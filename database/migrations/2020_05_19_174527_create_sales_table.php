@@ -22,7 +22,7 @@ class CreateSalesTable extends Migration
             $table->string('num_bill', 10);
             $table->decimal('tax', 4, 2);
             $table->decimal('total', 11, 2);
-            $table->string('status', 20);
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

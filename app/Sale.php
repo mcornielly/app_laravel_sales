@@ -66,7 +66,8 @@ class Sale extends Model
                         'orderable' => true,
                     ],
                 ],
-            ],
+            ]
+
         ]
     ];
     
@@ -88,6 +89,16 @@ class Sale extends Model
                 ->selectRaw('sum(total) sum')
                 ->selectRaw('count(*) sales')
                 ->groupBy('year','month','monthname');
+    }
+
+    public function getStatusAttribute($status)
+    {
+        if($status == 1){
+            return "REGISTRADO";
+        }else{
+            return "ANULADO";
+        }
+
     }
 
 }

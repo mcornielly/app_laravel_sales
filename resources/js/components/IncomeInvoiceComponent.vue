@@ -89,7 +89,7 @@
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Impuesto</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax = (total * iva).toFixed(2) | currency }} </td>
+                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax = (total * iva/100).toFixed(2) | currency }} </td>
                                 </tr>
                                 <tr style="background-color: #CEECF5;">
                                     <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
@@ -122,12 +122,14 @@ export default {
         },
         typeCurrency: {
             type: String,
+        },
+        iva: {
+            type: Number,
         }
     },  
     directives: {mask},  
     data(){
         return {
-            iva : 0.16,
             total: 0.00,
             totalTax: 0.00,
             totalPartials: 0.00,

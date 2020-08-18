@@ -17,8 +17,10 @@ class CreateDetailSalesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('sale_id')->unsigned();
             $table->unsignedBigInteger('product_id')->unsigned();
+            $table->string('type_sale');
             $table->integer('quantity');
             $table->decimal('price', 11, 2);
+            $table->decimal('discount', 11, 2);
             $table->timestamps();
             
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');

@@ -1,5 +1,5 @@
 <template>
-   <div class="modal fade" id="modal-product" data-backdrop="static"  tabindex="-1" role="dialog">
+   <div class="modal fade" :class="{'show' : openModal}" id="modal-product" data-backdrop="static"  tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content bg-secondary">
                 <div class="modal-header">
@@ -256,6 +256,9 @@ export default {
             type: Boolean,
         },
         storeup:{
+            type: Boolean,
+        },
+        openModal:{
             type: Boolean,
         }
     },

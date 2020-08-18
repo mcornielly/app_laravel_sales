@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use DB;
-use App\Divisa;
 use App\Income;
 use App\DetailIncome;
 use App\Http\Controllers\Controller;
@@ -148,7 +147,7 @@ class IncomesController extends Controller
             foreach($detail_incomes as $detail) {
                 $detail_income = new DetailIncome();
                 $detail_income->income_id = $income->id;
-                $detail_income->product_id = $detail['id'];
+                $detail_income->product_id = $detail['product_id'];
                 $detail_income->price = $detail['price'];
                 $detail_income->quantity = $detail['quantity'];
                 $detail_income->save();

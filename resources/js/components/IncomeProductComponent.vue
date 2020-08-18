@@ -11,7 +11,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                             </div>
-                            <input ref="code" type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
+                            <input ref="code" type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                             <div class="input-group-append">
                                 <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal-list-prod"><i class="fas fa-search" aria-hidden="true">&nbsp;</i> Buscar Producto</a>
                             </div>
@@ -226,9 +226,7 @@ export default {
         getDataProduct(){
             var leng_code = this.code.length;
             var code = this.code;
-            var x = 0;
-            if(leng_code == 13 && x == 0){
-                x=x+1;
+            if(leng_code == 13){
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
                     var product = response.data.product;
@@ -264,7 +262,7 @@ export default {
                if(this.findProduct(this.product.id)==false){
                    this.btnAdd=false;
                    this.detail_incomes.push({
-                       id: this.product.id,
+                       product_id: this.product.id,
                        name: this.product.name,
                        price: this.price,
                        quantity: this.quantity,

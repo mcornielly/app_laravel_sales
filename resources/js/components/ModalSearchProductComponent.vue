@@ -15,7 +15,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                 </div>
-                                <input type="text" @keyup="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
+                                <input type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                                 <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors"></span> -->
                             </div>
                         </div>
@@ -85,14 +85,12 @@ export default {
         getDataProduct(){
             var leng_code = this.code.length;
             var code = this.code;
-            var x = 0;
-            if(leng_code == 13 && x == 0){
+            if(leng_code == 13){
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
-                        console.log(x=x+1);
                         console.log(response.data[0]);
-                        this.data = response.data[0];
-                        this.images = response.data[0].photos;
+                        this.data = response.data.product[0];
+                        this.images = response.data.product[0].photos;
                         this.resultProduct = true;
                         this.code = '';
                         $('#modal-search').on('shown.bs.modal', function() {

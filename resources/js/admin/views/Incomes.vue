@@ -71,6 +71,7 @@
 
                                 <tab-content title="Ingreso" icon="ti-receipt" :before-change="validateInvoice">
                                     <income-invoice :detail_incomes="detail_incomes" 
+                                    :iva="iva"
                                     :provider="provider"
                                     :typeCurrency="typeCurrency" 
                                     @selectType="type_voucher = $event" 
@@ -170,8 +171,8 @@
                                         <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal-totalTax | currency }}</td>
                                     </tr>
                                     <tr>
-                                        <th>IVA <span>({{ income.tax*100 }}%)</span></th>
-                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax=total*income.tax | currency }}</td>
+                                        <th>IVA <span>({{ income.tax*100/100 }}%)</span></th>
+                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax=total*income.tax/100 | currency }}</td>
                                     </tr>
                                     <tr>
                                         <th>Total:</th>
@@ -323,7 +324,7 @@ export default {
             num_voucher:'',
             total: 0.00,
             totalTax: 0.00,
-            iva:0.16
+            iva:16
         }
     },
     created(){
@@ -374,7 +375,11 @@ export default {
             });
         },
         createIncome(){
-            this.vincome = 2;
+            if(this.divisa > 0){
+                this.vincome = 2;
+            }else{
+                toastr["info"]("Debe establecer el monto de la Divisa..!!", "Cotización de la Divisa");    
+            }
         },
         onComplete(){
             toastr["info"]("Ingreso de Productos completados con exito..!!", "Comprobante de Ingreso");

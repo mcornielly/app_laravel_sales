@@ -46,6 +46,7 @@
             ></product-create>   
         </template>
     
+
         <!-- Modal-Producto -->
         <modal-product
             :data="selectedRow"
@@ -149,7 +150,7 @@ export default {
             storeup: true,
             product_id: 0,
             images:[],
-            isLoading: false
+            isLoading: false, 
         }
     },
     created(){
@@ -202,46 +203,55 @@ export default {
             });
         },
         createProduct(){
-            this.title = 'Nueva Producto'
-            this.selectedRow = {};
-            this.action = true;
-            this.storeup = false;
-            this.vproducts = true;
+            if(this.divisa > 0){
+                this.title = 'Nueva Producto'
+                this.selectedRow = {};
+                this.action = true;
+                this.storeup = false;
+                this.vproducts = true;
+            }else{
+                toastr["info"]("Debe establecer el monto de la Divisa..!!", "Cotización de la Divisa");   
+            }
         },
         modalProduct(data, action){
-            switch(action){
-    			    case 'edit':
-                        {
-                            this.title = 'Editar Producto';
-                            this.selectedRow = data;
-                            this.product_id = data.id;
-                            this.getImages(this.product_id); 
-                            this.action = true;
-                            this.storeup = false;
-                            break;
-                        }
-                    case 'show':
-                        {
-                            this.title = "Detalle de Producto";
-                            this.selectedRow = data;
-                            this.product_id = data.id;
-                            this.getImages(this.product_id); 
-                            this.category = data.category;
-                            this.create = false;
-                            this.action = false;
-                            this.storeup = true;
-                            break;
-                        }
-                    case 'delete':
-                        {                           
-                            this.deleteProduct(data);
-                            break;
-                        }
-                    case 'restore':
-                        {                           
-                            this.restoreProduct(data);
-                            break;
-                        }
+            if(this.divisa > 0){
+                switch(action){
+                        case 'edit':
+                            {
+                                this.title = 'Editar Producto';
+                                this.selectedRow = data;
+                                this.product_id = data.id;
+                                this.getImages(this.product_id); 
+                                this.action = true;
+                                this.storeup = false;
+                                break;
+                            }
+                        case 'show':
+                            {
+                                this.title = "Detalle de Producto";
+                                this.selectedRow = data;
+                                this.product_id = data.id;
+                                this.getImages(this.product_id); 
+                                this.category = data.category;
+                                this.create = false;
+                                this.action = false;
+                                this.storeup = true;
+                                break;
+                            }
+                        case 'delete':
+                            {                           
+                                this.deleteProduct(data);
+                                break;
+                            }
+                        case 'restore':
+                            {                           
+                                this.restoreProduct(data);
+                                break;
+                            }
+                }
+            }else{
+                toastr["info"]("Debe establecer el monto de la Divisa..!!", "Cotización de la Divisa");
+                $('#modal-product').modal('hide'); 
             }
         },
         deleteProduct(data){

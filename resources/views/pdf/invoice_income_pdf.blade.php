@@ -60,11 +60,11 @@
           <tr>
             <td colspan="2"></td>
             <td colspan="2">SUBTOTAL</td>
-            <td>{{ number_format($inc->total-($inc->total*$inc->tax),2,',','.') }}</td>
+            <td>{{ number_format($inc->total-($inc->total*$inc->tax/100),2,',','.') }}</td>
           </tr>
           <tr>
             <td colspan="2"></td>
-            <td colspan="2">IVA {{ $inc->tax*100 }}%</td>
+            <td colspan="2">IVA {{ $inc->tax/100 }}%</td>
             <td>{{ number_format($inc->total*$inc->tax,2,',','.') }}</td>
           </tr>
           <tr>

@@ -70,10 +70,8 @@ Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider')
 // Ingresos
 Route::get('ingresos', 'Admin\IncomesController@index');
 Route::post('ingreso', 'Admin\IncomesController@store');
-Route::get('ingreso/{id}', 'Admin\IncomesController@show');
+// Route::get('ingreso/{id}', 'Admin\IncomesController@show');
 Route::get('ingresos/num_factura', 'Admin\IncomesController@count_record');
-
-//
 Route::get('ingreso/detalles/{id}', 'Admin\IncomesController@get_detail');
 Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
 Route::delete('ingreso/anular/{id}', 'Admin\IncomesController@destroy');
@@ -88,5 +86,9 @@ Route::delete('cliente/eliminar/{id}', 'Admin\CustomersController@destroy');
 Route::get('seleccionar-cliente', 'Admin\CustomersController@select_customer');
 
 Route::get('ventas', 'Admin\SalesController@index');
-
+Route::post('venta', 'Admin\SalesController@store');
+Route::get('venta/{id}', 'Admin\SalesController@show');
+Route::get('ventas/num_factura', 'Admin\SalesController@count_record');
+Route::get('venta/pdf/{id}', 'Admin\SalesController@sale_pdf');
+Route::delete('venta/anular/{id}', 'Admin\SalesController@destroy');
 

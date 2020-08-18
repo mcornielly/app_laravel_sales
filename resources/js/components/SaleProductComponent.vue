@@ -45,15 +45,21 @@
                                 readonly
                                 require
                             >
-                            </imask-input>    
-                            <span v-show="product.price"><small class="text-primary">Precio $ : {{ divisa_product | currency }}</small></span>
+                            </imask-input>
+                            <div v-if="checked == false">
+                                <span v-show="product.price"><small class="text-primary">Precio $ : {{ divisa_product_u | currency }}</small></span>
+                            </div>
+                            <div v-else>
+                                <span v-show="product.price"><small class="text-primary">Precio $ : {{ divisa_product_w | currency }}</small></span>
+                            </div>    
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Cant. <span class="text-danger">(*)</span></label>
-                            <input type="number" min="0" class="form-control text-center" v-model="quantity" placeholder="0">
-                            <span v-show="product.stock"><small class="text-primary">Stock actual : {{ product.stock }}</small></span>
+                            <input type="number" min="0" class="form-control text-center" v-model="quantity" placeholder="0" :readonly="stockStop">
+                            <span v-if="product.stock==0"><small :class="stockClass">Stock actual : 0</small></span>
+                            <span v-else><small :class="stockClass">Stock actual : {{ stockLimit }}</small></span>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -61,7 +67,7 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                <input type="checkbox" v-model="checked" @click="cahngeSale">
+                                <input type="checkbox" v-model="checked" @click="changeSale()">
                                 </span>
                             </div>
                             <input type="text" class="form-control text-center" v-model="wholesale_quantity" readonly>
@@ -74,7 +80,7 @@
                     </div>
                     <div class="col-md-1" style="margin-block: inherit; padding-top: 7px;">
                         <div class="form-group">
-                            <button :disabled="btnDiscount" @click.stop="costBalance(product)" data-toggle="modal" data-target="#modal-cost" class="btn btn-block btn-primary float-right" title="Descuento %">
+                            <button :disabled="btnDiscount" @click="openModalDiscount()" data-toggle="modal" data-target="#modal-discount" class="btn btn-block btn-primary float-right" title="Descuento %">
                                 <i class="fas fa-percentage" aria-hidden="true">&nbsp;</i>
                             </button>
                         </div>    
@@ -87,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" v-if="detail_incomes.length">
+                <div class="row" v-if="detail_sales.length">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -96,41 +102,52 @@
                             <!-- /.card-header -->
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-striped text-nowrap">
-                                <thead>
-                                    <tr>
-                                    <th>Opción</th>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Pack</th>
-                                    <th>Precio</th>
-                                    <th style="text-align: center;">Sub-Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(detail_income, index) in detail_incomes" :key="detail_income.id">
-                                        <td>
-                                            <button @click="deleteListProduct(index)" type="button" class="btn btn-danger btn-sm" title="Quitar Producto">
-                                                <i class="fas fa-minus-circle"></i>
-                                            </button>
-                                        </td>
-                                        <td>{{ detail_income.name }}</td>
-                                        <td>{{ detail_income.quantity }}</td>
-                                        <td>{{ detail_income.wholesale_quantity }}</td>
-                                        <td>{{ detail_income.price | currency }}</td>
-                                        <td style="text-align: right;">{{ detail_income.price*detail_income.quantity | currency }}</td>
-                                    </tr>
-                                    <tr style="background-color: #CEECF5;">
-                                        <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
-                                        <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal | currency }} </td>
-                                    </tr>
-                                </tbody>
+                                    <thead>
+                                        <tr>
+                                        <th>Opción</th>
+                                        <th>Producto</th>
+                                        <th>Tipo Venta</th>
+                                        <th>Cantidad</th>
+                                        <th>Pack</th>
+                                        <th>Precio</th>
+                                        <th>% Descuento</th>
+                                        <th style="text-align: center;">Sub-Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(detail_sale, index) in detail_sales" :key="detail_sale.id">
+                                            <td>
+                                                <button @click="deleteListProduct(index)" type="button" class="btn btn-danger btn-sm" title="Quitar Producto">
+                                                    <i class="fas fa-minus-circle"></i>
+                                                </button>
+                                            </td>
+                                            <td>{{ detail_sale.name }}</td>
+                                            <td>{{ detail_sale.type_sale }}</td>
+                                            <td style="text-align: center;">{{ detail_sale.quantity }}</td>
+                                            <td style="text-align: center;">{{ detail_sale.pack }}</td>
+                                            <td style="text-align: right;">{{ detail_sale.price | currency }}</td>
+                                            <td style="text-align: center;">{{ detail_sale.discount }}</td>
+                                            <td style="text-align: right;">
+                                                <div v-if="quantity_w">
+                                                    {{ (detail_sale.price*detail_sale.pack)-(detail_sale.mont_discount) | currency }}
+                                                </div>     
+                                                <div v-else>
+                                                    {{ (detail_sale.price*detail_sale.quantity)-(detail_sale.mont_discount) | currency }}
+                                                </div> 
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color: #CEECF5;">
+                                            <td colspan="7" class="text-right"><strong>Total Neto</strong></td>
+                                            <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal | currency }} </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
 
-                        <!-- <div class="row" v-if="detail_incomes.length"> -->
+                        <!-- <div class="row" v-if="detail_sales.length"> -->
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
@@ -151,7 +168,107 @@
                 @selectProduct="product = $event" 
                 @saleWhole="wholesale_quantity = $event" 
                 @salePrice="price = $event"
+                @addQuantity="quantity = $event"
                 :item="item"></modal-list-prod-sale> 
+        </div>
+
+        <div>
+            <div class="modal fade" id="modal-discount">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content bg-secondary">
+                        <div class="modal-header">
+                        <h4 class="modal-title">Descuento del Producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container" style="border-radius: 6px;border: 1px solid beige;">
+                                <div class="form-group pt-3 pl-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radio0" value="0" v-model="discount" checked>
+                                        <label class="form-check-label">Descuento por 0 %</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radio1" value="5" v-model="discount">
+                                        <label class="form-check-label">Descuento por 5 %</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radio2" value="10" v-model="discount">
+                                        <label class="form-check-label">Descuento por 10 %</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="radio3" value="15" v-model="discount">
+                                        <label class="form-check-label">Descuento por 15 %</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container pt-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" >Descuento (%)</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control text-center" v-model="discount" maxlength="2" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" >Precio</label>
+                                            <input type="text" class="form-control text-center" v-model="priceProduct" readonly v-money="money">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" >Cantidad</label>
+                                            <input type="text" class="form-control text-center" v-model="quantity" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pt-3">
+                                <table class="table table-striped text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-primary" colspan="2">Balance de Descuento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Monto Producto</td>
+                                            <td class="text-right"><span class="float-left" v-text="typeCurrency"></span>{{ montProduct | currency }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Monto Descuento (%)</td>
+                                            <td v-if="discount==0" class="text-right"><span class="float-left" v-text="typeCurrency"></span>0,00</td>
+                                            <td v-else class="text-right"><span class="float-left" v-text="typeCurrency"></span>{{ productDiscount | currency }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Descuento Aplicado</td>
+                                            <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ montProduct-productDiscount | currency }}</td>
+                                        </tr>
+                                        <!-- <tr style="background-color: #CEECF5;">
+                                            <td colspan="6" class="text-right"><strong>Total Neto</strong></td>
+                                            <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ calculateTotal | currency }} </td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="closeModalDiscount">Cerrar</button>
+                        <button type="button" class="btn btn-primary" @click="addDiscount">Aplicar Descuento</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
         </div>     
     </div>
 </template>
@@ -161,6 +278,7 @@ import Vue from 'vue'
 import {VMoney} from 'v-money'
 import {mask} from 'vue-the-mask'
 import {IMaskComponent} from 'vue-imask';
+// import { pack } from 'html2canvas/dist/types/css/types/color';
 
 export default {
     props:[
@@ -191,22 +309,25 @@ export default {
                 masked: false /* doesn't work with directive */
             },
             price: '',
-            price_sale_u: 0,
-            price_sale_w: 0,
             stock: '',
             quantity: 0,
+            quantity_w: 0,
+            discount: 0,
+            montDiscount:0,
             margin_gain_u: 0,
             wholesale_quantity: 0,
-            detail_incomes:[],
-            modalCost: false,
+            detail_sales:[],
+            stock_limit: 15,
             btnDiscount: true,
             btnAdd: true,
+            typeSale:'Venta Detal',
             title:'',
             errors:'',
             item:false,
-            subTotal: 0,
             saleUnit:true,
             checked:false,
+            priceProduct:0,
+            totalDiscount:0,
             onAccept (value) {
                 console.log(value)
                 // const maskRef = e.detail;
@@ -219,15 +340,6 @@ export default {
         this.setFocus();
     },
     watch: {
-        // price: function(){
-        //     if(this.price != '' && this.quantity != ''){
-        //         this.btnDiscount = false;
-        //         this.btnAdd = false;
-        //     }else{
-        //         this.btnDiscount = true;
-        //         this.btnAdd = true;
-        //     }
-        // },
         quantity: function(){
             if(this.quantity > 0){
                 this.btnDiscount = false;
@@ -236,32 +348,39 @@ export default {
                 this.btnDiscount = true;
                 this.btnAdd = true;
             }
-        },
-        unmaskedValue: function(){
-            alert(1)
         }
     },
     computed:{
         calculateTotal: function(){
             var result = 0.0;
-            for(var i=0; i<this.detail_incomes.length; i++){
-                this.subTotal = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
-                result = this.subTotal;
+            for(var i=0; i<this.detail_sales.length; i++){
+                if(this.detail_sales[i].type_sale == 'Venta Mayor'){
+                    result = result+(this.detail_sales[i].price*this.detail_sales[i].pack)-(this.detail_sales[i].mont_discount);
+                }else if(this.detail_sales[i].type_sale == 'Venta Detal'){
+                    result = result+(this.detail_sales[i].price*this.detail_sales[i].quantity)-(this.detail_sales[i].mont_discount);
+                }
             }
             return result;
         },
         divisa_price: function(){
             var result = 0.0;
-            if(this.subTotal){
-                result = Math.round(this.subTotal / this.divisa).toFixed();
+            if(this.calculateTotal){
+                result = Math.round(this.calculateTotal / this.divisa).toFixed();
             }
 
             return result;
         },
-        divisa_product: function(){
+        divisa_product_u: function(){
             var result = 0.0;
             if(this.product.divisa_unit){
                 result = Math.round(this.product.divisa_unit)
+            }
+            return result;
+        },
+        divisa_product_w: function(){
+            var result = 0.0;
+            if(this.product.wholesale_divisa){
+                result = Math.round(this.product.wholesale_divisa)
             }
             return result;
         },
@@ -277,7 +396,6 @@ export default {
                 if(this.product.price){
                     gain_u = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
                     result = parseFloat(this.product.price) + parseFloat(gain_u);
-                    // result = this.price_sale_u;
                 }
                 return result;
             },
@@ -295,7 +413,7 @@ export default {
                     cost_pack = this.product.price*this.product.wholesale_quantity;
                     gain_w = (Math.round(cost_pack * this.product.margin_gain_w / 100)).toFixed(2);
                     result  = parseFloat(cost_pack) + parseFloat(gain_w);
-                    // result = this.price_sale_w;
+
                 }
                 return result;
             },
@@ -303,6 +421,78 @@ export default {
                 var result = 0;
                 return result;
             }
+        },
+        stockLimit: function(){
+            var result = 0;
+            if(this.checked){
+                if(this.product.stock > this.product.wholesale_quantity){
+                    result = this.product.stock - (this.product.wholesale_quantity*this.quantity);
+                    this.btnDiscount = false;
+                    this.btnAdd = false;
+                }else{
+                    result = this.product.stock - this.quantity;
+                    this.btnDiscount = true;
+                    this.btnAdd = true;
+                }
+
+            }else{
+                if(this.product.stock > this.product.wholesale_quantity){
+                    result = this.product.stock - this.quantity;
+                    this.btnDiscount = false;
+                    this.btnAdd = false;
+                }else{
+                    result = this.product.stock;
+                    this.btnDiscount = true;
+                    this.btnAdd = true;
+                }
+            }
+            return result;
+        },
+        stockClass: function(){
+            if(this.stock_limit > this.stockLimit){
+                toastr["info"]("Stock Limit. El limite del stock del inventario ha sido superado.!")
+                return 'text-danger';
+            }else{
+                return 'text-primary';
+            }
+        },
+        stockStop: function(){
+           var readonly = false;
+            if(this.checked){
+                if(this.stockLimit < this.wholesale_quantity){
+                    readonly = true;
+                }else{
+                    readonly = false;
+                }
+            }else{
+                if(this.stockLimit == 0){
+                    readonly = true;
+                }else{
+                    readonly = false;
+                }
+            }
+            return readonly;
+        },
+        montProduct: function(){
+            var result = 0;
+            if(this.checked){
+                result = parseFloat(this.price_gain_w)*this.quantity;
+            }else{
+                result = parseFloat(this.price_gain_u)*this.quantity;
+            }
+            return result;
+        },
+        productDiscount: function(){
+            var result = 0;
+            result = parseFloat(this.montProduct)*this.discount/100;
+            return result;
+        },
+        calculateDiscount: function(){
+            var total_discount = 0.0;
+            // var i = 0;
+            total_discount = this.detail_sales[0].price*this.detail_sales[0].quantity*(this.detail_sales[0].discount/100);
+
+            return total_discount;
         },
 
     },
@@ -318,56 +508,40 @@ export default {
             this.$nextTick(() => this.$refs.code.focus());
         },
         getDataProduct(){
-            var leng_code = this.code.length;
+            // var leng_code = this.code.length;
             var code = this.code;
-            var counter = 0;
             
-            if(leng_code == 13){
+            // if(leng_code == 13){
                 if(code != this.codeSearched){
                     this.clearSearch();
                 }
                 setTimeout(() => {
-                    if(counter == 0){
                         var url = `${this.url}${code}`;
                         axios.get(url).then(response => {
                             var product = response.data.product;
                             var price = product[0].price;
                             this.codeSearched = product[0].code;
                             this.wholesale_quantity = product[0].wholesale_quantity;
-                            console.log(product)
                             if(product.length){
                                 if(this.findProduct(product[0].id)==false){
                                     this.product = response.data.product[0];
-                                    this.addQuantity(code, counter);
-                                    counter = counter + 1;
+                                    this.addQuantity(code);
                                 }else{
                                     toastr.error("El producto ya se encuentra en la lista.");
                                 }
                             }
-                            this.price = parseFloat(this.price_sale_u);
+                            this.price = parseFloat(this.price_gain_u).toFixed(2);
                         }).catch(error =>{
                             // console.log(error.response);
                             toastr.error("ERROR - Producto no registrado.");
                             this.clearSearch();
                         });
-                    }
                     this.code='';
                 }, 500)
-            }
+            // }
         },
-        // isPrice(price){
-        //     if(this.saleUnit){
-        //         var priceSale = 0.0;
-        //         this.price_sale = price;
-        //         priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));
-        //         this.price = parseFloat(priceSale).toFixed(2);
-        //     }
-        // },
-        addQuantity(code, counter){
-            console.log(code)
-            console.log(this.codeSearched)
-            console.log(counter)
-            if(code == this.codeSearched && counter == 0){
+        addQuantity(code){
+            if(code == this.codeSearched){
                 this.quantity += 1;
             }else{
                 this.quantity = 1;
@@ -378,26 +552,41 @@ export default {
             this.price = '';
             this.quantity = 0;
             this.wholesale_quantity = 0;
-            // this.errors = error.response;
-            // this.code = '';
         },
         addListProducts(data){
+           var quantity = 0;
+           var pack = 0;
+           if(this.quantity_w){
+               pack = this.quantity;
+               quantity = this.quantity_w*pack;
+           }else{
+               pack = this.wholesale_quantity;
+               quantity = this.quantity;
+           } 
            if(this.quantity > 0 && this.wholesale_quantity > 0){
                if(this.findProduct(this.product.id)==false){
-                   this.detail_incomes.push({
-                       id: this.product.id,
+                   this.detail_sales.push({
+                       product_id: this.product.id,
                        name: this.product.name,
                        price: this.price, 
-                       quantity: this.quantity,
-                       wholesale_quantity: this.wholesale_quantity,
+                       pack: pack, 
+                       quantity: quantity,
+                       discount: this.discount,
+                       wholesale_quantity: pack,
+                       type_sale: this.typeSale,
+                       mont_discount: this.montDiscount,
                    });
-                   this.$emit('addProduct', this.detail_incomes); 
+                   console.log(this.detail_sales)
+                   this.$emit('addProduct', this.detail_sales); 
                    //Se limpia el proceso
                    this.product={};
                    this.price='';  
                    this.quantity = 0;
                    this.wholesale_quantity = 0;
                    this.code='';
+                   this.checked=false;
+                   this.discount = 0;
+                   this.montDiscount = 0;
                }else{
                    toastr.error("El producto ya se encuentra en la lista.");
                }
@@ -409,8 +598,8 @@ export default {
         findProduct(id){
             var item=false;
 
-            for(var i=0; i<this.detail_incomes.length; i++){
-                if(this.detail_incomes[i].id==id){
+            for(var i=0; i<this.detail_sales.length; i++){
+                if(this.detail_sales[i].id==id){
                     item = true;
                     this.item = item;
                 }
@@ -420,17 +609,48 @@ export default {
         },
         deleteListProduct(index)
         {
-            this.detail_incomes.splice(index,1)
+            this.detail_sales.splice(index,1)
         },
-        cahngeSale(){
-            if(this.product.length){
+        changeSale(){
+            if(this.product){
                 if(this.checked){
-                    this.price = parseFloat(this.price_sale_u);
+                    this.typeSale = 'Venta Detal';
+                    this.quantity_w = 0;
+                    this.price = parseFloat(this.price_gain_u).toFixed(2);
+            
                 }else{
-                    this.price = parseFloat(this.price_sale_w);
+                    this.typeSale = 'Venta Mayor';
+                    this.quantity_w = this.quantity * this.wholesale_quantity;
+                    this.price = parseFloat(this.price_gain_w).toFixed(2);
                 }
             }
-        }
+        },
+        openModalDiscount(){
+            this.priceProduct = parseFloat(this.price).toFixed(2);
+        },
+        closeModalDiscount(){
+            this.discount = 0;
+            this.price = parseFloat(this.price_gain_u).toFixed(2);
+        },
+        addDiscount(){
+            var discount = 0.0;
+            if(this.checked){
+                discount = parseFloat(this.price_gain_w)*parseFloat(this.discount)/100;
+            }else{
+                discount = parseFloat(this.price_gain_u)*parseFloat(this.discount)/100;
+            }
+            this.montDiscount = (discount * this.quantity).toFixed(2);
+            
+            $('#modal-discount').modal('hide');
+        },
+        // changeQty(data){
+        //     alert(data)
+        //     if(this.stockStop==true && data > 0){
+        //         this.quantity = data-1;
+        //         readonly = false;
+        //     }
+        // }
+
 
     }
 }
