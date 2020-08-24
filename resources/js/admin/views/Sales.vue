@@ -100,7 +100,6 @@
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ title }} | {{ sale.num_voucher }} | 
                     </h3>
-                    
                     <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar</a>
                     </div>
                     <!-- /.card-header -->
@@ -109,6 +108,7 @@
                         <div class="row invoice-info">
                             <div class="col-sm-4 invoice-col">
                                 <b>Cliente:</b> <span>{{ customer.name }}</span><br>
+                                <hr>
                                 <address>
                                     {{ customer.address }}<br>
                                     <b>Phone: </b> <span> {{ customer.num_phone }}</span> <br>
@@ -409,7 +409,6 @@ export default {
             
         },
         setLoading: function(value) {
-       
             this.loadingWizard = value
             console.log(this.loadingWizard)
         },
@@ -420,7 +419,7 @@ export default {
           this.errorMsg = errorMsg
         },
         validateCustomer:function() {
-            console.log(this.customer)
+            // console.log(this.customer)
             return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if(Object.keys(this.customer).length > 0){
@@ -495,28 +494,27 @@ export default {
             }
         },
         storeSale(){
-                var url = `api/venta`;
-                axios.post(url,{
-                    'customer_id' : this.customer.id,
-                    'user_id': this.user.id,
-                    'type_voucher' : this.type_voucher,
-                    'num_voucher' : this.num_voucher,
-                    'num_bill' : this.num_bill,
-                    'tax':this.iva,
-                    'total':this.total,
-                    'detail_sales': this.detail_sales
-                }).then(response =>{
-                    console.log(response.data)
-                    this.errors = {};
-                    this.back_page();
-                    toastr.success("La Venta ha sido registrado.");
-                }).catch(error => {
-                    var error = error.response.data.errors;
-                    this.errors = error;
-                    toastr.error("ERROR - En la validaciones.");
-                    console.log(this.errors)
-                });
-
+            var url = `api/venta`;
+            axios.post(url,{
+                'customer_id' : this.customer.id,
+                'user_id': this.user.id,
+                'type_voucher' : this.type_voucher,
+                'num_voucher' : this.num_voucher,
+                'num_bill' : this.num_bill,
+                'tax':this.iva,
+                'total':this.total,
+                'detail_sales': this.detail_sales
+            }).then(response =>{
+                console.log(response.data)
+                this.errors = {};
+                this.back_page();
+                toastr.success("La Venta ha sido registrado.");
+            }).catch(error => {
+                var error = error.response.data.errors;
+                this.errors = error;
+                toastr.error("ERROR - En la validaciones.");
+                console.log(this.errors)
+            });
         },
         showSale(id){
             var url = `api/venta/${id}`;
@@ -532,16 +530,53 @@ export default {
             });
         },
         deleteSale(id){
-            var url = `/api/venta/anular/${id}`;
-            axios.delete(url).then(response => {
-                this.reloadTable();
-                toastr.error('La Venta fue anulada.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+ 
+            swalWithBootstrapButtons.fire({
+                title: '¿Esta seguro que desea anular la Venta.?',
+                text: "Esta operación no podra ser reversada!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Anular!',
+                cancelButtonText: 'No, Cancelar!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    var url = `/api/venta/anular/${id}`;
+                    axios.delete(url).then(response => {
+                        this.reloadTable();
+                        // toastr.error('La Venta fue anulada.');
+                        // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+                        swalWithBootstrapButtons.fire(
+                        'Anulado!',
+                        'El Comprobante de Venta ha sido Anulado.',
+                        'success'
+                        )
+                        this.reloadTable();
+
+                    }).catch(error => {
+                        console.log(error);
+                        var errors = error.response.data.errors;
+                        this.errors = errors;
+                    });
+                
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'La Anulación de la Venta ha sido cancelada',
+                    'error'
+                    )
+                }
+            })    
         },
         back_page(){
             this.vsale = 1;

@@ -9,7 +9,6 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                         <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista de Precios</h3>
-                        <!-- <a href="#" @click="createProduct()" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nueva Producto</a> -->
                         <a href="#" @click="searchProduct()" data-toggle="modal" data-target="#modal-search" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Consultar Producto</a>
                         </div>
                         

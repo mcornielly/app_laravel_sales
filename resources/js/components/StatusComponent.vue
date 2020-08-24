@@ -18,12 +18,13 @@
 
 <script>
 export default {
-    props:{
-          data: {
-            type: Object,
-            default: () => ({}),
-        },
-    }
+    props:['data']
+    // props:{
+    //       data: {
+    //         type: Object,
+    //         default: () => ({}),
+    //     },
+    // }
 }
 </script>
 

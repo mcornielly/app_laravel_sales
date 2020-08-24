@@ -113,7 +113,7 @@
                                                 </span>
                                             </div>
                                             <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Contacto" v-model="provider.contact_name" :disabled="storeup">
-                                            <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.name_contact[0]"></span>
+                                            <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.contact_name[0]"></span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -240,7 +240,7 @@ export default {
                 'num_phone': this.provider.num_phone, 
                 'email': this.provider.email, 
                 'address': this.provider.address, 
-                'name_contact': this.provider.contact_name, 
+                'contact_name': this.provider.contact_name, 
                 'contact_phone': this.provider.contact_phone,
                 'user_id': this.user.id,  
             }).then(response => {

@@ -7,6 +7,15 @@
             <i class="fas fa-eye text-success" aria-hidden="true"></i>
         </a>
 
+        <template>
+            <a href="#"
+                title="comprobante"
+                @click="click(data,'pdf')"
+                class="btn btn-link btn-sm">
+                <i class="fas fa-file-invoice" aria-hidden="true"></i>
+            </a>
+        </template> 
+
        <template v-if="data.status=='REGISTRADO'">
             <a href="#"
                 title="anular"

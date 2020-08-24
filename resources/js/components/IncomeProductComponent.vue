@@ -11,7 +11,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                             </div>
-                            <input ref="code" type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
+                            <input ref="code_income" type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
                             <div class="input-group-append">
                                 <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal-list-prod"><i class="fas fa-search" aria-hidden="true">&nbsp;</i> Buscar Producto</a>
                             </div>
@@ -147,9 +147,9 @@ import Vue from 'vue'
 import {VMoney} from 'v-money'
 import {mask} from 'vue-the-mask'
 import {IMaskComponent} from 'vue-imask';
-import VueNumerals from 'vue-numerals';
+// import VueNumerals from 'vue-numerals';
  
-Vue.use(VueNumerals); // default locale is 'en'
+// Vue.use(VueNumerals); // default locale is 'en'
 
 export default {
     props:[
@@ -189,9 +189,10 @@ export default {
             title:'',
             errors:'',
             item:false,
+             codeSearched:''
         }
     },
-    created(){
+    mounted(){
         this.setFocus();
     },
     watch: {
@@ -221,19 +222,25 @@ export default {
     },
     methods:{
         setFocus(){
-            this.$nextTick(() => this.$refs.code.focus());
+            this.$nextTick(() => this.$refs.code_income.focus());
         },
         getDataProduct(){
-            var leng_code = this.code.length;
+            // var leng_code = this.code.length;
             var code = this.code;
-            if(leng_code == 13){
+            
+            if(code != this.codeSearched){
+                this.clearSearch();
+            }
+            setTimeout(() => {
                 var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
                     var product = response.data.product;
+                    this.codeSearched = product[0].code;
                     if(this.findProduct(product[0].id)==false){
                         if(product.length){
                             this.product = response.data.product[0];
-                            this.btnCost=false;     
+                            this.btnCost=false;
+                            toastr.success("El producto " + this.product.name + " fue encontrado, para dar ingreso.");     
                         }else{
                             toastr.error("ERROR - Producto no registrado.");
                             this.btnCost=true;     
@@ -243,19 +250,15 @@ export default {
                         toastr.error("El producto ya se encuentra en la lista.");
                     }
                 }).catch(error =>{
-                        // console.log(error.response);
-                        // this.errors = error.response;
+                    // console.log(error.response);
+                    // this.errors = error.response;
                 });
-            }else{
-                if(this.code == ''){
-                        this.clearSearch();
-                        this.resultProduct = false;
-                }
-            }
+                this.code='';
+            }, 500)
+
         },
         clearSearch(){
             this.product = {};
-            // this.code = '';
         },
         addListProducts(data){
            if(this.quantity > 0 && this.wholesale_quantity > 0){

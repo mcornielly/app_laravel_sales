@@ -15,7 +15,10 @@ export default {
     },
     computed:{
         price_gain_u: function(){
-            var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+            var result = 0;
+            if(this.price > 0){
+                var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+            }    
             return result;
         },
         unit_price: function(){

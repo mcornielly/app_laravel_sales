@@ -6,15 +6,15 @@
                     <div class="card-header">
                         <h3 class="card-title text-muted">
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="">
                                     <i class="fas fa-tag" style="font-size: 20px;">&nbsp;</i>
                                     <strong>{{data.name}}</strong>
                                 </div>
-                                <div class="col-md-2 align-self-end">
-                                    <status-component :data="data"></status-component>
-                                </div>
                             </div>
                         </h3>
+                        <div class="float-right">
+                            <status-component :data="data"></status-component>
+                        </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0">

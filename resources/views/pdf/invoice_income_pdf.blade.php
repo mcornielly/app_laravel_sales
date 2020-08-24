@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Reporte Ingreso</title>
+    <title>Comprobante Ingreso</title>
     <link rel="stylesheet" href="{{public_path('css/style.css') }}" type="text/css"/>
   </head>
   <body>
@@ -69,7 +69,7 @@
           </tr>
           <tr>
             <td colspan="2"></td>
-            <td class="totalfoot" colspan="2">GRAND TOTAL</td>
+            <td class="totalfoot" colspan="2">TOTAL</td>
             <td class="totalfoot">{{ number_format($inc->total,2,',','.') }}</td>
           </tr>
         </tfoot>

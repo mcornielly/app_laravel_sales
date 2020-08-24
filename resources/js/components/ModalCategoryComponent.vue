@@ -116,6 +116,7 @@ export default {
         closeModal(){
             this.selectedRow = {};
             this.errors = '';
+            this.$parent.reloadTable();
         },
 
     }

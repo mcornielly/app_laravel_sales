@@ -63,14 +63,14 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Sctok</label>
                                     <div class="col-md-9">
-                                        <input type="number" class="form-control" placeholder="Stock" v-model="data.stock">
+                                        <input type="number" class="form-control" placeholder="Stock" v-model="data.stock" readonly>
                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.stock[0]"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label">Bulto (Cantidad)</label>
                                     <div class="col-md-9">
-                                        <input type="number" class="form-control" placeholder="Cantidad por bultor" v-model="data.wholesale_quantity">
+                                        <input type="number" class="form-control" placeholder="Cantidad por bultor" v-model="data.wholesale_quantity" readonly>
                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.wholesale_quantity[0]"></span>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted" for="text-input">(%) Ganancia</label>
                                                     <div class="col-md-7">
-                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="data.margin_gain_u">
+                                                        <input type="range" min="1" max="100" step="1" value="50" class="form-control" v-model="margin_gain_u">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.margin_gain_u[0]"></span>
                                                     </div>
                                                     <div class="col-md-2">
@@ -207,7 +207,7 @@
                     </div>
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
-                        <button v-show="action" type="button" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                        <button v-show="action" type="button" class="btn btn-primary" @click="updateProduct()" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         <!-- <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button> -->
                     </div>
                 </form>
@@ -219,7 +219,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 import {IMaskDirective} from 'vue-imask';
 import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode';
@@ -317,7 +317,11 @@ export default {
       imask: IMaskDirective
     },
     computed:{
+        margin_gain_u(){
+            return this.data.margin_gain_u.toFixed();
+        },
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         },
         price_gain_u: function(){
@@ -407,28 +411,6 @@ export default {
             this.photos.push(this.image);
             // console.log(this.photos)  
         },
-        actionModal(action){
-            if(action == "store"){
-                this.storeProduct();
-            }else{
-                this.updateProduct();
-            }
-        },
-        // storeProduct(){
-        //     var url = this.url;
-        //     axios.post(url,{
-        //         'name': this.data.name, 
-        //         'description': this.data.description 
-        //     }).then(response => {
-        //         console.log(response.data)
-        //         this.$parent.reloadTable();
-        //         toastr.success('El producto fue registrado.');
-        //     }).catch(error => {
-        //         console.log(error);
-        //         var errors = error.response.data.errors;
-        //         this.errors = errors;
-        //     });
-        // },
         updateProduct(){
             var url = `${this.url}/${this.data.id}`;
             axios.put(url,{

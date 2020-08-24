@@ -95,7 +95,7 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
+        
         $product = Product::create($request->all());
         // $product = new Product;
         // $product->name = $request->name;    
@@ -133,8 +133,7 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        $product = Product::withTrashed()->find($id);
-        $product->load('category');
+        $product = Product::with('category')->withTrashed()->find($id);
  
         if(request()->wantsJson())
         {
@@ -144,6 +143,7 @@ class ProductsController extends Controller
 
     public function product_search($code)
     {
+
         $product = Product::with('category','photos')
                     ->withTrashed()
                     ->where('code', $code)
@@ -180,10 +180,19 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request,Product $product, $id)
+    public function update(Request $request,Product $product, $id)
     {
-         
         $data = $request->all();
+        $data = $this->validate($request,[
+            'name' => 'required|min:3|unique:products,id,' . $request->id,
+            'category_id' => 'required|numeric|min:1',
+            'description' => 'required',
+            'code' => 'required',
+            'price' => 'required|numeric|not_in:0',
+            'stock' => 'required|numeric|not_in:0',
+            'wholesale_quantity' => 'required|numeric|not_in:0',
+        ]);
+
         $product = Product::find($request->id);    
         $product->update($data);
 

@@ -89,6 +89,11 @@ export default {
                     orderable: true,
                 },
                 {
+                    label: 'Pack',
+                    name: 'wholesale_quantity',
+                    orderable: true,
+                },
+                {
                     label: 'Estatus',
                     component: StatusComponentVue,
                     orderable: true,

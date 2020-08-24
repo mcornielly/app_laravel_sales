@@ -7,7 +7,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"@click.prevent="closeModal()">
                     <span aria-hidden="true">&times;</span></button>
                 </div>
-                <form role="form" @submit.prevent="getDataProduct()" method="POST">
+                <!-- <form role="form" @submit.prevent="getDataProduct()" method="POST"> -->
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="">Código del Producto</label>
@@ -16,13 +16,12 @@
                                     <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                 </div>
                                 <input type="text" @keypress.enter="getDataProduct()" class="form-control text-center" id="input_focus" v-model="code" maxlength="13" placeholder="Ingrese Código del Producto" autocomplete="off">
-                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors"></span> -->
                             </div>
                         </div>
                         <div v-show="resultProduct">
                             <hr class="bg-light disabled color-palette">
                             <prices-product
-                                :data="data"
+                                :data="product"
                                 :images="images"
                                 :imgshow="imgshow"
                                 >
@@ -36,11 +35,11 @@
                             </div>    
                         </div> -->
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-outline-light" data-dismiss="modal" @click.prevent="closeModal()">Cerrar</button>
-                        <button  @click.prevent="getDataProduct()" type="submit" class="btn btn-outline-light">Consultar</button>
+                    <div class="modal-footer" :class="{'justify-content-between':!resultProduct}">
+                        <button type="button" class="btn btn-outline-light" :class="{'pull-right' : resultProduct}" data-dismiss="modal" @click.prevent="closeModal()">Cerrar</button>
+                        <button v-show="!resultProduct" @click.prevent="getDataProduct()" type="submit" class="btn btn-outline-light">Consultar</button>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
             <!-- /.modal-content -->
         </div>
@@ -49,7 +48,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 import {IMaskDirective} from 'vue-imask';
 import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode';
@@ -64,13 +63,14 @@ export default {
     data(){
         return {
             url:"api/producto/search/",
-            data: {},
+            product: [],
             errors: '',
             code:'',
             images:[],
             resultProduct:false,
             resultFail:false,
-            imgshow: false
+            imgshow: false,
+            codeSearched:''
         }
     },
     components:{
@@ -78,42 +78,45 @@ export default {
     },
     computed:{
         user(){
+            let user = document.head.querySelector('meta[name="user"]');
             return JSON.parse(user.content);
         }
     },
     methods:{
         getDataProduct(){
-            var leng_code = this.code.length;
+            // var leng_code = this.code.length;
             var code = this.code;
-            if(leng_code == 13){
-                var url = `${this.url}${code}`;
+
+            setTimeout(() => {
+            var url = `${this.url}${code}`;
                 axios.get(url).then(response => {
-                        console.log(response.data[0]);
-                        this.data = response.data.product[0];
-                        this.images = response.data.product[0].photos;
-                        this.resultProduct = true;
-                        this.code = '';
-                        $('#modal-search').on('shown.bs.modal', function() {
-                            $('#input_focus').focus();
-                        });
+                    this.product = response.data.product[0]; 
+                    if(this.product){
+                       this.images = response.data.product[0].photos;
+                       this.resultProduct = true;
+                    }else{
+                        this.product = [];
+                    }
+                    console.log(this.product)
+                    
+                    // $('#modal-search').on('shown.bs.modal', function() {
+                    //     $('#input_focus').focus();
+                    // });
                 }).catch(error =>{
-                        console.log(error.response);
-                        this.errors = error.response;
-                        this.clearSearch();
-                        this.resultProduct = true;
-                       
+                    console.log(error);
+                    // if(this.data.length == 0){
+                    //     // this.errors = error.response;
+                    //     this.clearSearch();
+                    //     this.resultProduct = true;
+                    // }    
                 });
-            }else{
-                if(this.code == ''){
-                        this.clearSearch();
-                        this.resultProduct = false;
-                }
-            }
+            this.code='';
+            }, 500)        
         },
         clearSearch(){
-            this.data = {};
+            // this.data = {};
             this.images = [];
-             this.code = '';
+            this.code = '';
         },
         closeModal(){
             this.clearSearch();

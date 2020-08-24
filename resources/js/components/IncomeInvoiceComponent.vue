@@ -32,11 +32,12 @@
                 <div class="row col-md-12 form-group mt-3 pt-3 pb-3 border">
                     <div class="col-md-4">
                         <label for="">Tipo de Comprobante <span class="text-danger">(*)</span></label>
-                        <select class="custom-select" v-model="selected">
+                        <select class="custom-select" :class="{'is-invalid' : errors.type_voucher}" v-model="selected">
                           <option value="">Seleccione</option>
                           <option>Factura</option>
                           <option>Nota</option>
                         </select>
+                        <span v-if="errors.type_voucher" class="invalid-feedback" role="alert" v-html="errors.type_voucher"></span>
                     </div>
                     <div class="col-md-4">
                         <label for="">N° de Factura <span class="text-danger">(*)</span></label>
@@ -57,7 +58,8 @@
                                     <i class="fas fa-hashtag"></i>
                                 </span>
                             </div>
-                            <input class="form-control text-right" type="text" v-model="num_bill" placeholder="000000" maxlength="6">
+                            <input class="form-control text-right" :class="{'is-invalid' : errors.num_bill}" type="text" v-model="num_bill" placeholder="000000" maxlength="6">
+                            <span v-if="errors.num_bill" class="invalid-feedback" role="alert" v-html="errors.num_bill"></span>
                         </div>
                     </div>
                 </div>
@@ -91,9 +93,9 @@
                                     <td colspan="5" class="text-right"><strong>Total Impuesto</strong></td>
                                     <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax = (total * iva/100).toFixed(2) | currency }} </td>
                                 </tr>
-                                <tr style="background-color: #CEECF5;">
-                                    <td colspan="5" class="text-right"><strong>Total Neto</strong></td>
-                                    <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ total=calculateTotal | currency }}</td>
+                                <tr style="background-color: #1A8AB6; border-top: white 1px solid;" >
+                                    <td colspan="5" class="text-right text-white"><strong>Total Neto</strong></td>
+                                    <td class="text-right text-white"><span class="float-left" v-text="typeCurrency"></span> {{ total=calculateTotal | currency }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -120,6 +122,10 @@ export default {
         detail_incomes: {
             type: Array,
         },
+        errors: {
+            type: Object,
+            default: () => ({}),
+        },
         typeCurrency: {
             type: String,
         },
@@ -137,8 +143,7 @@ export default {
             selected: '',
             type_voucher: '',
             num_bill:'',
-            num_voucher:'',
-            errors:''
+            num_voucher:''
         }
     },
     mounted() {

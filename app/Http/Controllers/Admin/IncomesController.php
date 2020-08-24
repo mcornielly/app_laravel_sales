@@ -95,7 +95,7 @@ class IncomesController extends Controller
         //Vista del reporte PDF en el explorador             
         $num_income = Income::select('num_voucher')->where('id', $id)->get();
         // $pdf = \PDF::loadView('pdf.incomepdf', compact('income', 'detail_incomes'));
-        $pdf = \PDF::loadView('pdf.invoicepdf', compact('income', 'detail_incomes')); 
+        $pdf = \PDF::loadView('pdf.invoice_income_pdf', compact('income', 'detail_incomes')); 
         // $pdf->set_paper("a4", "portrait");
         // $pdf->render();            
         // $pdf = app('dompdf.wrapper');

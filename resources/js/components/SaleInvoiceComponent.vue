@@ -104,9 +104,9 @@
                                     <td colspan="7" class="text-right"><strong>Total Impuesto</strong></td>
                                     <td class="text-right"><span class="float-left" v-text="typeCurrency"></span> {{ totalTax = (total * iva/100).toFixed(2) | currency }} </td>
                                 </tr>
-                                <tr style="background-color: #1A8AB6;">
-                                    <td colspan="7" class="text-right"><strong>Total Neto</strong></td>
-                                    <td class="text-right text-white"><span class="float-left text-white" v-text="typeCurrency"></span> {{ total=calculateTotal | currency }}</td>
+                                <tr style="background-color: #1A8AB6; border-top: white 1px solid;">
+                                    <td colspan="7" class="text-right text-white"><strong>Total Neto</strong></td>
+                                    <td class="text-right text-white"><span class="float-left" v-text="typeCurrency"></span> {{ total=calculateTotal | currency }}</td>
                                 </tr>
                             </tbody>
                         </table>

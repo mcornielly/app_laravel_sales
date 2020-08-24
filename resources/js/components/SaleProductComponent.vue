@@ -511,34 +511,33 @@ export default {
             // var leng_code = this.code.length;
             var code = this.code;
             
-            // if(leng_code == 13){
-                if(code != this.codeSearched){
+            if(code != this.codeSearched){
+                this.clearSearch();
+            }
+            setTimeout(() => {
+                var url = `${this.url}${code}`;
+                axios.get(url).then(response => {
+                    var product = response.data.product;
+                    var price = product[0].price;
+                    this.codeSearched = product[0].code;
+                    this.wholesale_quantity = product[0].wholesale_quantity;
+                    if(product.length){
+                        if(this.findProduct(product[0].id)==false){
+                            this.product = response.data.product[0];
+                            this.addQuantity(code);
+                        }else{
+                            toastr.error("El producto ya se encuentra en la lista.");
+                        }
+                    }
+                    this.price = parseFloat(this.price_gain_u).toFixed(2);
+                }).catch(error =>{
+                    // console.log(error.response);
+                    toastr.error("ERROR - Producto no registrado.");
                     this.clearSearch();
-                }
-                setTimeout(() => {
-                        var url = `${this.url}${code}`;
-                        axios.get(url).then(response => {
-                            var product = response.data.product;
-                            var price = product[0].price;
-                            this.codeSearched = product[0].code;
-                            this.wholesale_quantity = product[0].wholesale_quantity;
-                            if(product.length){
-                                if(this.findProduct(product[0].id)==false){
-                                    this.product = response.data.product[0];
-                                    this.addQuantity(code);
-                                }else{
-                                    toastr.error("El producto ya se encuentra en la lista.");
-                                }
-                            }
-                            this.price = parseFloat(this.price_gain_u).toFixed(2);
-                        }).catch(error =>{
-                            // console.log(error.response);
-                            toastr.error("ERROR - Producto no registrado.");
-                            this.clearSearch();
-                        });
-                    this.code='';
-                }, 500)
-            // }
+                });
+                this.code='';
+            }, 500)
+   
         },
         addQuantity(code){
             if(code == this.codeSearched){

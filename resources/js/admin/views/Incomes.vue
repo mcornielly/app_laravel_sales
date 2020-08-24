@@ -71,6 +71,7 @@
 
                                 <tab-content title="Ingreso" icon="ti-receipt" :before-change="validateInvoice">
                                     <income-invoice :detail_incomes="detail_incomes" 
+                                    :errors="errors"
                                     :iva="iva"
                                     :provider="provider"
                                     :typeCurrency="typeCurrency" 
@@ -104,9 +105,9 @@
                             <!-- info row -->
                             <div class="row invoice-info">
                                 <div class="col-sm-4 invoice-col">
-                                    Proveedor:
+                                    <b>Proveedor:</b> <span>{{ income.customer_name }}</span><br>
+                                    <hr>  
                                     <address>
-                                        <strong>{{ income.customer_name }}</strong><br>
                                         {{ income.address }}<br>
                                         <b>Phone: </b> <span> {{ income.num_phone }}</span> <br>
                                         <b>Email: </b> <span> {{ income.email }}</span>
@@ -116,7 +117,9 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
-                                <b>N° <span>{{ income.type_voucher }}</span> <span>#{{ income.num_voucher }}</span> </b><br>
+                                <b>N° <span>{{ income.type_voucher }}</span> <span>#{{ income.num_voucher }}</span> </b>
+                                <span v-if="income.status=='ANULADO'" class="badge badge-danger" v-text="income.status" style="width: 100%;"></span>
+                                <span v-else class="badge badge-success" v-text="income.status" style="width: 100%;"></span><br>
                                 <br>
                                 <b>N° Comprobante :</b> <span>{{ income.num_bill }}</span><br>
                                 <b>Fecha de Pago :</b> <span>{{ income.created_at }}</span><br>
@@ -324,7 +327,12 @@ export default {
             num_voucher:'',
             total: 0.00,
             totalTax: 0.00,
-            iva:16
+            iva:16,
+            errors: {
+                num_bill:'',
+                selected: ''
+            },
+            toastr:{}
         }
     },
     created(){
@@ -434,9 +442,19 @@ export default {
                     var errors = "validate";
                     toastr.error("ERROR - Debe completar los campos.");
                     reject(errors);
+                    this.validateField();  
                 }
             }, 1000)
           }) 
+        },
+        validateField(){
+            if(!this.num_bill){
+                this.errors.num_bill = 'Debe llenar el campo.';
+            }
+            if(!this.type_voucher){
+                this.errors.type_voucher = 'Debe seleccionar el tipo de comprobante.';
+            }
+            console.log(this.errors)
         },
         selectAction(data, action){
             switch(action){
@@ -453,6 +471,12 @@ export default {
                     {         
                         this.id = data.id;                   
                         this.deleteIncome(this.id);
+                        break;
+                    }
+                case 'pdf':
+                    {         
+                        this.id = data.id;                   
+                        this.createPDF(this.id);
                         break;
                     }
             }
@@ -493,17 +517,54 @@ export default {
                 });
         },
         deleteIncome(id){
-            var url = `/api/ingreso/anular/${id}`;
-            axios.delete(url).then(response => {
-                this.reloadTable();
-                toastr.error('El ingreso fue anulado.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
 
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+ 
+            swalWithBootstrapButtons.fire({
+                title: '¿Esta seguro que desea anular el Ingreso.?',
+                text: "Esta operación no podra ser reversada!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Anular!',
+                cancelButtonText: 'No, Cancelar!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    var url = `/api/ingreso/anular/${id}`;
+                    axios.delete(url).then(response => {
+                        // toastr.error('El ingreso fue anulado.');
+                        // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+                        swalWithBootstrapButtons.fire(
+                        'Anulado!',
+                        'El Comprobante de Ingreso ha sido Anulado.',
+                        'success'
+                        )
+                        this.reloadTable();
+
+                    }).catch(error => {
+                        console.log(error);
+                        var errors = error.response.data.errors;
+                        this.errors = errors;
+                    });
+
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'La Anulación del Ingreso ha sido cancelada',
+                    'error'
+                    )
+                }
+            })
+
         },
         back_page(){
             this.vincome = 1;

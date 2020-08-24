@@ -63,8 +63,8 @@ class Provider extends Model
         $this->attributes['name'] = ucwords($value);
     }
 
-    public function getNameAttribute($value)
-    {
-        return strtoupper($value);
-    }
+    // public function getNameAttribute($value)
+    // {
+    //     return strtoupper($value);
+    // }
 }

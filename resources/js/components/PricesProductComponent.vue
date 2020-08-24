@@ -51,15 +51,15 @@
 
                         <div class="bg-gray py-2 px-3 mt-4">
                             <h4 class="mt-0">
-                            <small>Sin IVA: {{ tax | numeralFormat('0.00[,]00') }}</small>
+                            <small>Sin IVA: {{ tax | currency }}</small>
                             </h4>
-                            <h3 class="mb-0">Bs. {{ unit_price | numeralFormat('0.00[,]00') }} | $. {{ data.divisa_unit | numeralFormat('0.00[,]00') }}</h3>
+                            <h3 class="mb-0">Bs. {{ unit_price | currency }} | $. {{ data.divisa_unit | currency }}</h3>
                         </div>
                         <div class="bg-gray disabled color-palette py-2 px-3 mt-4">
                             <h4 class="mt-0">
-                            <small>Sin IVA: {{ tax_wholesale | numeralFormat('0.00[,]00') }} </small>
+                            <small>Sin IVA: {{ tax_wholesale | currency }} </small>
                             </h4>
-                            <h3 class="mb-0">Bs. {{ wholesale_price | numeralFormat('0.00[,]00') }} | $. {{ data.wholesale_divisa | numeralFormat('0.00[,]00') }} | Pack. {{ wholesale_quantity }}</h3>
+                            <h3 class="mb-0">Bs. {{ wholesale_price | currency }} | $. {{ data.wholesale_divisa | currency }} | Pack. {{ wholesale_quantity }}</h3>
                         </div>
                     </div>
                 </div>
@@ -77,10 +77,7 @@ Vue.use(VueNumerals); // default locale is 'en'
 import { compensateScroll } from '@fullcalendar/core'
 export default {
     props:{
-        data:{
-            type: Object,
-            default: () => {}
-        },
+        data:{},
         images:{
             type: Array,
             default: () => [],
@@ -115,40 +112,53 @@ export default {
             var result = 0;
             if(this.price > 0){
                 var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
-                this.p_gain_u = result;
             }    
             return result;
         },
+        // unit_price: function(){
+        //     var result = 0;
+        //     if(this.data.wholesale_quantity > 0 || this.data.price > 0){
+        //         var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+        //     }
+        //     return result;
+        // },
         unit_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
-                var result = ((parseFloat(this.price_gain_u) + parseFloat(this.data.price)) / this.data.wholesale_quantity).toFixed(2);
+            if(this.data.price > 0){
+                var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
             }
             return result;
         },
         price_gain_w: function(){
             var result = 0;
-            if(this.price > 0){
-                var result = (this.data.price * this.data.margin_gain_w / 100).toFixed(2);
+            if(this.data.price > 0){
+                result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
             }
             return result;
         },
         wholesale_price: function(){
             var result = 0;
-            if(this.data.wholesale_quantity > 0 || this.data.price > 0){
-                result = (parseFloat(this.price_gain_w) + parseFloat(this.data.price)).toFixed(2);
+            if(this.data.wholesale_quantity > 0){
+                 result = parseFloat(this.price_gain_w) + parseFloat(this.cost_pack);
             }
             return result;
         },
         tax_wholesale(){
-            var tax = 0.16;
-            var priceTax = this.wholesale_price * tax;
+            var tax = 16;
+            var priceTax = this.wholesale_price * tax/100;
             return (this.wholesale_price - priceTax).toFixed(2);
         },
         tax(){
-            var tax = 0.16;
-            var priceTax = this.unit_price * tax;
+            var tax = 16;
+            var priceTax = this.unit_price * tax/100;
             return (this.unit_price - priceTax).toFixed(2);
+        },
+        cost_pack: function(){
+            var result = 0;
+            if(this.data.price){
+                result = this.data.price*this.data.wholesale_quantity;
+            }
+            return result;
         }
     },
     methods:{
