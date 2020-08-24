@@ -96107,6 +96107,7 @@ try {// window.Popper = require('popper.js').default;
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+var user = document.head.querySelector('meta[name="user"]');
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

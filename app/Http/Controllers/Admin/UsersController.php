@@ -6,6 +6,8 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
@@ -34,7 +36,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -45,7 +47,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

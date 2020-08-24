@@ -25,7 +25,6 @@ class CategoriesController extends Controller
         $searchValue = $request->input('search');
 
         $query = Category::withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue);
-        // $categories = Category::withTrashed()->get();
 
         if(request()->wantsJson())
         {
