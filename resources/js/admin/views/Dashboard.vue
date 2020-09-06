@@ -24,7 +24,7 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>{{  divisa | numeralFormat('0.00[,]00') }}</h3>    
+                        <h3>{{  divisa | currency }}</h3>    
                         <!-- <h3>190.000,00</h3> -->
                         <p>Cotización del Dolar</p>
                     </div>

@@ -27,8 +27,8 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Ingresa tus datos para Iniciar Sesión</p>
-
-      <form method="POST" action="{{ route('login') }}">
+        <login-app></login-app>
+      {{-- <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="input-group mb-3">
             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
@@ -71,7 +71,7 @@
           </div>
           <!-- /.col -->
         </div>
-      </form>
+      </form> --}}
 
       {{-- <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>

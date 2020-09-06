@@ -185,23 +185,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Sidebar Menu -->
           <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <router-link to="/" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                          Dashboard
-                        </p>
-                    </router-link>
-                </li>
-                {{-- Divisa --}}
-                <li class="nav-item">
-                  <router-link to="/divisas" class="nav-link" >
-                    <i class="nav-icon fas fa-money-bill-alt"></i>
-                    <p>
-                      Divisa
-                    </p>
+              <li class="nav-item">
+                  <router-link to="/" class="nav-link">
+                      <i class="nav-icon fas fa-tachometer-alt"></i>
+                      <p>
+                        Dashboard
+                      </p>
                   </router-link>
-                </li>
+              </li>
+              {{-- Divisa --}}
+              <li class="nav-item">
+                <router-link to="/divisas" class="nav-link">
+                  <i class="nav-icon fas fa-money-bill-alt"></i>
+                  <p>
+                    Divisa
+                  </p>
+                </router-link>
+              </li>
               <li class="nav-item has-treeview">
                 <router-link to="#" class="nav-link">
                   <i class="nav-icon fas fa-boxes"></i>
