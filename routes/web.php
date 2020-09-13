@@ -12,9 +12,13 @@
 */
 
 Route::get('{any}', function () {
-    return view('spa_app');
+          return view('login');
 })->where('any', '.*');
 
+
+// Route::get('/', function () {
+//     return view('spa_app');
+// });
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -22,7 +26,7 @@ Route::get('{any}', function () {
 
 // Route::get('/', 'AdminController@index')->name('admin');
 // Route::get('/', 'AdminController@spa_index')->name('admin');
-// // Route::get('/home', 'HomeController@index')->name('home');
+     
 
 
 // Route::group([
@@ -40,3 +44,7 @@ Route::get('{any}', function () {
 
 // Auth::routes();
 
+
+Auth::routes();
+
+// Route::get('/', 'HomeController@index')->name('home');

@@ -1,9 +1,22 @@
+import Dashboard from './admin/views/Dashboard'
+
+
 export const routes = [
+    {
+        path: '/login',
+        name: 'login'
+    },
     {
         path: '/',
         name: 'dashboard',
-        component: require('./admin/views/Dashboard').default
-    }
+        component: Dashboard,
+        meta: {
+            requiresAuth: true
+        },
+        // beforeEnter: () => {
+        //     window.location.href = window.location.origin +'/'
+        // }
+    },
     // {
     //     path: '/divisas',
     //     name: 'divisas',

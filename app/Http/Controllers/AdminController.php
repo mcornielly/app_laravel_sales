@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -11,14 +10,19 @@ class AdminController extends Controller
         $this->middleware('auth'); 
     }
    
-   public function index()
+//    public function index()
+//    {
+//        return view('admin.app');
+//    }
+
+   public function home()
    {
-       return view('admin.app');
+       return view('spa_app');
    }
 
-   public function spa_index()
+   public function login()
    {
-       return view('admin.spa');
+        return view('auth.login');
    }
    
 }

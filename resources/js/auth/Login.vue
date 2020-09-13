@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form action="">
+        <form method="POST" action="">
             <div class="input-group mb-3">
                 <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email" v-model="user.email">
                 <div class="input-group-append">
@@ -34,7 +34,7 @@
                 </div> -->
                 <!-- /.col -->
                 <div class="col-4">
-                    <button type="button" class="btn btn-primary btn-block" @click.prevent="authenticate">Entrar</button>
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
                 </div>
                 <!-- /.col -->
             </div>
@@ -42,9 +42,6 @@
     </div>
 </template>
 <script>
-
-import {login} from '../../helpers/auth'
-
 export default {
     name: 'login-app',
     data(){
@@ -57,18 +54,12 @@ export default {
     },
     methods: {
         authenticate(){
-            alert(1)
-            this.$store.dispatch('login');
-            // this.$store.dispatch('store/loginUser', this.user);
-    
-            login(this.$data.user)
-                .then((response) => {
-                    console.log(response)
-                    // window.location.href = window.location.origin +'/'
-                    this.$store.commit("loginSuccess", response);
+            this.store.dispach('login');
 
-                    // this.$router.push({path: '/'});
-                    window.location.replace("/home");
+            login(this.$date.form)
+                .then((response) => {
+                    this.$store.commit("loginSuccess", response);
+                    this.$router.push({path: '/'});
                 })
                 .catch((error) => {
                     this.$store.commit("loginFailed", {error});

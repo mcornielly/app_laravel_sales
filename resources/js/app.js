@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import {routes} from './routes';
 import VueFormWizard from 'vue-form-wizard';
 import StoreData from './store';
+import {initialize} from  './helpers/general'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -25,6 +26,8 @@ const router = new VueRouter({
     mode: 'history',
     linkExactActiveClass: 'active'
 })
+
+initialize(store, router);
 
 /**
  * The following block of code may be used to automatically register your
