@@ -13,10 +13,10 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', 'AdminController@index')->name('admin');
-Route::get('/', 'AdminController@spa_index')->name('admin');
-// Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/', 'AdminController@spa_index')->name('admin');
+// Route::get('/', 'AdminController@index')->name('admin');
+// Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group([
     'prefix' => 'admin', 
