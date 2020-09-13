@@ -18,7 +18,7 @@ class AdminController extends Controller
 
    public function spa_index()
    {
-       return view('admin.spa');
+       return view('spa');
    }
    
 }

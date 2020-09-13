@@ -25,6 +25,7 @@ Vue.use(VueFormWizard)
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('login-app', require('./auth/Login.vue').default);
 Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
