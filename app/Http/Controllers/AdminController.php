@@ -10,12 +10,7 @@ class AdminController extends Controller
         $this->middleware('auth'); 
     }
    
-//    public function index()
-//    {
-//        return view('admin.app');
-//    }
-
-   public function home()
+   public function index()
    {
        return view('spa_app');
    }

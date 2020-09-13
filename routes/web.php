@@ -11,8 +11,10 @@
 |
 */
 
+// Route::get('/', 'AdminController@index')->name('admin');
+
 Route::get('{any}', function () {
-          return view('login');
+          return view('auth.login');
 })->where('any', '.*');
 
 
@@ -23,9 +25,6 @@ Route::get('{any}', function () {
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
-// Route::get('/', 'AdminController@index')->name('admin');
-// Route::get('/', 'AdminController@spa_index')->name('admin');
      
 
 
@@ -45,6 +44,6 @@ Route::get('{any}', function () {
 // Auth::routes();
 
 
-Auth::routes();
+// Auth::routes();
 
 // Route::get('/', 'HomeController@index')->name('home');
