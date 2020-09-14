@@ -2,10 +2,10 @@ import Dashboard from './admin/views/Dashboard'
 
 
 export const routes = [
-    {
-        path: '/login',
-        name: 'login'
-    },
+    // {
+    //     path: '/login',
+    //     name: 'login'
+    // },
     {
         path: '/',
         name: 'dashboard',

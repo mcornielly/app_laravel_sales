@@ -43,7 +43,7 @@ initialize(store, router);
 Vue.component('main-app', require('./components/layouts/MainApp.vue').default);
 Vue.component('header-app', require('./components/layouts/Header.vue').default);
 Vue.component('sidebar-app', require('./components/layouts/SideBar.vue').default);
-Vue.component('login-app', require('./components/auth/Login.vue').default);
+Vue.component('login-app', require('./auth/Login.vue').default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
