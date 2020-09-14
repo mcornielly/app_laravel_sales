@@ -8,8 +8,9 @@ require('./bootstrap');
 import Vue from 'vue';
 import Vuex from 'vuex'
 import {routes} from './routes';
-import VueFormWizard from 'vue-form-wizard'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import VueFormWizard from 'vue-form-wizard';
+import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+import StoreData from './store';
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
@@ -17,6 +18,7 @@ Vue.use(Vuex);
 Vue.use(VueFormWizard);
 window.jsPDF = require('jspdf');
 
+const store = new Vuex.Store(StoreData);
 const router = new VueRouter({
     routes,
     mode: 'history',
@@ -89,5 +91,6 @@ Vue.filter('currency', function (value) {
 const app = new Vue({
     el: '#app',
     router,
+    store
     
 });

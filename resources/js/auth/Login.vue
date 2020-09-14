@@ -1,6 +1,7 @@
 <template>
     <div>
         <form method="POST">
+        <p>{{ welcome }}</p>
         <div class="input-group mb-3">
             <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email">
             <div class="input-group-append">
@@ -46,8 +47,13 @@ export default {
     name: 'login-app',
     data() {
       return{
-        message:''
+        message:'',
       }
+    },
+    computed:{
+        welcome(){
+          return this.$store.getters.welcome.welcomeMessage
+        }
     },
     mounted() {
         console.log('Component mounted.')
