@@ -43,6 +43,12 @@
 </template>
 <script>
 export default {
+    name: 'login-app',
+    data() {
+      return{
+        message:''
+      }
+    },
     mounted() {
         console.log('Component mounted.')
     }

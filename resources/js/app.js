@@ -5,15 +5,25 @@
  */
 
 require('./bootstrap');
-
-window.Vue = require('vue');
-window.jsPDF = require('jspdf');
 import Vue from 'vue';
-import router from './routes';
+import Vuex from 'vuex'
+import {routes} from './routes';
 import VueFormWizard from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-Vue.use(VueFormWizard)
+import VueRouter from 'vue-router';
 
+Vue.use(VueRouter);
+Vue.use(Vuex);
+Vue.use(VueFormWizard);
+window.jsPDF = require('jspdf');
+
+const router = new VueRouter({
+    routes,
+    mode: 'history',
+    linkExactActiveClass: 'active'
+});
+
+// window.Vue = require('vue');
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -26,36 +36,37 @@ Vue.use(VueFormWizard)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('login-app', require('./auth/Login.vue').default);
-Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
-Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
-Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
-Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
-Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
-Vue.component('modal-product', require('./components/ModalProductComponent.vue').default);
-Vue.component('modal-list-prod', require('./components/ModalListProductComponent.vue').default);
-Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
-Vue.component('modal-searh-product', require('./components/ModalSearchProductComponent.vue').default);
-Vue.component('modal-show-priceslist', require('./components/ModalPricesListComponent.vue').default);
-Vue.component('bread-crumbs', require('./components/BreadCrumbs').default);
-Vue.component('product-create', require('./components/ProductCreateComponent.vue').default);
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('btn-divisa', require('./components/BtnDivisaComponent.vue').default);
-Vue.component('btn-category', require('./components/BtnCategoryComponent.vue').default);
-Vue.component('btn-products', require('./components/BtnProductsComponent.vue').default);
-Vue.component('btn-providers', require('./components/BtnProvidersComponent.vue').default);
-Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue').default);
-Vue.component('status-component', require('./components/StatusComponent.vue').default);
-Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
-Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
-Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
-Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
-Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);
-Vue.component('income-invoice', require('./components/IncomeInvoiceComponent.vue').default);
-Vue.component('sale-customer', require('./components/SaleCustomerComponent.vue').default);
-Vue.component('sale-product', require('./components/SaleProductComponent.vue').default);
-Vue.component('sale-invoice', require('./components/SaleInvoiceComponent.vue').default);
-Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
-Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').default);
+Vue.component('main-app', require('./components/layout/MainApp.vue').default);
+// Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
+// Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
+// Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
+// Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
+// Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
+// Vue.component('modal-product', require('./components/ModalProductComponent.vue').default);
+// Vue.component('modal-list-prod', require('./components/ModalListProductComponent.vue').default);
+// Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
+// Vue.component('modal-searh-product', require('./components/ModalSearchProductComponent.vue').default);
+// Vue.component('modal-show-priceslist', require('./components/ModalPricesListComponent.vue').default);
+// Vue.component('bread-crumbs', require('./components/BreadCrumbs').default);
+// Vue.component('product-create', require('./components/ProductCreateComponent.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('btn-divisa', require('./components/BtnDivisaComponent.vue').default);
+// Vue.component('btn-category', require('./components/BtnCategoryComponent.vue').default);
+// Vue.component('btn-products', require('./components/BtnProductsComponent.vue').default);
+// Vue.component('btn-providers', require('./components/BtnProvidersComponent.vue').default);
+// Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue').default);
+// Vue.component('status-component', require('./components/StatusComponent.vue').default);
+// Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
+// Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
+// Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
+// Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
+// Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);
+// Vue.component('income-invoice', require('./components/IncomeInvoiceComponent.vue').default);
+// Vue.component('sale-customer', require('./components/SaleCustomerComponent.vue').default);
+// Vue.component('sale-product', require('./components/SaleProductComponent.vue').default);
+// Vue.component('sale-invoice', require('./components/SaleInvoiceComponent.vue').default);
+// Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
+// Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);
 
 /**

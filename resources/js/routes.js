@@ -1,10 +1,5 @@
-import Vue from 'vue';
-import Router from 'vue-router';
 
-Vue.use(Router);
-
-export default new Router({
-    routes: [
+export const routes = [
         {
             path: '/',
             name: 'dashboard',
@@ -59,7 +54,4 @@ export default new Router({
             path: '*',
             component: require('./admin/views/404').default
         }
-    ],
-    linkExactActiveClass: 'active',
-    // mode: 'history'
-});
+    ];
