@@ -12,6 +12,7 @@ import VueFormWizard from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 import StoreData from './store';
 import VueRouter from 'vue-router';
+import { nextTick } from 'vue/types/umd';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -24,6 +25,19 @@ const router = new VueRouter({
     mode: 'history',
     linkExactActiveClass: 'active'
 });
+
+router.beforeEach((to, from, netx) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const currentUser = store.state.currentUser;
+
+    if(requiresAuth && !currentUser) {
+        next('/login');
+    }else if(to.path == '/login' && currentUser){
+        next('/');
+    }else{
+        next()
+    }
+})
 
 // window.Vue = require('vue');
 /**

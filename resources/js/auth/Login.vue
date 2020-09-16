@@ -3,7 +3,7 @@
         <form method="POST">
         <p>{{ welcome }}</p>
         <div class="input-group mb-3">
-            <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email">
+            <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email" v-model="user.email">
             <div class="input-group-append">
                 <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -14,7 +14,7 @@
                 </span>
         </div>
         <div class="input-group mb-3">
-            <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password" placeholder="Contraseña">
+            <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password" placeholder="Contraseña" v-model="user.password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -47,13 +47,30 @@ export default {
     name: 'login-app',
     data() {
       return{
-        message:'',
+        user:{
+          email:'',
+          password: ''
+        }
       }
     },
     computed:{
         welcome(){
           return this.$store.getters.welcome.welcomeMessage
         }
+    },
+    methods:{
+      authenticate() {
+        this.$store.dispatch('login');
+
+        login(this.$data.form)
+          .then((res) => {
+            this.$store.commit("loginSuccess", res);
+            // this.$router.push({path: '/'});
+          })
+          .catch((error) => {
+            this.$store.commit("loginFailed", {error});
+          })
+      }
     },
     mounted() {
         console.log('Component mounted.')
