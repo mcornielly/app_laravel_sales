@@ -5331,12 +5331,30 @@ __webpack_require__.r(__webpack_exports__);
   name: 'login-app',
   data: function data() {
     return {
-      message: ''
+      user: {
+        email: '',
+        password: ''
+      }
     };
   },
   computed: {
     welcome: function welcome() {
       return this.$store.getters.welcome.welcomeMessage;
+    }
+  },
+  methods: {
+    authenticate: function authenticate() {
+      var _this = this;
+
+      this.$store.dispatch('login');
+      login(this.$data.form).then(function (res) {
+        _this.$store.commit("loginSuccess", res); // this.$router.push({path: '/'});
+
+      })["catch"](function (error) {
+        _this.$store.commit("loginFailed", {
+          error: error
+        });
+      });
     }
   },
   mounted: function mounted() {
@@ -48346,6 +48364,14 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "input-group mb-3" }, [
         _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.user.email,
+              expression: "user.email"
+            }
+          ],
           staticClass: "form-control",
           attrs: {
             id: "email",
@@ -48355,6 +48381,15 @@ var render = function() {
             autocomplete: "email",
             autofocus: "",
             placeholder: "Email"
+          },
+          domProps: { value: _vm.user.email },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.user, "email", $event.target.value)
+            }
           }
         }),
         _vm._v(" "),
@@ -48369,6 +48404,14 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "input-group mb-3" }, [
         _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.user.password,
+              expression: "user.password"
+            }
+          ],
           staticClass: "form-control",
           attrs: {
             id: "password",
@@ -48377,6 +48420,15 @@ var render = function() {
             required: "",
             autocomplete: "current-password",
             placeholder: "Contraseña"
+          },
+          domProps: { value: _vm.user.password },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.user, "password", $event.target.value)
+            }
           }
         }),
         _vm._v(" "),
@@ -66703,12 +66755,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+!(function webpackMissingModule() { var e = new Error("Cannot find module 'vue/types/umd'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 
@@ -66726,6 +66780,20 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_2__["routes"],
   mode: 'history',
   linkExactActiveClass: 'active'
+});
+router.beforeEach(function (to, from, netx) {
+  var requiresAuth = to.matched.some(function (record) {
+    return record.meta.requiresAuth;
+  });
+  var currentUser = store.state.currentUser;
+
+  if (requiresAuth && !currentUser) {
+    next('/login');
+  } else if (to.path == '/login' && currentUser) {
+    next('/');
+  } else {
+    next();
+  }
 }); // window.Vue = require('vue');
 
 /**
@@ -68023,7 +68091,10 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [{
   path: '/',
   name: 'dashboard',
-  component: __webpack_require__(/*! ./admin/views/Dashboard */ "./resources/js/admin/views/Dashboard.vue")["default"]
+  component: __webpack_require__(/*! ./admin/views/Dashboard */ "./resources/js/admin/views/Dashboard.vue")["default"],
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/divisas',
   name: 'divisas',
@@ -68076,17 +68147,59 @@ var routes = [{
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+!(function webpackMissingModule() { var e = new Error("Cannot find module '/.helpers/auth'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+
+var user = !(function webpackMissingModule() { var e = new Error("Cannot find module '/.helpers/auth'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())();
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
-    welcomeMessage: 'Bienvenidos a mi App'
+    curremtUser: user,
+    isLoggedIn: !!user,
+    loading: false,
+    auth_error: null
   },
   getters: {
-    welcome: function welcome(state) {
-      return state;
+    isLoading: function isLoading(state) {
+      return state.loading;
+    },
+    isLoaggedIn: function isLoaggedIn(state) {
+      return state.isLoaggedIn;
+    },
+    currentUser: function currentUser(state) {
+      return state.currentUser;
+    },
+    authError: function authError(state) {
+      return state.auth_error;
     }
   },
-  mutations: {},
-  actions: {}
+  mutations: {
+    login: function login(state) {
+      state.loading = true;
+      state.auth_error = null;
+    },
+    loginSuccess: function loginSuccess(state, payload) {
+      state.auth_error = null;
+      state.isLoaggedIn = true;
+      state.loading = false;
+      state.currentUser = Object.assign({}, payload.user, {
+        token: payload.access
+      });
+      localStorage.setItem("user", JSON.stringify(state.curremtUser));
+    },
+    loginFailed: function loginFailed(state, payload) {
+      state.loading = false;
+      state.auth_error = payload.error;
+    },
+    logout: function logout(state) {
+      localStorage.remove("user");
+      state.isLoaggedIn = false;
+      state.currentUser = null;
+    }
+  },
+  actions: {
+    login: function login(context) {
+      context.commit("login");
+    }
+  }
 });
 
 /***/ }),
