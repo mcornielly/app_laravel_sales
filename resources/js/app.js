@@ -12,7 +12,7 @@ import VueFormWizard from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 import StoreData from './store';
 import VueRouter from 'vue-router';
-import { nextTick } from 'vue/types/umd';
+// import { nextTick } from 'vue/types/umd';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -26,7 +26,7 @@ const router = new VueRouter({
     linkExactActiveClass: 'active'
 });
 
-router.beforeEach((to, from, netx) => {
+router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const currentUser = store.state.currentUser;
 
@@ -37,7 +37,7 @@ router.beforeEach((to, from, netx) => {
     }else{
         next()
     }
-})
+});
 
 // window.Vue = require('vue');
 /**
@@ -53,6 +53,8 @@ router.beforeEach((to, from, netx) => {
 
 Vue.component('login-app', require('./auth/Login.vue').default);
 Vue.component('main-app', require('./components/layout/MainApp.vue').default);
+Vue.component('header-app', require('./components/layout/Header.vue').default);
+Vue.component('sidebar-app', require('./components/layout/SideBar.vue').default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);

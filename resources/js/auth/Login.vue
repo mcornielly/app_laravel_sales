@@ -1,7 +1,6 @@
 <template>
     <div>
         <form method="POST">
-        <p>{{ welcome }}</p>
         <div class="input-group mb-3">
             <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email" v-model="user.email">
             <div class="input-group-append">
@@ -10,7 +9,7 @@
                 </div>
             </div>
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ message }}</strong>
+                    <strong>{{ error }}</strong>
                 </span>
         </div>
         <div class="input-group mb-3">
@@ -21,7 +20,7 @@
             </div>
           </div>
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ message }}</strong>
+                    <strong>{{ error }}</strong>
                 </span>
         </div>
         <div class="row">
@@ -35,7 +34,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+            <button type="button" class="btn btn-primary btn-block" @click.prevent="authenticate">Entrar</button>
           </div>
           <!-- /.col -->
         </div>
@@ -43,6 +42,8 @@
     </div>
 </template>
 <script>
+import {login} from '../helpers/auth';
+
 export default {
     name: 'login-app',
     data() {
@@ -50,22 +51,34 @@ export default {
         user:{
           email:'',
           password: ''
-        }
+        },
+        error: null
       }
     },
-    computed:{
-        welcome(){
-          return this.$store.getters.welcome.welcomeMessage
-        }
-    },
+    // computed:{
+    //     welcome(){
+    //       return this.$store.getters.welcome.welcomeMessage
+    //     }
+    // },
     methods:{
       authenticate() {
         this.$store.dispatch('login');
-
-        login(this.$data.form)
+        // get the redirect object
+        // var redirect = this.$auth.redirect();
+        // console.log(redirect)
+        login(this.$data.user)
           .then((res) => {
+            console.log(res)
             this.$store.commit("loginSuccess", res);
-            // this.$router.push({path: '/'});
+
+            console.log(redirect.from.name)
+            // handle redirection
+            // const redirectTo = redirect ? redirect.from.name : res ? 'spa' : 'dashboard'
+            // this.$router.push({name: redirectTo})  
+
+
+            window.location.href("/");
+            // this.$router.push('/');
           })
           .catch((error) => {
             this.$store.commit("loginFailed", {error});

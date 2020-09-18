@@ -13,7 +13,7 @@ class AdminController extends Controller
    
    public function index()
    {
-       return view('admin.app');
+       return view('spa');
    }
 
    public function spa_index()

@@ -1,6 +1,10 @@
 
 export const routes = [
         {
+            path: '/login',
+            name:'login'
+        },
+        {
             path: '/',
             name: 'dashboard',
             component: require('./admin/views/Dashboard').default,

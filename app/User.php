@@ -2,19 +2,19 @@
 
 namespace App;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Models\Permission;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, LaravelVueDatatableTrait, HasRoles;
 
-    protected $guard_name = 'web';
+    protected $guard_name = 'api';
 
     /**
     * The accessors to append to the model's array form.

@@ -10,8 +10,8 @@ export function login($credentials) {
     })
 }
 
-export function getLocaluser() {
-    const userStr = localStorage.getitem("user");
+export function getLocalUser() {
+    const userStr = localStorage.getItem("user");
 
     if(!userStr) {
         return null;
