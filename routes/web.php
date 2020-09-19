@@ -10,26 +10,29 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return view('spa');
-});
 
-Route::get('/', 'AdminController@spa_index')->name('admin');
+Route::get('/{any}', 'AdminController@index')->where('any', '.*');
+
+// Route::get('/', function () {
+//     return view('spa');
+// });
+
+// Route::get('/', 'AdminController@spa_index')->name('admin');
 // Route::get('/', 'AdminController@index')->name('admin');
 // Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group([
-    'prefix' => 'admin', 
-    'namespace' => 'Admin', 
-    'middleware' => 'auth'], function(){
-    Route::resource('categorias', 'CategoriesController');
-    Route::resource('divisa', 'DivisaController');
-    Route::resource('productos', 'ProductsController');
-    Route::resource('ingresos', 'IncomesController');
-    Route::resource('proveedores', 'ProvidersController');
-    Route::resource('ventas', 'SalesController');
-    Route::resource('clientes', 'CustomersController');
-});
+// Route::group([
+//     'prefix' => 'admin', 
+//     'namespace' => 'Admin', 
+//     'middleware' => 'auth'], function(){
+//     Route::resource('categorias', 'CategoriesController');
+//     Route::resource('divisa', 'DivisaController');
+//     Route::resource('productos', 'ProductsController');
+//     Route::resource('ingresos', 'IncomesController');
+//     Route::resource('proveedores', 'ProvidersController');
+//     Route::resource('ventas', 'SalesController');
+//     Route::resource('clientes', 'CustomersController');
+// });
 
 Auth::routes();
 

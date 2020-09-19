@@ -39,6 +39,8 @@ const router = new VueRouter({
 
 Vue.component('login-app', require('./auth/Login.vue').default);
 Vue.component('main-app', require('./components/layout/MainApp.vue').default);
+Vue.component('sidebar-app', require('./components/layout/SideBar.vue').default);
+Vue.component('header-app', require('./components/layout/Header.vue').default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
