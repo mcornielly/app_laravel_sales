@@ -35,7 +35,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+            <button type="button" class="btn btn-primary btn-block" @click.prevent="authenticate">Entrar</button>
           </div>
           <!-- /.col -->
         </div>
@@ -57,6 +57,13 @@ export default {
     },
     mounted() {
         console.log('Component mounted.')
+    },
+    methods:{
+      authenticate(){
+        window.location.href = window.location.origin +'/home'
+        // console.log('aqui')
+        this.$router.push('/home');
+      }
     }
 }
 </script>

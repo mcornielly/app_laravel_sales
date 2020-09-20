@@ -5341,6 +5341,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  methods: {
+    authenticate: function authenticate() {
+      window.location.href = window.location.origin + '/home'; // console.log('aqui')
+
+      this.$router.push('/home');
+    }
   }
 });
 
@@ -48726,7 +48733,26 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _c("div", { staticClass: "row" }, [
+        _vm._m(2),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.authenticate($event)
+                }
+              }
+            },
+            [_vm._v("Entrar")]
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -48755,29 +48781,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-8" }, [
-        _c("div", { staticClass: "icheck-primary" }, [
-          _c("input", {
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", name: "remember", id: "remember" }
-          }),
-          _vm._v(" "),
-          _c("label", { attrs: { for: "remember" } }, [
-            _vm._v("\n            Recuérdame\n          ")
-          ])
+    return _c("div", { staticClass: "col-8" }, [
+      _c("div", { staticClass: "icheck-primary" }, [
+        _c("input", {
+          staticClass: "form-check-input",
+          attrs: { type: "checkbox", name: "remember", id: "remember" }
+        }),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "remember" } }, [
+          _vm._v("\n            Recuérdame\n          ")
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary btn-block",
-            attrs: { type: "submit" }
-          },
-          [_vm._v("Entrar")]
-        )
       ])
     ])
   }
@@ -67842,12 +67855,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _helpers_general__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./helpers/general */ "./resources/js/helpers/general.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 
@@ -67865,7 +67880,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_2__["routes"],
   mode: 'history',
   linkExactActiveClass: 'active'
-}); // window.Vue = require('vue');
+});
+Object(_helpers_general__WEBPACK_IMPORTED_MODULE_7__["initialize"])(store, router); // window.Vue = require('vue');
 
 /**
  * The following block of code may be used to automatically register your
@@ -69286,6 +69302,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_template_id_305ad4c2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/helpers/general.js":
+/*!*****************************************!*\
+  !*** ./resources/js/helpers/general.js ***!
+  \*****************************************/
+/*! exports provided: initialize */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialize", function() { return initialize; });
+function initialize(store, router) {
+  router.beforeEach(function (to, from, next) {
+    var requiresAuth = to.matched.some(function (record) {
+      return record.meta.requiresAuth;
+    });
+    var currentUser = store.state.currentUser;
+
+    if (requiresAuth && !currentUser) {
+      next('/login');
+    } else if (to.path == '/login' && currentUser) {
+      next('/');
+    } else {
+      next();
+    }
+  });
+}
 
 /***/ }),
 

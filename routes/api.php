@@ -17,21 +17,32 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+// Route::prefix('auth')->group(function () {
+//     Route::post('login', 'AuthController@login');
+//     Route::post('login', 'AdminController@login');
+//     Route::post('register', 'AuthController@register');
+//     Route::get('refresh', 'AuthController@refresh');
+//     Route::get('login', 'AdminController@login')->name('login');
+//     Route::get('home', 'AdminController@index')->name('home');
+//     Route::group(['middleware' => 'auth:api'], function(){
+//         Route::get('user', 'AuthController@user');
+//         Route::post('logout', 'AuthController@logout');
+//     });
+// });
 Route::prefix('auth')->group(function () {
+    Route::get('login', 'AdminController@login')->name('login');
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
     Route::get('refresh', 'AuthController@refresh');
-    
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('user', 'AuthController@user');
         Route::post('logout', 'AuthController@logout');
     });
 });
 
+
 // Dashboard
 Route::get('dashboard', 'DashboardController');
-
-
 // Usuarios
 Route::get('usuarios', 'Admin\UsersController@index');
 Route::post('usuario', 'Admin\UsersController@store');

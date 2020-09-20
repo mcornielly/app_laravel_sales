@@ -12,7 +12,11 @@
 */
 
 Route::get('/{any}', 'AdminController@index')->where('any', '.*');
+Route::get('login', 'AdminController@login')->name('login');
 
+
+// Route::get('/', 'AdminController@index');
+// Route::get('/home', 'AdminController@index')->name('home');
 // Route::get('/', function () {
 //     return view('spa');
 // });
@@ -34,5 +38,5 @@ Route::get('/{any}', 'AdminController@index')->where('any', '.*');
 //     Route::resource('clientes', 'CustomersController');
 // });
 
-Auth::routes();
+// Auth::routes();
 

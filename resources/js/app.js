@@ -12,6 +12,7 @@ import VueFormWizard from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 import StoreData from './store';
 import VueRouter from 'vue-router';
+import {initialize} from  './helpers/general'
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -24,6 +25,8 @@ const router = new VueRouter({
     mode: 'history',
     linkExactActiveClass: 'active'
 });
+
+initialize(store, router);
 
 // window.Vue = require('vue');
 /**

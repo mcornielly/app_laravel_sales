@@ -42,7 +42,7 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-        <a href="{{ route('password.request') }}">Reestablecer contraseña</a>
+        {{-- <a href="{{ route('password.request') }}">Reestablecer contraseña</a> --}}
       </p>
       <p class="mb-0">
         {{-- <a href="register.html" class="text-center">Register a new membership</a> --}}
