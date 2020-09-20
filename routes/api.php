@@ -18,18 +18,25 @@ use Illuminate\Http\Request;
 // });
 
 Route::prefix('auth')->group(function () {
-    
-    Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
     Route::get('refresh', 'AuthController@refresh');
-
+    
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('user', 'AuthController@user');
         Route::post('logout', 'AuthController@logout');
-        // // Dashboard
-        Route::get('dashboard', 'DashboardController');
     });
 });
+
+// Dashboard
+Route::get('dashboard', 'DashboardController');
+
+
+// Usuarios
+Route::get('usuarios', 'Admin\UsersController@index');
+Route::post('usuario', 'Admin\UsersController@store');
+Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+
 
 
 // Route::group(['middleware' => 'role:Administrador'], function () {
