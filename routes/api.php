@@ -20,12 +20,12 @@ use Illuminate\Http\Request;
 // Dashboard
 Route::get('dashboard', 'DashboardController');
 
-Route::group(['middleware' => 'role:Administrador'], function () {
-    // Usuarios
-    Route::get('usuarios', 'Admin\UsersController@index');
-    Route::post('usuario', 'Admin\UsersController@store');
-    Route::put('usuario/{usuario}', 'Admin\UsersController@update');
-});
+
+// Usuarios
+Route::get('usuarios', 'Admin\UsersController@index');
+Route::post('usuario', 'Admin\UsersController@store');
+Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+
 
 // Divisas
 Route::get('divisas', 'Admin\DivisaController@index');

@@ -39,9 +39,6 @@ class Kernel extends HttpKernel
 
         'api' => [
             'throttle:60,1',
-            'role',
-            'permission',
-            'role_or_permission',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
