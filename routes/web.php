@@ -11,6 +11,7 @@
 |
 */
 Route::get('{any}', 'AdminController@index')->where('any', '.*');
+// Route::get('/login', 'AdminController@login')->name('login');
 
 // Route::get('{any}', function () {
 //     return view('spa');
