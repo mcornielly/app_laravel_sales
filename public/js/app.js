@@ -46385,9 +46385,7 @@ var render = function() {
           { staticClass: "small-box bg-info" },
           [
             _c("div", { staticClass: "inner" }, [
-              _c("h3", [
-                _vm._v(_vm._s(_vm._f("numeralFormat")(_vm.divisa, "0.00[,]00")))
-              ]),
+              _c("h3", [_vm._v(_vm._s(_vm._f("currency")(_vm.divisa)))]),
               _vm._v(" "),
               _c("p", [_vm._v("Cotización del Dolar")])
             ]),
