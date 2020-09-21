@@ -15,10 +15,5 @@ class AdminController extends Controller
    {
        return view('spa');
    }
-
-   public function login()
-   {
-       return view('auth.login');
-   }
    
 }
