@@ -5344,9 +5344,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     authenticate: function authenticate() {
-      window.location.href = window.location.origin + '/home'; // console.log('aqui')
-
-      this.$router.push('/home');
+      // window.location.href = window.location.origin +'/home'
+      // console.log('aqui')
+      this.$router.push('/');
     }
   }
 });
@@ -69344,9 +69344,12 @@ function initialize(store, router) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return routes; });
+/* harmony import */ var _auth_Login_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth/Login.vue */ "./resources/js/auth/Login.vue");
+
 var routes = [{
   path: '/login',
-  name: 'login'
+  name: 'login',
+  component: _auth_Login_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
 }, {
   path: '/',
   name: 'dashboard',

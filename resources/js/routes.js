@@ -1,8 +1,10 @@
+import Login from './auth/Login.vue';   
 
 export const routes = [
         {
             path: '/login',
-            name: 'login'
+            name: 'login',
+            component: Login
         },
         {
             path: '/',

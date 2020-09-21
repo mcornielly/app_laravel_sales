@@ -60,9 +60,9 @@ export default {
     },
     methods:{
       authenticate(){
-        window.location.href = window.location.origin +'/home'
+        // window.location.href = window.location.origin +'/home'
         // console.log('aqui')
-        this.$router.push('/home');
+        this.$router.push('/');
       }
     }
 }
