@@ -13,8 +13,8 @@
 
 // Route::get('/', 'AdminController@index')->name('admin');
 
-Route::get('{any}', function () {
-          return view('auth.login');
+Route::get('/{any}', function () {
+          return view('spa');
 })->where('any', '.*');
 
 

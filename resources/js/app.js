@@ -1,13 +1,13 @@
-require('./bootstrap');
+require("./bootstrap");
 
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuex from 'vuex';          
-import {routes} from './routes';
-import VueFormWizard from 'vue-form-wizard';
-import StoreData from './store';
-import {initialize} from  './helpers/general'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Vuex from "vuex";
+import { routes } from "./routes";
+import VueFormWizard from "vue-form-wizard";
+import StoreData from "./store";
+// import {initialize} from  './helpers/general'
+import "vue-form-wizard/dist/vue-form-wizard.min.css";
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -16,18 +16,31 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 // window.Vue = require('vue');
 
 // Dependency
-window.jsPDF = require('jspdf');
-Vue.use(VueFormWizard)
+window.jsPDF = require("jspdf");
+Vue.use(VueFormWizard);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+
 const store = new Vuex.Store(StoreData);
 const router = new VueRouter({
     routes,
-    mode: 'history',
-    linkExactActiveClass: 'active'
-})
+    mode: "history",
+    linkExactActiveClass: "active"
+});
 
-initialize(store, router);
+// initialize(store, router);
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const currentUser = store.state.currentUser;
+    console.log(currentUser);
+    if (requiresAuth && !currentUser) {
+        next("/login");
+    } else if (to.path == "/login" && currentUser) {
+        next("/");
+    } else {
+        next();
+    }
+});
 
 /**
  * The following block of code may be used to automatically register your
@@ -40,10 +53,13 @@ initialize(store, router);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('main-app', require('./components/layouts/MainApp.vue').default);
-Vue.component('header-app', require('./components/layouts/Header.vue').default);
-Vue.component('sidebar-app', require('./components/layouts/SideBar.vue').default);
-Vue.component('login-app', require('./auth/Login.vue').default);
+Vue.component("main-app", require("./components/layouts/MainApp.vue").default);
+Vue.component("header-app", require("./components/layouts/Header.vue").default);
+Vue.component(
+    "sidebar-app",
+    require("./components/layouts/SideBar.vue").default
+);
+Vue.component("login-app", require("./auth/Login.vue").default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
@@ -82,20 +98,18 @@ Vue.component('login-app', require('./auth/Login.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.filter('currency', function (value) {
-
-    if(!value) return ''
+Vue.filter("currency", function(value) {
+    if (!value) return "";
     // var formatter = new Intl.NumberFormat('es-ES',{
-    //     minimumFractionDigits: 2 
+    //     minimumFractionDigits: 2
     // });
-    let val = (value/1).toFixed(2).replace('.', ',');
+    let val = (value / 1).toFixed(2).replace(".", ",");
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     // return formatter.format(value);
-}); 
+});
 
 const app = new Vue({
-    el: '#app',
+    el: "#app",
     router,
     store
-    
 });

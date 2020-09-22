@@ -163,7 +163,7 @@
                     </li>
                     <!-- Logout -->
                     <li class="nav-item">
-                        <router-link to="/usuarios" class="nav-link">
+                        <router-link to="/login" class="nav-link" @click.prevent="logout">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>Salir</p>
                         </router-link>

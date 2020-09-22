@@ -2,10 +2,20 @@
     <div>
         <form method="POST" action="">
             <div class="input-group mb-3">
-                <input id="email" type="email" class="form-control" name="email" required autocomplete="email" autofocus placeholder="Email" v-model="user.email">
+                <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    autofocus
+                    placeholder="Email"
+                    v-model="user.email"
+                />
                 <div class="input-group-append">
                     <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
+                        <span class="fas fa-envelope"></span>
                     </div>
                 </div>
                 <span class="invalid-feedback" role="alert">
@@ -13,7 +23,16 @@
                 </span>
             </div>
             <div class="input-group mb-3">
-                <input id="password" type="password" class="form-control" name="password" required autocomplete="current-password" placeholder="Contraseña" v-model="user.password">
+                <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="Contraseña"
+                    v-model="user.password"
+                />
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -34,37 +53,42 @@
                 </div> -->
                 <!-- /.col -->
                 <div class="col-4">
-                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Entrar
+                    </button>
                 </div>
                 <!-- /.col -->
             </div>
-        </form>    
+        </form>
     </div>
 </template>
 <script>
+import { login } from "../helpers/auth";
+
 export default {
-    name: 'login-app',
-    data(){
+    name: "login-app",
+    data() {
         return {
-            user:{
-                email: '',
-                password: ''
-            }
-        }
+            user: {
+                email: "",
+                password: ""
+            },
+            error: null
+        };
     },
     methods: {
-        authenticate(){
-            this.store.dispach('login');
+        authenticate() {
+            this.$store.dispach("login");
 
-            login(this.$date.form)
-                .then((response) => {
+            login(this.$date.user)
+                .then(response => {
                     this.$store.commit("loginSuccess", response);
-                    this.$router.push({path: '/'});
+                    this.$router.push({ path: "/" });
                 })
-                .catch((error) => {
-                    this.$store.commit("loginFailed", {error});
-                })
+                .catch(error => {
+                    this.$store.commit("loginFailed", { error });
+                });
         }
     }
-}
+};
 </script>

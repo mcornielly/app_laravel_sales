@@ -1,13 +1,13 @@
 <template>
     <div class="content">
-        <router-view ></router-view>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
 export default {
     mounted() {
-        console.log('Component mounted.')
+        console.log("Component mousaasnted.");
     }
-}
+};
 </script>
