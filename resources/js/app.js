@@ -4,26 +4,26 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-import Vue from 'vue';
-import Vuex from 'vuex'
-import {routes} from './routes';
-import VueFormWizard from 'vue-form-wizard';
-import 'vue-form-wizard/dist/vue-form-wizard.min.css';
-import StoreData from './store';
-import VueRouter from 'vue-router';
-import {initialize} from  './helpers/general'
+require("./bootstrap");
+import Vue from "vue";
+import Vuex from "vuex";
+import VueRouter from "vue-router";
+import { routes } from "./routes";
+import VueFormWizard from "vue-form-wizard";
+import StoreData from "./store";
+import { initialize } from "./helpers/general";
+import "vue-form-wizard/dist/vue-form-wizard.min.css";
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueFormWizard);
-window.jsPDF = require('jspdf');
+window.jsPDF = require("jspdf");
 
 const store = new Vuex.Store(StoreData);
 const router = new VueRouter({
     routes,
-    mode: 'history',
-    linkExactActiveClass: 'active'
+    mode: "history",
+    linkExactActiveClass: "active"
 });
 
 initialize(store, router);
@@ -40,10 +40,13 @@ initialize(store, router);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('login-app', require('./auth/Login.vue').default);
-Vue.component('main-app', require('./components/layout/MainApp.vue').default);
-Vue.component('sidebar-app', require('./components/layout/SideBar.vue').default);
-Vue.component('header-app', require('./components/layout/Header.vue').default);
+Vue.component("login-app", require("./auth/Login.vue").default);
+Vue.component("main-app", require("./components/layout/MainApp.vue").default);
+Vue.component(
+    "sidebar-app",
+    require("./components/layout/SideBar.vue").default
+);
+Vue.component("header-app", require("./components/layout/Header.vue").default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-divisa', require('./components/ModalDivisaComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
@@ -82,20 +85,18 @@ Vue.component('header-app', require('./components/layout/Header.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.filter('currency', function (value) {
-
-    if(!value) return ''
+Vue.filter("currency", function(value) {
+    if (!value) return "";
     // var formatter = new Intl.NumberFormat('es-ES',{
-    //     minimumFractionDigits: 2 
+    //     minimumFractionDigits: 2
     // });
-    let val = (value/1).toFixed(2).replace('.', ',');
+    let val = (value / 1).toFixed(2).replace(".", ",");
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     // return formatter.format(value);
-}); 
+});
 
 const app = new Vue({
-    el: '#app',
+    el: "#app",
     router,
     store
-    
 });

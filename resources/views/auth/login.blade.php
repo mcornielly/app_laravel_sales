@@ -19,39 +19,43 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition login-page">
-<div id="app" class="login-box">
-  <div class="login-logo">
-    <a href="/">{{ config('app.name') }}</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Ingresa tus datos para Iniciar Sesión</p>
 
-      <login-app></login-app>  
-
-      {{-- <div class="social-auth-links text-center mb-3">
-        <p>- OR -</p>
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div> --}}
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        {{-- <a href="{{ route('password.request') }}">Reestablecer contraseña</a> --}}
-      </p>
-      <p class="mb-0">
-        {{-- <a href="register.html" class="text-center">Register a new membership</a> --}}
-      </p>
+<div id="app">
+  <login-app></login-app> 
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="/">{{ config('app.name') }}</a>
     </div>
-    <!-- /.login-card-body -->
+    <!-- /.login-logo -->
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">Ingresa tus datos para Iniciar Sesión</p>
+  
+         
+  
+        {{-- <div class="social-auth-links text-center mb-3">
+          <p>- OR -</p>
+          <a href="#" class="btn btn-block btn-primary">
+            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+          </a>
+          <a href="#" class="btn btn-block btn-danger">
+            <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+          </a>
+        </div> --}}
+        <!-- /.social-auth-links -->
+  
+        <p class="mb-1">
+          {{-- <a href="{{ route('password.request') }}">Reestablecer contraseña</a> --}}
+        </p>
+        <p class="mb-0">
+          {{-- <a href="register.html" class="text-center">Register a new membership</a> --}}
+        </p>
+      </div>
+      <!-- /.login-card-body -->
+    </div>
   </div>
 </div>
-<!-- /.login-box -->
+<!-- /.l-->
 
 <!-- jQuery -->
 <script src="/adminlte/plugins/jquery/jquery.min.js"></script>

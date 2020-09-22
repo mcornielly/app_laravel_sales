@@ -5,24 +5,33 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="/adminlte/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img
+                        src="/adminlte/img/user2-160x160.jpg"
+                        class="img-circle elevation-2"
+                        alt="User Image"
+                    />
                 </div>
                 <template>
                     <div class="info">
-                    <a href="#" class="d-block">{{ currentUser.name }}</a>
+                        <a href="#" class="d-block">{{ currentUser.name }}</a>
                     </div>
                 </template>
             </div>
 
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <ul
+                    class="nav nav-pills nav-sidebar flex-column"
+                    data-widget="treeview"
+                    role="menu"
+                    data-accordion="false"
+                >
                     <!-- Dashboard -->
                     <li class="nav-item">
                         <router-link to="/" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                            Dashboard
+                                Dashboard
                             </p>
                         </router-link>
                     </li>
@@ -31,7 +40,7 @@
                         <router-link to="/divisas" class="nav-link">
                             <i class="nav-icon fas fa-money-bill-alt"></i>
                             <p>
-                            Divisa
+                                Divisa
                             </p>
                         </router-link>
                     </li>
@@ -58,7 +67,10 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/precios_lista" class="nav-link">
+                                <router-link
+                                    to="/precios_lista"
+                                    class="nav-link"
+                                >
                                     <i class="nav-icon far fa-list-alt"></i>
                                     <p>Lista de Precios</p>
                                 </router-link>
@@ -77,14 +89,14 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <router-link to="/ingresos" class="nav-link">
-                                <i class="nav-icon fas fa-piggy-bank"></i>
-                                <p>Ingresos</p>
+                                    <i class="nav-icon fas fa-piggy-bank"></i>
+                                    <p>Ingresos</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">
                                 <router-link to="/proveedores" class="nav-link">
-                                <i class="nav-icon fas fa-industry"></i>
-                                <p>Proveedores</p>
+                                    <i class="nav-icon fas fa-industry"></i>
+                                    <p>Proveedores</p>
                                 </router-link>
                             </li>
                         </ul>
@@ -101,14 +113,16 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <router-link to="/ventas" class="nav-link">
-                                <i class="nav-icon fas fa-cash-register"></i>
-                                <p>Ventas</p>
+                                    <i
+                                        class="nav-icon fas fa-cash-register"
+                                    ></i>
+                                    <p>Ventas</p>
                                 </router-link>
                             </li>
                             <li class="nav-item">
                                 <router-link to="/clientes" class="nav-link">
-                                <i class="nav-icon fas fa-user-tie"></i>
-                                <p>Clientes</p>
+                                    <i class="nav-icon fas fa-user-tie"></i>
+                                    <p>Clientes</p>
                                 </router-link>
                             </li>
                         </ul>
@@ -140,7 +154,7 @@
                     <!-- Reportes -->
                     <li class="nav-item has-treeview">
                         <router-link to="#" class="nav-link">
-                        <i class="nav-icon fas fa-clipboard"></i>
+                            <i class="nav-icon fas fa-clipboard"></i>
                             <p>
                                 Reportes
                                 <i class="right fas fa-angle-left"></i>
@@ -155,7 +169,9 @@
                             </li>
                             <li class="nav-item">
                                 <router-link to="/usuarios" class="nav-link">
-                                    <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                    <i
+                                        class="nav-icon fas fa-file-invoice-dollar"
+                                    ></i>
                                     <p>Reportes Ventas</p>
                                 </router-link>
                             </li>
@@ -175,18 +191,17 @@
 </template>
 <script>
 export default {
-    name: 'sidebar-app',
-    data(){
-        return{
+    name: "sidebar-app",
+    props: ["nameApp"],
+    data() {
+        return {
             currentUser: {
-                name: 'Miguel Angel Cornielly H'
+                name: "Miguel Angel Cornielly H"
             }
-        }
+        };
     },
-    methods:{
-        logout(){
-
-        }
+    methods: {
+        logout() {}
     }
-}
+};
 </script>
