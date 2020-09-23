@@ -53,7 +53,11 @@
                 </div> -->
                 <!-- /.col -->
                 <div class="col-4">
-                    <button type="submit" class="btn btn-primary btn-block">
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-block"
+                        @click.prevent="authenticate"
+                    >
                         Entrar
                     </button>
                 </div>
@@ -78,10 +82,11 @@ export default {
     },
     methods: {
         authenticate() {
-            this.$store.dispach("login");
+            this.$store.dispatch("login");
 
-            login(this.$date.user)
+            login(this.$data.user)
                 .then(response => {
+                    console.log(response);
                     this.$store.commit("loginSuccess", response);
                     this.$router.push({ path: "/" });
                 })

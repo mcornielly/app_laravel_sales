@@ -2303,6 +2303,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login-app",
@@ -2319,8 +2323,10 @@ __webpack_require__.r(__webpack_exports__);
     authenticate: function authenticate() {
       var _this = this;
 
-      this.$store.dispach("login");
-      Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$date.user).then(function (response) {
+      this.$store.dispatch("login");
+      Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.user).then(function (response) {
+        console.log(response);
+
         _this.$store.commit("loginSuccess", response);
 
         _this.$router.push({
@@ -21627,7 +21633,24 @@ var render = function() {
         _vm._m(3)
       ]),
       _vm._v(" "),
-      _vm._m(4)
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-4" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-block",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.authenticate($event)
+                }
+              }
+            },
+            [_vm._v("\n                    Entrar\n                ")]
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -21671,23 +21694,6 @@ var staticRenderFns = [
       { staticClass: "invalid-feedback", attrs: { role: "alert" } },
       [_c("strong", [_vm._v("$message")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-4" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary btn-block",
-            attrs: { type: "submit" }
-          },
-          [_vm._v("\n                    Entrar\n                ")]
-        )
-      ])
-    ])
   }
 ]
 render._withStripped = true
