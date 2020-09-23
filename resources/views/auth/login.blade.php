@@ -14,7 +14,7 @@
   <!-- icheck bootstrap -->
   <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/adminlte/dist/css/admin<login-app></login-app>lte.min.css">
+  <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -28,7 +28,7 @@
     <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">Ingresa tus datos passdsdssara Iniciar Sesión</p>
-          
+        <login-app></login-app>
         </div> 
         <p class="mb-1">
           {{-- <a href="{{ route('password.request') }}">Reestablecer contraseña</a> --}}

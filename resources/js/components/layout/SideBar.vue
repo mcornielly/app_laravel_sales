@@ -11,7 +11,7 @@
                         alt="User Image"
                     />
                 </div>
-                <template v-if="currentUser">
+                <template>
                     <div class="info">
                         <a href="#" class="d-block">{{ currentUser.name }}</a>
                     </div>
@@ -179,10 +179,14 @@
                     </li>
                     <!-- Logout -->
                     <li class="nav-item">
-                        <a href="#/" class="nav-link" @click.prevent="logout">
+                        <router-link
+                            to="#"
+                            class="nav-link"
+                            @click.prevent="logout"
+                        >
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>Salir</p>
-                        </a>
+                        </router-link>
                     </li>
                 </ul>
             </nav>
@@ -192,6 +196,7 @@
 <script>
 export default {
     name: "sidebar-app",
+    props: ["nameApp"],
     methods: {
         logout() {
             this.$store.commit("logout");
@@ -200,9 +205,9 @@ export default {
     },
     computed: {
         currentUser() {
-            console.log(this.$store.getters.currentUser);
             return this.$store.getters.currentUser;
         }
     }
 };
 </script>
+|

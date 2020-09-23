@@ -1,4 +1,4 @@
-import {getLocalUser} from './helpers/auth';
+import { getLocalUser } from "./helpers/auth";
 
 const user = getLocalUser();
 
@@ -19,7 +19,7 @@ export default {
         currentUser(state) {
             return state.currentUser;
         },
-        authError(state){
+        authError(state) {
             return state.auth_error;
         }
     },
@@ -32,8 +32,10 @@ export default {
             state.auth_error = null;
             state.isLoggeIn = true;
             state.loading = false;
-            state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
-
+            state.currentUser = Object.assign({}, payload.user, {
+                token: payload.access_token
+            });
+            console.log(state.currentUser);
             localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         loginFailed(state, payload) {
@@ -42,32 +44,32 @@ export default {
         },
         logout(state) {
             localStorage.removeItem("user");
-            state.isLoggeIn = fasle;
+            state.isLoggeIn = false;
             state.currentUser = null;
         }
     },
     actions: {
         login(context) {
             context.commit("login");
-        },
-        
-            //     loginUser({}, user){
-            //     axios.post("/api/auth/login",{
-            //         email: user.email,
-            //         password: user.password
-            //     }).then(response => {
-            //         console.log(response.data)
-            //         if(responser.data.access_token){
-            //             localStorage.set(
-            //                 "app_token",
-            //                 response.data.access_token
-            //             )
+        }
 
-            //             window.location.replace("/home")
-            //         }
-            //     }).catch(error => {
-            //         console.log(error.data)
-            //     });
-            // }
+        //     loginUser({}, user){
+        //     axios.post("/api/auth/login",{
+        //         email: user.email,
+        //         password: user.password
+        //     }).then(response => {
+        //         console.log(response.data)
+        //         if(responser.data.access_token){
+        //             localStorage.set(
+        //                 "app_token",
+        //                 response.data.access_token
+        //             )
+
+        //             window.location.replace("/home")
+        //         }
+        //     }).catch(error => {
+        //         console.log(error.data)
+        //     });
+        // }
     }
 };
