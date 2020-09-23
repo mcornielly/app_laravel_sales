@@ -5473,7 +5473,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login-app",
@@ -5502,15 +5501,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch("login");
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.user).then(function (res) {
         // console.log('aqui')
-        console.log(res);
-
         _this.$store.commit("loginSuccess", res);
 
-        _this.$router.push({
-          path: "/"
-        }); // this.$router.push("/");
-        // window.location.href = window.location.origin +'/home'
-
+        console.log(res); // this.$router.push({ path: "/" });
+        // this.$router.push("/");
+        // window.location.href = window.location.origin + "/";
       })["catch"](function (error) {
         _this.$store.commit("loginFailed", {
           error: error
@@ -48947,8 +48942,6 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("form", { attrs: { method: "POST" } }, [
-            _c("p", [_vm._v(_vm._s(_vm.welcome))]),
-            _vm._v(" "),
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("input", {
                 staticClass: "form-control",
@@ -69869,6 +69862,7 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
       state.currentUser = Object.assign({}, payload.user, {
         token: payload.access_token
       });
+      console.log(state.currentUser);
       localStorage.setItem("user", JSON.stringify(state.currentUser));
     },
     loginFailed: function loginFailed(state, payload) {

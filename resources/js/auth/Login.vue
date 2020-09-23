@@ -12,7 +12,6 @@
                     </p>
 
                     <form method="POST">
-                        <p>{{ welcome }}</p>
                         <div class="input-group mb-3">
                             <input
                                 id="email"
@@ -120,15 +119,15 @@ export default {
     methods: {
         authenticate() {
             this.$store.dispatch("login");
-
+            
             login(this.$data.user)
                 .then(res => {
                     // console.log('aqui')
-                    console.log(res);
                     this.$store.commit("loginSuccess", res);
-                    this.$router.push({ path: "/" });
+                    console.log(res);
+                    // this.$router.push({ path: "/" });
                     // this.$router.push("/");
-                    // window.location.href = window.location.origin +'/home'
+                    // window.location.href = window.location.origin + "/";
                 })
                 .catch(error => {
                     this.$store.commit("loginFailed", { error });
