@@ -41,79 +41,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 <body class="hold-transition sidebar-mini">
 
-<div class="wrapper">
-    <div id="app">
-        <!-- Navbar -->
-        <header-app></header-app>
-        <!-- /.navbar --> 
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-            <img src="/adminlte/img/sale_logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
-            <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
-            </a>
-
-            <!-- Main Sidebar Container  -->
-            <sidebar-app></sidebar-app>
-            <!-- /.sidebar -->
-        </aside>    
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <main-app></main-app>
-            {{-- Message
-            <div class="container-fluid">
-            @if(session()->has('message'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('message') }}
-                <button type="button"
-                    class="close"
-                    data-dismiss="alert"
-                    aria-label="Close">
-                    <span arian-hidden="true">&times;</span>
-                </button>
-                </div>
-            @endif
-            </div>
-
-            <div class="content">
-            <router-view></router-view>
-            </div>   --}}
-        </div> 
-
-        <!-- Main Footer -->
-        <footer class="main-footer">
-        <!-- To the right -->
-        <div class="float-right d-none d-sm-inline">
-            Anything you want
-        </div>
-        <!-- Default to the left -->
-        <strong>Copyright &copy; 2020 | V-1.0 <a href="https://adminlte.io">{{ config('app.name') }}.io</a>.</strong> All rights reserved.
-        </footer>
+    <div id="app"> 
+        <main-app></main-app>
     </div>
-</div>
-<!-- ./wrapper -->
 
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="/adminlte/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/adminlte/plugins/chart.js/Chart.min.js"></script>
-<!-- DataTables -->
-{{-- <script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
-<script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script> --}}
-<script src="/adminlte/plugins/toastr/toastr.min.js"></script>
-<script src="/adminlte/plugins/sweetalert2/sweetalert_2.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/adminlte/js/adminlte.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-<!-- AdminLTE App -->
-<script src="{{ mix('js/app.js') }}"></script>
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="/adminlte/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/adminlte/plugins/chart.js/Chart.min.js"></script>
+    <!-- DataTables -->
+    {{-- <script src="/adminlte/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script> --}}
+    <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
+    <script src="/adminlte/plugins/sweetalert2/sweetalert_2.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/adminlte/js/adminlte.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 
 </html>

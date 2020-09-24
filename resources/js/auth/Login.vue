@@ -70,7 +70,7 @@
                             <button
                                 type="button"
                                 class="btn btn-primary btn-block"
-                                @click.prevent="authenticate"
+                                @click="authenticate"
                             >
                                 Entrar
                             </button>
@@ -111,6 +111,8 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.$store.commit("loginSuccess", response);
+                    location.reload();
+
                     this.$router.push({ path: "/" });
                 })
                 .catch(error => {

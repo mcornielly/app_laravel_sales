@@ -16,13 +16,16 @@ export const routes = [
     {
         path: "/login",
         name: "login",
-        component: Login
+        component: Login,
+        meta: {
+            requiresAuth: false
+        }
+    },
+    {
+        path: "/divisas",
+        name: "divisas",
+        component: require("./admin/views/Divisas").default
     }
-    // {
-    //     path: '/divisas',
-    //     name: 'divisas',
-    //     component: require('./admin/views/Divisas').default
-    // },
     // {
     //     path: '/categorias',
     //     name: 'categories',
