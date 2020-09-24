@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- <meta name="user" content="{{ Auth::user() }}"> --}}
+    <meta name="user" content="{{ Auth::user() }}">
     <title>{{ config('app.name') }} | Dashboard</title>
 
     <!-- Font Awesome Icons -->
@@ -39,9 +39,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- CSS pages -->
 </head>
-<body class="hold-transition sidebar-mini">
+{{-- <body class="hold-transition sidebar-mini"> --}}
+    <body class="hold-transition login-page">   
 
-    <div id="app"> 
+    <div id="app">
         <main-app></main-app>
     </div>
 

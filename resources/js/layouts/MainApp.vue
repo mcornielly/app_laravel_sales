@@ -38,10 +38,19 @@ export default {
     //         return
     //     }
     // },
-    mounted() {
+    created() {
+        this.userLogin();
+        console.log(this.$route.path);
+
+        if (this.$route.path == "/") {
+            $("body").removeClass("login-page");
+            $("body").addClass("sidebar-mini");
+        } else {
+            $("body").removeClass("sidebar-mini");
+            $("body").addClass("login-page");
+        }
         // location.reload();
-        this.currentUser = this.$store.getters.currentUser;
-        // this.userLogin();
+        // this.currentUser = this.$store.getters.currentUser;
         // this.meta = this.$route.meta;
         // if (this.meta.auth) {
         //    $('body').removeClass('gray-bg');

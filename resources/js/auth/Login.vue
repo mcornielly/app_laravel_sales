@@ -100,6 +100,7 @@ export default {
                 email: "",
                 password: ""
             },
+            currentUser: {},
             error: null
         };
     },
@@ -110,10 +111,11 @@ export default {
             login(this.$data.user)
                 .then(response => {
                     console.log(response);
-                    this.$store.commit("loginSuccess", response);
                     location.reload();
-
-                    this.$router.push({ path: "/" });
+                    setTimeout(() => {
+                        this.$store.commit("loginSuccess", response);
+                        this.$router.push({ path: "/" });
+                    }, 400);
                 })
                 .catch(error => {
                     this.$store.commit("loginFailed", { error });
