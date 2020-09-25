@@ -216,7 +216,7 @@ export default {
     }
 };
 
-$("#logout").click(function() {
-    $(".prel").css("display", "block");
-});
+// $("#logout").click(function() {
+//     $(".prel").css("display", "block");
+// });
 </script>

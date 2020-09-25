@@ -8,12 +8,21 @@ import VueFormWizard from "vue-form-wizard";
 import StoreData from "./store";
 // import {initialize} from  './helpers/general'
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import VueProgressBar from 'vue-progressbar'
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 // window.Vue = require('vue');
+
+
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '2px'
+})
+
 
 // Dependency
 window.jsPDF = require("jspdf");

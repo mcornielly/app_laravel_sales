@@ -70,7 +70,7 @@
                             <button
                                 type="button"
                                 class="btn btn-primary btn-block"
-                                @click="authenticate"
+                                @click.prevent="authenticate"
                             >
                                 Entrar
                             </button>
@@ -105,17 +105,39 @@ export default {
         };
     },
     methods: {
+        start() {
+            this.$Progress.start();
+        },
+        set(num) {
+            this.$Progress.set(num);
+        },
+        increase(num) {
+            this.$Progress.increase(num);
+        },
+        decrease(num) {
+            this.$Progress.decrease(num);
+        },
+        finish() {
+            this.$Progress.finish();
+        },
+        fail() {
+            this.$Progress.fail();
+        },
         authenticate() {
             this.$store.dispatch("login");
 
             login(this.$data.user)
                 .then(response => {
                     console.log(response);
+                    this.$store.commit("loginSuccess", response);
                     location.reload();
+                    this.$Progress.start();
                     setTimeout(() => {
-                        this.$store.commit("loginSuccess", response);
+                        $("body").removeClass("login-page");
+                        $("body").addClass("sidebar-mini");
                         this.$router.push({ path: "/" });
-                    }, 400);
+                    }, 1000);
+                    this.$Progress.finish();
                 })
                 .catch(error => {
                     this.$store.commit("loginFailed", { error });

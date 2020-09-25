@@ -229,7 +229,7 @@
                                 id="logout"
                                 href="#/"
                                 class="nav-link"
-                                @click="logout"
+                                @click.prevent="logout"
                             >
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>Salir</p>
@@ -242,39 +242,23 @@
         </aside>
     </div>
 </template>
-<style>
-.prel {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: white;
-    margin: 0 auto;
-    text-align: center;
-    display: block;
-    z-index: 9999999;
-}
-.prel h4 {
-    color: black;
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: 1px;
-}
-</style>
+
 <script>
 export default {
     name: "sidebar-app",
     methods: {
         logout() {
+            this.$store.commit("logout");
             location.reload();
             setTimeout(() => {
-                this.$store.commit("logout");
+                $("body").removeClass("sidebar-mini");
+                $("body").addClass("login-page");
                 this.$router.push("/login");
-            }, 400);
+            }, 1000);
         }
     },
     computed: {
         currentUser() {
-            console.log(this.$store.getters.currentUser);
             return this.$store.getters.currentUser;
         }
     }
