@@ -174,9 +174,13 @@ export default {
         }
     },
     methods: {
+        start () {
+            this.$Progress.start()
+        },
         getData(){
             let me = this;
             var url = "/api/dashboard";
+            this.$Progress.start()
             axios.get(url).then(response => {
                 console.log(response.data.divisa_p)
                 me.divisa = response.data.divisa_p;
@@ -186,8 +190,10 @@ export default {
                 me.loadSales_1(me.incomes);
                 me.loadIncomes(me.incomes);
                 me.loadIncomes_2(me.sales);
+                this.$Progress.finish()
             }).catch(errors => {
                 console.log(errors)
+                this.$Progress.fail()
             });
         },
         loadSales(){

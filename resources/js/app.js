@@ -9,12 +9,13 @@ import StoreData from "./store";
 import {initialize} from  './helpers/general'
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 
-// import VueProgressBar from 'vue-progressbar'
-// Vue.use(VueProgressBar, {
-//   color: 'rgb(143, 255, 199)',
-//   failedColor: 'red',
-//   height: '2px'
-// })
+import VueProgressBar from 'vue-progressbar'
+
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 58)',
+  failedColor: 'red',
+  height: '2px'
+})
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
