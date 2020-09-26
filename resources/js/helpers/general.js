@@ -4,7 +4,7 @@ export function initialize(store, router) {
             record => record.meta.requiresAuth
         );
         const currentUser = store.state.currentUser;
-
+        console.log(currentUser);
         if (requiresAuth && !currentUser) {
             next("/login");
         } else if (to.path == "/login" && currentUser) {
@@ -23,5 +23,7 @@ export function initialize(store, router) {
         return Promise.reject(error);
     });
 
-    // axios.defaults.headers.common["Authorization"] = `Bearer ${store.getters.currentUser.token}`
+    axios.defaults.headers.common[
+        "Authorization"
+    ] = `Bearer ${store.getters.currentUser.token}`;
 }

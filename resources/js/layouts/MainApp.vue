@@ -1,6 +1,8 @@
 <template>
     <div v-if="currentUser" class="content">
         <div class="wrapper">
+            <!-- set progressbar -->
+            <vue-progress-bar></vue-progress-bar>
             <!-- Navbar -->
             <header-app></header-app>
             <!-- /.navbar -->
@@ -12,8 +14,6 @@
                 <section class="content">
                     <div class="content-fluid">
                         <router-view></router-view>
-                        <!-- set progressbar -->
-                        <vue-progress-bar></vue-progress-bar>
                     </div>
                 </section>
             </div>
@@ -32,17 +32,11 @@ export default {
     data() {
         return {
             meta: {},
-            currentUser: {},
+            currentUser: {}
         };
     },
-    // computed: {
-    //     currentUser(){
-    //         return
-    //     }
-    // },
     created() {
         this.userLogin();
-        console.log(this.$route.path);
 
         if (this.$route.path == "/") {
             $("body").removeClass("login-page");
@@ -51,15 +45,6 @@ export default {
             $("body").removeClass("sidebar-mini");
             $("body").addClass("login-page");
         }
-        // location.reload();
-        // this.currentUser = this.$store.getters.currentUser;
-        // this.meta = this.$route.meta;
-        // if (this.meta.auth) {
-        //    $('body').removeClass('gray-bg');
-        // } else {
-        //     $('body').addClass('gray-bg');
-
-        // }
     },
     methods: {
         userLogin() {

@@ -18,7 +18,6 @@ export const routes = [
         name: "login",
         component: Login,
         meta: {
-            title: 'Login',
             requiresAuth: false
         }
     },
