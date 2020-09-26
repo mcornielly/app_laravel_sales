@@ -1,5 +1,9 @@
 <template>
-    <div class="login-box">
+        <div class="login-box">
+            <div v-if="error_login" class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>!Permiso!</strong> {{ error_login }}.
+            </div>
         <div class="login-logo">
             <a href="/">SaleSystems</a>
         </div>
@@ -7,7 +11,7 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">
-                    Ingresa tus datos passdsdssara Iniciar Sesión
+                    Ingresa tus datos para Iniciar Sesión
                 </p>
                 <form method="POST" action="">
                     <div class="input-group mb-3">
@@ -15,6 +19,7 @@
                             id="email"
                             type="email"
                             class="form-control"
+                            :class="{'is-invalid' : errors.email }"
                             name="email"
                             required
                             autocomplete="email"
@@ -27,8 +32,8 @@
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <span class="invalid-feedback" role="alert">
-                            <strong>message error</strong>
+                        <span v-if="errors.email" class="invalid-feedback" role="alert">
+                            <strong>{{ errors.email[0] }}</strong>
                         </span>
                     </div>
                     <div class="input-group mb-3">
@@ -36,6 +41,7 @@
                             id="password"
                             type="password"
                             class="form-control"
+                            :class="{'is-invalid' : errors.password }"
                             name="password"
                             required
                             autocomplete="current-password"
@@ -47,8 +53,8 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <span class="invalid-feedback" role="alert">
-                            <strong>$message</strong>
+                        <span v-if="errors.password" class="invalid-feedback" role="alert">
+                            <strong>{{ errors.password[0] }}</strong>
                         </span>
                     </div>
                     <div class="row">
@@ -101,28 +107,11 @@ export default {
                 password: ""
             },
             currentUser: {},
-            error: null
+            errors: '',
+            error_login: ''
         };
     },
     methods: {
-        start() {
-            this.$Progress.start();
-        },
-        set(num) {
-            this.$Progress.set(num);
-        },
-        increase(num) {
-            this.$Progress.increase(num);
-        },
-        decrease(num) {
-            this.$Progress.decrease(num);
-        },
-        finish() {
-            this.$Progress.finish();
-        },
-        fail() {
-            this.$Progress.fail();
-        },
         authenticate() {
             this.$store.dispatch("login");
 
@@ -130,16 +119,22 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.$store.commit("loginSuccess", response);
-                    location.reload();
-                    this.$Progress.start();
-                    setTimeout(() => {
+                    // location.reload();
+                    // setTimeout(() => {
                         $("body").removeClass("login-page");
                         $("body").addClass("sidebar-mini");
                         this.$router.push({ path: "/" });
-                    }, 1000);
-                    this.$Progress.finish();
+                    // }, 1000);
                 })
                 .catch(error => {
+                    // this.errors = error;
+                    console.log(error)
+                    if(error == "Unauthorized"){
+                        this.error_login = "No Autorizado";
+                    }else{
+                        this.errors = error;
+                    }
+                    // this.errors = error;
                     this.$store.commit("loginFailed", { error });
                 });
         }

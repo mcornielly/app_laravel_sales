@@ -2083,20 +2083,32 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    start: function start() {
+      this.$Progress.start();
+    },
     getData: function getData() {
+      var _this = this;
+
+      this.$Progress.start();
       var me = this;
       var url = "/api/dashboard";
-      axios.get(url).then(function (response) {
-        console.log(response.data.divisa_p);
-        me.divisa = response.data.divisa_p;
-        me.sales = response.data.sales;
-        me.incomes = response.data.incomes;
-        me.loadSales(me.sales);
-        me.loadSales_1(me.incomes);
-        me.loadIncomes(me.incomes);
-        me.loadIncomes_2(me.sales);
+      setTimeout(function () {
+        axios.get(url).then(function (response) {
+          console.log(response.data.divisa_p);
+          me.divisa = response.data.divisa_p;
+          me.sales = response.data.sales;
+          me.incomes = response.data.incomes;
+          me.loadSales(me.sales);
+          me.loadSales_1(me.incomes);
+          me.loadIncomes(me.incomes);
+          me.loadIncomes_2(me.sales);
+        }, 1000);
+
+        _this.$Progress.finish();
       })["catch"](function (errors) {
         console.log(errors);
+
+        _this.$Progress.fail();
       });
     },
     loadSales: function loadSales() {
@@ -2519,6 +2531,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login-app",
@@ -2529,28 +2547,11 @@ __webpack_require__.r(__webpack_exports__);
         password: ""
       },
       currentUser: {},
-      error: null
+      errors: '',
+      error_login: ''
     };
   },
   methods: {
-    start: function start() {
-      this.$Progress.start();
-    },
-    set: function set(num) {
-      this.$Progress.set(num);
-    },
-    increase: function increase(num) {
-      this.$Progress.increase(num);
-    },
-    decrease: function decrease(num) {
-      this.$Progress.decrease(num);
-    },
-    finish: function finish() {
-      this.$Progress.finish();
-    },
-    fail: function fail() {
-      this.$Progress.fail();
-    },
     authenticate: function authenticate() {
       var _this = this;
 
@@ -2558,23 +2559,28 @@ __webpack_require__.r(__webpack_exports__);
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.user).then(function (response) {
         console.log(response);
 
-        _this.$store.commit("loginSuccess", response);
+        _this.$store.commit("loginSuccess", response); // location.reload();
+        // setTimeout(() => {
 
-        location.reload();
 
-        _this.$Progress.start();
+        $("body").removeClass("login-page");
+        $("body").addClass("sidebar-mini");
 
-        setTimeout(function () {
-          $("body").removeClass("login-page");
-          $("body").addClass("sidebar-mini");
+        _this.$router.push({
+          path: "/"
+        }); // }, 1000);
 
-          _this.$router.push({
-            path: "/"
-          });
-        }, 1000);
-
-        _this.$Progress.finish();
       })["catch"](function (error) {
+        // this.errors = error;
+        console.log(error);
+
+        if (error == "Unauthorized") {
+          _this.error_login = "No Autorizado";
+        } else {
+          _this.errors = error;
+        } // this.errors = error;
+
+
         _this.$store.commit("loginFailed", {
           error: error
         });
@@ -3176,8 +3182,14 @@ __webpack_require__.r(__webpack_exports__);
       currentUser: {}
     };
   },
+  // computed: {
+  //     currentUser(){
+  //         return
+  //     }
+  // },
   created: function created() {
     this.userLogin();
+    console.log(this.$route.path);
 
     if (this.$route.path == "/") {
       $("body").removeClass("login-page");
@@ -3185,7 +3197,15 @@ __webpack_require__.r(__webpack_exports__);
     } else {
       $("body").removeClass("sidebar-mini");
       $("body").addClass("login-page");
-    }
+    } // location.reload();
+    // this.currentUser = this.$store.getters.currentUser;
+    // this.meta = this.$route.meta;
+    // if (this.meta.auth) {
+    //    $('body').removeClass('gray-bg');
+    // } else {
+    //     $('body').addClass('gray-bg');
+    // }
+
   },
   methods: {
     userLogin: function userLogin() {
@@ -17574,7 +17594,7 @@ __webpack_require__("7075")('Map');
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.15';
+  var VERSION = '4.17.20';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -21281,8 +21301,21 @@ __webpack_require__("7075")('Map');
      * @returns {Array} Returns the new sorted array.
      */
     function baseOrderBy(collection, iteratees, orders) {
+      if (iteratees.length) {
+        iteratees = arrayMap(iteratees, function(iteratee) {
+          if (isArray(iteratee)) {
+            return function(value) {
+              return baseGet(value, iteratee.length === 1 ? iteratee[0] : iteratee);
+            }
+          }
+          return iteratee;
+        });
+      } else {
+        iteratees = [identity];
+      }
+
       var index = -1;
-      iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(getIteratee()));
+      iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
 
       var result = baseMap(collection, function(value, key, collection) {
         var criteria = arrayMap(iteratees, function(iteratee) {
@@ -21539,6 +21572,10 @@ __webpack_require__("7075")('Map');
         var key = toKey(path[index]),
             newValue = value;
 
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return object;
+        }
+
         if (index != lastIndex) {
           var objValue = nested[key];
           newValue = customizer ? customizer(objValue, key, nested) : undefined;
@@ -21691,11 +21728,14 @@ __webpack_require__("7075")('Map');
      *  into `array`.
      */
     function baseSortedIndexBy(array, value, iteratee, retHighest) {
-      value = iteratee(value);
-
       var low = 0,
-          high = array == null ? 0 : array.length,
-          valIsNaN = value !== value,
+          high = array == null ? 0 : array.length;
+      if (high === 0) {
+        return 0;
+      }
+
+      value = iteratee(value);
+      var valIsNaN = value !== value,
           valIsNull = value === null,
           valIsSymbol = isSymbol(value),
           valIsUndefined = value === undefined;
@@ -23180,10 +23220,11 @@ __webpack_require__("7075")('Map');
       if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
         return false;
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(array);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var arrStacked = stack.get(array);
+      var othStacked = stack.get(other);
+      if (arrStacked && othStacked) {
+        return arrStacked == other && othStacked == array;
       }
       var index = -1,
           result = true,
@@ -23345,10 +23386,11 @@ __webpack_require__("7075")('Map');
           return false;
         }
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(object);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var objStacked = stack.get(object);
+      var othStacked = stack.get(other);
+      if (objStacked && othStacked) {
+        return objStacked == other && othStacked == object;
       }
       var result = true;
       stack.set(object, other);
@@ -26729,6 +26771,10 @@ __webpack_require__("7075")('Map');
      * // The `_.property` iteratee shorthand.
      * _.filter(users, 'active');
      * // => objects for ['barney']
+     *
+     * // Combining several predicates using `_.overEvery` or `_.overSome`.
+     * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+     * // => objects for ['fred', 'barney']
      */
     function filter(collection, predicate) {
       var func = isArray(collection) ? arrayFilter : baseFilter;
@@ -27478,15 +27524,15 @@ __webpack_require__("7075")('Map');
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 36 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 30 },
      *   { 'user': 'barney', 'age': 34 }
      * ];
      *
      * _.sortBy(users, [function(o) { return o.user; }]);
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 30]]
      *
      * _.sortBy(users, ['user', 'age']);
-     * // => objects for [['barney', 34], ['barney', 36], ['fred', 40], ['fred', 48]]
+     * // => objects for [['barney', 34], ['barney', 36], ['fred', 30], ['fred', 48]]
      */
     var sortBy = baseRest(function(collection, iteratees) {
       if (collection == null) {
@@ -32361,11 +32407,11 @@ __webpack_require__("7075")('Map');
 
       // Use a sourceURL for easier debugging.
       // The sourceURL gets injected into the source that's eval-ed, so be careful
-      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
-      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
+      // to normalize all kinds of whitespace, so e.g. newlines (and unicode versions of it) can't sneak in
+      // and escape the comment, thus injecting code that gets evaled.
       var sourceURL = '//# sourceURL=' +
         (hasOwnProperty.call(options, 'sourceURL')
-          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
+          ? (options.sourceURL + '').replace(/\s/g, ' ')
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -32398,8 +32444,6 @@ __webpack_require__("7075")('Map');
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      // Like with sourceURL, we take care to not check the option's prototype,
-      // as this configuration is a code injection vector.
       var variable = hasOwnProperty.call(options, 'variable') && options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
@@ -33106,6 +33150,9 @@ __webpack_require__("7075")('Map');
      * values against any array or object value, respectively. See `_.isEqual`
      * for a list of supported value comparisons.
      *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
+     *
      * @static
      * @memberOf _
      * @since 3.0.0
@@ -33121,6 +33168,10 @@ __webpack_require__("7075")('Map');
      *
      * _.filter(objects, _.matches({ 'a': 4, 'c': 6 }));
      * // => [{ 'a': 4, 'b': 5, 'c': 6 }]
+     *
+     * // Checking for several possible values
+     * _.filter(objects, _.overSome([_.matches({ 'a': 1 }), _.matches({ 'a': 4 })]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matches(source) {
       return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
@@ -33134,6 +33185,9 @@ __webpack_require__("7075")('Map');
      * **Note:** Partial comparisons will match empty array and empty object
      * `srcValue` values against any array or object value, respectively. See
      * `_.isEqual` for a list of supported value comparisons.
+     *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
      *
      * @static
      * @memberOf _
@@ -33151,6 +33205,10 @@ __webpack_require__("7075")('Map');
      *
      * _.find(objects, _.matchesProperty('a', 4));
      * // => { 'a': 4, 'b': 5, 'c': 6 }
+     *
+     * // Checking for several possible values
+     * _.filter(objects, _.overSome([_.matchesProperty('a', 1), _.matchesProperty('a', 4)]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matchesProperty(path, srcValue) {
       return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
@@ -33374,6 +33432,10 @@ __webpack_require__("7075")('Map');
      * Creates a function that checks if **all** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -33400,6 +33462,10 @@ __webpack_require__("7075")('Map');
      * Creates a function that checks if **any** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -33419,6 +33485,9 @@ __webpack_require__("7075")('Map');
      *
      * func(NaN);
      * // => false
+     *
+     * var matchesFunc = _.overSome([{ 'a': 1 }, { 'a': 2 }])
+     * var matchesPropertyFunc = _.overSome([['a', 1], ['a', 2]])
      */
     var overSome = createOver(arraySome);
 
@@ -36429,13 +36498,29 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "login-box" }, [
+    _vm.error_login
+      ? _c("div", { staticClass: "alert alert-danger alert-dismissable" }, [
+          _c(
+            "button",
+            {
+              staticClass: "close",
+              attrs: { type: "button", "data-dismiss": "alert" }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v(" "),
+          _c("strong", [_vm._v("!Permiso!")]),
+          _vm._v(" " + _vm._s(_vm.error_login) + ".\n        ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body login-card-body" }, [
         _c("p", { staticClass: "login-box-msg" }, [
           _vm._v(
-            "\n                Ingresa tus datos passdsdssara Iniciar Sesión\n            "
+            "\n                Ingresa tus datos para Iniciar Sesión\n            "
           )
         ]),
         _vm._v(" "),
@@ -36451,6 +36536,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              class: { "is-invalid": _vm.errors.email },
               attrs: {
                 id: "email",
                 type: "email",
@@ -36473,7 +36559,13 @@ var render = function() {
             _vm._v(" "),
             _vm._m(1),
             _vm._v(" "),
-            _vm._m(2)
+            _vm.errors.email
+              ? _c(
+                  "span",
+                  { staticClass: "invalid-feedback", attrs: { role: "alert" } },
+                  [_c("strong", [_vm._v(_vm._s(_vm.errors.email[0]))])]
+                )
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group mb-3" }, [
@@ -36487,6 +36579,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              class: { "is-invalid": _vm.errors.password },
               attrs: {
                 id: "password",
                 type: "password",
@@ -36506,13 +36599,19 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _vm._m(3),
+            _vm._m(2),
             _vm._v(" "),
-            _vm._m(4)
+            _vm.errors.password
+              ? _c(
+                  "span",
+                  { staticClass: "invalid-feedback", attrs: { role: "alert" } },
+                  [_c("strong", [_vm._v(_vm._s(_vm.errors.password[0]))])]
+                )
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
-            _vm._m(5),
+            _vm._m(3),
             _vm._v(" "),
             _c("div", { staticClass: "col-4" }, [
               _c(
@@ -36567,31 +36666,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("message error")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-append" }, [
       _c("div", { staticClass: "input-group-text" }, [
         _c("span", { staticClass: "fas fa-lock" })
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("$message")])]
-    )
   },
   function() {
     var _vm = this
@@ -37373,8 +37452,6 @@ var render = function() {
           "div",
           { staticClass: "wrapper" },
           [
-            _c("vue-progress-bar"),
-            _vm._v(" "),
             _c("header-app"),
             _vm._v(" "),
             _c("sidebar-app"),
@@ -37384,7 +37461,7 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "content-fluid" },
-                  [_c("router-view")],
+                  [_c("router-view"), _vm._v(" "), _c("vue-progress-bar")],
                   1
                 )
               ])
@@ -54491,8 +54568,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_form_wizard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-form-wizard */ "./node_modules/vue-form-wizard/dist/vue-form-wizard.js");
 /* harmony import */ var vue_form_wizard__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
-/* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-form-wizard/dist/vue-form-wizard.min.css */ "./node_modules/vue-form-wizard/dist/vue-form-wizard.min.css");
-/* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _helpers_general__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./helpers/general */ "./resources/js/helpers/general.js");
+/* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-form-wizard/dist/vue-form-wizard.min.css */ "./node_modules/vue-form-wizard/dist/vue-form-wizard.min.css");
+/* harmony import */ var vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_form_wizard_dist_vue_form_wizard_min_css__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
 /* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_8__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
@@ -54502,22 +54580,22 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
- // import {initialize} from  './helpers/general'
 
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_8___default.a, {
+  color: 'rgb(51, 156, 255)',
+  failedColor: 'red',
+  height: '4px'
+});
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 // window.Vue = require('vue');
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_8___default.a, {
-  color: 'rgb(143, 255, 199)',
-  failedColor: 'red',
-  height: '2px'
-}); // Dependency
+// Dependency
 
 window.jsPDF = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.min.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_form_wizard__WEBPACK_IMPORTED_MODULE_4___default.a);
@@ -54528,23 +54606,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_3__["routes"],
   mode: "history",
   linkExactActiveClass: "active"
-}); // initialize(store, router);
-
-router.beforeEach(function (to, from, next) {
-  var requiresAuth = to.matched.some(function (record) {
-    return record.meta.requiresAuth;
-  });
-  var currentUser = store.state.currentUser;
-  console.log(currentUser);
-
-  if (requiresAuth && !currentUser) {
-    next("/login");
-  } else if (to.path == "/login" && currentUser) {
-    next("/");
-  } else {
-    next();
-  }
 });
+Object(_helpers_general__WEBPACK_IMPORTED_MODULE_6__["initialize"])(store, router);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -55018,10 +55081,11 @@ function login(credentials) {
   return new Promise(function (res, rej) {
     axios.post('/api/auth/login', credentials).then(function (response) {
       console.log(response.data);
-      res(response.data);
-      setAuthorization(response.data.access_token);
+      res(response.data.access_token); // setAuthorization(response.data.access_token);
     })["catch"](function (err) {
-      rej("Wrong email or password");
+      console.log(err);
+      var error = err.response.data.errors;
+      rej(error);
     });
   });
 }
@@ -55033,6 +55097,43 @@ function getLocalUser() {
   }
 
   return JSON.parse(userStr);
+}
+
+/***/ }),
+
+/***/ "./resources/js/helpers/general.js":
+/*!*****************************************!*\
+  !*** ./resources/js/helpers/general.js ***!
+  \*****************************************/
+/*! exports provided: initialize */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialize", function() { return initialize; });
+function initialize(store, router) {
+  router.beforeEach(function (to, from, next) {
+    var requiresAuth = to.matched.some(function (record) {
+      return record.meta.requiresAuth;
+    });
+    var currentUser = store.state.currentUser;
+
+    if (requiresAuth && !currentUser) {
+      next("/login");
+    } else if (to.path == "/login" && currentUser) {
+      next("/");
+    } else {
+      next();
+    }
+  });
+  axios.interceptors.response.use(null, function (error) {
+    if (error.response.status = 401) {
+      store.commit("logout");
+      router.push("/login");
+    }
+
+    return Promise.reject(error);
+  }); // axios.defaults.headers.common["Authorization"] = `Bearer ${store.getters.currentUser.token}`
 }
 
 /***/ }),
@@ -55170,7 +55271,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./Header.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/layouts/Header.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
  /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
@@ -55360,6 +55461,7 @@ var routes = [{
   name: "login",
   component: _auth_Login__WEBPACK_IMPORTED_MODULE_1__["default"],
   meta: {
+    title: 'Login',
     requiresAuth: false
   }
 }, {

@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    // use AuthenticatesUsers;
-    // protected $redirectTo = '/home';
+    
     /**
      * Create a new AuthController instance.
      *
@@ -27,13 +26,19 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-      
+        
+        $validate = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
+
         $credentials = request(['email', 'password']);
       
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth('api')->attempt($credentials) && $validate) {
+
+            return response()->json(['errors' => 'Unauthorized'], 401);
         }
         
         return $this->respondWithToken($token);
@@ -90,5 +95,21 @@ class AuthController extends Controller
 
     public function guard(){
         return Auth::guard('api');
+    }
+
+        /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
     }
 }

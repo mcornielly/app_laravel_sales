@@ -1,14 +1,17 @@
 export function login(credentials) {
     console.log(credentials)
     return new Promise((res, rej) => {
+    
         axios.post('/api/auth/login', credentials)
             .then((response) => {
                 console.log(response.data)
-                res(response.data);
-                setAuthorization(response.data.access_token);
+                res(response.data.access_token);
+                // setAuthorization(response.data.access_token);
             })
             .catch((err) =>{
-                rej("Wrong email or password");
+                console.log(err)
+                const error = err.response.data.errors;
+                rej(error);
             })
     })
 }
