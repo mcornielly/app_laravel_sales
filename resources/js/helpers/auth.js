@@ -1,3 +1,5 @@
+import { setAuthorization } from "./general";
+
 export function login(credentials) {
     console.log(credentials)
     return new Promise((res, rej) => {

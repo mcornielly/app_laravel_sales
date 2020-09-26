@@ -6,22 +6,21 @@ import Vuex from "vuex";
 import { routes } from "./routes";
 import VueFormWizard from "vue-form-wizard";
 import StoreData from "./store";
-// import {initialize} from  './helpers/general'
+import {initialize} from  './helpers/general'
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
-import VueProgressBar from 'vue-progressbar'
+
+// import VueProgressBar from 'vue-progressbar'
+// Vue.use(VueProgressBar, {
+//   color: 'rgb(143, 255, 199)',
+//   failedColor: 'red',
+//   height: '2px'
+// })
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 // window.Vue = require('vue');
-
-
-Vue.use(VueProgressBar, {
-  color: 'rgb(143, 255, 199)',
-  failedColor: 'red',
-  height: '2px'
-})
 
 
 // Dependency
@@ -37,19 +36,19 @@ const router = new VueRouter({
     linkExactActiveClass: "active"
 });
 
-// initialize(store, router);
-router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-    const currentUser = store.state.currentUser;
-    console.log(currentUser);
-    if (requiresAuth && !currentUser) {
-        next("/login");
-    } else if (to.path == "/login" && currentUser) {
-        next("/");
-    } else {
-        next();
-    }
-});
+initialize(store, router);
+// router.beforeEach((to, from, next) => {
+//     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//     const currentUser = store.state.currentUser;
+//     console.log(currentUser);
+//     if (requiresAuth && !currentUser) {
+//         next("/login");
+//     } else if (to.path == "/login" && currentUser) {
+//         next("/");
+//     } else {
+//         next();
+//     }
+// });
 
 /**
  * The following block of code may be used to automatically register your
