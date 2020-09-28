@@ -2529,6 +2529,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login-app",
@@ -2539,7 +2545,9 @@ __webpack_require__.r(__webpack_exports__);
         password: ""
       },
       currentUser: {},
-      error: null
+      error: null,
+      errors: '',
+      error_login: ''
     };
   },
   methods: {
@@ -2553,18 +2561,45 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.commit("loginSuccess", response);
 
         location.reload();
-        setTimeout(function () {
+        toastr["success"]("Validación exitosa..!!", "Inicio de Sesión", {
+          "progressBar": true,
+          "showDuration": "2000",
+          "hideDuration": "1000",
+          "timeOut": "1000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }, setTimeout(function () {
           $("body").removeClass("login-page");
           $("body").addClass("sidebar-mini");
 
           _this.$router.push({
             path: "/"
           });
-        }, 1000);
+        }, 1000));
       })["catch"](function (error) {
-        _this.$store.commit("loginFailed", {
-          error: error
-        });
+        var err = error.response.data.errors;
+        _this.error = err;
+        console.log(_this.err);
+
+        if (err == undefined) {
+          _this.error_login = "Correo Electrónico / Clave";
+          toastr.error("ERROR - Correo Electrónico / Clave.");
+        } else {
+          _this.errors = err;
+        } // let err = error;
+        // console.log(error.response.data.errors)
+        // this.errors = error;
+        // if(error == "Unauthorized"){
+        //     this.error_login = "No Autorizado";
+        // }else{
+        //     this.errors = error;
+        //     console.log(this.errors)
+        // }
+        // this.$store.commit("loginFailed", { error });
+
       });
     }
   }
@@ -36424,7 +36459,7 @@ var render = function() {
       _c("div", { staticClass: "card-body login-card-body" }, [
         _c("p", { staticClass: "login-box-msg" }, [
           _vm._v(
-            "\n                Ingresa tus datos passdsdssara Iniciar Sesión\n            "
+            "\n                Ingresa tus datos para Iniciar Sesión\n            "
           )
         ]),
         _vm._v(" "),
@@ -36440,6 +36475,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              class: { "is-invalid": _vm.errors.email },
               attrs: {
                 id: "email",
                 type: "email",
@@ -36462,7 +36498,13 @@ var render = function() {
             _vm._v(" "),
             _vm._m(1),
             _vm._v(" "),
-            _vm._m(2)
+            _vm.errors.email
+              ? _c(
+                  "span",
+                  { staticClass: "invalid-feedback", attrs: { role: "alert" } },
+                  [_c("strong", [_vm._v(_vm._s(_vm.errors.email[0]))])]
+                )
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "input-group mb-3" }, [
@@ -36476,6 +36518,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              class: { "is-invalid": _vm.errors.password },
               attrs: {
                 id: "password",
                 type: "password",
@@ -36495,13 +36538,19 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _vm._m(3),
+            _vm._m(2),
             _vm._v(" "),
-            _vm._m(4)
+            _vm.errors.password
+              ? _c(
+                  "span",
+                  { staticClass: "invalid-feedback", attrs: { role: "alert" } },
+                  [_c("strong", [_vm._v(_vm._s(_vm.errors.password[0]))])]
+                )
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
-            _vm._m(5),
+            _vm._m(3),
             _vm._v(" "),
             _c("div", { staticClass: "col-4" }, [
               _c(
@@ -36556,31 +36605,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("message error")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-append" }, [
       _c("div", { staticClass: "input-group-text" }, [
         _c("span", { staticClass: "fas fa-lock" })
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      { staticClass: "invalid-feedback", attrs: { role: "alert" } },
-      [_c("strong", [_vm._v("$message")])]
-    )
   },
   function() {
     var _vm = this
@@ -54604,14 +54633,15 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 /*!*************************************!*\
   !*** ./resources/js/auth/Login.vue ***!
   \*************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Login_vue_vue_type_template_id_3d143c20___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=3d143c20& */ "./resources/js/auth/Login.vue?vue&type=template&id=3d143c20&");
 /* harmony import */ var _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&lang=js& */ "./resources/js/auth/Login.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -54641,7 +54671,7 @@ component.options.__file = "resources/js/auth/Login.vue"
 /*!**************************************************************!*\
   !*** ./resources/js/auth/Login.vue?vue&type=script&lang=js& ***!
   \**************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55003,18 +55033,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _general__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./general */ "./resources/js/helpers/general.js");
 
 function login(credentials) {
-  var _this = this;
-
-  console.log(credentials);
   return new Promise(function (res, rej) {
     axios.post('/api/auth/login', credentials).then(function (response) {
       console.log(response.data);
       res(response.data);
       Object(_general__WEBPACK_IMPORTED_MODULE_0__["setAuthorization"])(response.data.access_token);
-
-      _this.$Progress.finish();
     })["catch"](function (err) {
-      rej("Wrong email or password");
+      // const error = err.response.data.errors;
+      rej(err); // rej("Wrong email or password");
     });
   });
 }
