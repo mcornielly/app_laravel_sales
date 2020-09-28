@@ -2064,6 +2064,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+$("body").removeClass("login-page");
+$("body").addClass("sidebar-mini");
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getData();
@@ -2256,10 +2258,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_BtnDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/BtnDivisaComponent.vue */ "./resources/js/components/BtnDivisaComponent.vue");
 /* harmony import */ var _components_ModalDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/ModalDivisaComponent.vue */ "./resources/js/components/ModalDivisaComponent.vue");
 /* harmony import */ var _components_DataTableCurrencyCell_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/DataTableCurrencyCell.vue */ "./resources/js/components/DataTableCurrencyCell.vue");
-/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-loading-overlay */ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js");
-/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
-/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_6__);
 //
 //
 //
@@ -2308,29 +2306,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-var _user = document.head.querySelector('meta[name="user"]');
 
 
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a); // Import component
-
- // Import stylesheet
-
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a); // // Import component
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     BtnDivisaComponentVue: _components_BtnDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     DataTableCurrencyCell: _components_DataTableCurrencyCell_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    ModalDivisaComponentVue: _components_ModalDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_5___default.a
+    ModalDivisaComponentVue: _components_ModalDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"] // Loading
+
   },
   data: function data() {
     return {
-      amount: '',
       url: "api/auth/divisas",
       titlePage: 'Divisa',
       routePage: 'Divisa',
@@ -2376,17 +2370,20 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
         component: _components_BtnDivisaComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
         handler: this.editDivisa
       }],
-      selectedRow: {},
-      isLoading: false
+      selectedRow: {} // isLoading: false
+
     };
   },
   created: function created() {
+    $("body").removeClass("login-page");
+    $("body").addClass("sidebar-mini");
     this.getData(this.url);
   },
   computed: {
-    user: function user() {
-      return JSON.parse(_user.content);
-    },
+    // user(){
+    //     let user = document.head.querySelector('meta[name="user"]');
+    //     return JSON.parse(user.content);
+    // },
     currentUser: function currentUser() {
       console.log(this.$store.getters.currentUser);
       return this.$store.getters.currentUser;
@@ -2398,7 +2395,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
 
       var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.url;
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.tableProps;
-      this.isLoading = true;
+      // this.isLoading = true;
       setTimeout(function () {
         _this.$Progress.start();
 
@@ -2417,8 +2414,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
         });
 
         _this.$Progress.finish();
-      }, 1000);
-      this.isLoading = false;
+      }, 1000); // this.isLoading = false;
     },
     reloadTable: function reloadTable(tableProps) {
       this.getData(this.url, tableProps);
@@ -2426,6 +2422,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     createDivisa: function createDivisa() {
       this.title = 'Nuevo Precio de la Divisa';
       this.create = true;
+      this.selectedRow = {};
       $('#modal-divisas').on('shown.bs.modal', function () {
         $('#input_focus').focus();
       });
@@ -2779,8 +2776,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _user = document.head.querySelector('meta[name="user"]');
-
 
 
 
@@ -2808,29 +2803,23 @@ var _user = document.head.querySelector('meta[name="user"]');
       user_id: 0,
       price: 0,
       errors: '',
-      value: '' // mask: {
-      //     amount: {
-      //         mask: Number,
-      //         scale: 2, 
-      //         signed: false,
-      //         thousandsSeparator: ".", 
-      //         padFractionalZeros: true, 
-      //         normalizeZeros: true,
-      //         radix: ",", 
-      //         mapToRadix: ["."], 
-      //         max: 100000000
-      //     },
-      //     lazy: false
-      // },
-
+      value: ''
     };
   },
   components: {
     'imask-input': vue_imask__WEBPACK_IMPORTED_MODULE_2__["IMaskComponent"]
   },
   computed: {
-    user: function user() {
-      return JSON.parse(_user.content);
+    // user(){
+    //     let user = document.head.querySelector('meta[name="user"]');
+    //     return JSON.parse(user.content);
+    // },
+    currentUser: function currentUser() {
+      console.log(this.$store.getters.currentUser);
+      return this.$store.getters.currentUser;
+    },
+    amount: function amount() {
+      return this.price = this.amount;
     }
   },
   methods: {
@@ -2849,10 +2838,14 @@ var _user = document.head.querySelector('meta[name="user"]');
     storeDivisa: function storeDivisa() {
       var _this = this;
 
+      alert(this.data.price);
       var url = "/api/divisas";
       axios.post(url, {
         'price': this.data.price,
-        'user_id': this.user.id
+        'user_id': this.currentUser.id,
+        headers: {
+          "Authorization": "Bearer ".concat(this.currentUser.token)
+        }
       }).then(function (response) {
         console.log(response.data);
         toastr.success('El Precio de la Divisa fue registrado.');
@@ -2873,7 +2866,10 @@ var _user = document.head.querySelector('meta[name="user"]');
       axios.put(url, {
         'id': this.data.id,
         'price': this.data.price,
-        'user_id': this.user.id
+        'user_id': this.currentUser.id,
+        headers: {
+          "Authorization": "Bearer ".concat(this.currentUser.token)
+        }
       }).then(function (response) {
         toastr.info('El Precio de la Divisa fue actualizado.');
 
@@ -3196,7 +3192,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "main-app",
   data: function data() {
@@ -3208,12 +3203,14 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.userLogin();
 
-    if (this.$route.path == "/") {
-      $("body").removeClass("login-page");
-      $("body").addClass("sidebar-mini");
-    } else {
+    if (this.$route.path == "/login") {
+      // alert('main-1')
       $("body").removeClass("sidebar-mini");
       $("body").addClass("login-page");
+    } else {
+      // alert('main-2')
+      $("body").removeClass("login-page");
+      $("body").addClass("sidebar-mini");
     }
   },
   methods: {
@@ -3234,14 +3231,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3519,25 +3508,6 @@ exports = module.exports = __webpack_require__(/*! ../../css-loader/lib/css-base
 
 // module
 exports.push([module.i, ".vue-form-wizard .wizard-btn{display:inline-block;margin-bottom:0;font-weight:400;text-align:center;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;background-image:none;border:1px solid transparent;white-space:nowrap;padding:6px 12px;font-size:14px;line-height:1.42857;border-radius:4px}.vue-form-wizard .wizard-btn.disabled,.vue-form-wizard .wizard-btn[disabled],fieldset[disabled] .vue-form-wizard .wizard-btn{cursor:not-allowed;opacity:.65;filter:alpha(opacity=65);-webkit-box-shadow:none;box-shadow:none}.vue-form-wizard *{-webkit-box-sizing:border-box;box-sizing:border-box}.vue-form-wizard a{text-decoration:none}.vue-form-wizard .wizard-nav{margin-bottom:0;padding-left:0;list-style:none}.vue-form-wizard .wizard-nav>li{position:relative;display:block}.vue-form-wizard .wizard-nav>li>a{position:relative;display:block;padding:10px 15px}.vue-form-wizard .wizard-nav>li>a:focus,.vue-form-wizard .wizard-nav>li>a:hover{text-decoration:none;background-color:#eee}.vue-form-wizard .wizard-nav>li.disabled>a{color:#777}.vue-form-wizard .wizard-nav>li.disabled>a:focus,.vue-form-wizard .wizard-nav>li.disabled>a:hover{color:#777;text-decoration:none;background-color:transparent;cursor:not-allowed}.vue-form-wizard .wizard-progress-bar{float:left;width:0;height:100%;font-size:12px;line-height:20px;color:#fff;text-align:center;background-color:#337ab7;-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);-webkit-transition:width .6s ease;transition:width .6s ease}.vue-form-wizard .navbar .navbar-nav>li>a.wizard-btn,.vue-form-wizard .wizard-btn{-webkit-box-sizing:border-box;box-sizing:border-box;border-width:2px;background-color:transparent;font-size:14px;font-weight:600;padding:6px 12px;min-width:140px}.vue-form-wizard .navbar .navbar-nav>li>a.wizard-btn:focus,.vue-form-wizard .navbar .navbar-nav>li>a.wizard-btn:hover,.vue-form-wizard .wizard-btn:focus,.vue-form-wizard .wizard-btn:hover{outline:0!important}.vue-form-wizard .wizard-nav-pills{margin-top:0;position:relative;text-align:center;display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap}.vue-form-wizard .wizard-nav-pills a,.vue-form-wizard .wizard-nav-pills li{-webkit-box-flex:1;-ms-flex:1;flex:1;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-ms-flex-wrap:wrap;flex-wrap:wrap;-ms-flex-positive:1;flex-grow:1}.vue-form-wizard .wizard-nav-pills>li>a,.vue-form-wizard .wizard-nav-pills a{display:-webkit-box;display:-ms-flexbox;display:flex}.vue-form-wizard .wizard-nav-pills>li>a{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;padding:0;margin:0 auto;color:rgba(0,0,0,.2);position:relative;top:3px}.vue-form-wizard .wizard-nav-pills>li>a:focus,.vue-form-wizard .wizard-nav-pills>li>a:hover{background-color:transparent;color:rgba(0,0,0,.2);outline:0!important}.vue-form-wizard .wizard-nav-pills>li>a.disabled{pointer-events:none;cursor:default}.vue-form-wizard .wizard-nav-pills>li.active>a,.vue-form-wizard .wizard-nav-pills>li.active>a:focus,.vue-form-wizard .wizard-nav-pills>li.active>a:hover{background-color:transparent;-webkit-transition:font-size .2s linear;transition:font-size .2s linear}.vue-form-wizard .wizard-nav-pills>li.active>a .wizard-icon,.vue-form-wizard .wizard-nav-pills>li.active>a:focus .wizard-icon,.vue-form-wizard .wizard-nav-pills>li.active>a:hover .wizard-icon{color:#fff;font-size:24px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-transition:all .2s linear;transition:all .2s linear}.vue-form-wizard{padding-bottom:20px}.vue-form-wizard .is_error{border-color:#c84513!important}.vue-form-wizard .is_error .icon-container{background:#c84513!important}.vue-form-wizard.xs .wizard-icon-circle{width:40px;height:40px;font-size:16px}.vue-form-wizard.xs .wizard-icon-circle.tab_shape{height:25px}.vue-form-wizard.xs .wizard-nav-pills>li.active>a .wizard-icon{font-size:16px}.vue-form-wizard.xs .wizard-navigation .wizard-progress-with-circle{position:relative;top:25px;height:4px}.vue-form-wizard.sm .wizard-icon-circle{width:50px;height:50px;font-size:20px}.vue-form-wizard.sm .wizard-icon-circle.tab_shape{height:30px}.vue-form-wizard.sm .wizard-nav-pills>li.active>a .wizard-icon{font-size:20px}.vue-form-wizard.sm .wizard-navigation .wizard-progress-with-circle{position:relative;top:30px;height:4px}.vue-form-wizard.md .wizard-icon-circle{width:70px;height:70px;font-size:24px}.vue-form-wizard.md .wizard-icon-circle.tab_shape{height:40px}.vue-form-wizard.md .wizard-nav-pills>li.active>a .wizard-icon{font-size:24px}.vue-form-wizard.md .wizard-navigation .wizard-progress-with-circle{position:relative;top:40px;height:4px}.vue-form-wizard.lg .wizard-icon-circle{width:90px;height:90px;font-size:28px}.vue-form-wizard.lg .wizard-icon-circle.tab_shape{height:50px}.vue-form-wizard.lg .wizard-nav-pills>li.active>a .wizard-icon{font-size:28px}.vue-form-wizard.lg .wizard-navigation .wizard-progress-with-circle{position:relative;top:50px;height:4px}.vue-form-wizard .wizard-icon-circle{font-size:18px;border:3px solid #f3f2ee;border-radius:50%;font-weight:600;width:70px;height:70px;background-color:#fff;position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-ms-flex-line-pack:center;align-content:center}.vue-form-wizard .wizard-icon-circle.square_shape{border-radius:0}.vue-form-wizard .wizard-icon-circle.tab_shape{width:100%;min-width:100px;height:40px;border:none;background-color:#f3f2ee;border-radius:0}.vue-form-wizard .wizard-icon-circle .wizard-icon-container{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-flex:1;-ms-flex:1;flex:1;border-radius:40%}.vue-form-wizard .wizard-icon-circle .wizard-icon-container.square_shape,.vue-form-wizard .wizard-icon-circle .wizard-icon-container.tab_shape{border-radius:0}.vue-form-wizard .wizard-icon-circle .wizard-icon{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.vue-form-wizard .wizard-tab-content{min-height:100px;padding:30px 20px 10px}.vue-form-wizard .wizard-header{padding:15px;position:relative;border-radius:3px 3px 0 0;text-align:center}.vue-form-wizard .wizard-title{color:#252422;font-weight:300;margin:0;text-align:center}.vue-form-wizard .category{font-size:14px;font-weight:400;color:#9a9a9a;margin-bottom:0;text-align:center}.vue-form-wizard .wizard-navigation .wizard-progress-with-circle{position:relative;top:40px;height:4px}.vue-form-wizard .wizard-navigation .wizard-progress-with-circle .wizard-progress-bar{-webkit-box-shadow:none;box-shadow:none;-webkit-transition:width .3s ease;transition:width .3s ease}.vue-form-wizard .clearfix:after{content:\"\";clear:both;display:table}.vue-form-wizard .wizard-card-footer{padding:0 20px}.vue-form-wizard .wizard-card-footer .wizard-footer-left{float:left}.vue-form-wizard .wizard-card-footer .wizard-footer-right{float:right}@media screen and (max-width:350px){.vue-form-wizard .wizard-card-footer{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.vue-form-wizard .wizard-card-footer .wizard-footer-left,.vue-form-wizard .wizard-card-footer .wizard-footer-right{float:none;-webkit-box-flex:1;-ms-flex:1;flex:1;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.vue-form-wizard .wizard-card-footer .wizard-footer-right button{margin-top:10px}}.vue-form-wizard.vertical .wizard-card-footer{display:block}.vue-form-wizard.vertical .wizard-nav-pills{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.vue-form-wizard.vertical .wizard-navigation{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.vue-form-wizard.vertical .wizard-card-footer{padding-top:30px}", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loading-overlay/dist/vue-loading.css":
-/*!***********************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loading-overlay/dist/vue-loading.css ***!
-  \***********************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ".vld-overlay {\n  bottom: 0;\n  left: 0;\n  position: absolute;\n  right: 0;\n  top: 0;\n  align-items: center;\n  display: none;\n  justify-content: center;\n  overflow: hidden;\n  z-index: 9999;\n}\n\n.vld-overlay.is-active {\n  display: flex;\n}\n\n.vld-overlay.is-full-page {\n  z-index: 9999;\n  position: fixed;\n}\n\n.vld-overlay .vld-background {\n  bottom: 0;\n  left: 0;\n  position: absolute;\n  right: 0;\n  top: 0;\n  background: #fff;\n  opacity: 0.5;\n}\n\n.vld-overlay .vld-icon, .vld-parent {\n  position: relative;\n}\n\n", ""]);
 
 // exports
 
@@ -36435,15 +36405,6 @@ var render = function() {
                         _vm.isLoading = false
                       }
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("loading", {
-                    attrs: { "is-full-page": true, active: _vm.isLoading },
-                    on: {
-                      "update:active": function($event) {
-                        _vm.isLoading = $event
-                      }
-                    }
                   })
                 ]
               ],
@@ -36454,12 +36415,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("modal-divisa", {
-        attrs: {
-          amount: _vm.amount,
-          data: _vm.selectedRow,
-          title: _vm.title,
-          create: _vm.create
-        }
+        attrs: { data: _vm.selectedRow, title: _vm.title, create: _vm.create }
       })
     ],
     1
@@ -37458,12 +37414,7 @@ var render = function() {
           1
         )
       ])
-    : _c(
-        "div",
-        { staticClass: "content" },
-        [_c("h3", [_vm._v("Aqui")]), _vm._v(" "), _c("router-view")],
-        1
-      )
+    : _c("div", { staticClass: "content" }, [_c("router-view")], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37537,7 +37488,8 @@ var render = function() {
                       { staticClass: "nav-link", attrs: { to: "/" } },
                       [
                         _c("i", {
-                          staticClass: "nav-icon fas fa-tachometer-alt"
+                          staticClass:
+                            "nav-icon fas fa-tachometer-alt text-info"
                         }),
                         _vm._v(" "),
                         _c("p", [
@@ -37560,7 +37512,8 @@ var render = function() {
                       { staticClass: "nav-link", attrs: { to: "/divisas" } },
                       [
                         _c("i", {
-                          staticClass: "nav-icon fas fa-money-bill-alt"
+                          staticClass:
+                            "nav-icon fas fa-money-bill-alt text-success"
                         }),
                         _vm._v(" "),
                         _c("p", [
@@ -37582,7 +37535,9 @@ var render = function() {
                       "router-link",
                       { staticClass: "nav-link", attrs: { to: "#" } },
                       [
-                        _c("i", { staticClass: "nav-icon fas fa-boxes" }),
+                        _c("i", {
+                          staticClass: "nav-icon fas fa-boxes text-orange"
+                        }),
                         _vm._v(" "),
                         _c("p", [
                           _vm._v(
@@ -37765,7 +37720,9 @@ var render = function() {
                       "router-link",
                       { staticClass: "nav-link", attrs: { to: "#" } },
                       [
-                        _c("i", { staticClass: "nav-icon fas fa-clipboard" }),
+                        _c("i", {
+                          staticClass: "nav-icon fas fa-clipboard text-primary"
+                        }),
                         _vm._v(" "),
                         _c("p", [
                           _vm._v(
@@ -37894,7 +37851,9 @@ var render = function() {
                       }
                     },
                     [
-                      _c("i", { staticClass: "nav-icon fas fa-sign-out-alt" }),
+                      _c("i", {
+                        staticClass: "nav-icon fas fa-sign-out-alt text-danger"
+                      }),
                       _vm._v(" "),
                       _c("p", [_vm._v("Salir")])
                     ]
@@ -37946,7 +37905,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "nav-icon fas fa-store" }),
+      _c("i", { staticClass: "nav-icon fas fa-store text-purple" }),
       _vm._v(" "),
       _c("p", [
         _vm._v(
@@ -37961,7 +37920,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "nav-icon far fa-handshake" }),
+      _c("i", { staticClass: "nav-icon far fa-handshake text-teal" }),
       _vm._v(" "),
       _c("p", [
         _vm._v(
@@ -37976,7 +37935,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "nav-icon fas fa-door-open" }),
+      _c("i", { staticClass: "nav-icon fas fa-door-open text-lightblue" }),
       _vm._v(" "),
       _c("p", [
         _vm._v(
@@ -38102,47 +38061,6 @@ function normalizeComponent (
   }
 }
 
-
-/***/ }),
-
-/***/ "./node_modules/vue-loading-overlay/dist/vue-loading.css":
-/*!***************************************************************!*\
-  !*** ./node_modules/vue-loading-overlay/dist/vue-loading.css ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./vue-loading.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loading-overlay/dist/vue-loading.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/vue-loading-overlay/dist/vue-loading.min.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-!function(t,e){ true?module.exports=e():undefined}("undefined"!=typeof self?self:this,(function(){return function(t){var e={};function i(n){if(e[n])return e[n].exports;var r=e[n]={i:n,l:!1,exports:{}};return t[n].call(r.exports,r,r.exports,i),r.l=!0,r.exports}return i.m=t,i.c=e,i.d=function(t,e,n){i.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},i.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},i.t=function(t,e){if(1&e&&(t=i(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var n=Object.create(null);if(i.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var r in t)i.d(n,r,function(e){return t[e]}.bind(null,r));return n},i.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return i.d(e,"a",e),e},i.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},i.p="",i(i.s=1)}([function(t,e,i){},function(t,e,i){"use strict";i.r(e);var n="undefined"!=typeof window?window.HTMLElement:Object,r={mounted:function(){document.addEventListener("focusin",this.focusIn)},methods:{focusIn:function(t){if(this.isActive&&t.target!==this.$el&&!this.$el.contains(t.target)){var e=this.container?this.container:this.isFullPage?null:this.$el.parentElement;(this.isFullPage||e&&e.contains(t.target))&&(t.preventDefault(),this.$el.focus())}}},beforeDestroy:function(){document.removeEventListener("focusin",this.focusIn)}};function a(t,e,i,n,r,a,o,s){var u,l="function"==typeof t?t.options:t;if(e&&(l.render=e,l.staticRenderFns=i,l._compiled=!0),n&&(l.functional=!0),a&&(l._scopeId="data-v-"+a),o?(u=function(t){(t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),r&&r.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(o)},l._ssrRegister=u):r&&(u=s?function(){r.call(this,this.$root.$options.shadowRoot)}:r),u)if(l.functional){l._injectStyles=u;var c=l.render;l.render=function(t,e){return u.call(e),c(t,e)}}else{var d=l.beforeCreate;l.beforeCreate=d?[].concat(d,u):[u]}return{exports:t,options:l}}var o=a({name:"spinner",props:{color:{type:String,default:"#000"},height:{type:Number,default:64},width:{type:Number,default:64}}},(function(){var t=this.$createElement,e=this._self._c||t;return e("svg",{attrs:{viewBox:"0 0 38 38",xmlns:"http://www.w3.org/2000/svg",width:this.width,height:this.height,stroke:this.color}},[e("g",{attrs:{fill:"none","fill-rule":"evenodd"}},[e("g",{attrs:{transform:"translate(1 1)","stroke-width":"2"}},[e("circle",{attrs:{"stroke-opacity":".25",cx:"18",cy:"18",r:"18"}}),e("path",{attrs:{d:"M36 18c0-9.94-8.06-18-18-18"}},[e("animateTransform",{attrs:{attributeName:"transform",type:"rotate",from:"0 18 18",to:"360 18 18",dur:"0.8s",repeatCount:"indefinite"}})],1)])])])}),[],!1,null,null,null).exports,s=a({name:"dots",props:{color:{type:String,default:"#000"},height:{type:Number,default:240},width:{type:Number,default:60}}},(function(){var t=this.$createElement,e=this._self._c||t;return e("svg",{attrs:{viewBox:"0 0 120 30",xmlns:"http://www.w3.org/2000/svg",fill:this.color,width:this.width,height:this.height}},[e("circle",{attrs:{cx:"15",cy:"15",r:"15"}},[e("animate",{attrs:{attributeName:"r",from:"15",to:"15",begin:"0s",dur:"0.8s",values:"15;9;15",calcMode:"linear",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"fill-opacity",from:"1",to:"1",begin:"0s",dur:"0.8s",values:"1;.5;1",calcMode:"linear",repeatCount:"indefinite"}})]),e("circle",{attrs:{cx:"60",cy:"15",r:"9","fill-opacity":"0.3"}},[e("animate",{attrs:{attributeName:"r",from:"9",to:"9",begin:"0s",dur:"0.8s",values:"9;15;9",calcMode:"linear",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"fill-opacity",from:"0.5",to:"0.5",begin:"0s",dur:"0.8s",values:".5;1;.5",calcMode:"linear",repeatCount:"indefinite"}})]),e("circle",{attrs:{cx:"105",cy:"15",r:"15"}},[e("animate",{attrs:{attributeName:"r",from:"15",to:"15",begin:"0s",dur:"0.8s",values:"15;9;15",calcMode:"linear",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"fill-opacity",from:"1",to:"1",begin:"0s",dur:"0.8s",values:"1;.5;1",calcMode:"linear",repeatCount:"indefinite"}})])])}),[],!1,null,null,null).exports,u=a({name:"bars",props:{color:{type:String,default:"#000"},height:{type:Number,default:40},width:{type:Number,default:40}}},(function(){var t=this.$createElement,e=this._self._c||t;return e("svg",{attrs:{xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 30 30",height:this.height,width:this.width,fill:this.color}},[e("rect",{attrs:{x:"0",y:"13",width:"4",height:"5"}},[e("animate",{attrs:{attributeName:"height",attributeType:"XML",values:"5;21;5",begin:"0s",dur:"0.6s",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"y",attributeType:"XML",values:"13; 5; 13",begin:"0s",dur:"0.6s",repeatCount:"indefinite"}})]),e("rect",{attrs:{x:"10",y:"13",width:"4",height:"5"}},[e("animate",{attrs:{attributeName:"height",attributeType:"XML",values:"5;21;5",begin:"0.15s",dur:"0.6s",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"y",attributeType:"XML",values:"13; 5; 13",begin:"0.15s",dur:"0.6s",repeatCount:"indefinite"}})]),e("rect",{attrs:{x:"20",y:"13",width:"4",height:"5"}},[e("animate",{attrs:{attributeName:"height",attributeType:"XML",values:"5;21;5",begin:"0.3s",dur:"0.6s",repeatCount:"indefinite"}}),e("animate",{attrs:{attributeName:"y",attributeType:"XML",values:"13; 5; 13",begin:"0.3s",dur:"0.6s",repeatCount:"indefinite"}})])])}),[],!1,null,null,null).exports,l=a({name:"vue-loading",mixins:[r],props:{active:Boolean,programmatic:Boolean,container:[Object,Function,n],isFullPage:{type:Boolean,default:!0},transition:{type:String,default:"fade"},canCancel:Boolean,onCancel:{type:Function,default:function(){}},color:String,backgroundColor:String,opacity:Number,width:Number,height:Number,zIndex:Number,loader:{type:String,default:"spinner"}},data:function(){return{isActive:this.active}},components:{Spinner:o,Dots:s,Bars:u},beforeMount:function(){this.programmatic&&(this.container?(this.isFullPage=!1,this.container.appendChild(this.$el)):document.body.appendChild(this.$el))},mounted:function(){this.programmatic&&(this.isActive=!0),document.addEventListener("keyup",this.keyPress)},methods:{cancel:function(){this.canCancel&&this.isActive&&(this.hide(),this.onCancel.apply(null,arguments))},hide:function(){var t=this;this.$emit("hide"),this.$emit("update:active",!1),this.programmatic&&(this.isActive=!1,setTimeout((function(){var e;t.$destroy(),void 0!==(e=t.$el).remove?e.remove():e.parentNode.removeChild(e)}),150))},keyPress:function(t){27===t.keyCode&&this.cancel()}},watch:{active:function(t){this.isActive=t}},beforeDestroy:function(){document.removeEventListener("keyup",this.keyPress)}},(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("transition",{attrs:{name:t.transition}},[i("div",{directives:[{name:"show",rawName:"v-show",value:t.isActive,expression:"isActive"}],staticClass:"vld-overlay is-active",class:{"is-full-page":t.isFullPage},style:{zIndex:t.zIndex},attrs:{tabindex:"0","aria-busy":t.isActive,"aria-label":"Loading"}},[i("div",{staticClass:"vld-background",style:{background:t.backgroundColor,opacity:t.opacity},on:{click:function(e){return e.preventDefault(),t.cancel(e)}}}),i("div",{staticClass:"vld-icon"},[t._t("before"),t._t("default",[i(t.loader,{tag:"component",attrs:{color:t.color,width:t.width,height:t.height}})]),t._t("after")],2)])])}),[],!1,null,null,null).exports,c=function(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return{show:function(){var n=arguments.length>0&&void 0!==arguments[0]?arguments[0]:e,r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:i,a={programmatic:!0},o=Object.assign({},e,n,a),s=new(t.extend(l))({el:document.createElement("div"),propsData:o}),u=Object.assign({},i,r);return Object.keys(u).map((function(t){s.$slots[t]=u[t]})),s}}};i(0);l.install=function(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},n=c(t,e,i);t.$loading=n,t.prototype.$loading=n};e.default=l}]).default}));
 
 /***/ }),
 
@@ -55184,18 +55102,23 @@ function initialize(store, router) {
     var currentUser = store.state.currentUser;
 
     if (requiresAuth && !currentUser) {
+      // alert('gene-1')
       $("body").removeClass("sidebar-mini");
       $("body").addClass("login-page");
       next("/login");
     } else if (to.path == "/login" && currentUser) {
+      // alert('gene-2')
+      $("body").removeClass("login-page");
+      $("body").addClass("sidebar-mini");
       next("/");
     } else {
+      // alert('gene-3')
       next();
     }
   });
   axios.interceptors.response.use(null, function (error) {
     if (error.response.status = 401) {
-      alert(4);
+      alert('error-404');
       router.push("*"); // store.commit("logout");
       // router.push("/login");
     }
@@ -55647,8 +55570,8 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
     },
     logout: function logout(state) {
       // alert(2)
-      $("body").removeClass("sidebar-mini");
-      $("body").addClass("login-page");
+      // $("body").removeClass("sidebar-mini");
+      // $("body").addClass("login-page");
       location.reload();
       localStorage.removeItem("user");
       state.isLoggeIn = false;

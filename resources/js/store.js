@@ -48,8 +48,8 @@ export default {
         },
         logout(state) {
             // alert(2)
-            $("body").removeClass("sidebar-mini");
-            $("body").addClass("login-page");
+            // $("body").removeClass("sidebar-mini");
+            // $("body").addClass("login-page");
             location.reload();
             localStorage.removeItem("user");
             state.isLoggeIn = false;

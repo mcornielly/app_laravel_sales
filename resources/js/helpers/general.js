@@ -4,22 +4,24 @@ export function initialize(store, router) {
         const currentUser = store.state.currentUser;
 
         if (requiresAuth && !currentUser) {
-            alert(3)
+            // alert('gene-1')
             $("body").removeClass("sidebar-mini");
             $("body").addClass("login-page");
             next("/login");
         } else if (to.path == "/login" && currentUser) {
-            alert(3)
+            // alert('gene-2')
+            $("body").removeClass("login-page");
+            $("body").addClass("sidebar-mini");
             next("/");
         } else {
-            alert(3)
+            // alert('gene-3')
             next();
         }
     });
 
     axios.interceptors.response.use(null, error => {
         if ((error.response.status = 401)) {
-           alert(4) 
+           alert('error-404') 
             router.push("*");
             // store.commit("logout");
             // router.push("/login");

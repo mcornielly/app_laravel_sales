@@ -23,10 +23,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -38,7 +38,6 @@
     
         <!-- Modal-Divisa -->
         <modal-divisa
-            :amount="amount"
             :data="selectedRow"
             :title="title"
             :create="create"
@@ -48,29 +47,26 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
-
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import BtnDivisaComponentVue from '../../components/BtnDivisaComponent.vue';
 import ModalDivisaComponentVue from '../../components/ModalDivisaComponent.vue';
 import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
 Vue.use(DataTable);
-// Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// // Import component
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnDivisaComponentVue,
         DataTableCurrencyCell,
         ModalDivisaComponentVue,
-        Loading
+        // Loading
     },
     data() {
         return {
-            amount: '',
             url:"api/auth/divisas",
             titlePage:'Divisa',
             routePage:'Divisa',
@@ -123,17 +119,20 @@ export default {
                 },
             ],
             selectedRow: {},
-            isLoading: false
+            // isLoading: false
 
         }
     },
     created(){
+        $("body").removeClass("login-page");
+        $("body").addClass("sidebar-mini");
         this.getData(this.url);
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
-        },
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
         currentUser() {
             console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
@@ -141,7 +140,7 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
             setTimeout(() => {
                 this.$Progress.start()
                 axios.get(url,
@@ -162,22 +161,23 @@ export default {
                 })
             this.$Progress.finish()
             },1000)
-            this.isLoading = false;
+            // this.isLoading = false;
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
         createDivisa(){
-            this.title = 'Nuevo Precio de la Divisa'
-            this.create = true
+            this.title = 'Nuevo Precio de la Divisa';
+            this.create = true;
+            this.selectedRow = {};
             $('#modal-divisas').on('shown.bs.modal', function() {
                 $('#input_focus').focus();
             })
         },
         editDivisa(data) {
             console.log(data)
-            this.title = 'Nuevo Precio de la Divisa'
-            this.create = false
+            this.title = 'Nuevo Precio de la Divisa';
+            this.create = false;
             this.selectedRow = data;
             this.amount = data.price;
 

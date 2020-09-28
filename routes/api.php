@@ -46,6 +46,23 @@ Route::group(['prefix' => 'auth'], function ($router) {
     
 });
 
+Route::group(['middleware' => 'jwt.auth'], function($router){
+    // Dashboard
+    Route::get('dashboard', 'DashboardController');
+
+    // Divisas
+    Route::group(['middleware' => ['role:Administrador']], function(){
+        // Usuarios
+        Route::get('usuarios', 'Admin\UsersController@index');
+        Route::post('usuario', 'Admin\UsersController@store');
+        Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+        // Divisa
+        Route::get('divisas', 'Admin\DivisaController@index');
+        Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+        Route::post('divisas', 'Admin\DivisaController@store');
+        Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+    });
+});
 
 
 // Route::group(['middleware' => 'role:Administrador'], function () {

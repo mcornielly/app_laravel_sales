@@ -48,7 +48,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 import Vue from 'vue';
 import Divisas from './../admin/views/Divisas.vue';
 import {IMaskComponent} from 'vue-imask';
@@ -72,31 +72,23 @@ export default {
             user_id: 0,
             price: 0,
             errors: '',
-            value:'',
-            // mask: {
-            //     amount: {
-            //         mask: Number,
-            //         scale: 2, 
-            //         signed: false,
-            //         thousandsSeparator: ".", 
-            //         padFractionalZeros: true, 
-            //         normalizeZeros: true,
-            //         radix: ",", 
-            //         mapToRadix: ["."], 
-            //         max: 100000000
-            //     },
-            //     lazy: false
-            // },
-
-
+            value:''
         }
     },
     components: {
       'imask-input': IMaskComponent
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
+        amount() {
+            return this.price = this.amount;
         }
     },
     methods:{
@@ -115,10 +107,14 @@ export default {
             }
         },
         storeDivisa(){
+            alert(this.data.price)
             var url = "/api/divisas";
             axios.post(url,{
                 'price': this.data.price, 
-                'user_id': this.user.id 
+                'user_id': this.currentUser.id,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                } 
             }).then(response => {
                 console.log(response.data)
                 toastr.success('El Precio de la Divisa fue registrado.');
@@ -136,7 +132,10 @@ export default {
             axios.put(url,{
                 'id': this.data.id,
                 'price': this.data.price, 
-                'user_id': this.user.id 
+                'user_id': this.currentUser.id,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                } 
             }).then(response => {
                 toastr.info('El Precio de la Divisa fue actualizado.');
                 this.$parent.reloadTable();

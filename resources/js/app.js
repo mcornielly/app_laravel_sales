@@ -67,10 +67,7 @@ Vue.component("header-app", require("./layouts/Header.vue").default);
 Vue.component("footer-app", require("./layouts/Footer.vue").default);
 Vue.component("sidebar-app", require("./layouts/SideBar.vue").default);
 Vue.component("login-app", require("./auth/Login.vue").default);
-Vue.component(
-    "modal-divisa",
-    require("./components/ModalDivisaComponent.vue").default
-);
+Vue.component("modal-divisa",require("./components/ModalDivisaComponent.vue").default);
 Vue.component("bread-crumbs", require("./components/BreadCrumbs").default);
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);

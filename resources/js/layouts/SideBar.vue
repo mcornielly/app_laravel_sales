@@ -42,7 +42,7 @@
                         <!-- Dashboard -->
                         <li class="nav-item">
                             <router-link to="/" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-tachometer-alt text-info"></i>
                                 <p>
                                     Dashboard
                                 </p>
@@ -51,7 +51,7 @@
                         <!-- Divisa -->
                         <li class="nav-item">
                             <router-link to="/divisas" class="nav-link">
-                                <i class="nav-icon fas fa-money-bill-alt"></i>
+                                <i class="nav-icon fas fa-money-bill-alt text-success"></i>
                                 <p>
                                     Divisa
                                 </p>
@@ -60,7 +60,7 @@
                         <!-- Almacén -->
                         <li class="nav-item has-treeview">
                             <router-link to="#" class="nav-link">
-                                <i class="nav-icon fas fa-boxes"></i>
+                                <i class="nav-icon fas fa-boxes text-orange"></i>
                                 <p>
                                     Almacén
                                     <i class="right fas fa-angle-left"></i>
@@ -99,7 +99,7 @@
                         <!-- Compras -->
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-store"></i>
+                                <i class="nav-icon fas fa-store text-purple"></i>
                                 <p>
                                     Compras
                                     <i class="right fas fa-angle-left"></i>
@@ -111,9 +111,7 @@
                                         to="/ingresos"
                                         class="nav-link"
                                     >
-                                        <i
-                                            class="nav-icon fas fa-piggy-bank"
-                                        ></i>
+                                        <i class="nav-icon fas fa-piggy-bank"></i>
                                         <p>Ingresos</p>
                                     </router-link>
                                 </li>
@@ -131,7 +129,7 @@
                         <!-- Ventas -->
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-handshake"></i>
+                                <i class="nav-icon far fa-handshake text-teal"></i>
                                 <p>
                                     Ventas
                                     <i class="right fas fa-angle-left"></i>
@@ -140,9 +138,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <router-link to="/ventas" class="nav-link">
-                                        <i
-                                            class="nav-icon fas fa-cash-register"
-                                        ></i>
+                                        <i class="nav-icon fas fa-cash-register"></i>
                                         <p>Ventas</p>
                                     </router-link>
                                 </li>
@@ -161,7 +157,7 @@
                         <!-- Reportes -->
                         <li class="nav-item has-treeview">
                             <router-link to="#" class="nav-link">
-                                <i class="nav-icon fas fa-clipboard"></i>
+                                <i class="nav-icon fas fa-clipboard text-primary"></i>
                                 <p>
                                     Reportes
                                     <i class="right fas fa-angle-left"></i>
@@ -173,9 +169,7 @@
                                         to="/usuarios"
                                         class="nav-link"
                                     >
-                                        <i
-                                            class="nav-icon fas fa-file-invoice"
-                                        ></i>
+                                        <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>Reportes Ingreso</p>
                                     </router-link>
                                 </li>
@@ -184,19 +178,17 @@
                                         to="/usuarios"
                                         class="nav-link"
                                     >
-                                        <i
-                                            class="nav-icon fas fa-file-invoice-dollar"
-                                        ></i>
+                                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
                                         <p>Reportes Ventas</p>
                                     </router-link>
                                 </li>
                             </ul>
                         </li>
-                                                <template v-if="currentUser.roles[0].name=='Administrador'">
+                        <template v-if="currentUser.roles[0].name=='Administrador'">
                             <!-- Usiuarios Roles  Permisos -->
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-door-open"></i>
+                                    <i class="nav-icon fas fa-door-open text-lightblue"></i>
                                     <p>
                                         Accesos
                                         <i class="right fas fa-angle-left"></i>
@@ -234,7 +226,7 @@
                                 class="nav-link"
                                 @click.prevent="logout"
                             >
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
                                 <p>Salir</p>
                             </a>
                         </li>
