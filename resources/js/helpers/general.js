@@ -4,18 +4,25 @@ export function initialize(store, router) {
         const currentUser = store.state.currentUser;
 
         if (requiresAuth && !currentUser) {
+            alert(3)
+            $("body").removeClass("sidebar-mini");
+            $("body").addClass("login-page");
             next("/login");
         } else if (to.path == "/login" && currentUser) {
+            alert(3)
             next("/");
         } else {
+            alert(3)
             next();
         }
     });
 
     axios.interceptors.response.use(null, error => {
         if ((error.response.status = 401)) {
-            store.commit("logout");
-            router.push("/login");
+           alert(4) 
+            router.push("*");
+            // store.commit("logout");
+            // router.push("/login");
         }
 
         return Promise.reject(error);

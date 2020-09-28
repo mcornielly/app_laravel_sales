@@ -157,38 +157,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Usiuarios Roles  Permisos -->
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-door-open"></i>
-                                <p>
-                                    Accesos
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <router-link
-                                        to="/usuarios"
-                                        class="nav-link"
-                                    >
-                                        <i class="nav-icon fas fa-users"></i>
-                                        <p>Usurios</p>
-                                    </router-link>
-                                </li>
-                                <li class="nav-item">
-                                    <router-link
-                                        to="/usuarios"
-                                        class="nav-link"
-                                    >
-                                        <i
-                                            class="nav-icon fas fa-users-cog"
-                                        ></i>
-                                        <p>Roles</p>
-                                    </router-link>
-                                </li>
-                            </ul>
-                        </li>
+
                         <!-- Reportes -->
                         <li class="nav-item has-treeview">
                             <router-link to="#" class="nav-link">
@@ -223,6 +192,40 @@
                                 </li>
                             </ul>
                         </li>
+                                                <template v-if="currentUser.roles[0].name=='Administrador'">
+                            <!-- Usiuarios Roles  Permisos -->
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-door-open"></i>
+                                    <p>
+                                        Accesos
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <router-link
+                                            to="/usuarios"
+                                            class="nav-link"
+                                        >
+                                            <i class="nav-icon fas fa-users"></i>
+                                            <p>Usurios</p>
+                                        </router-link>
+                                    </li>
+                                    <li class="nav-item">
+                                        <router-link
+                                            to="/usuarios"
+                                            class="nav-link"
+                                        >
+                                            <i
+                                                class="nav-icon fas fa-users-cog"
+                                            ></i>
+                                            <p>Roles</p>
+                                        </router-link>
+                                    </li>
+                                </ul>
+                            </li>
+                        </template>
                         <!-- Logout -->
                         <li class="nav-item">
                             <a
@@ -249,16 +252,17 @@ export default {
     methods: {
         logout() {
             this.$store.commit("logout");
-            location.reload();
+            
             setTimeout(() => {
-                $("body").removeClass("sidebar-mini");
-                $("body").addClass("login-page");
+                // $("body").removeClass("sidebar-mini");
+                // $("body").addClass("login-page");
                 this.$router.push("/login");
             }, 1000);
         }
     },
     computed: {
         currentUser() {
+            console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
         }
     }

@@ -26,14 +26,36 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::post('logout', 'AuthController@logout');
         Route::post('me', 'AuthController@me');
+
+        // Dashboard
+        Route::get('dashboard', 'DashboardController');
+
+        // Divisas
+        Route::group(['middleware' => ['role:Administrador']], function(){
+            // Usuarios
+            Route::get('usuarios', 'Admin\UsersController@index');
+            Route::post('usuario', 'Admin\UsersController@store');
+            Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+            // Divisa
+            Route::get('divisas', 'Admin\DivisaController@index');
+            Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+            Route::post('divisas', 'Admin\DivisaController@store');
+            Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+        });
     });
     
 });
 
+
+
+// Route::group(['middleware' => 'role:Administrador'], function () {
+//     // Usuarios
+//     Route::get('usuarios', 'Admin\UsersController@index');
+//     Route::post('usuario', 'Admin\UsersController@store');
+//     Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+// });
 // Route::get('/', 'HomeController@index')->name('home'); 
 
-// Dashboard
-Route::get('dashboard', 'DashboardController');
 // Route::group(['middleware' => 'role:Administrador'], function () {
 //     // Usuarios
 //     Route::get('usuarios', 'Admin\UsersController@index');
@@ -41,11 +63,6 @@ Route::get('dashboard', 'DashboardController');
 //     Route::put('usuario/{usuario}', 'Admin\UsersController@update');
 // });
 
-// // Divisas
-// Route::get('divisas', 'Admin\DivisaController@index');
-// Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
-// Route::post('divisas', 'Admin\DivisaController@store');
-// Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
 
 // // Categorías
 // Route::get('categorias', 'Admin\CategoriesController@index');

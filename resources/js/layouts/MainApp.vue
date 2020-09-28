@@ -24,6 +24,7 @@
         <!-- ./wrapper -->
     </div>
     <div v-else class="content">
+        <h3>Aqui</h3>  
         <router-view></router-view>
     </div>
 </template>
@@ -40,12 +41,14 @@ export default {
     created() {
         this.userLogin();
 
-        if (this.$route.path == "/") {
-            $("body").removeClass("login-page");
-            $("body").addClass("sidebar-mini");
-        } else {
+        if (this.$route.path == "/login") {
+            alert(1)
             $("body").removeClass("sidebar-mini");
             $("body").addClass("login-page");
+        } else {
+            alert(2)
+            $("body").removeClass("login-page");
+            $("body").addClass("sidebar-mini");
         }
     },
     methods: {

@@ -24,7 +24,8 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>{{  divisa | currency }}</h3>    
+                        <h3 v-if="divisa">{{  divisa | currency }}</h3>    
+                        <h3 v-else>{{  0 | currency }}</h3>    
                         <!-- <h3>190.000,00</h3> -->
                         <p>Cotización del Dolar</p>
                     </div>
@@ -154,13 +155,17 @@
 </template>
 
 <script>
+
+$("body").removeClass("login-page");
+$("body").addClass("sidebar-mini");
+
 export default {
     mounted(){
         this.getData();
     },
     data(){
         return {
-            divisa: 0.00,
+            divisa: 0,
             sales:[],
             varSale: null,
             chartSale: null,
@@ -179,7 +184,7 @@ export default {
         },
         getData(){
             let me = this;
-            var url = "/api/dashboard";
+            var url = "/api/auth/dashboard";
             this.$Progress.start()
             axios.get(url).then(response => {
                 console.log(response.data.divisa_p)

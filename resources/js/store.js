@@ -7,7 +7,8 @@ export default {
         currentUser: user,
         isLoggeIn: !!user,
         loading: false,
-        auth_error: null
+        auth_error: null,
+        divisa: []
     },
     getters: {
         isLoading(state) {
@@ -21,6 +22,9 @@ export default {
         },
         authError(state) {
             return state.auth_error;
+        },
+        divisa(state) {
+            return state.divisa;
         }
     },
     mutations: {
@@ -43,14 +47,27 @@ export default {
             state.auth_error = payload.error;
         },
         logout(state) {
+            // alert(2)
+            $("body").removeClass("sidebar-mini");
+            $("body").addClass("login-page");
+            location.reload();
             localStorage.removeItem("user");
             state.isLoggeIn = false;
             state.currentUser = null;
+        },
+        stateDivisa(state, payload) {
+            state.divisa = payload;
         }
     },
     actions: {
         login(context) {
             context.commit("login");
+        },
+        getCustomers(context) {
+            axios.get('/api/customers')
+                .then((response) => {
+                    context.commit('updateCustomers', response.data.customers);
+                });
         }
 
         //     loginUser({}, user){

@@ -3,17 +3,6 @@ import Login from "./auth/Login";
 
 export const routes = [
     {
-        path: "/",
-        name: "dashboard",
-        component: Dashboard,
-        meta: {
-            requiresAuth: true
-        }
-        // beforeEnter: () => {
-        //     window.location.href = window.location.origin +'/'
-        // }
-    },
-    {
         path: "/login",
         name: "login",
         component: Login,
@@ -22,10 +11,21 @@ export const routes = [
         }
     },
     {
+        path: "/",
+        name: "dashboard",
+        component: Dashboard,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
         path: "/divisas",
         name: "divisas",
-        component: require("./admin/views/Divisas").default
-    }
+        component: require("./admin/views/Divisas").default,
+        meta: {
+            requiresAuth: true
+        }
+    },
     // {
     //     path: '/categorias',
     //     name: 'categories',
@@ -66,8 +66,8 @@ export const routes = [
     //     name: 'sales',
     //     component: require('./admin/views/Sales').default,
     // },
-    // {
-    //     path: '*',
-    //     component: require('./admin/views/404').default
-    // }
+    {
+        path: '*',
+        component: require('./admin/views/404').default
+    }
 ];

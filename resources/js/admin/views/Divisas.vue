@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             amount: '',
-            url:"api/divisas",
+            url:"api/auth/divisas",
             titlePage:'Divisa',
             routePage:'Divisa',
             create:false,
@@ -129,19 +129,27 @@ export default {
     },
     created(){
         this.getData(this.url);
-        
     },
     computed:{
         user(){
             return JSON.parse(user.content);
+        },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
             this.isLoading = true;
             setTimeout(() => {
-                axios.get(url, {
-                    params: options
+                this.$Progress.start()
+                axios.get(url,
+                {
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -150,9 +158,11 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;
+            this.$Progress.finish()
             },1000)
+            this.isLoading = false;
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
