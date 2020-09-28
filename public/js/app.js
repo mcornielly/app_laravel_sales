@@ -2563,7 +2563,7 @@ __webpack_require__.r(__webpack_exports__);
         location.reload();
         toastr["success"]("Validación exitosa..!!", "Inicio de Sesión", {
           "progressBar": true,
-          "showDuration": "2000",
+          "showDuration": "1000",
           "hideDuration": "1000",
           "timeOut": "1000",
           "extendedTimeOut": "1000",
@@ -2589,17 +2589,7 @@ __webpack_require__.r(__webpack_exports__);
           toastr.error("ERROR - Correo Electrónico / Clave.");
         } else {
           _this.errors = err;
-        } // let err = error;
-        // console.log(error.response.data.errors)
-        // this.errors = error;
-        // if(error == "Unauthorized"){
-        //     this.error_login = "No Autorizado";
-        // }else{
-        //     this.errors = error;
-        //     console.log(this.errors)
-        // }
-        // this.$store.commit("loginFailed", { error });
-
+        }
       });
     }
   }
