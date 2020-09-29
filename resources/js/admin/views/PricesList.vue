@@ -24,10 +24,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
@@ -80,29 +80,30 @@ Vue.use(DataTable);
 
 export default {
     components:{
-        BtnProductsComponentVue,
         StatusComponentVue,
         DataTableCurrencyUnitDivisa,
         DataTableCurrencyWholeDivisa,
         DataTableCurrencyWholesale,
         DataTableCurrencyUnit,
+        BtnProductsComponentVue,
         BtnPricesListComponent,
         // Loading
     },
     data(){
         return{
+            url:"api/productos",
             data: {},
             divisa: 0,
             code:'',
             titlePage:'Lista de Precios',
             routePage:'Lista de Precios',
-            url:"api/productos/lista_precios",
             title: '',
             tableProps: {
                 search: '',
                 length: 10,
                 column: 'id',
                 dir: 'desc',
+                price: true,
             },
             translate:{
                 nextButton: 'Siguiente', 
@@ -183,21 +184,30 @@ export default {
         this.getCategories();
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
             // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
-                this.$Progress.start()
+                let url = `${this.url}`;
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
-                    console.log(this.data)
+                    // console.log(this.data)
                 })
                 // eslint-disable-next-line
                 .catch(errors => {
@@ -209,10 +219,11 @@ export default {
             },1000)
         },
         reloadTable(tableProps){
-            this.getData(this.url, tableProps);
+            let url = `${this.url}/lista`;
+            this.getData(url, tableProps);
         },
         getDivisa(){
-            var url = "api/divisa/precio";
+            let url = "api/divisa/precio";
             axios.get(url).then(response => {
                 this.divisa = response.data;
                 console.log(this.divisa);
@@ -221,7 +232,7 @@ export default {
             });
         },
         getCategories(){
-            var url = "api/categorias/lista";
+            let url = "api/categorias/lista";
             axios.get(url).then(response => {
                 this.categories = response.data;
                 console.log(this.categories)
@@ -244,7 +255,7 @@ export default {
         deleteProduct(data){
             this.id = data.id;
             console.log(this.id)
-            var url = `/api/producto/eliminar/${this.id}`;
+            let url = `${this.url}/${this.id}`;
             axios.delete(url).then(response => {
                 this.reloadTable();
                 this.destroy = false;
@@ -253,20 +264,20 @@ export default {
 
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
         restoreProduct(data){
             this.id = data.id;
-            var url = `/api/producto/restore/${this.id}`;
+            let url = `${this.url}/restore/${this.id}`;
             axios.get(url).then(response => {
                 this.reloadTable();
                 toastr.success('El producto fue restaurada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
@@ -274,8 +285,8 @@ export default {
             this.vproducts = false;
         },
         getImages(product_id){
-            var id = product_id;
-            var url = `/api/producto/imagenes/${id}`;
+            let id = product_id;
+            let url = `${this.url}/imagenes/${id}`;
             axios.get(url).then(response => {
                 this.images = response.data;
                 console.log( this.images)

@@ -177,44 +177,44 @@ export default {
         },
         selectAction(data, action){
             switch(action){
-    			    case 'edit':
-                        {
-                            this.title = 'Editar Categoría';
-                            this.selectedRow = data;
-                            this.create = false;
-                            this.action = true;
-                            this.storeup = false;
-                            break; 
-                        }
-                    case 'show':
-                        {
-                            this.title = "Detalle de Categoría";
-                            this.selectedRow = data;
-                            this.create = false;
-                            this.action = false; 
-                            this.storeup = true; 
-                            break;
-                        }
-                    case 'delete':
-                        {                           
-                            this.deleteCategory(data);
-                            break;
-                        }
-                    case 'restore':
-                        {                           
-                            this.restoreCategory(data);
-                            break;
-                        }
+                case 'update':
+                    {
+                        this.title = 'Actualizar Categoría';
+                        this.selectedRow = data;
+                        this.create = false;
+                        this.action = true;
+                        this.storeup = false;
+                        break; 
+                    }
+                case 'show':
+                    {
+                        this.title = "Detalle de Categoría";
+                        this.selectedRow = data;
+                        this.create = false;
+                        this.action = false; 
+                        this.storeup = true; 
+                        break;
+                    }
+                case 'delete':
+                    {                           
+                        this.deleteCategory(data);
+                        break;
+                    }
+                case 'restore':
+                    {                           
+                        this.restoreCategory(data);
+                        break;
+                    }
             }
         },
         deleteCategory(data){
             this.id = data.id;
             console.log(this.id)
-            var url = `/api/categoria/${this.id}`;
+            var url = `${this.url}/${this.id}`;
             axios.delete(url).then(response => {
                 this.reloadTable();
                 this.destroy = false;
-                toastr.error('La categoría fue eliminada.');
+                toastr.error('La categoría no deshabilitada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
 
             }).catch(error => {
@@ -225,10 +225,10 @@ export default {
         },
         restoreCategory(data){
             this.id = data.id;
-            var url = `/api/categoria/restore/${this.id}`;
+            var url = `${this.url}/restore/${this.id}`;
             axios.get(url).then(response => {
                 this.reloadTable();
-                toastr.success('La categoría fue restaurada.');
+                toastr.success('La categoría fue habilitada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
             }).catch(error => {
                 console.log(error);

@@ -28,8 +28,8 @@
                     <div class="modal-footer" :class="{'justify-content-between':action}">
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <div v-if="action">
-                            <button v-if="create" type="submit" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
-                            <button v-else type="submit" class="btn btn-primary" @click="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                            <button v-if="create" type="submit" class="btn btn-primary" @click.prevent="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
+                            <button v-else type="submit" class="btn btn-primary" @click.prevent="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         </div>
                     </div>
                 </form>
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
 
 export default {
     props:{
@@ -65,13 +64,18 @@ export default {
     },
     data(){
         return {
-            url:"api/categoria",
+            url:"api/categorias",
             errors: '',
         }
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods:{
@@ -83,33 +87,33 @@ export default {
             }
         },
         storeCategory(){
-            var url = this.url;
+            let url = this.url;
             axios.post(url,{
                 'name': this.data.name, 
-                'description': this.data.description 
+                'description': this.data.description
             }).then(response => {
                 console.log(response.data)
                 this.$parent.reloadTable();
                 toastr.success('La categoría fue registrada.');
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
         updateCategory(){
-            var url = `${this.url}/${this.data.id}`;
+            let url = `${this.url}/${this.data.id}`;
             console.log(url)
             axios.put(url,{
                 'id': this.data.id,
                 'name':this.data.name,
-                'description': this.data.description,
+                'description': this.data.description
             }).then(response => {
                 toastr.info('La categoría fue actualizada.');
                 this.$parent.reloadTable();
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },

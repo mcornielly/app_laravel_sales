@@ -187,7 +187,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                                     </div>
-                                                    <input ref="code" type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" maxlength="13">
+                                                    <input ref="code" type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" v-imask="mask.code" maxlength="13">
                                                 </div>   
                                                 <small>Los números de código debe ser de 13 dígitos.</small>
                                                 <span v-if="errors.code" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>
@@ -279,6 +279,7 @@ export default {
     },    
     data(){
         return{
+            url: 'api/productos',
             imgLector: '/images/img/lector-codigo.jpg',
             name: '',
             code: '',
@@ -312,6 +313,9 @@ export default {
                     radix: ",", 
                     mapToRadix: ["."], 
                     max: 100000000
+                },
+                code: {
+                    mask:Number
                 }
             },
             image: '',
@@ -343,9 +347,13 @@ export default {
       }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         price_gain_u: function(){
             var result = 0;
@@ -414,11 +422,14 @@ export default {
         validateAsync:function() {
           return new Promise((resolve, reject) => {
             setTimeout(() => {
-                var url = `api/producto/validate`;
+                var url = `${this.url}/validate`;
                 axios.post(url,{
                     'name' : this.name,
                     'category_id' : this.category_id,
-                    'description' : this.description
+                    'description' : this.description,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }   
                 }).then(response =>{
                     // console.log(response.data)
                     this.setFocus();
@@ -437,9 +448,12 @@ export default {
         validateCode(){
             return new Promise((resolve, reject) => {
             setTimeout(() => {
-                var url = `api/producto/validate/code`;
+                var url = `${this.url}/validate/code`;
                 axios.post(url,{
                     'code' : this.code,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 }).then(response =>{
                     // console.log(response.data)
                     resolve(true)
@@ -472,13 +486,13 @@ export default {
         },
         storeProduct(){
             if(this.divisa > 0){
-                var url = `api/producto`;
+                var url = `${this.url}`;
                 axios.post(url,{
                     'name' : this.name,
                     'category_id' : this.category_id,
                     'code' : this.code,
                     'description' : this.description,
-                    'user_id': this.user.id,
+                    'user_id': this.currentUser.id,
                     'photos':this.photos,
                     'stock': 0,
                     'price' : 0,
@@ -486,7 +500,10 @@ export default {
                     'divisa_unit' : 0,
                     'wholesale_quantity' : 0,
                     'margin_gain_w' : 0,
-                    'wholesale_divisa' : 0
+                    'wholesale_divisa' : 0,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 }).then(response =>{
                     console.log(response.data)
                     this.back_page();
@@ -504,6 +521,7 @@ export default {
         },
         back_page(){
             this.$parent.reloadTable();
+            // this.$router.push({path:'/productos'})
             this.$emit('returned', this.vproducts);
         }
     }

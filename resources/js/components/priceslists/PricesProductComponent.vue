@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import VueNumerals from 'vue-numerals';
 Vue.use(VueNumerals); // default locale is 'en'
 

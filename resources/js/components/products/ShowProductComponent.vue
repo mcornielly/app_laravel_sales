@@ -194,7 +194,8 @@
 <script>
 import VueBarcode from 'vue-barcode';
 import VueNumerals from 'vue-numerals';
-// Vue.use(VueNumerals); // default locale is 'en'
+import Vue from "vue";
+Vue.use(VueNumerals); // default locale is 'en'
 // // Vue.use(VueNumerals, {
 // //   locale: 'es'
 // // });

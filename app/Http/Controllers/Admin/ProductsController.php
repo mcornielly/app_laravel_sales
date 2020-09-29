@@ -25,7 +25,12 @@ class ProductsController extends Controller
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue);
+        if($request->price == true){
+            $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue)
+            ->where('products.price', '>', 0);
+        }else{
+            $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue);
+        }
                 
         if(request()->wantsJson())
         {
@@ -33,10 +38,10 @@ class ProductsController extends Controller
             return new DataTableCollectionResource($data);
         }
 
-        return view('admin.products.index', compact('products', 'divisa_p'));
+        //return view('admin.products.index', compact('products', 'divisa_p'));
     }
 
-    public function price_list(Request $request)
+    public function priceslist(Request $request)
     {
         //Propiedades del DataTble
         $length = $request->input('length');
@@ -45,8 +50,9 @@ class ProductsController extends Controller
         $searchValue = $request->input('search');
 
         $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue)
-                ->where('products.price', '>', 0);
-                
+        ->where('products.price', '>', 0);
+        // $query = Product::with('category')->withTrashed()->eloquentQuery($orderBy, $orderByDir, $searchValue)
+               
         if(request()->wantsJson())
         {
             $data = $query->paginate($length);

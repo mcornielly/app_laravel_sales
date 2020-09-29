@@ -159,7 +159,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 form-control-label text-muted">Código</label>
                                                     <div class="col-md-9">
-                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code" maxlength="13">
+                                                        <input type="text" class="form-control" placeholder="Código de Barras" v-model="data.code" v-imask="mask.code" maxlength="13">
                                                         <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.code[0]"></span>
                                                         <barcode :value="data.code" :options="{ format: 'EAN-13'}">
                                                         </barcode>
@@ -206,8 +206,8 @@
                         </show-product>
                     </div>
                     <div class="modal-footer" :class="{'justify-content-between':action}">
-                        <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
-                        <button v-show="action" type="button" class="btn btn-primary" @click="updateProduct()" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                        <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click.prevent="closeModal()" data-dismiss="modal">Cerrar</button>
+                        <button v-show="action" type="button" class="btn btn-primary" @click.prevent="updateProduct()" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         <!-- <button v-if="create" type="button" class="btn btn-primary" @click="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button> -->
                     </div>
                 </form>
@@ -264,7 +264,7 @@ export default {
     },
     data(){
         return {
-            url:"api/producto",
+            url:"api/productos",
             user_id:0,
             errors: '',
             name:'',
@@ -275,10 +275,10 @@ export default {
             stock: 0,
             code:0,
             wholesale_quantity: 0,
-            margin_gain_u: 0,
-            margin_gain_w: 0,
+            // margin_gain_u: 0,
+            // margin_gain_w: 0,
             dropzoneOptions: {
-                url: 'api/producto/img',
+                url: 'api/productos/img',
                 paramName: 'photo',
                 acceptedFiles: 'image/*',
                 thumbnailWidth: 150,
@@ -301,6 +301,9 @@ export default {
                     radix: ",", 
                     mapToRadix: ["."], 
                     max: 100000000
+                },
+                code: {
+                    mask:Number,
                 }
             },
             image: '',
@@ -318,11 +321,15 @@ export default {
     },
     computed:{
         margin_gain_u(){
-            return this.data.margin_gain_u.toFixed();
+            return this.data.margin_gain_u;
         },
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         price_gain_u: function(){
             var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
@@ -380,6 +387,7 @@ export default {
             // console.log('accept', maskRef.value);
         },
         vremoved(file, xhr, error) {
+            console.log(file)
             this.$refs.myVueDropzone.removeAllFiles();
             if(this.close == true && !this.photos){
                 this.removeStorage();
@@ -426,8 +434,11 @@ export default {
                 'wholesale_quantity':this.data.wholesale_quantity,
                 'margin_gain_w':this.data.margin_gain_w,
                 'wholesale_divisa':this.wholesale_divisa,
-                'user_id':this.user.id,
-                'photos':this.photos
+                'user_id':this.currentUser.id,
+                'photos':this.photos,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
             }).then(response => {
                 this.$parent.reloadTable();
                 this.vremoved();
@@ -441,7 +452,10 @@ export default {
         deleteImag(data){
             var url = `api/fotos/eliminar/${data}`;
             axios.delete(url,{
-                'photo': this.photos
+                'photo': this.photos,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
             }).then(response => {
                 console.log(response.data)
                 this.product_id = response.data.product_id;

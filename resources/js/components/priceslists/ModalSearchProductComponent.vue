@@ -52,6 +52,7 @@
 import {IMaskDirective} from 'vue-imask';
 import {IMaskComponent} from 'vue-imask';
 import VueBarcode from 'vue-barcode';
+import PriceProduct from './PricesProductComponent'
 
 export default {
     props:{
@@ -62,7 +63,7 @@ export default {
     },
     data(){
         return {
-            url:"api/producto/search/",
+            url:"api/productos/search",
             product: [],
             errors: '',
             code:'',
@@ -75,21 +76,30 @@ export default {
     },
     components:{
         'barcode': VueBarcode,
+        'prices-product': PriceProduct 
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods:{
         getDataProduct(){
-            // var leng_code = this.code.length;
-            var code = this.code;
-
+            // let leng_code = this.code.length;
+            let code = this.code;
+            this.$Progress.start()
             setTimeout(() => {
-            var url = `${this.url}${code}`;
-                axios.get(url).then(response => {
+            let url = `${this.url}/${code}`;
+                axios.get(url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response => {
                     this.product = response.data.product[0]; 
                     if(this.product){
                        this.images = response.data.product[0].photos;
@@ -97,12 +107,11 @@ export default {
                     }else{
                         this.product = [];
                     }
-                    console.log(this.product)
-                    
                     // $('#modal-search').on('shown.bs.modal', function() {
                     //     $('#input_focus').focus();
                     // });
                 }).catch(error =>{
+                    this.$Progress.fail()
                     console.log(error);
                     // if(this.data.length == 0){
                     //     // this.errors = error.response;
@@ -111,6 +120,7 @@ export default {
                     // }    
                 });
             this.code='';
+             this.$Progress.finish()
             }, 500)        
         },
         clearSearch(){

@@ -148,7 +148,7 @@ export default {
             storeup: true,
             product_id: 0,
             images:[],
-            isLoading: false, 
+            // isLoading: false, 
         }
     },
     created(){
@@ -191,7 +191,7 @@ export default {
             },1000)
         },
         getDivisa(){
-            var url = "api/divisa/precio";
+            let url = "api/divisa/precio";
             axios.get(url).then(response => {
                 this.divisa = response.data;
                 console.log(this.divisa);
@@ -203,7 +203,7 @@ export default {
             this.getData(this.url, tableProps);
         },
         getCategories(){
-            var url = "api/categorias/lista";
+            let url = "api/categorias/lista";
             axios.get(url).then(response => {
                 this.categories = response.data;
                 console.log(this.categories)
@@ -225,38 +225,39 @@ export default {
         modalProduct(data, action){
             if(this.divisa > 0){
                 switch(action){
-                        case 'edit':
-                            {
-                                this.title = 'Editar Producto';
-                                this.selectedRow = data;
-                                this.product_id = data.id;
-                                this.getImages(this.product_id); 
-                                this.action = true;
-                                this.storeup = false;
-                                break;
-                            }
-                        case 'show':
-                            {
-                                this.title = "Detalle de Producto";
-                                this.selectedRow = data;
-                                this.product_id = data.id;
-                                this.getImages(this.product_id); 
-                                this.category = data.category;
-                                this.create = false;
-                                this.action = false;
-                                this.storeup = true;
-                                break;
-                            }
-                        case 'delete':
-                            {                           
-                                this.deleteProduct(data);
-                                break;
-                            }
-                        case 'restore':
-                            {                           
-                                this.restoreProduct(data);
-                                break;
-                            }
+                    case 'update':
+                        {
+                            console.log(data)
+                            this.title = 'Actualizar Producto';
+                            this.selectedRow = data;
+                            this.product_id = data.id;
+                            this.getImages(this.product_id); 
+                            this.action = true;
+                            this.storeup = false;
+                            break;
+                        }
+                    case 'show':
+                        {
+                            this.title = "Detalle de Producto";
+                            this.selectedRow = data;
+                            this.product_id = data.id;
+                            this.getImages(this.product_id); 
+                            this.category = data.category;
+                            this.create = false;
+                            this.action = false;
+                            this.storeup = true;
+                            break;
+                        }
+                    case 'delete':
+                        {                           
+                            this.deleteProduct(data);
+                            break;
+                        }
+                    case 'restore':
+                        {                           
+                            this.restoreProduct(data);
+                            break;
+                        }
                 }
             }else{
                 toastr["info"]("Debe establecer el monto de la Divisa..!!", "Cotización de la Divisa");
@@ -266,7 +267,7 @@ export default {
         deleteProduct(data){
             this.id = data.id;
             console.log(this.id)
-            var url = `/api/producto/eliminar/${this.id}`;
+            let url = `${this.url}/${this.id}`;
             axios.delete(url).then(response => {
                 this.reloadTable();
                 this.destroy = false;
@@ -275,20 +276,20 @@ export default {
 
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
         restoreProduct(data){
             this.id = data.id;
-            var url = `/api/producto/restore/${this.id}`;
+            let url = `${this.url}/restore/${this.id}`;
             axios.get(url).then(response => {
                 this.reloadTable();
                 toastr.success('El producto fue restaurada.');
                 // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
             }).catch(error => {
                 console.log(error);
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 this.errors = errors;
             });
         },
@@ -296,8 +297,8 @@ export default {
             this.vproducts = false;
         },
         getImages(product_id){
-            var id = product_id;
-            var url = `/api/producto/imagenes/${id}`;
+            let id = product_id;
+            let url = `${this.url}/imagenes/${id}`;
             axios.get(url).then(response => {
                 this.images = response.data;
                 console.log( this.images)

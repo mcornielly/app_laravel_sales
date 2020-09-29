@@ -20,7 +20,7 @@ mix.browserSync({
     proxy: "http://app_laravel_sales.test",
     // browser: "firefox"
     browser: 'C:\\Program Files\\Firefox Developer Edition\\firefox.exe',//Firefox Developer
-    open: false
+    open: true
 });
 
 //deshabilita las notificaciones de larevel mix.

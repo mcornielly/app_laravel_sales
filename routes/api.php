@@ -62,20 +62,19 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
         // Categorias
         Route::resource('categorias', 'Admin\CategoriesController', ['except' => 'show']);
-        Route::get('categoria/restore/{id}', 'Admin\CategoriesController@restore');
-        Route::delete('categoria/{id}', 'Admin\CategoriesController@destroy');
+        Route::get('categorias/restore/{id}', 'Admin\CategoriesController@restore');
         Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
         // Productos
         Route::resource('productos', 'Admin\ProductsController');
-        Route::get('producto/restore/{id}', 'Admin\ProductsController@restore');
-        Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
-        Route::get('productos/lista_precios', 'Admin\ProductsController@price_list');
-        Route::post('producto/img', 'Admin\PhotosController@store');
-        Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
-        Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
-        Route::post('producto/validate', 'Admin\ProductsController@validate_step');
-        Route::post('producto/validate/code', 'Admin\ProductsController@validate_code');
-        Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
+        Route::get('productos/restore/{id}', 'Admin\ProductsController@restore');
+        Route::get('productos/imagenes/{id}', 'Admin\PhotosController@show');
+        Route::post('productos/validate', 'Admin\ProductsController@validate_step');
+        Route::post('productos/validate/code', 'Admin\ProductsController@validate_code');
+        // Lista de Precios
+        // Route::get('productos/lista', 'Admin\ProductsController@index');
+        Route::post('productos/img', 'Admin\PhotosController@store');
+        Route::get('productos/search/{code}', 'Admin\ProductsController@product_search');
+        Route::put('productos/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
     });
 });
 
