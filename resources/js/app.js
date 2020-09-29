@@ -62,32 +62,33 @@ initialize(store, router);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component("main-app", require("./layouts/MainApp.vue").default);
-Vue.component("header-app", require("./layouts/Header.vue").default);
-Vue.component("footer-app", require("./layouts/Footer.vue").default);
-Vue.component("sidebar-app", require("./layouts/SideBar.vue").default);
+Vue.component("main-app", require("./components/layouts/MainApp.vue").default);
+Vue.component("header-app", require("./components/layouts/Header.vue").default);
+Vue.component("footer-app", require("./components/layouts/Footer.vue").default);
+Vue.component("sidebar-app", require("./components/layouts/SideBar.vue").default);
+Vue.component("bread-crumbs", require("./components/layouts/BreadCrumbs").default);
+Vue.component('status-component', require('./components/layouts/StatusComponent.vue').default);
 Vue.component("login-app", require("./auth/Login.vue").default);
-Vue.component("modal-divisa",require("./components/ModalDivisaComponent.vue").default);
-Vue.component("bread-crumbs", require("./components/BreadCrumbs").default);
+Vue.component("modal-divisa",require("./components/divisas/ModalDivisaComponent.vue").default);
+Vue.component('modal-category', require('./components/categories/ModalCategoryComponent.vue').default);
+Vue.component('modal-product', require('./components/products/ModalProductComponent.vue').default);
+Vue.component('product-create', require('./components/products/ProductCreateComponent.vue').default);
+Vue.component('modal-list-prod', require('./components/products/ModalListProductComponent.vue').default);
+Vue.component('modal-show-priceslist', require('./components/priceslists/ModalPricesListComponent.vue').default);
+Vue.component('show-product', require('./components/products/ShowProductComponent.vue').default);
+
 // Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
-// Vue.component('modal-category', require('./components/ModalCategoryComponent.vue').default);
 // Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
 // Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
-// Vue.component('modal-product', require('./components/ModalProductComponent.vue').default);
-// Vue.component('modal-list-prod', require('./components/ModalListProductComponent.vue').default);
 // Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
 // Vue.component('modal-searh-product', require('./components/ModalSearchProductComponent.vue').default);
-// Vue.component('modal-show-priceslist', require('./components/ModalPricesListComponent.vue').default);
-// Vue.component('product-create', require('./components/ProductCreateComponent.vue').default);
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('btn-category', require('./components/categories/BtnCategoryComponent.vue').default);
+// Vue.component('btn-products', require('./components/products/BtnProductsComponent.vue').default);
 // Vue.component('btn-divisa', require('./components/BtnDivisaComponent.vue').default);
-// Vue.component('btn-category', require('./components/BtnCategoryComponent.vue').default);
-// Vue.component('btn-products', require('./components/BtnProductsComponent.vue').default);
 // Vue.component('btn-providers', require('./components/BtnProvidersComponent.vue').default);
 // Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue').default);
-// Vue.component('status-component', require('./components/StatusComponent.vue').default);
 // Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
-// Vue.component('show-product', require('./components/ShowProductComponent.vue').default);
 // Vue.component('prices-product', require('./components/PricesProductComponent.vue').default);
 // Vue.component('income-provider', require('./components/IncomeProviderComponent.vue').default);
 // Vue.component('income-product', require('./components/IncomeProductComponent.vue').default);

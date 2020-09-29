@@ -26,21 +26,31 @@ export const routes = [
             requiresAuth: true
         }
     },
-    // {
-    //     path: '/categorias',
-    //     name: 'categories',
-    //     component: require('./admin/views/Categories').default
-    // },
-    // {
-    //     path: '/productos',
-    //     name: 'products',
-    //     component: require('./admin/views/Products').default,
-    // },
-    // {
-    //     path: '/precios_lista',
-    //     name: 'prices',
-    //     component: require('./admin/views/PricesList').default,
-    // },
+    {
+        path: '/categorias',
+        name: 'categories',
+        component: require('./admin/views/Categories').default,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/productos',
+        name: 'products',
+        component: require('./admin/views/Products').default,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/precios_lista',
+        name: 'prices',
+        component: require('./admin/views/PricesList').default,
+        meta: {
+            requiresAuth: true
+        }
+    },
+
     // {
     //     path: '/usuarios',
     //     name: 'users',

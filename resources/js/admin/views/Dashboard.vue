@@ -156,8 +156,8 @@
 
 <script>
 
-$("body").removeClass("login-page");
-$("body").addClass("sidebar-mini");
+// $("body").removeClass("login-page");
+// $("body").addClass("sidebar-mini");
 
 export default {
     mounted(){

@@ -50,7 +50,7 @@
 <script>
 
 import Vue from 'vue';
-import Divisas from './../admin/views/Divisas.vue';
+import Divisas from '../../admin/views/Divisas';
 import {IMaskComponent} from 'vue-imask';
 export default {
     props:{

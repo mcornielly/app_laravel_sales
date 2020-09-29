@@ -35,9 +35,9 @@
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnListProductsComponentVue from './BtnListProductsComponent.vue';
-import StatusComponentVue from './StatusComponent.vue';
-import DataTableCurrencyCell from './DataTableCurrencyCell.vue';
+import BtnListProductsComponentVue from './BtnListProductsComponent';
+import StatusComponentVue from '../../components/layouts/StatusComponent';
+import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell';
 
 
 Vue.use(DataTable);

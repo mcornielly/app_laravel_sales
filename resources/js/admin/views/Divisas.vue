@@ -49,9 +49,9 @@
 <script>
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnDivisaComponentVue from '../../components/BtnDivisaComponent.vue';
-import ModalDivisaComponentVue from '../../components/ModalDivisaComponent.vue';
-import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+import BtnDivisaComponentVue from '../../components/divisas/BtnDivisaComponent';
+import ModalDivisaComponentVue from '../../components/divisas/ModalDivisaComponent';
+import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell';
 Vue.use(DataTable);
 // // Import component
 // import Loading from 'vue-loading-overlay';

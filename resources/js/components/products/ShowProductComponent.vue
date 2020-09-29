@@ -194,10 +194,10 @@
 <script>
 import VueBarcode from 'vue-barcode';
 import VueNumerals from 'vue-numerals';
-Vue.use(VueNumerals); // default locale is 'en'
-// Vue.use(VueNumerals, {
-//   locale: 'es'
-// });
+// Vue.use(VueNumerals); // default locale is 'en'
+// // Vue.use(VueNumerals, {
+// //   locale: 'es'
+// // });
 
 export default {
     // props: ['data','categoryName','divisa','images'],

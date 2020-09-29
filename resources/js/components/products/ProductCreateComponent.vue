@@ -257,7 +257,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 import {FormWizard, TabContent} from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-
+import Vue from "vue";
 // autofocus
 Vue.directive('focus', {
     // Cuando el elemento enlazado se inserta en el DOM...

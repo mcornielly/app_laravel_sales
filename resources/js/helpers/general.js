@@ -20,12 +20,20 @@ export function initialize(store, router) {
     });
 
     axios.interceptors.response.use(null, error => {
-        if ((error.response.status = 401)) {
-           alert('error-404') 
-            router.push("*");
-            // store.commit("logout");
-            // router.push("/login");
+        const errorRequest = error.request.status;
+        const currentUser = store.state.currentUser;
+      
+        if(errorRequest == 403 && currentUser){
+            router.push("*"); 
+        }else{
+            store.commit("logout");
+            router.push("/login");
         }
+        
+        // if((error.response.status = 401)){
+        //         store.commit("logout");
+        //         router.push("/login");
+        // }
 
         return Promise.reject(error);
     });

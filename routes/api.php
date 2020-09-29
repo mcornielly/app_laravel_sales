@@ -50,7 +50,6 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
     // Dashboard
     Route::get('dashboard', 'DashboardController');
 
-    // Divisas
     Route::group(['middleware' => ['role:Administrador']], function(){
         // Usuarios
         Route::get('usuarios', 'Admin\UsersController@index');
@@ -61,6 +60,22 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
         Route::post('divisas', 'Admin\DivisaController@store');
         Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+        // Categorias
+        Route::resource('categorias', 'Admin\CategoriesController', ['except' => 'show']);
+        Route::get('categoria/restore/{id}', 'Admin\CategoriesController@restore');
+        Route::delete('categoria/{id}', 'Admin\CategoriesController@destroy');
+        Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
+        // Productos
+        Route::resource('productos', 'Admin\ProductsController');
+        Route::get('producto/restore/{id}', 'Admin\ProductsController@restore');
+        Route::delete('producto/eliminar/{id}', 'Admin\ProductsController@destroy');
+        Route::get('productos/lista_precios', 'Admin\ProductsController@price_list');
+        Route::post('producto/img', 'Admin\PhotosController@store');
+        Route::get('producto/imagenes/{id}', 'Admin\PhotosController@show');
+        Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
+        Route::post('producto/validate', 'Admin\ProductsController@validate_step');
+        Route::post('producto/validate/code', 'Admin\ProductsController@validate_code');
+        Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
     });
 });
 

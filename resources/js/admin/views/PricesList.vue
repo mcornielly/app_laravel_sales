@@ -60,20 +60,20 @@ let user = document.head.querySelector('meta[name="user"]');
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnProductsComponentVue from '../../components/BtnProductsComponent.vue';
-import StatusComponentVue from '../../components/StatusComponent.vue';
-import DataTableCurrencyUnitDivisa from '../../components/DataTableCurrencyUnitDivisa.vue';
-import DataTableCurrencyWholeDivisa from '../../components/DataTableCurrencyWholeDivisa.vue';
-import DataTableCurrencyWholesale from '../../components/DataTableCurrencyWholesale.vue';
-import DataTableCurrencyUnit from '../../components/DataTableCurrencyUnit.vue';
-import BtnPricesListComponent from '../../components/BtnPricesListComponent.vue';
+import StatusComponentVue from '../../components/layouts/StatusComponent.vue';
+import DataTableCurrencyUnitDivisa from '../../components/datatable/DataTableCurrencyUnitDivisa.vue';
+import DataTableCurrencyWholeDivisa from '../../components/datatable/DataTableCurrencyWholeDivisa.vue';
+import DataTableCurrencyWholesale from '../../components/datatable/DataTableCurrencyWholesale.vue';
+import DataTableCurrencyUnit from '../../components/datatable/DataTableCurrencyUnit.vue';
+import BtnProductsComponentVue from '../../components/products/BtnProductsComponent.vue';
+import BtnPricesListComponent from '../../components/priceslists/BtnPricesListComponent.vue';
 
 Vue.use(DataTable);
 
-// Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// // Import component
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 // Registra una directiva personalizada global llamada `v-focus`
 // Vue.directive('focus', { inserted: function (el) { el.focus() } }) 
@@ -87,7 +87,7 @@ export default {
         DataTableCurrencyWholesale,
         DataTableCurrencyUnit,
         BtnPricesListComponent,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -174,7 +174,7 @@ export default {
             product_id: 0,
             images:[],
             imgshow:false,
-            isLoading: false
+            // isLoading: false
         }
     },
     created(){
@@ -189,8 +189,9 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
             setTimeout(() => {
+                this.$Progress.start()
                 axios.get(url, {
                     params: options
                 })
@@ -201,8 +202,10 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-                this.isLoading = false;
+                // this.isLoading = false;
+                this.$Progress.finish()
             },1000)
         },
         reloadTable(tableProps){

@@ -27,6 +27,9 @@
                             <a href="#" class="d-block">{{
                                 currentUser.name
                             }}</a>
+                            <span>
+                                <small class="text-teal">{{currentUser.roles[0].name}}</small>     
+                            </span>
                         </div>
                     </template>
                 </div>
@@ -68,28 +71,19 @@
                             </router-link>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/categorias"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/categorias" class="nav-link">
                                         <i class="nav-icon fas fa-tags"></i>
                                         <p>Categorias</p>
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/productos"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/productos" class="nav-link">
                                         <i class="nav-icon fas fa-box"></i>
                                         <p>Productos</p>
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/precios_lista"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/precios_lista" class="nav-link">
                                         <i class="nav-icon far fa-list-alt"></i>
                                         <p>Lista de Precios</p>
                                     </router-link>
@@ -98,13 +92,13 @@
                         </li>
                         <!-- Compras -->
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <router-link to="#" class="nav-link">
                                 <i class="nav-icon fas fa-store text-purple"></i>
                                 <p>
                                     Compras
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
-                            </a>
+                            </router-link>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <router-link
@@ -157,7 +151,7 @@
                         <!-- Reportes -->
                         <li class="nav-item has-treeview">
                             <router-link to="#" class="nav-link">
-                                <i class="nav-icon fas fa-clipboard text-primary"></i>
+                                <i class="nav-icon fas fa-clipboard text-gray"></i>
                                 <p>
                                     Reportes
                                     <i class="right fas fa-angle-left"></i>
@@ -166,7 +160,7 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <router-link
-                                        to="/usuarios"
+                                        to="#"
                                         class="nav-link"
                                     >
                                         <i class="nav-icon fas fa-file-invoice"></i>

@@ -24,10 +24,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -54,19 +54,19 @@ let user = document.head.querySelector('meta[name="user"]');
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnCategoryComponentVue from '../../components/BtnCategoryComponent.vue';
-import StatusComponentVue from '../../components/StatusComponent.vue';
+import BtnCategoryComponentVue from '../../components/categories/BtnCategoryComponent.vue';
+import StatusComponentVue from '../../components/layouts/StatusComponent.vue';
 Vue.use(DataTable);
-// Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// // Import component
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnCategoryComponentVue,
         StatusComponentVue,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -126,23 +126,31 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
-            isLoading: false
+            // isLoading: false
         }
     },
     created(){
         this.getData(this.url);
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
+        // user(){
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -151,8 +159,10 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;
+            // this.isLoading = false;
+            this.$Progress.finish()
             },1000)
         },
         reloadTable(tableProps){
