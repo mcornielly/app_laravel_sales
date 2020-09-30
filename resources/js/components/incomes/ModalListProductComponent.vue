@@ -10,13 +10,13 @@
                 </div>
                 <form role="form" method="POST">
                     <div class="modal-body">
-                            <data-table ref="tb"
-                                :theme="theme"
-                                :columns="columns"
-                                :translate="translate"
-                                url="api/productos"
-                                >
-                            </data-table>
+                        <data-table ref="tb"
+                            :data="data"
+                            :theme="theme"
+                            :columns="columns"
+                            :translate="translate"
+                            >
+                        </data-table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" @click="closeModal()" data-dismiss="modal">Cerrar</button>
@@ -35,7 +35,7 @@
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnListProductsComponentVue from './BtnListProductsComponent';
+import BtnListProductsComponentVue from '../products/BtnListProductsComponent';
 import StatusComponentVue from '../../components/layouts/StatusComponent';
 import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell';
 
@@ -51,6 +51,8 @@ export default {
     },
     data(){
         return {
+            data:{},
+            url:'api/productos',
             title: 'Lista de Productos',
             translate:{
                 nextButton: 'Siguiente', 
@@ -103,12 +105,39 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
-        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
     },
     methods:{
+        getData(url = this.url, options = this.tableProps) {
+            // this.isLoading = true;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                    this.$Progress.fail()
+                })
+                // this.isLoading = false;
+                this.$Progress.finish()
+            },1000)
+        },
         selectProduct(data){
             this.product = data;
             this.wholesale_quantity = this.product.wholesale_quantity;
@@ -133,8 +162,10 @@ export default {
         closeModal(){
             $('#modal-list-prod').modal('hide');
         }
-
     },
+    mounted(){
+        this.getData(this.url);
+    }
 
 }
 </script>

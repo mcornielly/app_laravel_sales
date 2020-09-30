@@ -156,13 +156,17 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         price_gain_u: {
             get: function(){
-                var result = 0;
+                let result = 0;
                 if(this.price > 0){
                     // this.amount_inv = this.price * this.stock; 
                     result = (Math.round(this.price * this.margin_gain_u / 100)).toFixed(2);
@@ -170,40 +174,40 @@ export default {
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         divisa_unit: {
             get: function(){
-                var result = 0;
+                let result = 0;
                 if(this.divisa > 0 || this.unit_price > 0){
-                    var result = (this.unit_price / this.divisa).toFixed(2);
+                    let result = (this.unit_price / this.divisa).toFixed(2);
                 }
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         unit_price: {
             get: function(){
-                var result = 0;
+                let result = 0;
                 if(this.price > 0){
-                    var result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
+                    let result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
                 }
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         price_gain_w: {
             get: function(){
-                var result = 0.0;
-                var cost_pack = 0.0;
+                let result = 0.0;
+                let cost_pack = 0.0;
                 if(this.price > 0){
                     cost_pack = this.price*this.wholesale_quantity;
                     result = (Math.round(cost_pack * this.margin_gain_w / 100)).toFixed(2);
@@ -211,20 +215,20 @@ export default {
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         wholesale_divisa: {
             get: function(){
-                var result = 0;
+                let result = 0;
                 if(this.divisa > 0 || this.wholesale_price > 0){
                     result = (this.wholesale_price / this.divisa).toFixed(2);
                 }
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
 
@@ -248,7 +252,7 @@ export default {
     methods:{
         updateCost(){
             this.id = this.data.id;
-            var url = `api/producto/actualizar_costo/${this.id}`;
+            let url = `api/producto/actualizar_costo/${this.id}`;
             axios.put(url,{
                 'id' : this.id,
                 'price' : this.price,
@@ -257,7 +261,10 @@ export default {
                 'wholesale_quantity' : this.wholesale_quantity,
                 'margin_gain_w' : this.margin_gain_w,
                 'wholesale_divisa' : this.wholesale_divisa,
-                'user_id': this.user.id,
+                'user_id': this.currentUser.id,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
             }).then(response =>{
                 // console.log(response.data)
                 toastr.success("La Ganacia del Producto ha sido actualizado.");

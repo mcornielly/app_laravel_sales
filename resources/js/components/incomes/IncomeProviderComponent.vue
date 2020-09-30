@@ -177,20 +177,24 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
-        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
     },
     methods:{
         selectProvider(search, loading){
             let me = this;
             loading(true);
             setTimeout(() => {            
-                var url = '/api/seleccionar-proveedor?filter='+search;
+                let url = '/api/seleccionar-proveedor?filter='+search;
                 axios.get(url).then(function (response){
 
-                    var result = response.data;
+                    let result = response.data;
                     q: search
                     if(result.length > 0){
                         me.providers = result;
@@ -232,7 +236,7 @@ export default {
             this.errors='';
         },
         storeProvider(){
-            var url = 'api/proveedor';
+            let url = 'api/proveedor';
             axios.post(url,{
                 'name': this.provider.name,
                 'type_document':  this.type_document,
@@ -242,12 +246,15 @@ export default {
                 'address': this.provider.address, 
                 'contact_name': this.provider.contact_name, 
                 'contact_phone': this.provider.contact_phone,
-                'user_id': this.user.id,  
+                'user_id': this.user.id,
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }  
             }).then(response => {
                 toastr.success('El Proveedor fue registrado.');
                 this.closeForm();
             }).catch(error => {
-                var errors = error.response.data.errors;
+                let errors = error.response.data.errors;
                 if (error.response.status == 422) {
                     this.errors = errors;
                     console.log(this.errors)

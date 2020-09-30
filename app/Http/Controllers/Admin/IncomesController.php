@@ -93,21 +93,23 @@ class IncomesController extends Controller
                     ->get();
         
         //Vista del reporte PDF en el explorador             
-        $num_income = Income::select('num_voucher')->where('id', $id)->get();
-        // $pdf = \PDF::loadView('pdf.incomepdf', compact('income', 'detail_incomes'));
-        $pdf = \PDF::loadView('pdf.invoice_income_pdf', compact('income', 'detail_incomes')); 
+        // $num_income = Income::select('num_voucher')->where('id', $id)->get();
+        // $pdf = \PDF::loadView('pdf.invoice_income_pdf', compact('income', 'detail_incomes'));
+        // $pdf->setPaper('a4' , 'portrait'); 
+        // ------
+        // return $pdf->stream('income - '.$num_income.'.pdf');
+        // return $pdf->output('income - '.$num_income.'.pdf');
         // $pdf->set_paper("a4", "portrait");
         // $pdf->render();            
         // $pdf = app('dompdf.wrapper');
         // $pdf->loadHTML($pdf);
         // $pdf->setOption('javascript-delay', 3000);
-        return $pdf->stream('income - '.$num_income.'.pdf');
         // return $pdf->download('income - '.$num_income.'.pdf');
         
         //Reporte de PDF download -------------------------------------------           
-        // $num_income = Income::select('num_voucher')->where('id', $id)->get();
-        // $pdf = \PDF::loadView('pdf.invoicepdf', compact('income', 'detail_incomes'))->render();
-        // return $pdf->download('income - '.$num_income.'.pdf'); 
+        $num_income = Income::select('num_voucher')->where('id', $id)->get();
+        $pdf = \PDF::loadView('pdf.invoice_income_pdf', compact('income', 'detail_incomes'))->render();
+        return $pdf->download('income - '.$num_income.'.pdf'); 
         
     }
 

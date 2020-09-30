@@ -63,7 +63,7 @@ export default {
     },
     data(){
         return {
-            url:"api/productos/search",
+            url:"api/producto/search",
             product: [],
             errors: '',
             code:'',

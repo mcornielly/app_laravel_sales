@@ -163,9 +163,13 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         calculateTotal: function(){
             let result = 0.0;
@@ -187,8 +191,12 @@ export default {
             this.$emit('tax', this.iva);
         },
         getCount(){
-            let url = "api/ingresos/num_factura";
-            axios.get(url).then(response => {
+            let url = "api/ingreso/num_factura";
+            axios.get(url,{
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
+            }).then(response => {
                 this.num_voucher = response.data;
                 console.log(this.num_voucher)
             })

@@ -212,9 +212,13 @@ export default {
         }
     },
     computed:{
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
         calculateTotal: function(){
-            var result = 0.0;
-            for(var i=0; i<this.detail_incomes.length; i++){
+            let result = 0.0;
+            for(let i=0; i<this.detail_incomes.length; i++){
                 result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
             }
             return result;
@@ -226,15 +230,19 @@ export default {
         },
         getDataProduct(){
             // var leng_code = this.code.length;
-            var code = this.code;
+            let code = this.code;
             
             if(code != this.codeSearched){
                 this.clearSearch();
             }
             setTimeout(() => {
-                var url = `${this.url}${code}`;
-                axios.get(url).then(response => {
-                    var product = response.data.product;
+                let url = `${this.url}${code}`;
+                axios.get(url,{
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
+                }).then(response => {
+                    let product = response.data.product;
                     this.codeSearched = product[0].code;
                     if(this.findProduct(product[0].id)==false){
                         if(product.length){

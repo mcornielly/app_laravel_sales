@@ -97,8 +97,12 @@
                 <div id="canvas" class="invoice p-3 mb-3">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ title }} | {{ income.num_voucher }}</h3>
-                        <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar</a>
+                        <h3 class="card-title"><i class="fas 1fa-bars">&nbsp;</i> {{ title }} | {{ income.num_voucher }}</h3>
+                            <div class="row no-print">
+                                <div class="col-12">
+                                    <a href="#" @click="back_page()" class="btn btn-sm btn-primary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar</a>
+                                </div> 
+                            </div> 
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -191,6 +195,7 @@
                             <!-- this row will not appear when printing -->
                             <div class="row no-print">
                                 <div class="col-12">
+                                <a @click.prevent="printme" href="" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                                 <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;" @click="createPDF()">
                                     <i class="fas fa-download"></i> Generate PDF
                                 </button>
@@ -230,7 +235,7 @@ import {FormWizard, TabContent} from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+// import html2canvas from 'html2canvas'
 
 export default {
     components:{
@@ -492,26 +497,34 @@ export default {
             }
         },
         storeIncome(){
-                let url = this.url;
+            let url = this.url;
+            this.$Progress.start()
+            setTimeout(() => {
                 axios.post(url,{
                     'provider_id' : this.provider.id,
-                    'user_id': this.user.id,
+                    'user_id': this.currentUser.id,
                     'type_voucher' : this.type_voucher,
                     'num_voucher' : this.num_voucher,
                     'num_bill' : this.num_bill,
                     'tax':this.iva,
                     'total':this.total,
-                    'detail_incomes': this.detail_incomes
+                    'detail_incomes': this.detail_incomes,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 }).then(response =>{
                     console.log(response.data)
                     this.back_page();
                     toastr.success("El Ingreso ha sido registrado.");
                 }).catch(error => {
                     // var error = error.response.data.errors;
+                    console.log(error)
+                    this.$Progress.fail()
                     this.errors = error.response.data.errors;
                     toastr.error("ERROR - En la validaciones.");
-                    console.log(this.errors)
                 });
+            this.$Progress.finish()
+            }, 1000)    
 
         },
         showIncome(id){
@@ -545,7 +558,7 @@ export default {
                 reverseButtons: true
             }).then((result) => {
                 if (result.value) {
-                    let url = `/api/ingreso/anular/${id}`;
+                    let url = `${this.url}/${id}`;
                     axios.delete(url).then(response => {
                         // toastr.error('El ingreso fue anulado.');
                         // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
@@ -578,9 +591,42 @@ export default {
         back_page(){
             this.vincome = 1;
             this.reloadTable();
+        },
+        printme(){
+            window.print();
         },  
         createPDF(){
             window.open('api/ingreso/pdf/' + this.id);
+            // let url = `api/ingreso/pdf/${this.id}`;
+
+            // $.ajax({
+            //     type: "GET",
+            //     url: url,
+            //     data: this.id,
+            //     cache: false,
+            //     headers: {"Authorization": `Bearer ${this.currentUser.token}`},
+            //     success: function(response)
+            //     {
+            //         alert('got response');
+            //         window.open('pdf/invoice_sale_pdf');
+            //     },
+            //     error: function (XMLHttpRequest, textStatus, errorThrown) 
+            //     {
+            //         alert('Error occurred while opening fax template' 
+            //             + getAjaxErrorString(textStatus, errorThrown));
+            //     }
+            // });
+                // axios.get(url,{
+                //     headers: {
+                //         "Authorization": `Bearer ${this.currentUser.token}`
+                //     }
+                // }).then(response => {
+                //     console.log(response.data)
+                // }).catch(error => {
+                //     console.log(error);
+                //     let errors = error.response.data.errors;
+                //     this.errors = errors;
+                // });
         }
     }
 }

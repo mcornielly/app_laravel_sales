@@ -109,20 +109,24 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         price_gain_u: {
             get: function(){
-                var result = 0;
+                let result = 0;
                 if(this.product.price){
                     result = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
                 }
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         }
@@ -159,7 +163,7 @@ export default {
             $('#modal-list-prod').modal('hide');
         },
         isPrice(price){
-            var priceSale = 0.0;
+            let priceSale = 0.0;
             this.price_sale = price;
             console.log(this.price_sale)
             priceSale =  (parseFloat(this.price_sale) + parseFloat(this.price_gain_u));

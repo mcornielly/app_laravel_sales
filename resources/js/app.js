@@ -71,18 +71,18 @@ Vue.component('status-component', require('./components/layouts/StatusComponent.
 Vue.component("login-app", require("./auth/Login.vue").default);
 Vue.component("modal-divisa",require("./components/divisas/ModalDivisaComponent.vue").default);
 Vue.component('modal-category', require('./components/categories/ModalCategoryComponent.vue').default);
-Vue.component('modal-product', require('./components/products/ModalProductComponent.vue').default);
 Vue.component('product-create', require('./components/products/ProductCreateComponent.vue').default);
-Vue.component('modal-list-prod', require('./components/products/ModalListProductComponent.vue').default);
+Vue.component('modal-product', require('./components/products/ModalProductComponent.vue').default);
 Vue.component('show-product', require('./components/products/ShowProductComponent.vue').default);
-Vue.component('modal-show-priceslist', require('./components/priceslists/ModalPricesListComponent.vue').default);
 Vue.component('modal-searh-product', require('./components/priceslists/ModalSearchProductComponent.vue').default);
 Vue.component('prices-product', require('./components/priceslists/PricesProductComponent.vue').default);
+Vue.component('modal-show-priceslist', require('./components/priceslists/ModalPricesListComponent.vue').default);
 Vue.component('income-provider', require('./components/incomes/IncomeProviderComponent.vue').default);
 Vue.component('income-product', require('./components/incomes/IncomeProductComponent.vue').default);
 Vue.component('income-invoice', require('./components/incomes/IncomeInvoiceComponent.vue').default);
+Vue.component('modal-list-prod', require('./components/incomes/ModalListProductComponent.vue').default);
+Vue.component('modal-cost', require('./components/incomes/ModalCostComponent.vue').default);
 
-// Vue.component('modal-cost', require('./components/ModalCostComponent.vue').default);
 // Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
 // Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
 // Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
@@ -119,5 +119,10 @@ Vue.filter("currency", function(value) {
 const app = new Vue({
     el: "#app",
     router,
-    store
+    store,
+    methods:{
+        printme(){
+            window.print();
+        }
+    }
 });

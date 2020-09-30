@@ -72,19 +72,23 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::post('productos/validate/code', 'Admin\ProductsController@validate_code');
         // Lista de Precios
         Route::post('productos/img', 'Admin\PhotosController@store');
-        Route::get('productos/search/{code}', 'Admin\ProductsController@product_search');
-        Route::put('productos/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
+        Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
+        Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
         // Ingresos
         Route::resource('ingresos', 'Admin\IncomesController');
         Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
-        
-        // Route::get('ingresos', 'Admin\IncomesController@index');
-        // Route::post('ingreso', 'Admin\IncomesController@store');
-        // Route::get('ingreso/{id}', 'Admin\IncomesController@show');
-        // Route::delete('ingreso/anular/{id}', 'Admin\IncomesController@destroy');
+        Route::get('ingreso/num_factura', 'Admin\IncomesController@count_record');
 
-        // Route::get('ingresos/num_factura', 'Admin\IncomesController@count_record');
-        // Route::get('ingreso/detalles/{id}', 'Admin\IncomesController@get_detail');
+        // Proveedores
+        Route::get('proveedores', 'Admin\ProvidersController@index');
+        Route::post('proveedor', 'Admin\ProvidersController@store');
+        Route::put('proveedor/{id}', 'Admin\ProvidersController@update');
+        Route::get('proveedor/{id}', 'Admin\ProvidersController@show');
+        Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
+        Route::delete('proveedor/eliminar/{id}', 'Admin\ProvidersController@destroy');
+        Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
+
+
     });
 });
 
