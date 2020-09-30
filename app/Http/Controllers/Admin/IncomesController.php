@@ -52,16 +52,16 @@ class IncomesController extends Controller
 
     }
 
-    public function get_detail($id)
-    {
-        $detail_incomes = DetailIncome::join('products','detail_incomes.product_id','products.id')
-                    ->select('detail_incomes.*','products.*')
-                    ->where('detail_incomes.income_id', $id) 
-                    ->orderBy('detail_incomes.id', 'DESC')
-                    ->get();
+    // public function get_detail($id)
+    // {
+    //     $detail_incomes = DetailIncome::join('products','detail_incomes.product_id','products.id')
+    //                 ->select('detail_incomes.*','products.*')
+    //                 ->where('detail_incomes.income_id', $id) 
+    //                 ->orderBy('detail_incomes.id', 'DESC')
+    //                 ->get();
 
-        return ['detail_incomes' => $detail_incomes];
-    }
+    //     return ['detail_incomes' => $detail_incomes];
+    // }
 
     public function count_record(){
         $counter = Income::all()->count();
@@ -168,7 +168,16 @@ class IncomesController extends Controller
      */
     public function show($id)
     {
-        //
+        $detail_incomes = DetailIncome::join('products','detail_incomes.product_id','products.id')
+        ->select('detail_incomes.*','products.*')
+        ->where('detail_incomes.income_id', $id) 
+        ->orderBy('detail_incomes.id', 'DESC')
+        ->get();
+
+        if(request()->wantsJson())
+        {
+            return ['detail_incomes' => $detail_incomes];
+        }    
     }
 
     /**

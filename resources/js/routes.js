@@ -50,6 +50,11 @@ export const routes = [
             requiresAuth: true
         }
     },
+    {
+        path: '/ingresos',
+        name: 'incomes',
+        component: require('./admin/views/Incomes').default,
+    },
 
     // {
     //     path: '/usuarios',
@@ -60,11 +65,6 @@ export const routes = [
     //     path: '/proveedores',
     //     name: 'providers',
     //     component: require('./admin/views/Providers').default,
-    // },
-    // {
-    //     path: '/ingresos',
-    //     name: 'incomes',
-    //     component: require('./admin/views/Incomes').default,
     // },
     // {
     //     path: '/clientes',

@@ -168,8 +168,8 @@ export default {
             return JSON.parse(user.content);
         },
         calculateTotal: function(){
-            var result = 0.0;
-            for(var i=0; i<this.detail_incomes.length; i++){
+            let result = 0.0;
+            for(let i=0; i<this.detail_incomes.length; i++){
                 result = result+(this.detail_incomes[i].price*this.detail_incomes[i].wholesale_quantity)
             }
             return result;
@@ -187,7 +187,7 @@ export default {
             this.$emit('tax', this.iva);
         },
         getCount(){
-            var url = "api/ingresos/num_factura";
+            let url = "api/ingresos/num_factura";
             axios.get(url).then(response => {
                 this.num_voucher = response.data;
                 console.log(this.num_voucher)

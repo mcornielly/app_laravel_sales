@@ -24,10 +24,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -211,14 +211,14 @@
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
-import BtnIncomesComponentVue from '../../components/BtnIncomesComponent.vue';
-import StatusComponentVue from '../../components/StatusComponent.vue';
+import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell.vue';
+import BtnIncomesComponentVue from '../../components/incomes/BtnIncomesComponent.vue';
+import StatusComponentVue from '../../components/layouts/StatusComponent.vue';
 Vue.use(DataTable);
 // Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 // Vue-select
 import vSelect from 'vue-select'
@@ -239,7 +239,7 @@ export default {
         DataTableCurrencyCell,
         FormWizard,
         TabContent,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -315,7 +315,6 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
-            isLoading: false,
             loadingWizard: false,
             errorMsg: null,
             provider: {},
@@ -333,6 +332,7 @@ export default {
                 selected: ''
             },
             toastr:{}
+            // isLoading: false,
         }
     },
     created(){
@@ -340,12 +340,16 @@ export default {
         this.getDivisa();
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         },
         calculateTotal: function(){
-            var result = 0.0;
+            let result = 0.0;
             for(var i=0; i<this.detail_incomes.length; i++){
                 result = result+(this.detail_incomes[i].price*this.detail_incomes[i].quantity)
             }
@@ -354,10 +358,14 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -366,15 +374,17 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;
+            // this.isLoading = false;
+            this.$Progress.finish()
             },1000)
         },
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
         getDivisa(){
-            var url = "api/divisa/precio";
+            let url = "api/divisa/precio";
             axios.get(url).then(response => {
                 this.divisa = response.data;
                 console.log(this.divisa);
@@ -413,7 +423,7 @@ export default {
                 if(Object.keys(this.provider).length > 0){
                     resolve(true)
                 }else{
-                    var errors = "validate";
+                    let errors = "validate";
                     toastr.error("ERROR - Debe seleccionar un Proveedor.");
                     reject(errors);
                 }
@@ -426,7 +436,7 @@ export default {
                 if(this.detail_incomes.length > 0){
                     resolve(true)
                 }else{
-                    var errors = "validate";
+                    let errors = "validate";
                     toastr.error("ERROR - Debe agregar los productos.");
                     reject(errors);
                 }
@@ -439,7 +449,7 @@ export default {
                 if(this.num_bill != '' && this.type_voucher != ''){
                     resolve(true)
                 }else{
-                    var errors = "validate";
+                    let errors = "validate";
                     toastr.error("ERROR - Debe completar los campos.");
                     reject(errors);
                     this.validateField();  
@@ -482,7 +492,7 @@ export default {
             }
         },
         storeIncome(){
-                var url = `api/ingreso`;
+                let url = this.url;
                 axios.post(url,{
                     'provider_id' : this.provider.id,
                     'user_id': this.user.id,
@@ -497,20 +507,19 @@ export default {
                     this.back_page();
                     toastr.success("El Ingreso ha sido registrado.");
                 }).catch(error => {
-                    var error = error.response.data.errors;
-                    this.errors = error;
+                    // var error = error.response.data.errors;
+                    this.errors = error.response.data.errors;
                     toastr.error("ERROR - En la validaciones.");
                     console.log(this.errors)
                 });
 
         },
         showIncome(id){
-                var url = `api/ingreso/detalles/${id}`;
+                let url = `${this.url}/${id}`;
                 axios.get(url).then(response =>{
                     this.detail_incomes = response.data.detail_incomes;
                     console.log(this.detail_incomes);
                 }).catch(error => {
-                    var error = error;
                     this.errors = error;
                     toastr.error("ERROR - En la validaciones.");
                     console.log(this.errors)
@@ -536,7 +545,7 @@ export default {
                 reverseButtons: true
             }).then((result) => {
                 if (result.value) {
-                    var url = `/api/ingreso/anular/${id}`;
+                    let url = `/api/ingreso/anular/${id}`;
                     axios.delete(url).then(response => {
                         // toastr.error('El ingreso fue anulado.');
                         // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
@@ -549,7 +558,7 @@ export default {
 
                     }).catch(error => {
                         console.log(error);
-                        var errors = error.response.data.errors;
+                        let errors = error.response.data.errors;
                         this.errors = errors;
                     });
 
