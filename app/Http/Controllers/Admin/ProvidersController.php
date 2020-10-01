@@ -67,8 +67,11 @@ class ProvidersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Provider $provider)
+    public function store(Request $request)
     {
+
+       
+
         $valido = $this->validate($request,[
             'name' => 'required|min:3|unique:customers',
             'type_document' => 'required',
@@ -151,15 +154,18 @@ class ProvidersController extends Controller
         $customer->email = $request->email;
         $customer->address = $request->address;
         $customer->update();    
-
-        $provider = Provider::findOrFail($request->id);
+        
+        $provider = Provider::findOrFail($request->customer_id);
         $provider->name = $request->name_contact;
         $provider->contact_phone = $request->contact_phone;
         $provider->update();
+        
+        
+        return $valido;
 
         if($valido && request()->wantsJson())
         {
-            return $provider;
+            return $customer;
         }else{
             return $valido;
         }

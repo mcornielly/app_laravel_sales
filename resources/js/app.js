@@ -8,8 +8,8 @@ import VueFormWizard from "vue-form-wizard";
 import StoreData from "./store";
 import {initialize} from  './helpers/general'
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
-
 import VueProgressBar from 'vue-progressbar'
+import VueTheMask from 'vue-the-mask'
 
 Vue.use(VueProgressBar, {
   color: 'rgb(143, 255, 58)',
@@ -29,6 +29,7 @@ window.jsPDF = require("jspdf");
 Vue.use(VueFormWizard);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(VueTheMask)
 
 const store = new Vuex.Store(StoreData);
 const router = new VueRouter({
@@ -82,8 +83,8 @@ Vue.component('income-product', require('./components/incomes/IncomeProductCompo
 Vue.component('income-invoice', require('./components/incomes/IncomeInvoiceComponent.vue').default);
 Vue.component('modal-list-prod', require('./components/incomes/ModalListProductComponent.vue').default);
 Vue.component('modal-cost', require('./components/incomes/ModalCostComponent.vue').default);
+Vue.component('modal-provider', require('./components/providers/ModalProviderComponent.vue').default);
 
-// Vue.component('modal-provider', require('./components/ModalProviderComponent.vue').default);
 // Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
 // Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);

@@ -24,10 +24,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -51,21 +51,21 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnProvidersComponentVue from '../../components/BtnProvidersComponent.vue';
+import BtnProvidersComponentVue from '../../components/providers/BtnProvidersComponent.vue';
 Vue.use(DataTable);
 // Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnProvidersComponentVue,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -142,23 +142,32 @@ export default {
             provider: {},
             action: false,
             storeup: true,
-            isLoading: false
+            // isLoading: false
         }
     },
     created(){
         this.getData(this.url);
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
-        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -167,8 +176,10 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;
+            // this.isLoading = false;
+            this.$Progress.finish()
             },1000)
         },
         reloadTable(tableProps){
@@ -185,42 +196,42 @@ export default {
         selectAction(data, action){
             this.type_document = data.type_document;
             switch(action){
-    			    case 'edit':
-                        {
-                            this.title = 'Editar Proveedor';
-                            this.selectedRow = data;
-                            this.provider = data;
-                            this.create = false;
-                            this.action = true;
-                            this.storeup = false;
-                            break; 
-                        }
-                    case 'show':
-                        {
-                            this.title = "Detalle de Proveedor";
-                            this.selectedRow = data;
-                            this.provider = data;
-                            this.create = false;
-                            this.action = false; 
-                            this.storeup = true; 
-                            break;
-                        }
-                    case 'delete':
-                        {                           
-                            this.deleteProvider(data);
-                            break;
-                        }
-                    case 'restore':
-                        {                           
-                            this.restoreProvider(data);
-                            break;
-                        }
+                case 'update':
+                    {
+                        this.title = 'Actualizar Proveedor';
+                        this.selectedRow = data;
+                        this.provider = data;
+                        this.create = false;
+                        this.action = true;
+                        this.storeup = false;
+                        break; 
+                    }
+                case 'show':
+                    {
+                        this.title = "Detalle de Proveedor";
+                        this.selectedRow = data;
+                        this.provider = data;
+                        this.create = false;
+                        this.action = false; 
+                        this.storeup = true; 
+                        break;
+                    }
+                case 'delete':
+                    {                           
+                        this.deleteProvider(data);
+                        break;
+                    }
+                case 'restore':
+                    {                           
+                        this.restoreProvider(data);
+                        break;
+                    }
             }
         },
         deleteProvider(data){
             this.id = data.id;
             console.log(this.id)
-            var url = `/api/proveedor/${this.id}`;
+            var url = `${this.url}/${this.id}`;
             axios.delete(url).then(response => {
                 this.reloadTable();
                 this.destroy = false;

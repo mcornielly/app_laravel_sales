@@ -58,7 +58,8 @@
                                             <i class="fas fa-phone"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-mask="'(###) ###-##-##'" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                    <!-- <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup"> -->
+                                    <input type="tel" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
                                     <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_phone[0]"></span>
                                 </div>
                             </div>
@@ -101,8 +102,9 @@
                                             <i class="fas fa-phone"></i>
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-mask="'(###) ###-##-##'" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup">
-                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.contact_phone[0]" type="tel" ></span>
+                                    <!-- <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup"> -->
+                                    <input type="tel" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup">
+                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.contact_phone[0]"></span>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +148,8 @@
                                             </tr>
                                             <tr>
                                                 <th width=300>N° Tlf. Contacto</th>
-                                                <td type="tel" v-mask="'(###) ###-##-##'" v-text="data.contact_phone"></td>
+                                                <!-- <td type="text" v-imask="mask.numphone" v-text="data.contact_phone"></td> -->
+                                                <td type="tel"  v-text="data.contact_phone"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -160,7 +163,7 @@
                         <button type="button" class="btn btn-default" :class="{'pull-right' : storeup}" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <div v-if="action">
                             <button v-if="create" type="submit" class="btn btn-primary" @click.prevent="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
-                            <button v-else type="submit" class="btn btn-primary" @click.prevent="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
+                            <button v-else type="button" class="btn btn-primary" @click.prevent="actionModal('update')" data-dismiss="modal" data-backdrop="false">Actualizar</button>
                         </div>
                     </div>
                 </form>
@@ -170,9 +173,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import {IMaskDirective} from 'vue-imask';
 import {mask} from 'vue-the-mask'
 
 export default {
+    directives: {
+      imask: IMaskDirective,
+      mask
+    },    
     props:{
         data: {
             type: Object,
@@ -199,12 +208,18 @@ export default {
     },
     data(){
         return {
-            url:"api/proveedor",
+            url:"api/proveedores",
             type_document:'',
             typedocument: Object.assign({}, this.provider),
             name:'',
             errors: '',
-            customer_id: 0
+            customer_id: 0,
+            mask:{
+                numphone: {
+                    mask: "(000) 000-00-00",
+                    lazy: false
+                }    
+            }
         }
     },
     watch:{
@@ -222,9 +237,13 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
         }
     },
     methods:{
@@ -241,50 +260,66 @@ export default {
         },
         storeProvider(){
             var url = this.url;
-            axios.post(url,{
-                'name': this.provider.name,
-                'type_document':  this.typedocument.type_document,
-                'num_document': this.provider.num_document, 
-                'num_phone': this.provider.num_phone, 
-                'email': this.provider.email, 
-                'address': this.provider.address, 
-                'contact_name': this.data.contact_name, 
-                'contact_phone': this.data.contact_phone, 
-                'user_id': this.user.id, 
-            }).then(response => {
-                this.$parent.reloadTable();
-                toastr.success('El Proveedor fue registrado.');
-                this.closeModal();
-            }).catch(error => {
-                var errors = error.response.data.errors;
-                this.errors = errors;
-                console.log(this.errors)
-                $('#modal-provider').modal('show');
-            });
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.post(url,{
+                    'name': this.provider.name,
+                    'type_document':  this.typedocument.type_document,
+                    'num_document': this.provider.num_document, 
+                    'num_phone': this.provider.num_phone, 
+                    'email': this.provider.email, 
+                    'address': this.provider.address, 
+                    'contact_name': this.data.contact_name, 
+                    'contact_phone': this.data.contact_phone, 
+                    'user_id': this.currentUser.id,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    } 
+                }).then(response => {
+                    this.$parent.reloadTable();
+                    toastr.success('El Proveedor fue registrado.');
+                    this.closeModal();
+                }).catch(error => {
+                    this.$Progress.fail()
+                    var errors = error.response.data.errors;
+                    this.errors = errors;
+                    console.log(this.errors)
+                    $('#modal-provider').modal('show');
+                });
+                this.$Progress.finish()
+            },1000)
         },
         updateProvider(){
             var url = `${this.url}/${this.data.id}`;
-            axios.put(url,{
-                'customer_id': this.provider.id,
-                'name': this.provider.name,
-                'type_document': this.typedocument.type_document,
-                'num_document': this.provider.num_document, 
-                'num_phone': this.provider.num_phone, 
-                'email': this.provider.email, 
-                'address': this.provider.address, 
-                'name_contact': this.data.name, 
-                'contact_phone': this.data.contact_phone, 
-                'user_id': this.user.id
-            }).then(response => {
-                this.$parent.reloadTable();
-                toastr.info('El Proveedor fue actualizado.');
-                this.closeModal();
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-                $('#modal-provider').modal('show');
-            });
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.put(url,{
+                    'customer_id': this.provider.id,
+                    'name': this.provider.name,
+                    'type_document': this.typedocument.type_document,
+                    'num_document': this.provider.num_document, 
+                    'num_phone': this.provider.num_phone, 
+                    'email': this.provider.email, 
+                    'address': this.provider.address, 
+                    'name_contact': this.data.name, 
+                    'contact_phone': this.data.contact_phone, 
+                    'user_id': this.currentUser.id,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    } 
+                }).then(response => {
+                    this.$parent.reloadTable();
+                    toastr.info('El Proveedor fue actualizado.');
+                    this.closeModal();
+                }).catch(error => {
+                    this.$Progress.fail()
+                    console.log(error);
+                    var errors = error.response.data.errors;
+                    this.errors = errors;
+                    $('#modal-provider').modal('show');
+                })
+                this.$Progress.finish()
+            },1000)
         },
         closeModal(){
             this.type_document = "";

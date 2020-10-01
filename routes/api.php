@@ -57,9 +57,9 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::put('usuario/{usuario}', 'Admin\UsersController@update');
         // Divisa
         Route::get('divisas', 'Admin\DivisaController@index');
-        Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
         Route::post('divisas', 'Admin\DivisaController@store');
         Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+        Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
         // Categorias
         Route::resource('categorias', 'Admin\CategoriesController', ['except' => 'show']);
         Route::get('categorias/restore/{id}', 'Admin\CategoriesController@restore');
@@ -78,16 +78,10 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::resource('ingresos', 'Admin\IncomesController');
         Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
         Route::get('ingreso/num_factura', 'Admin\IncomesController@count_record');
-
         // Proveedores
-        Route::get('proveedores', 'Admin\ProvidersController@index');
-        Route::post('proveedor', 'Admin\ProvidersController@store');
-        Route::put('proveedor/{id}', 'Admin\ProvidersController@update');
-        Route::get('proveedor/{id}', 'Admin\ProvidersController@show');
+        Route::resource('proveedores', 'Admin\ProvidersController');
         Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
-        Route::delete('proveedor/eliminar/{id}', 'Admin\ProvidersController@destroy');
         Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
-
 
     });
 });

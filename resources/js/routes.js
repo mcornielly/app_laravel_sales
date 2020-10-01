@@ -55,16 +55,15 @@ export const routes = [
         name: 'incomes',
         component: require('./admin/views/Incomes').default,
     },
-
+    {
+        path: '/proveedores',
+        name: 'providers',
+        component: require('./admin/views/Providers').default,
+    },
     // {
     //     path: '/usuarios',
     //     name: 'users',
     //     component: require('./admin/views/Users').default,
-    // },
-    // {
-    //     path: '/proveedores',
-    //     name: 'providers',
-    //     component: require('./admin/views/Providers').default,
     // },
     // {
     //     path: '/clientes',
