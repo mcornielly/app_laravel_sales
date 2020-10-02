@@ -188,15 +188,16 @@ class ProductsController extends Controller
      */
     public function update(Request $request,Product $product, $id)
     {
-        $data = $request->all();
+        // return $request->all();
+        // $data = $request->all();
         $data = $this->validate($request,[
             'name' => 'required|min:3|unique:products,id,' . $request->id,
             'category_id' => 'required|numeric|min:1',
             'description' => 'required',
             'code' => 'required',
-            'price' => 'required|numeric|not_in:0',
-            'stock' => 'required|numeric|not_in:0',
-            'wholesale_quantity' => 'required|numeric|not_in:0',
+            // 'price' => 'required|numeric|not_in:0',
+            // 'stock' => 'required|numeric|not_in:0',
+            // 'wholesale_quantity' => 'required|numeric|not_in:0',
         ]);
 
         $product = Product::find($request->id);    

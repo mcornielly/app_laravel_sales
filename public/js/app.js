@@ -19847,7 +19847,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var url = this.url;
-      this.$Progress.start();
       setTimeout(function () {
         axios.post(url, {
           'name': _this.provider.name,
@@ -19869,15 +19868,11 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.closeModal();
         })["catch"](function (error) {
-          _this.$Progress.fail();
-
           var errors = error.response.data.errors;
           _this.errors = errors;
           console.log(_this.errors);
           $('#modal-provider').modal('show');
         });
-
-        _this.$Progress.finish();
       }, 1000);
     },
     updateProvider: function updateProvider() {
@@ -83658,14 +83653,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/admin/views/Products.vue ***!
   \***********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Products_vue_vue_type_template_id_987fd47a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Products.vue?vue&type=template&id=987fd47a& */ "./resources/js/admin/views/Products.vue?vue&type=template&id=987fd47a&");
 /* harmony import */ var _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Products.vue?vue&type=script&lang=js& */ "./resources/js/admin/views/Products.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -83695,7 +83691,7 @@ component.options.__file = "resources/js/admin/views/Products.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/admin/views/Products.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

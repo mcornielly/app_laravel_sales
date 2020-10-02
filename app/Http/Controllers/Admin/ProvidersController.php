@@ -70,8 +70,6 @@ class ProvidersController extends Controller
     public function store(Request $request)
     {
 
-       
-
         $valido = $this->validate($request,[
             'name' => 'required|min:3|unique:customers',
             'type_document' => 'required',
@@ -80,6 +78,7 @@ class ProvidersController extends Controller
             'email' => 'required|email|unique:customers',
             'address' => 'required',
             'contact_name' => 'required', 
+            'user_id' => 'required', 
             'contact_phone' => 'required', 
         ]);  
 
@@ -144,6 +143,7 @@ class ProvidersController extends Controller
             'address' => 'required',
             'name' => 'required|unique:providers,name,'. $request->id, 
             'contact_phone' => 'required', 
+            'user_id' => 'required', 
         ]);
         
         $customer = Customer::findOrFail($request->customer_id);
@@ -153,6 +153,7 @@ class ProvidersController extends Controller
         $customer->num_phone = $request->num_phone;
         $customer->email = $request->email;
         $customer->address = $request->address;
+        $customer->user_id = $request->user_id;
         $customer->update();    
         
         $provider = Provider::findOrFail($request->customer_id);

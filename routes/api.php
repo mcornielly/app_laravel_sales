@@ -67,13 +67,16 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         // Productos
         Route::resource('productos', 'Admin\ProductsController');
         Route::get('productos/restore/{id}', 'Admin\ProductsController@restore');
-        Route::get('productos/imagenes/{id}', 'Admin\PhotosController@show');
         Route::post('productos/validate', 'Admin\ProductsController@validate_step');
         Route::post('productos/validate/code', 'Admin\ProductsController@validate_code');
         // Lista de Precios
-        Route::post('productos/img', 'Admin\PhotosController@store');
         Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
         Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
+        // Fotos-Imagenes del Producto
+        Route::get('fotos/{id}', 'Admin\PhotosController@show');
+        Route::post('fotos', 'Admin\PhotosController@store');
+        Route::delete('fotos/{id}', 'Admin\PhotosController@destroy');
+        Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
         // Ingresos
         Route::resource('ingresos', 'Admin\IncomesController');
         Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
@@ -82,6 +85,7 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::resource('proveedores', 'Admin\ProvidersController');
         Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
         Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
+
 
     });
 });

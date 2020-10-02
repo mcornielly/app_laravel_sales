@@ -260,7 +260,6 @@ export default {
         },
         storeProvider(){
             var url = this.url;
-            this.$Progress.start()
             setTimeout(() => {
                 axios.post(url,{
                     'name': this.provider.name,
@@ -280,13 +279,11 @@ export default {
                     toastr.success('El Proveedor fue registrado.');
                     this.closeModal();
                 }).catch(error => {
-                    this.$Progress.fail()
                     var errors = error.response.data.errors;
                     this.errors = errors;
                     console.log(this.errors)
                     $('#modal-provider').modal('show');
                 });
-                this.$Progress.finish()
             },1000)
         },
         updateProvider(){
