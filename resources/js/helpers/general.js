@@ -2,7 +2,7 @@ export function initialize(store, router) {
     router.beforeEach((to, from, next) => {
         const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
         const currentUser = store.state.currentUser;
-
+        // alert('general 1')
         if (requiresAuth && !currentUser) {
             // alert('gene-1')
             $("body").removeClass("sidebar-mini");
@@ -22,10 +22,10 @@ export function initialize(store, router) {
     axios.interceptors.response.use(null, error => {
         const errorRequest = error.request.status;
         const currentUser = store.state.currentUser;
-      
+  
         if(errorRequest == 403 && currentUser){
             router.push("*"); 
-        }else{
+        }else if(errorRequest == 401){
             store.commit("logout");
             router.push("/login");
         }

@@ -178,15 +178,25 @@ export default {
             totalIncome: [],
         }
     },
+    computed:{
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        }
+    },
     methods: {
         start () {
             this.$Progress.start()
         },
         getData(){
             let me = this;
-            var url = "/api/auth/dashboard";
+            var url = "/api/dashboard";
             this.$Progress.start()
-            axios.get(url).then(response => {
+            axios.get(url,{
+                headers: {
+                    "Authorization": `Bearer ${this.currentUser.token}`
+                }
+            }).then(response => {
                 console.log(response.data.divisa_p)
                 me.divisa = response.data.divisa_p;
                 me.sales = response.data.sales;

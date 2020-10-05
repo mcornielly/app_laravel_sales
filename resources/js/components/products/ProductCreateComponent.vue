@@ -291,13 +291,14 @@ export default {
             margin_gain_u: 50,
             margin_gain_w: 25,
             dropzoneOptions: {
-                url: 'api/producto/img',
+                url: 'api/fotos',
                 paramName: 'photo',
                 acceptedFiles: 'image/*',
                 thumbnailWidth: 150,
                 maxFilesize: 2,
                 maxFiles: 3,
                 headers: { "My-Awesome-Header": "header value" },
+                // headers: { "My-Awesome-Header": "header value" },
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
@@ -487,33 +488,35 @@ export default {
         storeProduct(){
             if(this.divisa > 0){
                 var url = `${this.url}`;
-                axios.post(url,{
-                    'name' : this.name,
-                    'category_id' : this.category_id,
-                    'code' : this.code,
-                    'description' : this.description,
-                    'user_id': this.currentUser.id,
-                    'photos':this.photos,
-                    'stock': 0,
-                    'price' : 0,
-                    'margin_gain_u' : 0,
-                    'divisa_unit' : 0,
-                    'wholesale_quantity' : 0,
-                    'margin_gain_w' : 0,
-                    'wholesale_divisa' : 0,
-                    headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
-                    }
-                }).then(response =>{
-                    console.log(response.data)
-                    this.back_page();
-                    toastr.success("El Producto ha sido registrado.");
-                }).catch(error => {
-                    var error = error.response.data.errors;
-                    this.errors = error;
-                    toastr.error("ERROR - En la validaciones.");
-                    console.log(this.errors)
-                });
+                setTimeout(() => {
+                    axios.post(url,{
+                        'name' : this.name,
+                        'category_id' : this.category_id,
+                        'code' : this.code,
+                        'description' : this.description,
+                        'user_id': this.currentUser.id,
+                        'photos':this.photos,
+                        'stock': 0,
+                        'price' : 0,
+                        'margin_gain_u' : 0,
+                        'divisa_unit' : 0,
+                        'wholesale_quantity' : 0,
+                        'margin_gain_w' : 0,
+                        'wholesale_divisa' : 0,
+                        headers: {
+                            "Authorization": `Bearer ${this.currentUser.token}`
+                        }
+                    }).then(response =>{
+                        console.log(response.data)
+                        this.back_page();
+                        toastr.success("El Producto ha sido registrado.");
+                    }).catch(error => {
+                        var error = error.response.data.errors;
+                        this.errors = error;
+                        toastr.error("ERROR - En la validaciones.");
+                        console.log(this.errors)
+                    });
+                }, 1000)
             }else{
                 toastr.error('El precio de la Divisa no se encuentra establecido.');
             }

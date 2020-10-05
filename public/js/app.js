@@ -12755,6 +12755,12 @@ __webpack_require__.r(__webpack_exports__);
       totalIncome: []
     };
   },
+  computed: {
+    currentUser: function currentUser() {
+      console.log(this.$store.getters.currentUser);
+      return this.$store.getters.currentUser;
+    }
+  },
   methods: {
     start: function start() {
       this.$Progress.start();
@@ -12763,9 +12769,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var me = this;
-      var url = "/api/auth/dashboard";
+      var url = "/api/dashboard";
       this.$Progress.start();
-      axios.get(url).then(function (response) {
+      axios.get(url, {
+        headers: {
+          "Authorization": "Bearer ".concat(this.currentUser.token)
+        }
+      }).then(function (response) {
         console.log(response.data.divisa_p);
         me.divisa = response.data.divisa_p;
         me.sales = response.data.sales;
@@ -18952,7 +18962,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
       margin_gain_u: 50,
       margin_gain_w: 25,
       dropzoneOptions: {
-        url: 'api/producto/img',
+        url: 'api/fotos',
         paramName: 'photo',
         acceptedFiles: 'image/*',
         thumbnailWidth: 150,
@@ -18961,6 +18971,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
         headers: {
           "My-Awesome-Header": "header value"
         },
+        // headers: { "My-Awesome-Header": "header value" },
         dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
 
       },
@@ -19173,35 +19184,37 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
 
       if (this.divisa > 0) {
         var url = "".concat(this.url);
-        axios.post(url, {
-          'name': this.name,
-          'category_id': this.category_id,
-          'code': this.code,
-          'description': this.description,
-          'user_id': this.currentUser.id,
-          'photos': this.photos,
-          'stock': 0,
-          'price': 0,
-          'margin_gain_u': 0,
-          'divisa_unit': 0,
-          'wholesale_quantity': 0,
-          'margin_gain_w': 0,
-          'wholesale_divisa': 0,
-          headers: {
-            "Authorization": "Bearer ".concat(this.currentUser.token)
-          }
-        }).then(function (response) {
-          console.log(response.data);
+        setTimeout(function () {
+          axios.post(url, {
+            'name': _this5.name,
+            'category_id': _this5.category_id,
+            'code': _this5.code,
+            'description': _this5.description,
+            'user_id': _this5.currentUser.id,
+            'photos': _this5.photos,
+            'stock': 0,
+            'price': 0,
+            'margin_gain_u': 0,
+            'divisa_unit': 0,
+            'wholesale_quantity': 0,
+            'margin_gain_w': 0,
+            'wholesale_divisa': 0,
+            headers: {
+              "Authorization": "Bearer ".concat(_this5.currentUser.token)
+            }
+          }).then(function (response) {
+            console.log(response.data);
 
-          _this5.back_page();
+            _this5.back_page();
 
-          toastr.success("El Producto ha sido registrado.");
-        })["catch"](function (error) {
-          var error = error.response.data.errors;
-          _this5.errors = error;
-          toastr.error("ERROR - En la validaciones.");
-          console.log(_this5.errors);
-        });
+            toastr.success("El Producto ha sido registrado.");
+          })["catch"](function (error) {
+            var error = error.response.data.errors;
+            _this5.errors = error;
+            toastr.error("ERROR - En la validaciones.");
+            console.log(_this5.errors);
+          });
+        }, 1000);
       } else {
         toastr.error('El precio de la Divisa no se encuentra establecido.');
       }
@@ -83653,15 +83666,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/admin/views/Products.vue ***!
   \***********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Products_vue_vue_type_template_id_987fd47a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Products.vue?vue&type=template&id=987fd47a& */ "./resources/js/admin/views/Products.vue?vue&type=template&id=987fd47a&");
 /* harmony import */ var _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Products.vue?vue&type=script&lang=js& */ "./resources/js/admin/views/Products.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Products_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -83691,7 +83703,7 @@ component.options.__file = "resources/js/admin/views/Products.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/admin/views/Products.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -86416,7 +86428,7 @@ function initialize(store, router) {
     var requiresAuth = to.matched.some(function (record) {
       return record.meta.requiresAuth;
     });
-    var currentUser = store.state.currentUser;
+    var currentUser = store.state.currentUser; // alert('general 1')
 
     if (requiresAuth && !currentUser) {
       // alert('gene-1')
@@ -86439,7 +86451,7 @@ function initialize(store, router) {
 
     if (errorRequest == 403 && currentUser) {
       router.push("*");
-    } else {
+    } else if (errorRequest == 401) {
       store.commit("logout");
       router.push("/login");
     } // if((error.response.status = 401)){
