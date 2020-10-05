@@ -14167,6 +14167,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -14242,7 +14244,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       action: false,
       storeup: true,
       product_id: 0,
-      images: [] // isLoading: false, 
+      images: [],
+      token: '' // isLoading: false, 
 
     };
   },
@@ -14250,6 +14253,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     this.getData(this.url);
     this.getDivisa();
     this.getCategories();
+    this.token = this.currentUser.token;
   },
   computed: {
     // user(){
@@ -18370,6 +18374,9 @@ __webpack_require__.r(__webpack_exports__);
         return {};
       }
     },
+    token: {
+      type: String
+    },
     categories: {
       type: Array,
       "default": function _default() {
@@ -18423,6 +18430,7 @@ __webpack_require__.r(__webpack_exports__);
       wholesale_quantity: 0,
       // margin_gain_u: 0,
       // margin_gain_w: 0,
+      tokenUser: this.token,
       dropzoneOptions: {
         url: 'api/productos/img',
         paramName: 'photo',
@@ -18432,7 +18440,7 @@ __webpack_require__.r(__webpack_exports__);
         maxFilesize: 2,
         maxFiles: 3,
         headers: {
-          "My-Awesome-Header": "header value"
+          "Authorization": "Bearer ".concat(this.tokenUser)
         },
         dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
 
@@ -18946,6 +18954,9 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
     divisa: {
       type: Number,
       "default": 0
+    },
+    token: {
+      type: String
     }
   },
   data: function data() {
@@ -18961,6 +18972,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
       wholesale_quantity: 0,
       margin_gain_u: 50,
       margin_gain_w: 25,
+      tokenUser: this.token,
       dropzoneOptions: {
         url: 'api/fotos',
         paramName: 'photo',
@@ -18969,7 +18981,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
         maxFilesize: 2,
         maxFiles: 3,
         headers: {
-          "My-Awesome-Header": "header value"
+          "Authorization": "Bearer ".concat(this.tokenUser)
         },
         // headers: { "My-Awesome-Header": "header value" },
         dictDefaultMessage: 'Arrastra las imagenes para subirlas' // autoProcessQueue:false
@@ -19026,7 +19038,6 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
     //     return JSON.parse(user.content);
     // },
     currentUser: function currentUser() {
-      console.log(this.$store.getters.currentUser);
       return this.$store.getters.currentUser;
     },
     price_gain_u: function price_gain_u() {
@@ -19200,7 +19211,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
             'margin_gain_w': 0,
             'wholesale_divisa': 0,
             headers: {
-              "Authorization": "Bearer ".concat(_this5.currentUser.token)
+              "Authorization": "Bearer ".concat(_this5.tokenUser)
             }
           }).then(function (response) {
             console.log(response.data);
@@ -58115,7 +58126,11 @@ var render = function() {
           ]
         : [
             _c("product-create", {
-              attrs: { divisa: _vm.divisa, categories: _vm.categories },
+              attrs: {
+                divisa: _vm.divisa,
+                categories: _vm.categories,
+                token: _vm.token
+              },
               on: {
                 returned: function($event) {
                   _vm.vproducts = $event
@@ -58133,7 +58148,8 @@ var render = function() {
           categories: _vm.categories,
           title: _vm.title,
           action: _vm.action,
-          storeup: _vm.storeup
+          storeup: _vm.storeup,
+          token: _vm.token
         }
       })
     ],

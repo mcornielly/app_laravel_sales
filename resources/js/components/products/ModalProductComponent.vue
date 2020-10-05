@@ -232,6 +232,9 @@ export default {
             type: Object,
             default: () => ({}),
         },
+        token: {
+            type: String,
+        },
         categories: {
             type: Array,
             default: () => [],
@@ -277,15 +280,16 @@ export default {
             wholesale_quantity: 0,
             // margin_gain_u: 0,
             // margin_gain_w: 0,
+            tokenUser:this.token,
             dropzoneOptions: {
-                url: 'api/productos/img',
+                url: 'api/fotos',
                 paramName: 'photo',
                 acceptedFiles: 'image/*',
                 thumbnailWidth: 150,
                 thumbnailHeight: 100,
                 maxFilesize: 2,
                 maxFiles: 3,
-                headers: { "My-Awesome-Header": "header value" },
+                headers: { "Authorization": `Bearer ${this.tokenUser}`},
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
@@ -308,7 +312,8 @@ export default {
             },
             image: '',
             photos:[],
-            close: false
+            close: false,
+            
         }
     },
     components:{

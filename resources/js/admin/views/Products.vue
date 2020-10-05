@@ -43,6 +43,7 @@
             <product-create @returned="vproducts = $event"
                 :divisa="divisa"
                 :categories="categories"
+                :token="token"
             ></product-create>   
         </template>
     
@@ -57,6 +58,7 @@
             :title="title"
             :action="action"
             :storeup="storeup"
+            :token="token"
         ></modal-product>
         <!-- /.modal -->
     </section>
@@ -148,6 +150,7 @@ export default {
             storeup: true,
             product_id: 0,
             images:[],
+            token:''
             // isLoading: false, 
         }
     },
@@ -155,6 +158,7 @@ export default {
         this.getData(this.url);
         this.getDivisa();
         this.getCategories();
+        this.token = this.currentUser.token;
     },
     computed:{
         // user(){
@@ -164,7 +168,7 @@ export default {
         currentUser() {
             console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
-        }
+        },
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {

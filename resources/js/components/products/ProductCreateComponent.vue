@@ -275,7 +275,10 @@ export default {
         divisa: {
             type: Number,
             default: 0
-        }
+        },
+        token: {
+            type: String,
+        },
     },    
     data(){
         return{
@@ -290,6 +293,7 @@ export default {
             wholesale_quantity: 0,
             margin_gain_u: 50,
             margin_gain_w: 25,
+            tokenUser: this.token,
             dropzoneOptions: {
                 url: 'api/fotos',
                 paramName: 'photo',
@@ -297,8 +301,8 @@ export default {
                 thumbnailWidth: 150,
                 maxFilesize: 2,
                 maxFiles: 3,
+                // headers: { "Authorization": `Bearer ${this.tokenUser}`},
                 headers: { "My-Awesome-Header": "header value" },
-                // headers: { "My-Awesome-Header": "header value" },
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
@@ -353,7 +357,6 @@ export default {
         //     return JSON.parse(user.content);
         // },
         currentUser() {
-            console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
         },
         price_gain_u: function(){
@@ -504,7 +507,7 @@ export default {
                         'margin_gain_w' : 0,
                         'wholesale_divisa' : 0,
                         headers: {
-                            "Authorization": `Bearer ${this.currentUser.token}`
+                            "Authorization": `Bearer ${this.tokenUser}`
                         }
                     }).then(response =>{
                         console.log(response.data)
