@@ -276,8 +276,9 @@ export default {
             type: Number,
             default: 0
         },
-        token: {
+        tokenUser: {
             type: String,
+            default: ''          
         },
     },    
     data(){
@@ -293,7 +294,6 @@ export default {
             wholesale_quantity: 0,
             margin_gain_u: 50,
             margin_gain_w: 25,
-            tokenUser: this.token,
             dropzoneOptions: {
                 url: 'api/fotos',
                 paramName: 'photo',
@@ -301,8 +301,10 @@ export default {
                 thumbnailWidth: 150,
                 maxFilesize: 2,
                 maxFiles: 3,
-                // headers: { "Authorization": `Bearer ${this.tokenUser}`},
-                headers: { "My-Awesome-Header": "header value" },
+                headers: { 
+                    "Authorization": `Bearer ${this.tokenUser}`
+                },
+                // headers: { "My-Awesome-Header": "header value" },
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
@@ -432,7 +434,7 @@ export default {
                     'category_id' : this.category_id,
                     'description' : this.description,
                     headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
+                        "Authorization": `Bearer ${this.tokenUser}`
                     }   
                 }).then(response =>{
                     // console.log(response.data)
@@ -456,7 +458,7 @@ export default {
                 axios.post(url,{
                     'code' : this.code,
                     headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
+                        "Authorization": `Bearer ${this.tokenUser}`
                     }
                 }).then(response =>{
                     // console.log(response.data)

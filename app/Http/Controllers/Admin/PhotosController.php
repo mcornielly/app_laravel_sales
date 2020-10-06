@@ -45,7 +45,9 @@ class PhotosController extends Controller
             
         $photoUrl = Storage::url($photos);
 
-        return $photoUrl;
+        if(request()->wantsJson()){
+            return $photoUrl;
+        }
     }
 
     /**
@@ -58,7 +60,9 @@ class PhotosController extends Controller
     {
         $photos = Photo::where('product_id', $id)->get();
 
-        return $photos;
+        if(request()->wantsJson()){
+            return $photos;
+        }
     }
 
     /**

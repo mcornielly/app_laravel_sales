@@ -232,8 +232,9 @@ export default {
             type: Object,
             default: () => ({}),
         },
-        token: {
+        tokenUser: {
             type: String,
+            default: ''          
         },
         categories: {
             type: Array,
@@ -278,9 +279,10 @@ export default {
             stock: 0,
             code:0,
             wholesale_quantity: 0,
+            // currentUser: this.currentUser,
             // margin_gain_u: 0,
             // margin_gain_w: 0,
-            tokenUser:this.token,
+            // tokenUser:this.tokenUser,
             dropzoneOptions: {
                 url: 'api/fotos',
                 paramName: 'photo',
@@ -289,7 +291,9 @@ export default {
                 thumbnailHeight: 100,
                 maxFilesize: 2,
                 maxFiles: 3,
-                headers: { "Authorization": `Bearer ${this.tokenUser}`},
+                headers: { 
+                    "Authorization": `Bearer ${this.tokenUser}`
+                },
                 dictDefaultMessage: 'Arrastra las imagenes para subirlas',
                 // autoProcessQueue:false
             },
@@ -323,6 +327,9 @@ export default {
     },
     directives: {
       imask: IMaskDirective
+    },
+    mounted(){
+       console.log(this.tokenUser)
     },
     computed:{
         margin_gain_u(){
@@ -392,7 +399,6 @@ export default {
             // console.log('accept', maskRef.value);
         },
         vremoved(file, xhr, error) {
-            console.log(file)
             this.$refs.myVueDropzone.removeAllFiles();
             if(this.close == true && !this.photos){
                 this.removeStorage();
@@ -442,7 +448,7 @@ export default {
                 'user_id':this.currentUser.id,
                 'photos':this.photos,
                 headers: {
-                    "Authorization": `Bearer ${this.currentUser.token}`
+                    "Authorization": `Bearer ${this.tokenUser}`
                 }
             }).then(response => {
                 this.$parent.reloadTable();
@@ -459,7 +465,7 @@ export default {
             axios.delete(url,{
                 'photo': this.photos,
                 headers: {
-                    "Authorization": `Bearer ${this.currentUser.token}`
+                    "Authorization": `Bearer ${this.tokenUser}`
                 }
             }).then(response => {
                 console.log(response.data)
