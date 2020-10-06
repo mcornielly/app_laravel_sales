@@ -80,7 +80,8 @@
                                                     <i class="fas fa-phone"></i>
                                                 </span>
                                             </div>
-                                            <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                            <input type="text" v-imask="mask.numphone" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                            <!-- <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup"> -->
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.num_phone[0]"></span>
                                         </div>
                                     </div>
@@ -124,7 +125,8 @@
                                                     <i class="fas fa-phone"></i>
                                                 </span>
                                             </div>
-                                            <input type="tel" v-mask="'(###) ###-##-##'"  class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.contact_phone" :disabled="storeup">
+                                            <input type="text" v-imask="mask.numphone"  class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.contact_phone" :disabled="storeup">
+                                            <!-- <input type="tel" v-mask="'(###) ###-##-##'"  class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.contact_phone" :disabled="storeup"> -->
                                             <span v-if="errors" class="invalid-feedback" role="alert" v-html="errors.contact_phone[0]"></span>
                                         </div>
                                     </div>
@@ -148,10 +150,14 @@
 
 <script>
 // Local Directive - vue-the-mask
-import {mask} from 'vue-the-mask'
+import {IMaskDirective} from 'vue-imask';
+// import {mask} from 'vue-the-mask'
 
 export default {
-    directives: {mask},
+    directives: {
+        imask: IMaskDirective,
+    //   mask
+    },  
     data(){
         return {
             provider:{
@@ -163,6 +169,12 @@ export default {
                 address:'',
                 contact_name:'',
                 contact_phone:''
+            },
+            mask:{
+                numphone: {
+                    mask: "(000) 000-00-00",
+                    lazy: false
+                }    
             },
             type_document:'',
             search:'',
@@ -237,31 +249,36 @@ export default {
         },
         storeProvider(){
             let url = 'api/proveedor';
-            axios.post(url,{
-                'name': this.provider.name,
-                'type_document':  this.type_document,
-                'num_document': this.provider.num_document, 
-                'num_phone': this.provider.num_phone, 
-                'email': this.provider.email, 
-                'address': this.provider.address, 
-                'contact_name': this.provider.contact_name, 
-                'contact_phone': this.provider.contact_phone,
-                'user_id': this.user.id,
-                headers: {
-                    "Authorization": `Bearer ${this.currentUser.token}`
-                }  
-            }).then(response => {
-                toastr.success('El Proveedor fue registrado.');
-                this.closeForm();
-            }).catch(error => {
-                let errors = error.response.data.errors;
-                if (error.response.status == 422) {
-                    this.errors = errors;
-                    console.log(this.errors)
-                    toastr.error("ERROR - En la validaciones.");
-                    // reject(this.errors);
-                }
-            });
+            this.$Progress.start()
+            setTimeout(()=>{                
+                axios.post(url,{
+                    'name': this.provider.name,
+                    'type_document':  this.type_document,
+                    'num_document': this.provider.num_document, 
+                    'num_phone': this.provider.num_phone, 
+                    'email': this.provider.email, 
+                    'address': this.provider.address, 
+                    'contact_name': this.provider.contact_name, 
+                    'contact_phone': this.provider.contact_phone,
+                    'user_id': this.currentUser.id,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }  
+                }).then(response => {
+                    toastr.success('El Proveedor fue registrado.');
+                    this.closeForm();
+                }).catch(error => {
+                    this.$Progress.fail()
+                    let errors = error.response.data.errors;
+                    if (error.response.status == 422) {
+                        this.errors = errors;
+                        console.log(this.errors)
+                        toastr.error("ERROR - En la validaciones.");
+                        // reject(this.errors);
+                    }
+                });
+                this.$Progress.finish()
+            },1000)
         },
     }
 }

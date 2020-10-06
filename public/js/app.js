@@ -16120,8 +16120,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-the-mask */ "./node_modules/vue-the-mask/dist/vue-the-mask.js");
-/* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_the_mask__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_imask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-imask */ "./node_modules/vue-imask/esm/index.js");
+//
+//
 //
 //
 //
@@ -16271,10 +16272,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 // Local Directive - vue-the-mask
+ // import {mask} from 'vue-the-mask'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   directives: {
-    mask: vue_the_mask__WEBPACK_IMPORTED_MODULE_0__["mask"]
+    imask: vue_imask__WEBPACK_IMPORTED_MODULE_0__["IMaskDirective"] //   mask
+
   },
   data: function data() {
     return {
@@ -16287,6 +16290,12 @@ __webpack_require__.r(__webpack_exports__);
         address: '',
         contact_name: '',
         contact_phone: ''
+      },
+      mask: {
+        numphone: {
+          mask: "(000) 000-00-00",
+          lazy: false
+        }
       },
       type_document: '',
       search: '',
@@ -16363,32 +16372,39 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var url = 'api/proveedor';
-      axios.post(url, {
-        'name': this.provider.name,
-        'type_document': this.type_document,
-        'num_document': this.provider.num_document,
-        'num_phone': this.provider.num_phone,
-        'email': this.provider.email,
-        'address': this.provider.address,
-        'contact_name': this.provider.contact_name,
-        'contact_phone': this.provider.contact_phone,
-        'user_id': this.user.id,
-        headers: {
-          "Authorization": "Bearer ".concat(this.currentUser.token)
-        }
-      }).then(function (response) {
-        toastr.success('El Proveedor fue registrado.');
+      this.$Progress.start();
+      setTimeout(function () {
+        axios.post(url, {
+          'name': _this.provider.name,
+          'type_document': _this.type_document,
+          'num_document': _this.provider.num_document,
+          'num_phone': _this.provider.num_phone,
+          'email': _this.provider.email,
+          'address': _this.provider.address,
+          'contact_name': _this.provider.contact_name,
+          'contact_phone': _this.provider.contact_phone,
+          'user_id': _this.currentUser.id,
+          headers: {
+            "Authorization": "Bearer ".concat(_this.currentUser.token)
+          }
+        }).then(function (response) {
+          toastr.success('El Proveedor fue registrado.');
 
-        _this.closeForm();
-      })["catch"](function (error) {
-        var errors = error.response.data.errors;
+          _this.closeForm();
+        })["catch"](function (error) {
+          _this.$Progress.fail();
 
-        if (error.response.status == 422) {
-          _this.errors = errors;
-          console.log(_this.errors);
-          toastr.error("ERROR - En la validaciones."); // reject(this.errors);
-        }
-      });
+          var errors = error.response.data.errors;
+
+          if (error.response.status == 422) {
+            _this.errors = errors;
+            console.log(_this.errors);
+            toastr.error("ERROR - En la validaciones."); // reject(this.errors);
+          }
+        });
+
+        _this.$Progress.finish();
+      }, 1000);
     }
   }
 });
@@ -19616,9 +19632,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_imask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-imask */ "./node_modules/vue-imask/esm/index.js");
-/* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-the-mask */ "./node_modules/vue-the-mask/dist/vue-the-mask.js");
-/* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_the_mask__WEBPACK_IMPORTED_MODULE_2__);
-//
 //
 //
 //
@@ -19793,12 +19806,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-
+ // import {mask} from 'vue-the-mask'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   directives: {
-    imask: vue_imask__WEBPACK_IMPORTED_MODULE_1__["IMaskDirective"],
-    mask: vue_the_mask__WEBPACK_IMPORTED_MODULE_2__["mask"]
+    imask: vue_imask__WEBPACK_IMPORTED_MODULE_1__["IMaskDirective"] //   mask
+
   },
   props: {
     data: {
@@ -19878,6 +19891,7 @@ __webpack_require__.r(__webpack_exports__);
       if (action == "store") {
         this.storeProvider();
       } else {
+        console.log(this.typedocument);
         this.updateProvider();
       }
     },
@@ -19917,7 +19931,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var url = "".concat(this.url, "/").concat(this.data.id);
-      this.$Progress.start();
       setTimeout(function () {
         axios.put(url, {
           'customer_id': _this2.provider.id,
@@ -19927,7 +19940,7 @@ __webpack_require__.r(__webpack_exports__);
           'num_phone': _this2.provider.num_phone,
           'email': _this2.provider.email,
           'address': _this2.provider.address,
-          'name_contact': _this2.data.name,
+          'contact_name': _this2.data.contact_name,
           'contact_phone': _this2.data.contact_phone,
           'user_id': _this2.currentUser.id,
           headers: {
@@ -19940,15 +19953,11 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.closeModal();
         })["catch"](function (error) {
-          _this2.$Progress.fail();
-
           console.log(error);
           var errors = error.response.data.errors;
           _this2.errors = errors;
           $('#modal-provider').modal('show');
         });
-
-        _this2.$Progress.finish();
       }, 1000);
     },
     closeModal: function closeModal() {
@@ -60786,10 +60795,10 @@ var render = function() {
                               _c("input", {
                                 directives: [
                                   {
-                                    name: "mask",
-                                    rawName: "v-mask",
-                                    value: "(###) ###-##-##",
-                                    expression: "'(###) ###-##-##'"
+                                    name: "imask",
+                                    rawName: "v-imask",
+                                    value: _vm.mask.numphone,
+                                    expression: "mask.numphone"
                                   },
                                   {
                                     name: "model",
@@ -60801,7 +60810,7 @@ var render = function() {
                                 staticClass: "form-control",
                                 class: { "is-invalid": _vm.errors },
                                 attrs: {
-                                  type: "tel",
+                                  type: "text",
                                   placeholder: "(###) ###-##-##",
                                   disabled: _vm.storeup
                                 },
@@ -61039,10 +61048,10 @@ var render = function() {
                               _c("input", {
                                 directives: [
                                   {
-                                    name: "mask",
-                                    rawName: "v-mask",
-                                    value: "(###) ###-##-##",
-                                    expression: "'(###) ###-##-##'"
+                                    name: "imask",
+                                    rawName: "v-imask",
+                                    value: _vm.mask.numphone,
+                                    expression: "mask.numphone"
                                   },
                                   {
                                     name: "model",
@@ -61054,7 +61063,7 @@ var render = function() {
                                 staticClass: "form-control",
                                 class: { "is-invalid": _vm.errors },
                                 attrs: {
-                                  type: "tel",
+                                  type: "text",
                                   placeholder: "(###) ###-##-##",
                                   disabled: _vm.storeup
                                 },
@@ -66291,6 +66300,12 @@ var render = function() {
                         _c("input", {
                           directives: [
                             {
+                              name: "imask",
+                              rawName: "v-imask",
+                              value: _vm.mask.numphone,
+                              expression: "mask.numphone"
+                            },
+                            {
                               name: "model",
                               rawName: "v-model",
                               value: _vm.provider.num_phone,
@@ -66300,7 +66315,7 @@ var render = function() {
                           staticClass: "form-control",
                           class: { "is-invalid": _vm.errors },
                           attrs: {
-                            type: "tel",
+                            type: "text",
                             placeholder: "(###) ###-##-##",
                             disabled: _vm.storeup
                           },
@@ -66502,6 +66517,12 @@ var render = function() {
                         _c("input", {
                           directives: [
                             {
+                              name: "imask",
+                              rawName: "v-imask",
+                              value: _vm.mask.numphone,
+                              expression: "mask.numphone"
+                            },
+                            {
                               name: "model",
                               rawName: "v-model",
                               value: _vm.data.contact_phone,
@@ -66511,7 +66532,7 @@ var render = function() {
                           staticClass: "form-control",
                           class: { "is-invalid": _vm.errors },
                           attrs: {
-                            type: "tel",
+                            type: "text",
                             placeholder: "(###) ###-##-##",
                             disabled: _vm.storeup
                           },
@@ -66635,7 +66656,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("td", {
-                                attrs: { type: "tel" },
+                                attrs: { type: "text" },
                                 domProps: {
                                   textContent: _vm._s(_vm.data.contact_phone)
                                 }
@@ -84954,14 +84975,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************************************************!*\
   !*** ./resources/js/components/incomes/IncomeProviderComponent.vue ***!
   \*********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _IncomeProviderComponent_vue_vue_type_template_id_ff9e20ba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IncomeProviderComponent.vue?vue&type=template&id=ff9e20ba& */ "./resources/js/components/incomes/IncomeProviderComponent.vue?vue&type=template&id=ff9e20ba&");
 /* harmony import */ var _IncomeProviderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IncomeProviderComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/incomes/IncomeProviderComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _IncomeProviderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _IncomeProviderComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -84991,7 +85013,7 @@ component.options.__file = "resources/js/components/incomes/IncomeProviderCompon
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/incomes/IncomeProviderComponent.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -134,6 +134,8 @@ class ProvidersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return $request->all();
+
         $valido = $this->validate($request,[
             'name' => 'required|unique:customers,name,'. $request->customer_id,
             'type_document' => 'required',
@@ -141,7 +143,7 @@ class ProvidersController extends Controller
             'num_phone' => 'required',
             'email' => 'required|email|unique:customers,email,'. $request->customer_id,
             'address' => 'required',
-            'name' => 'required|unique:providers,name,'. $request->id, 
+            'contact_name' => 'required|unique:providers,name,'. $id, 
             'contact_phone' => 'required', 
             'user_id' => 'required', 
         ]);
@@ -157,7 +159,7 @@ class ProvidersController extends Controller
         $customer->update();    
         
         $provider = Provider::findOrFail($request->customer_id);
-        $provider->name = $request->name_contact;
+        $provider->name = $request->contact_name;
         $provider->contact_phone = $request->contact_phone;
         $provider->update();
         

@@ -58,8 +58,8 @@
                                             <i class="fas fa-phone"></i>
                                         </span>
                                     </div>
-                                    <!-- <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup"> -->
-                                    <input type="tel" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup">
+                                    <!-- <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="provider.num_phone" :disabled="storeup"> -->
                                     <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.num_phone[0]"></span>
                                 </div>
                             </div>
@@ -102,8 +102,8 @@
                                             <i class="fas fa-phone"></i>
                                         </span>
                                     </div>
-                                    <!-- <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup"> -->
-                                    <input type="tel" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup">
+                                    <input type="text" class="form-control" :class="{'is-invalid' : errors}" v-imask="mask.numphone" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup">
+                                    <!-- <input type="tel" v-mask="'(###) ###-##-##'" class="form-control" :class="{'is-invalid' : errors}" placeholder="(###) ###-##-##" v-model="data.contact_phone" :disabled="storeup"> -->
                                     <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.contact_phone[0]"></span>
                                 </div>
                             </div>
@@ -148,8 +148,7 @@
                                             </tr>
                                             <tr>
                                                 <th width=300>N° Tlf. Contacto</th>
-                                                <!-- <td type="text" v-imask="mask.numphone" v-text="data.contact_phone"></td> -->
-                                                <td type="tel"  v-text="data.contact_phone"></td>
+                                                <td type="text" v-text="data.contact_phone"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -175,12 +174,12 @@
 <script>
 import Vue from 'vue'
 import {IMaskDirective} from 'vue-imask';
-import {mask} from 'vue-the-mask'
+// import {mask} from 'vue-the-mask'
 
 export default {
     directives: {
       imask: IMaskDirective,
-      mask
+    //   mask
     },    
     props:{
         data: {
@@ -255,6 +254,7 @@ export default {
             if(action == "store"){
                 this.storeProvider();
             }else{
+                console.log(this.typedocument)
                 this.updateProvider();
             }
         },
@@ -288,7 +288,6 @@ export default {
         },
         updateProvider(){
             var url = `${this.url}/${this.data.id}`;
-            this.$Progress.start()
             setTimeout(() => {
                 axios.put(url,{
                     'customer_id': this.provider.id,
@@ -298,7 +297,7 @@ export default {
                     'num_phone': this.provider.num_phone, 
                     'email': this.provider.email, 
                     'address': this.provider.address, 
-                    'name_contact': this.data.name, 
+                    'contact_name': this.data.contact_name, 
                     'contact_phone': this.data.contact_phone, 
                     'user_id': this.currentUser.id,
                     headers: {
@@ -309,13 +308,11 @@ export default {
                     toastr.info('El Proveedor fue actualizado.');
                     this.closeModal();
                 }).catch(error => {
-                    this.$Progress.fail()
                     console.log(error);
                     var errors = error.response.data.errors;
                     this.errors = errors;
                     $('#modal-provider').modal('show');
                 })
-                this.$Progress.finish()
             },1000)
         },
         closeModal(){
