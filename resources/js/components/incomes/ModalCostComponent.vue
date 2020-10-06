@@ -18,31 +18,36 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
+                                    <div class="row">
+                                        <label class="form-control-label text-md" for="text-input">(%) Ganancia</label>
+                                    </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                        <div class="col-xl-6 col-md-5 col-sm-5">
+                                        <div class="col-xl-9 col-md-8 col-sm-8s">
                                             <input type="range" min="0" max="100" step="1" value="50" class="form-control"  v-model="margin_gain_u">
                                         </div>
                                         <div class="col-xl-3 col-md-4 col-sm-4">
                                             <input type="number" class="form-control" v-model="margin_gain_u">
                                         </div>
                                     </div>
+                                    <div class="pt-2 pb-2">
+                                        <hr>
+                                    </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Ganancia</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Ganancia</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="price_gain_u" disabled>
                                             
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Precio ($)</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Precio ($)</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="divisa_unit" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Precio (Bs.)</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="unit_price" disabled>
                                         </div>
                                     </div>
@@ -56,30 +61,35 @@
                                     <h3 class="card-title"><i class="fas fa-coins">&nbsp;</i> Precio al Mayor</h3>
                                 </div>
                                 <div class="card-body">
+                                    <div class="row">
+                                        <label class="form-control-label" for="text-input">(%) Ganancia</label>
+                                    </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label" for="text-input">(%) Ganancia</label>
-                                        <div class="col-xl-6 col-md-5 col-sm-5">
+                                        <div class="col-xl-9 col-md-8 col-sm-8">
                                             <input type="range" min="0" max="100" step="1" value="50" class="form-control" v-model="margin_gain_w">
                                         </div>
                                         <div class="col-xl-3 col-md-4 col-sm-4">
                                             <input type="number" class="form-control" v-model="margin_gain_w">
                                         </div>
                                     </div>
+                                    <div class="pt-2 pb-2">
+                                        <hr>
+                                    </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Ganancia</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Ganancia</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="price_gain_w" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Precio ($)</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Precio ($)</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right"  v-model="wholesale_divisa" disabled>
                                         </div>
                                     </div>                           
                                     <div class="form-group row">
-                                        <label class="col-md-3 form-control-label">Precio (Bs.)</label>
-                                        <div class="col-md-9">
+                                        <label class="col-md-4 form-control-label">Precio (Bs.)</label>
+                                        <div class="col-md-8">
                                             <input v-imask="mask.amount" type="text" class="form-control text-right" v-model="wholesale_price" disabled>
                                         </div>
                                     </div>
@@ -182,7 +192,7 @@ export default {
             get: function(){
                 let result = 0;
                 if(this.divisa > 0 || this.unit_price > 0){
-                    let result = (this.unit_price / this.divisa).toFixed(2);
+                    result = (this.unit_price / this.divisa).toFixed(2);
                 }
                 return result;
             },
@@ -195,7 +205,7 @@ export default {
             get: function(){
                 let result = 0;
                 if(this.price > 0){
-                    let result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
+                    result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
                 }
                 return result;
             },

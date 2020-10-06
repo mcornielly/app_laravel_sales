@@ -16510,6 +16510,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -16596,7 +16606,7 @@ __webpack_require__.r(__webpack_exports__);
         var result = 0;
 
         if (this.divisa > 0 || this.unit_price > 0) {
-          var _result = (this.unit_price / this.divisa).toFixed(2);
+          result = (this.unit_price / this.divisa).toFixed(2);
         }
 
         return result;
@@ -16611,7 +16621,7 @@ __webpack_require__.r(__webpack_exports__);
         var result = 0;
 
         if (this.price > 0) {
-          var _result2 = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
+          result = (parseFloat(this.price_gain_u) + parseFloat(this.price)).toFixed(2);
         }
 
         return result;
@@ -61199,42 +61209,39 @@ var render = function() {
                   _vm._m(1),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body" }, [
+                    _vm._m(2),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" }
-                        },
-                        [_vm._v("(%) Ganancia")]
+                        "div",
+                        { staticClass: "col-xl-9 col-md-8 col-sm-8s" },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.margin_gain_u,
+                                expression: "margin_gain_u"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "range",
+                              min: "0",
+                              max: "100",
+                              step: "1",
+                              value: "50"
+                            },
+                            domProps: { value: _vm.margin_gain_u },
+                            on: {
+                              __r: function($event) {
+                                _vm.margin_gain_u = $event.target.value
+                              }
+                            }
+                          })
+                        ]
                       ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-xl-6 col-md-5 col-sm-5" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.margin_gain_u,
-                              expression: "margin_gain_u"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "range",
-                            min: "0",
-                            max: "100",
-                            step: "1",
-                            value: "50"
-                          },
-                          domProps: { value: _vm.margin_gain_u },
-                          on: {
-                            __r: function($event) {
-                              _vm.margin_gain_u = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-xl-3 col-md-4 col-sm-4" }, [
                         _c("input", {
@@ -61261,14 +61268,16 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
+                    _vm._m(3),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Ganancia")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61302,11 +61311,11 @@ var render = function() {
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Precio ($)")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61340,11 +61349,11 @@ var render = function() {
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Precio (Bs.)")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61380,20 +61389,13 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
                 _c("div", { staticClass: "card card-default card-default" }, [
-                  _vm._m(2),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("div", { staticClass: "card-body" }, [
+                    _vm._m(5),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" }
-                        },
-                        [_vm._v("(%) Ganancia")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-xl-6 col-md-5 col-sm-5" }, [
+                      _c("div", { staticClass: "col-xl-9 col-md-8 col-sm-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61445,14 +61447,16 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
+                    _vm._m(6),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Ganancia")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61486,11 +61490,11 @@ var render = function() {
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Precio ($)")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61524,11 +61528,11 @@ var render = function() {
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
-                        { staticClass: "col-md-3 form-control-label" },
+                        { staticClass: "col-md-4 form-control-label" },
                         [_vm._v("Precio (Bs.)")]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
                         _c("input", {
                           directives: [
                             {
@@ -61635,12 +61639,51 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c(
+        "label",
+        {
+          staticClass: "form-control-label text-md",
+          attrs: { for: "text-input" }
+        },
+        [_vm._v("(%) Ganancia")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pt-2 pb-2" }, [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
       _c("h3", { staticClass: "card-title" }, [
         _c("i", { staticClass: "fas fa-coins" }, [_vm._v(" ")]),
         _vm._v(" Precio al Mayor")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c(
+        "label",
+        { staticClass: "form-control-label", attrs: { for: "text-input" } },
+        [_vm._v("(%) Ganancia")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pt-2 pb-2" }, [_c("hr")])
   }
 ]
 render._withStripped = true
