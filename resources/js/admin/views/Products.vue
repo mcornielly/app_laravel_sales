@@ -43,7 +43,7 @@
             <product-create @returned="vproducts = $event"
                 :divisa="divisa"
                 :categories="categories"
-                :token="token"
+                :tokenUser="currentUser.token"
             ></product-create>   
         </template>
     
@@ -58,7 +58,7 @@
             :title="title"
             :action="action"
             :storeup="storeup"
-            :token="token"
+            :tokenUser="currentUser.token"
         ></modal-product>
         <!-- /.modal -->
     </section>
@@ -150,7 +150,7 @@ export default {
             storeup: true,
             product_id: 0,
             images:[],
-            token:''
+            tokenUser:''
             // isLoading: false, 
         }
     },
@@ -302,7 +302,7 @@ export default {
         },
         getImages(product_id){
             let id = product_id;
-            let url = `${this.url}/imagenes/${id}`;
+            let url = `api/fotos/${id}`;
             axios.get(url).then(response => {
                 this.images = response.data;
                 console.log( this.images)

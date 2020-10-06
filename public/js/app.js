@@ -14245,7 +14245,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       storeup: true,
       product_id: 0,
       images: [],
-      token: '' // isLoading: false, 
+      tokenUser: '' // isLoading: false, 
 
     };
   },
@@ -14411,7 +14411,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       var _this6 = this;
 
       var id = product_id;
-      var url = "".concat(this.url, "/imagenes/").concat(id);
+      var url = "api/fotos/".concat(id);
       axios.get(url).then(function (response) {
         _this6.images = response.data;
         console.log(_this6.images);
@@ -18374,8 +18374,9 @@ __webpack_require__.r(__webpack_exports__);
         return {};
       }
     },
-    token: {
-      type: String
+    tokenUser: {
+      type: String,
+      "default": ''
     },
     categories: {
       type: Array,
@@ -18428,11 +18429,12 @@ __webpack_require__.r(__webpack_exports__);
       stock: 0,
       code: 0,
       wholesale_quantity: 0,
+      // currentUser: this.currentUser,
       // margin_gain_u: 0,
       // margin_gain_w: 0,
-      tokenUser: this.token,
+      // tokenUser:this.tokenUser,
       dropzoneOptions: {
-        url: 'api/productos/img',
+        url: 'api/fotos',
         paramName: 'photo',
         acceptedFiles: 'image/*',
         thumbnailWidth: 150,
@@ -18474,6 +18476,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   directives: {
     imask: vue_imask__WEBPACK_IMPORTED_MODULE_0__["IMaskDirective"]
+  },
+  mounted: function mounted() {
+    console.log(this.tokenUser);
   },
   computed: {
     margin_gain_u: function margin_gain_u() {
@@ -18554,7 +18559,6 @@ __webpack_require__.r(__webpack_exports__);
       // console.log('accept', maskRef.value);
     },
     vremoved: function vremoved(file, xhr, error) {
-      console.log(file);
       this.$refs.myVueDropzone.removeAllFiles();
 
       if (this.close == true && !this.photos) {
@@ -18608,7 +18612,7 @@ __webpack_require__.r(__webpack_exports__);
         'user_id': this.currentUser.id,
         'photos': this.photos,
         headers: {
-          "Authorization": "Bearer ".concat(this.currentUser.token)
+          "Authorization": "Bearer ".concat(this.tokenUser)
         }
       }).then(function (response) {
         _this2.$parent.reloadTable();
@@ -18629,7 +18633,7 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"](url, {
         'photo': this.photos,
         headers: {
-          "Authorization": "Bearer ".concat(this.currentUser.token)
+          "Authorization": "Bearer ".concat(this.tokenUser)
         }
       }).then(function (response) {
         console.log(response.data);
@@ -18955,8 +18959,9 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
       type: Number,
       "default": 0
     },
-    token: {
-      type: String
+    tokenUser: {
+      type: String,
+      "default": ''
     }
   },
   data: function data() {
@@ -18972,7 +18977,6 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
       wholesale_quantity: 0,
       margin_gain_u: 50,
       margin_gain_w: 25,
-      tokenUser: this.token,
       dropzoneOptions: {
         url: 'api/fotos',
         paramName: 'photo',
@@ -19132,7 +19136,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
             'category_id': _this3.category_id,
             'description': _this3.description,
             headers: {
-              "Authorization": "Bearer ".concat(_this3.currentUser.token)
+              "Authorization": "Bearer ".concat(_this3.tokenUser)
             }
           }).then(function (response) {
             // console.log(response.data)
@@ -19159,7 +19163,7 @@ vue__WEBPACK_IMPORTED_MODULE_6___default.a.directive('focus', {
           axios.post(url, {
             'code': _this4.code,
             headers: {
-              "Authorization": "Bearer ".concat(_this4.currentUser.token)
+              "Authorization": "Bearer ".concat(_this4.tokenUser)
             }
           }).then(function (response) {
             // console.log(response.data)
@@ -58129,7 +58133,7 @@ var render = function() {
               attrs: {
                 divisa: _vm.divisa,
                 categories: _vm.categories,
-                token: _vm.token
+                tokenUser: _vm.currentUser.token
               },
               on: {
                 returned: function($event) {
@@ -58149,7 +58153,7 @@ var render = function() {
           title: _vm.title,
           action: _vm.action,
           storeup: _vm.storeup,
-          token: _vm.token
+          tokenUser: _vm.currentUser.token
         }
       })
     ],
@@ -86014,14 +86018,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************************!*\
   !*** ./resources/js/components/products/ModalProductComponent.vue ***!
   \********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ModalProductComponent_vue_vue_type_template_id_12e897ca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalProductComponent.vue?vue&type=template&id=12e897ca& */ "./resources/js/components/products/ModalProductComponent.vue?vue&type=template&id=12e897ca&");
 /* harmony import */ var _ModalProductComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalProductComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/products/ModalProductComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _ModalProductComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalProductComponent.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/products/ModalProductComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ModalProductComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ModalProductComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _ModalProductComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalProductComponent.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/products/ModalProductComponent.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -86053,7 +86058,7 @@ component.options.__file = "resources/js/components/products/ModalProductCompone
 /*!*********************************************************************************************!*\
   !*** ./resources/js/components/products/ModalProductComponent.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
