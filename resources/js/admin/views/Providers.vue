@@ -230,32 +230,46 @@ export default {
         },
         deleteProvider(data){
             this.id = data.id;
-            console.log(this.id)
-            var url = `${this.url}/${this.id}`;
-            axios.delete(url).then(response => {
-                this.reloadTable();
-                this.destroy = false;
-                toastr.error('Lo Proveedor fue eliminada.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
-
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            // console.log(this.id)
+            let url = `${this.url}/${this.id}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.delete(url).then(response => {
+                    this.reloadTable();
+                    this.destroy = false;
+                    toastr.error('Lo Proveedor fue eliminado.');
+                    // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+    
+                }).catch(error => {
+                    console.log(error);
+                    let errors = error.response.data.errors;
+                    this.errors = errors;
+                    this.$Progress.fail()
+                });
+                this.$Progress.finish()  
+            },1000)
         },
         restoreProvider(data){
             this.id = data.id;
-            var url = `/api/proveedor/restore/${this.id}`;
-            axios.get(url).then(response => {
-                this.reloadTable();
-                toastr.success('Lo Proveedor fue restaurada.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            let url = `/api/proveedor/restore/${this.id}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.get(url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response => {
+                    this.reloadTable();
+                    toastr.success('Lo Proveedor fue restaurado.');
+                    // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+                }).catch(error => {
+                    console.log(error);
+                    let errors = error.response.data.errors;
+                    this.errors = errors;
+                    this.$Progress.fail()
+                });
+                this.$Progress.finish() 
+            },1000)
         }
 
     }

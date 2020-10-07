@@ -309,7 +309,7 @@ export default {
                     this.closeModal();
                 }).catch(error => {
                     console.log(error);
-                    var errors = error.response.data.errors;
+                    let errors = error.response.data.errors;
                     this.errors = errors;
                     $('#modal-provider').modal('show');
                 })

@@ -22,10 +22,10 @@
                                 @onTablePropsChanged="reloadTable">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -48,21 +48,21 @@
 </template>
 
 <script>
-let user = document.head.querySelector('meta[name="user"]');
+
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnCustomersComponentVue from '../../components/BtnCustomersComponent.vue';
+import BtnCustomersComponentVue from '../../components/customers/BtnCustomersComponent.vue';
 Vue.use(DataTable);
 // Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnCustomersComponentVue,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -147,16 +147,25 @@ export default {
         this.getData(this.url);
     },
     computed:{
-        user(){
-            return JSON.parse(user.content);
-        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -165,8 +174,10 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;    
+            // this.isLoading = false;
+            this.$Progress.finish()    
             },1000)
         },
         reloadTable(tableProps){
@@ -181,63 +192,81 @@ export default {
         },
         modalCustomer(data, action){
             switch(action){
-    			    case 'edit':
-                        {
-                            this.title = 'Editar Cliente';
-                            this.selectedRow = data;
-                            this.create = false;
-                            this.action = true;
-                            this.storeup = false;
-                            break; 
-                        }
-                    case 'show':
-                        {
-                            this.title = "Detalle de Cliente";
-                            this.selectedRow = data;
-                            this.create = false;
-                            this.action = false; 
-                            this.storeup = true; 
-                            break;
-                        }
-                    case 'delete':
-                        {                           
-                            this.deleteProvider(data);
-                            break;
-                        }
-                    case 'restore':
-                        {                           
-                            this.restoreProvider(data);
-                            break;
-                        }
+                case 'update':
+                    {
+                        this.title = 'Actualizar Cliente';
+                        this.selectedRow = data;
+                        this.create = false;
+                        this.action = true;
+                        this.storeup = false;
+                        break; 
+                    }
+                case 'show':
+                    {
+                        this.title = "Detalle de Cliente";
+                        this.selectedRow = data;
+                        this.create = false;
+                        this.action = false; 
+                        this.storeup = true; 
+                        break;
+                    }
+                case 'delete':
+                    {                           
+                        this.deleteProvider(data);
+                        break;
+                    }
+                case 'restore':
+                    {                           
+                        this.restoreProvider(data);
+                        break;
+                    }
             }
         },
         deleteProvider(data){
             this.id = data.id;
-            console.log(this.id)
-            var url = `/api/cliente/${this.id}`;
-            axios.delete(url).then(response => {
-                this.reloadTable();
-                this.destroy = false;
-                toastr.error('Lo Cliente fue eliminada.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            // console.log(this.id)
+            let url = `${this.url}/${this.id}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.delete(url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response => {
+                    this.reloadTable();
+                    this.destroy = false;
+                    toastr.error('Lo Cliente fue eliminado.');
+                    // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+                }).catch(error => {
+                    console.log(error);
+                    let errors = error.response.data.errors;
+                    this.errors = errors;
+                    this.$Progress.fail()
+                });
+                this.$Progress.finish() 
+            },1000)
         },
         restoreProvider(data){
             this.id = data.id;
-            var url = `/api/cliente/restore/${this.id}`;
-            axios.get(url).then(response => {
-                this.reloadTable();
-                toastr.success('Lo Cliente fue restaurada.');
-                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-            });
+            let url = `/api/cliente/restore/${this.id}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.get(url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response => {
+                    this.reloadTable();
+                    toastr.success('Lo Cliente fue restaurado.');
+                    // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+                }).catch(error => {
+                    console.log(error);
+                    let errors = error.response.data.errors;
+                    this.errors = errors;
+                    this.$Progress.fail()
+                });
+                this.$Progress.finish() 
+            },1000)
         }
 
     }

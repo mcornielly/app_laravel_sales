@@ -65,15 +65,15 @@ export const routes = [
         name: 'sales',
         component: require('./admin/views/Sales').default,
     },
+    {
+        path: '/clientes',
+        name: 'clients',
+        component: require('./admin/views/Customers').default,
+    },
     // {
     //     path: '/usuarios',
     //     name: 'users',
     //     component: require('./admin/views/Users').default,
-    // },
-    // {
-    //     path: '/clientes',
-    //     name: 'clients',
-    //     component: require('./admin/views/Customers').default,
     // },
     {
         path: '*',

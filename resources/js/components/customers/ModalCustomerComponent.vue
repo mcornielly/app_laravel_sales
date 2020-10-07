@@ -125,7 +125,7 @@ export default {
     },
     data(){
         return {
-            url:"api/cliente",
+            url:"api/clientes",
             type_document:'',
             typedocument: Object.assign({}, this.data),
             name:'',
@@ -148,10 +148,14 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
-        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
     },
     methods:{
         changeSelect(data){
@@ -166,45 +170,57 @@ export default {
             }
         },
         storeCustomer(){
-            var url = this.url;
-            axios.post(url,{
-                'name': this.data.name,
-                'type_document':  this.typedocument.type_document,
-                'num_document': this.data.num_document, 
-                'num_phone': this.data.num_phone, 
-                'email': this.data.email, 
-                'address': this.data.address, 
-            }).then(response => {
-                this.$parent.reloadTable();
-                toastr.success('El Cliente fue registrado.');
-                this.closeModal();
-            }).catch(error => {
-                var errors = error.response.data.errors;
-                this.errors = errors;
-                console.log(this.errors)
-                $('#modal-customer').modal('show');
-            });
+            let url = this.url;
+            setTimeout(() => {
+                axios.post(url,{
+                    'name': this.data.name,
+                    'type_document':  this.typedocument.type_document,
+                    'num_document': this.data.num_document, 
+                    'num_phone': this.data.num_phone, 
+                    'email': this.data.email, 
+                    'address': this.data.address,
+                    'user_id': this.currentUser.id,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    } 
+                }).then(response => {
+                    this.$parent.reloadTable();
+                    toastr.success('El Cliente fue registrado.');
+                    this.closeModal();
+                }).catch(error => {
+                    var errors = error.response.data.errors;
+                    this.errors = errors;
+                    console.log(this.errors)
+                    $('#modal-customer').modal('show');
+                });
+            },1000)
         },
         updateCustomer(){
-            var url = `${this.url}/${this.data.id}`;
-            axios.put(url,{
-                'id': this.data.id,
-                'name': this.data.name,
-                'type_document': this.typedocument.type_document,
-                'num_document': this.data.num_document, 
-                'num_phone': this.data.num_phone, 
-                'email': this.data.email, 
-                'address': this.data.address, 
-            }).then(response => {
-                this.$parent.reloadTable();
-                toastr.info('El Cliente fue actualizado.');
-                this.closeModal();
-            }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                this.errors = errors;
-                $('#modal-customer').modal('show');
-            });
+            let url = `${this.url}/${this.data.id}`;
+            setTimeout(() => {
+                axios.put(url,{
+                    'id': this.data.id,
+                    'name': this.data.name,
+                    'type_document': this.typedocument.type_document,
+                    'num_document': this.data.num_document, 
+                    'num_phone': this.data.num_phone, 
+                    'email': this.data.email, 
+                    'address': this.data.address,
+                    'user_id': this.currentUser.id,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    } 
+                }).then(response => {
+                    this.$parent.reloadTable();
+                    toastr.info('El Cliente fue actualizado.');
+                    this.closeModal();
+                }).catch(error => {
+                    console.log(error);
+                    let errors = error.response.data.errors;
+                    this.errors = errors;
+                    $('#modal-customer').modal('show');
+                });
+            },1000)
         },
         closeModal(){
             this.type_document = "";

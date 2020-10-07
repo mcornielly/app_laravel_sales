@@ -5,7 +5,7 @@
             type="button"
             data-toggle="modal"
             data-target="#modal-customer"
-            @click="click(data, 'edit')"
+            @click="click(data, 'update')"
             class="btn btn-link btn-sm">
             <i class="fas fa-edit text-primary" aria-hidden="true"></i>
         </a>
