@@ -25,10 +25,10 @@
                                 @finishedLoading="isLoading = false">
                             </data-table>
                             <!-- Animation -->
-                            <loading
+                            <!-- <loading
                                 :is-full-page="true"
                                 :active.sync="isLoading">
-                            </loading>
+                            </loading> -->
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -212,6 +212,7 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
+                            <a @click.prevent="printme" href="" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                             <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;" @click="createPDF()">
                                 <i class="fas fa-download"></i> Generate PDF
                             </button>
@@ -231,21 +232,21 @@
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnSalesComponentVue from '../../components/BtnSalesComponent.vue';
-import StatusComponentVue from '../../components/StatusComponent.vue';
-import DataTableCurrencyCell from '../../components/DataTableCurrencyCell.vue';
+import BtnSalesComponentVue from '../../components/sales/BtnSalesComponent.vue';
+import StatusComponentVue from '../../components/layouts/StatusComponent.vue';
+import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell.vue';
 Vue.use(DataTable);
 // Import component
-import Loading from 'vue-loading-overlay';
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// import Loading from 'vue-loading-overlay';
+// // Import stylesheet
+// import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     components:{
         BtnSalesComponentVue,
         StatusComponentVue,
         DataTableCurrencyCell,
-        Loading
+        // Loading
     },
     data(){
         return{
@@ -321,7 +322,7 @@ export default {
             selectedRow: {},
             action: false,
             storeup: true,
-            isLoading: false,
+            // isLoading: false,
             loadingWizard: false,
             sale:{},
             detail_sales: [],
@@ -343,10 +344,14 @@ export default {
         this.getDivisa();
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
-        },
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
         // calculateTotal: function(){
         //     var result = 0.0;
         //     var subtotal = 0;
@@ -366,10 +371,14 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
                 })
                 .then(response => {
                     this.data = response.data;
@@ -378,8 +387,10 @@ export default {
                 // eslint-disable-next-line
                 .catch(errors => {
                     //Handle Errors
+                    this.$Progress.fail()
                 })
-            this.isLoading = false;
+            // this.isLoading = false;
+            this.$Progress.finish()
             },1000)
         },
         reloadTable(tableProps){
@@ -425,7 +436,7 @@ export default {
                 if(Object.keys(this.customer).length > 0){
                     resolve(true)
                 }else{
-                    var errors = "validate";
+                    let errors = "validate";
                     toastr.error("ERROR - Debe seleccionar un Cliemte.");
                     reject(errors);
                 }
@@ -438,7 +449,7 @@ export default {
                 if(this.detail_sales.length > 0){
                     resolve(true)
                 }else{
-                    var errors = "validate";
+                    let errors = "validate";
                     toastr.error("ERROR - Debe agregar los productos.");
                     reject(errors);
                 }
@@ -451,7 +462,7 @@ export default {
                     if(this.num_bill != '' && this.type_voucher != ''){
                         resolve(true)
                 }else{
-                    var errors = 'validate';
+                    let errors = 'validate';
                     toastr.error("ERROR - Debe completar los campos.");
                     reject(errors);
                     this.validateField();   
@@ -494,40 +505,57 @@ export default {
             }
         },
         storeSale(){
-            var url = `api/venta`;
-            axios.post(url,{
-                'customer_id' : this.customer.id,
-                'user_id': this.user.id,
-                'type_voucher' : this.type_voucher,
-                'num_voucher' : this.num_voucher,
-                'num_bill' : this.num_bill,
-                'tax':this.iva,
-                'total':this.total,
-                'detail_sales': this.detail_sales
-            }).then(response =>{
-                console.log(response.data)
-                this.errors = {};
-                this.back_page();
-                toastr.success("La Venta ha sido registrado.");
-            }).catch(error => {
-                var error = error.response.data.errors;
-                this.errors = error;
-                toastr.error("ERROR - En la validaciones.");
-                console.log(this.errors)
-            });
+            let url = `${this.url}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.post(url,{
+                    'customer_id' : this.customer.id,
+                    'user_id': this.currentUser.id,
+                    'type_voucher' : this.type_voucher,
+                    'num_voucher' : this.num_voucher,
+                    'num_bill' : this.num_bill,
+                    'tax':this.iva,
+                    'total':this.total,
+                    'detail_sales': this.detail_sales,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response =>{
+                    console.log(response.data)
+                    this.errors = {};
+                    this.back_page();
+                    toastr.success("La Venta ha sido registrado.");
+                }).catch(error => {
+                    this.$Progress.fail()
+                    // let error = error.response.data.errors;
+                    this.errors = error.response.data.errors;
+                    toastr.error("ERROR - En la validaciones.");
+                    console.log(this.errors)
+                });
+                this.$Progress.finish()
+            }, 1000)
         },
         showSale(id){
-            var url = `api/venta/${id}`;
-            axios.get(url).then(response =>{
-                this.detail_sales = response.data.detail_sales;
-                this.sale = response.data.sale;
-                this.customer = response.data.sale.customer;
-            }).catch(error => {
-                var error = error;
-                this.errors = error;
-                toastr.error("ERROR - En la validaciones.");
-                console.log(this.errors)
-            });
+            let url = `${this.url}/${id}`;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.get(url,{
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response =>{
+                    this.detail_sales = response.data.detail_sales;
+                    this.sale = response.data.sale;
+                    this.customer = response.data.sale.customer;
+                }).catch(error => {
+                    this.$Progress.fail()
+                    // let error = error;
+                    this.errors = error;
+                    toastr.error("ERROR - En la validaciones.");
+                    console.log(this.errors)
+                });
+                this.$Progress.finish()
+            },1000)
         },
         deleteSale(id){
             const swalWithBootstrapButtons = Swal.mixin({
@@ -548,7 +576,7 @@ export default {
                 reverseButtons: true
             }).then((result) => {
                 if (result.value) {
-                    var url = `/api/venta/anular/${id}`;
+                    var url = `${this.url}/${id}`;
                     axios.delete(url).then(response => {
                         this.reloadTable();
                         // toastr.error('La Venta fue anulada.');
@@ -582,6 +610,9 @@ export default {
             this.vsale = 1;
             this.reloadTable();
         },
+        printme(){
+            window.print();
+        },  
         createPDF(){
             window.open('api/venta/pdf/' + this.id);
         }        

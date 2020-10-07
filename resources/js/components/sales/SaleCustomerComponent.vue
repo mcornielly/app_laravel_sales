@@ -150,10 +150,14 @@ export default {
         }
     },
     computed:{
-        user(){
-            let user = document.head.querySelector('meta[name="user"]');
-            return JSON.parse(user.content);
-        }
+        currentUser() {
+            console.log(this.$store.getters.currentUser)
+            return this.$store.getters.currentUser;
+        },
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // }
     },
     methods:{
         selectCliente(search, loading){
@@ -198,27 +202,34 @@ export default {
             this.errors='';
         },
         storeCustomer(){
-            var url = 'api/cliente';
-            axios.post(url,{
-                'name': this.customer.name,
-                'type_document':  this.type_document,
-                'num_document': this.customer.num_document, 
-                'num_phone': this.customer.num_phone, 
-                'email': this.customer.email, 
-                'address': this.customer.address, 
-                'user_id': this.user.id,  
-            }).then(response => {
-                toastr.success('El Cliente fue registrado.');
-                this.closeForm();
-            }).catch(error => {
-                var errors = error.response.data.errors;
-                if (error.response.status == 422) {
-                    this.errors = errors;
-                    console.log(this.errors)
-                    toastr.error("ERROR - En la validaciones.");
-                    // reject(this.errors);
-                }
-            });
+            let url = 'api/clientes';
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.post(url,{
+                    'name': this.customer.name,
+                    'type_document':  this.type_document,
+                    'num_document': this.customer.num_document, 
+                    'num_phone': this.customer.num_phone, 
+                    'email': this.customer.email, 
+                    'address': this.customer.address, 
+                    'user_id': this.currentUser.id, 
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                }).then(response => {
+                    toastr.success('El Cliente fue registrado.');
+                    this.closeForm();
+                }).catch(error => {
+                    this.$Progress.fail()
+                    let errors = error.response.data.errors;
+                    if (error.response.status == 422) {
+                        this.errors = errors;
+                        console.log(this.errors)
+                        toastr.error("ERROR - En la validaciones.");
+                        // reject(this.errors);
+                    }
+                });
+            }, 1000)
         },
     }
 }

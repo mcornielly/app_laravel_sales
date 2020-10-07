@@ -169,7 +169,8 @@
                 @saleWhole="wholesale_quantity = $event" 
                 @salePrice="price = $event"
                 @addQuantity="quantity = $event"
-                :item="item"></modal-list-prod-sale> 
+                :item="item">
+            </modal-list-prod-sale> 
         </div>
 
         <div>
@@ -294,7 +295,7 @@ export default {
     },
     data(){
         return{
-            url:"api/producto/search/",
+            url:"api/producto",
             code:'',
             codeSearched:'',
             products:[],
@@ -352,8 +353,8 @@ export default {
     },
     computed:{
         calculateTotal: function(){
-            var result = 0.0;
-            for(var i=0; i<this.detail_sales.length; i++){
+            let result = 0.0;
+            for(let i=0; i<this.detail_sales.length; i++){
                 if(this.detail_sales[i].type_sale == 'Venta Mayor'){
                     result = result+(this.detail_sales[i].price*this.detail_sales[i].pack)-(this.detail_sales[i].mont_discount);
                 }else if(this.detail_sales[i].type_sale == 'Venta Detal'){
@@ -363,7 +364,7 @@ export default {
             return result;
         },
         divisa_price: function(){
-            var result = 0.0;
+            let result = 0.0;
             if(this.calculateTotal){
                 result = Math.round(this.calculateTotal / this.divisa).toFixed();
             }
@@ -371,28 +372,28 @@ export default {
             return result;
         },
         divisa_product_u: function(){
-            var result = 0.0;
+            let result = 0.0;
             if(this.product.divisa_unit){
                 result = Math.round(this.product.divisa_unit)
             }
             return result;
         },
         divisa_product_w: function(){
-            var result = 0.0;
+            let result = 0.0;
             if(this.product.wholesale_divisa){
                 result = Math.round(this.product.wholesale_divisa)
             }
             return result;
         },
         numDecimal: function(){
-            var decimal = Math.floor(parseFloat(this.divisa_price)) - Math.floor(this.divisa_price)
+            let decimal = Math.floor(parseFloat(this.divisa_price)) - Math.floor(this.divisa_price)
             console.log(this.divisa_price)
             return decimal.toFixed(2);
         },
         price_gain_u: {
             get: function(){
-                var result = 0;
-                var gain_u = 0.0;
+                let result = 0;
+                let gain_u = 0.0;
                 if(this.product.price){
                     gain_u = (Math.round(this.product.price * this.product.margin_gain_u / 100)).toFixed(2);
                     result = parseFloat(this.product.price) + parseFloat(gain_u);
@@ -400,15 +401,15 @@ export default {
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         price_gain_w: {
             get: function(){
-                var result = 0.0;
-                var gain_w = 0.0;
-                var cost_pack = 0.0;
+                let result = 0.0;
+                let gain_w = 0.0;
+                let cost_pack = 0.0;
                 if(this.product.price > 0){
                     cost_pack = this.product.price*this.product.wholesale_quantity;
                     gain_w = (Math.round(cost_pack * this.product.margin_gain_w / 100)).toFixed(2);
@@ -418,12 +419,12 @@ export default {
                 return result;
             },
             set: function(){
-                var result = 0;
+                let result = 0;
                 return result;
             }
         },
         stockLimit: function(){
-            var result = 0;
+            let result = 0;
             if(this.checked){
                 if(this.product.stock > this.product.wholesale_quantity){
                     result = this.product.stock - (this.product.wholesale_quantity*this.quantity);
@@ -457,7 +458,7 @@ export default {
             }
         },
         stockStop: function(){
-           var readonly = false;
+           let readonly = false;
             if(this.checked){
                 if(this.stockLimit < this.wholesale_quantity){
                     readonly = true;
@@ -474,7 +475,7 @@ export default {
             return readonly;
         },
         montProduct: function(){
-            var result = 0;
+            let result = 0;
             if(this.checked){
                 result = parseFloat(this.price_gain_w)*this.quantity;
             }else{
@@ -483,13 +484,13 @@ export default {
             return result;
         },
         productDiscount: function(){
-            var result = 0;
+            let result = 0;
             result = parseFloat(this.montProduct)*this.discount/100;
             return result;
         },
         calculateDiscount: function(){
-            var total_discount = 0.0;
-            // var i = 0;
+            let total_discount = 0.0;
+            // let i = 0;
             total_discount = this.detail_sales[0].price*this.detail_sales[0].quantity*(this.detail_sales[0].discount/100);
 
             return total_discount;
@@ -508,17 +509,17 @@ export default {
             this.$nextTick(() => this.$refs.code.focus());
         },
         getDataProduct(){
-            // var leng_code = this.code.length;
-            var code = this.code;
+            // let leng_code = this.code.length;
+            let code = this.code;
             
             if(code != this.codeSearched){
                 this.clearSearch();
             }
             setTimeout(() => {
-                var url = `${this.url}${code}`;
+                let url = `${this.url}/${code}`;
                 axios.get(url).then(response => {
-                    var product = response.data.product;
-                    var price = product[0].price;
+                    let product = response.data.product;
+                    let price = product[0].price;
                     this.codeSearched = product[0].code;
                     this.wholesale_quantity = product[0].wholesale_quantity;
                     if(product.length){
@@ -553,8 +554,8 @@ export default {
             this.wholesale_quantity = 0;
         },
         addListProducts(data){
-           var quantity = 0;
-           var pack = 0;
+           let quantity = 0;
+           let pack = 0;
            if(this.quantity_w){
                pack = this.quantity;
                quantity = this.quantity_w*pack;
@@ -595,9 +596,9 @@ export default {
 
         },
         findProduct(id){
-            var item=false;
+            let item=false;
 
-            for(var i=0; i<this.detail_sales.length; i++){
+            for(let i=0; i<this.detail_sales.length; i++){
                 if(this.detail_sales[i].id==id){
                     item = true;
                     this.item = item;
@@ -632,7 +633,7 @@ export default {
             this.price = parseFloat(this.price_gain_u).toFixed(2);
         },
         addDiscount(){
-            var discount = 0.0;
+            let discount = 0.0;
             if(this.checked){
                 discount = parseFloat(this.price_gain_w)*parseFloat(this.discount)/100;
             }else{

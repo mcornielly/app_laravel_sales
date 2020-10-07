@@ -73,9 +73,7 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
         Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
         // Fotos-Imagenes del Producto
-        Route::get('fotos/{id}', 'Admin\PhotosController@show');
-        Route::post('fotos', 'Admin\PhotosController@store');
-        Route::delete('fotos/{id}', 'Admin\PhotosController@destroy');
+        Route::resource('fotos', 'Admin\PhotosController');
         Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
         // Ingresos
         Route::resource('ingresos', 'Admin\IncomesController');
@@ -85,7 +83,14 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::resource('proveedores', 'Admin\ProvidersController');
         Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
         Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
-
+        // Sales
+        Route::resource('ventas', 'Admin\SalesController');
+        Route::get('venta/num_factura', 'Admin\SalesController@count_record');
+        Route::get('venta/pdf/{id}', 'Admin\SalesController@sale_pdf');
+        // Clientes
+        Route::resource('clientes', 'Admin\CustomersController');
+        Route::get('cliente/restore/{id}', 'Admin\CustomersController@restore');
+        Route::get('seleccionar-cliente', 'Admin\CustomersController@select_customer');
 
     });
 });
@@ -131,8 +136,10 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
 // Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
 
 // // Fotos-Imagenes del Producto
+// Route::get('fotos/{id}', 'Admin\PhotosController@show');
+// Route::post('fotos', 'Admin\PhotosController@store');
+// Route::delete('fotos/{id}', 'Admin\PhotosController@destroy');
 // Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
-// Route::delete('fotos/eliminar/{id}', 'Admin\PhotosController@destroy');
 
 // // Proveedores
 // Route::get('proveedores', 'Admin\ProvidersController@index');

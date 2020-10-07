@@ -180,7 +180,7 @@ export default {
             return JSON.parse(user.content);
         },
         calculateTotal: function(){
-            var result = 0.0;
+            let result = 0.0;
             for(var i=0; i<this.detail_sales.length; i++){
                 if(this.detail_sales[i].type_sale == 'Venta Mayor'){
                     result = result+(this.detail_sales[i].price*this.detail_sales[i].pack)-(this.detail_sales[i].mont_discount);
@@ -203,7 +203,7 @@ export default {
             this.$emit('tax', this.iva);
         },
         getCount(){
-            var url = "api/ventas/num_factura";
+            let url = "api/venta/num_factura";
             axios.get(url).then(response => {
                 this.num_voucher = response.data;
                 console.log(this.num_voucher)

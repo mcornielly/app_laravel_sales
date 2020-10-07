@@ -84,9 +84,12 @@ Vue.component('income-invoice', require('./components/incomes/IncomeInvoiceCompo
 Vue.component('modal-list-prod', require('./components/incomes/ModalListProductComponent.vue').default);
 Vue.component('modal-cost', require('./components/incomes/ModalCostComponent.vue').default);
 Vue.component('modal-provider', require('./components/providers/ModalProviderComponent.vue').default);
+Vue.component('sale-customer', require('./components/sales/SaleCustomerComponent.vue').default);
+Vue.component('sale-product', require('./components/sales/SaleProductComponent.vue').default);
+Vue.component('sale-invoice', require('./components/sales/SaleInvoiceComponent.vue').default);
+Vue.component('modal-list-prod-sale', require('./components/sales/ModalListProductSaleComponent.vue').default);
 
 // Vue.component('modal-customer', require('./components/ModalCustomerComponent.vue').default);
-// Vue.component('modal-list-prod-sale', require('./components/ModalListProductSaleComponent.vue').default);
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('btn-category', require('./components/categories/BtnCategoryComponent.vue').default);
 // Vue.component('btn-products', require('./components/products/BtnProductsComponent.vue').default);
@@ -94,9 +97,6 @@ Vue.component('modal-provider', require('./components/providers/ModalProviderCom
 // Vue.component('btn-providers', require('./components/BtnProvidersComponent.vue').default);
 // Vue.component('btn-customers', require('./components/BtnCustomersComponent.vue').default);
 // Vue.component('show-customer', require('./components/ShowCustomerComponent.vue').default);
-// Vue.component('sale-customer', require('./components/SaleCustomerComponent.vue').default);
-// Vue.component('sale-product', require('./components/SaleProductComponent.vue').default);
-// Vue.component('sale-invoice', require('./components/SaleInvoiceComponent.vue').default);
 // Vue.component('form-provider', require('./components/FormProviderComponent.vue').default);
 // Vue.component('cost-balance', require('./components/CostBalanceComponent.vue').default);
 // Vue.component('currency-cell', require('./components/DataTableCurrencyCell.vue').default);

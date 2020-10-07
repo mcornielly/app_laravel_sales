@@ -11,10 +11,10 @@
                 <form role="form" method="POST">
                     <div class="modal-body">
                             <data-table ref="tb"
+                                :data="data"
                                 :theme="theme"
                                 :columns="columns"
                                 :translate="translate"
-                                url="api/productos"
                                 >
                             </data-table>
                     </div>
@@ -35,9 +35,9 @@
 
 import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
-import BtnListProductsComponentVue from './BtnListProductsComponent.vue';
-import StatusComponentVue from './StatusComponent.vue';
-import DataTableCurrencyUnit from './DataTableCurrencyUnit.vue';
+import BtnListProductsComponentVue from '../products/BtnListProductsComponent';
+import StatusComponentVue from '../layouts/StatusComponent';
+import DataTableCurrencyUnit from '../datatable/DataTableCurrencyUnit';
 
 
 Vue.use(DataTable);
@@ -51,6 +51,8 @@ export default {
     },
     data(){
         return {
+            data:{},
+            url:'api/productos',
             title: 'Lista de Productos',
             translate:{
                 nextButton: 'Siguiente', 
@@ -132,13 +134,36 @@ export default {
         }
     },
     methods:{
+        getData(url = this.url, options = this.tableProps) {
+            // this.isLoading = true;
+            this.$Progress.start()
+            setTimeout(() => {
+                axios.get(url, {
+                    params: options,
+                    headers: {
+                        "Authorization": `Bearer ${this.currentUser.token}`
+                    }
+                })
+                .then(response => {
+                    this.data = response.data;
+                    console.log(this.data)
+                })
+                // eslint-disable-next-line
+                .catch(errors => {
+                    //Handle Errors
+                    this.$Progress.fail()
+                })
+                // this.isLoading = false;
+                this.$Progress.finish()
+            },1000)
+        },
         selectProduct(data){
             this.product = data;
             this.wholesale_quantity = this.product.wholesale_quantity;
 
             //se consulta el producto exitente en la lista
             this.$parent.findProduct(this.product.id);
-            this.isLoading = true;
+            // this.isLoading = true;
             this.isPrice(this.product.price);
             this.quantity = 1;
             setTimeout(() => {
@@ -156,7 +181,7 @@ export default {
                         toastr.error("El producto ya se encuentra en la lista.");
                     }
                 }
-                this.isLoading = false;
+                // this.isLoading = false;
             },500)        
         },
         closeModal(){
@@ -172,6 +197,8 @@ export default {
         },
 
     },
-
+    mounted(){
+        this.getData(this.url);
+    }
 }
 </script>

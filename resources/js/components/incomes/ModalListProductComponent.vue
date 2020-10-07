@@ -145,7 +145,7 @@ export default {
             console.log(this.product.id)
             //se consulta el producto exitente en la lista
             this.$parent.findProduct(this.product.id);
-            this.isLoading = true;
+            // this.isLoading = true;
             setTimeout(() => {
                 if(this.item == false){
                     this.$emit('selectProduct', this.product);
@@ -156,7 +156,7 @@ export default {
                 }else{
                     toastr.error("El producto ya se encuentra en la lista.");
                 }
-                this.isLoading = false;
+                // this.isLoading = false;
             },500)        
         },
         closeModal(){
