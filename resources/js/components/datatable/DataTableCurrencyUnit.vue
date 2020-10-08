@@ -15,16 +15,16 @@ export default {
     },
     computed:{
         price_gain_u: function(){
-            var result = 0;
-            if(this.price > 0){
-                var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+            let result = 0;
+            if(this.data.price > 0){
+                result = (this.data.price * this.data.margin_gain_u / 100);
             }    
             return result;
         },
         unit_price: function(){
-            var result = 0;
+            let result = 0;
             if(this.data.price > 0){
-                var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
+                result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
             }
             return result;
         }
