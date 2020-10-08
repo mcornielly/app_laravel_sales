@@ -70,11 +70,11 @@ export const routes = [
         name: 'clients',
         component: require('./admin/views/Customers').default,
     },
-    // {
-    //     path: '/usuarios',
-    //     name: 'users',
-    //     component: require('./admin/views/Users').default,
-    // },
+    {
+        path: '/usuarios',
+        name: 'users',
+        component: require('./admin/views/Users').default,
+    },
     {
         path: '*',
         component: require('./admin/views/404').default
