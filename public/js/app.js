@@ -16436,8 +16436,8 @@ __webpack_require__.r(__webpack_exports__);
     price_gain_u: function price_gain_u() {
       var result = 0;
 
-      if (this.price > 0) {
-        var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+      if (this.data.price > 0) {
+        result = this.data.price * this.data.margin_gain_u / 100;
       }
 
       return result;
@@ -16446,7 +16446,7 @@ __webpack_require__.r(__webpack_exports__);
       var result = 0;
 
       if (this.data.price > 0) {
-        var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
+        result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
       }
 
       return result;
@@ -18089,6 +18089,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -18107,6 +18109,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       data: {},
       url: 'api/productos',
       title: 'Lista de Productos',
+      tableProps: {
+        search: '',
+        length: 10,
+        column: 'id',
+        dir: 'desc'
+      },
       translate: {
         nextButton: 'Siguiente',
         previousButton: 'Anterior',
@@ -18214,6 +18222,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
     },
     closeModal: function closeModal() {
       $('#modal-list-prod').modal('hide');
+    },
+    reloadTable: function reloadTable(tableProps) {
+      this.getData(this.url, tableProps);
     }
   },
   mounted: function mounted() {
@@ -19291,8 +19302,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_numerals__WEBPACK_IMPORTED_MO
     price_gain_u: function price_gain_u() {
       var result = 0;
 
-      if (this.price > 0) {
-        var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+      if (this.data.price > 0) {
+        result = this.data.price * this.data.margin_gain_u / 100;
       }
 
       return result;
@@ -19308,7 +19319,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_numerals__WEBPACK_IMPORTED_MO
       var result = 0;
 
       if (this.data.price > 0) {
-        var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
+        result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
       }
 
       return result;
@@ -65947,24 +65958,33 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("form", { attrs: { role: "form", method: "POST" } }, [
-            _c(
-              "div",
-              { staticClass: "modal-body" },
-              [
-                _c("data-table", {
-                  ref: "tb",
-                  attrs: {
-                    data: _vm.data,
-                    theme: _vm.theme,
-                    columns: _vm.columns,
-                    translate: _vm.translate
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _c("data-table", {
+                ref: "tb",
+                attrs: {
+                  data: _vm.data,
+                  theme: _vm.theme,
+                  columns: _vm.columns,
+                  translate: _vm.translate
+                },
+                on: {
+                  onTablePropsChanged: _vm.reloadTable,
+                  loading: function($event) {
+                    _vm.isLoading = true
+                  },
+                  finishedLoading: function($event) {
+                    _vm.isLoading = false
                   }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("form", { attrs: { role: "form", method: "POST" } }, [
             _c("div", { staticClass: "modal-footer" }, [
               _c(
                 "button",

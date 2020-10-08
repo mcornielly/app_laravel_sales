@@ -110,9 +110,9 @@ export default {
             }
         },
         price_gain_u: function(){
-            var result = 0;
-            if(this.price > 0){
-                var result = (this.data.price * this.data.margin_gain_u / 100).toFixed(2);
+            let result = 0;
+            if(this.data.price > 0){
+                result = (this.data.price * this.data.margin_gain_u / 100);
             }    
             return result;
         },
@@ -124,38 +124,38 @@ export default {
         //     return result;
         // },
         unit_price: function(){
-            var result = 0;
+            let result = 0;
             if(this.data.price > 0){
-                var result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
+                result = parseFloat(this.data.price) + parseFloat(this.price_gain_u);
             }
             return result;
         },
         price_gain_w: function(){
-            var result = 0;
+            let result = 0;
             if(this.data.price > 0){
                 result = Math.round(this.cost_pack * this.data.margin_gain_w / 100).toFixed(2);
             }
             return result;
         },
         wholesale_price: function(){
-            var result = 0;
+            let result = 0;
             if(this.data.wholesale_quantity > 0){
                  result = parseFloat(this.price_gain_w) + parseFloat(this.cost_pack);
             }
             return result;
         },
         tax_wholesale(){
-            var tax = 16;
-            var priceTax = this.wholesale_price * tax/100;
+            let tax = 16;
+            let priceTax = this.wholesale_price * tax/100;
             return (this.wholesale_price - priceTax).toFixed(2);
         },
         tax(){
-            var tax = 16;
-            var priceTax = this.unit_price * tax/100;
+            let tax = 16;
+            let priceTax = this.unit_price * tax/100;
             return (this.unit_price - priceTax).toFixed(2);
         },
         cost_pack: function(){
-            var result = 0;
+            let result = 0;
             if(this.data.price){
                 result = this.data.price*this.data.wholesale_quantity;
             }
