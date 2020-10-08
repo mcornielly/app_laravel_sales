@@ -3,21 +3,23 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content  bg-secondary">
                 <div class="modal-header">
-                <h4 class="modal-title" v-text="title"></h4>
-                <button type="button" class="close" @click="closeModal()" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <h4 class="modal-title" v-text="title"></h4>
+                    <button type="button" class="close" @click="closeModal()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <form role="form" method="POST">
                     <div class="modal-body">
-                        <data-table ref="tb"
-                            :data="data"
-                            :theme="theme"
-                            :columns="columns"
-                            :translate="translate"
-                            >
+                            <data-table ref="tb"
+                                :data="data"
+                                :theme="theme"
+                                :columns="columns"
+                                :translate="translate"
+                                @onTablePropsChanged="reloadTable"
+                                @loading="isLoading = true"
+                                @finishedLoading="isLoading = false">
                         </data-table>
                     </div>
+                <form role="form" method="POST">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" @click="closeModal()" data-dismiss="modal">Cerrar</button>
                         <!-- <button type="submit" class="btn btn-primary" @click.prevent="actionModal('store')" data-dismiss="modal" data-backdrop="false">Agregar</button>
@@ -54,6 +56,12 @@ export default {
             data:{},
             url:'api/productos',
             title: 'Lista de Productos',
+            tableProps: {
+                search: '',
+                length: 10,
+                column: 'id',
+                dir: 'desc',
+            },
             translate:{
                 nextButton: 'Siguiente', 
                 previousButton: 'Anterior', 
@@ -161,7 +169,10 @@ export default {
         },
         closeModal(){
             $('#modal-list-prod').modal('hide');
-        }
+        },
+        reloadTable(tableProps){
+            this.getData(this.url, tableProps);
+        },
     },
     mounted(){
         this.getData(this.url);
