@@ -76,6 +76,11 @@ export const routes = [
         component: require('./admin/views/Users').default,
     },
     {
+        path: '/roles',
+        name: 'roles',
+        component: require('./admin/views/Roles').default,
+    },
+    {
         path: '*',
         component: require('./admin/views/404').default
     }

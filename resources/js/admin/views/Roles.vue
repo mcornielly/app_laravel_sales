@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista Usuarios</h3>
+                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Lista Roles</h3>
                     <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
                     </div>
                     <!-- /.card-header -->
@@ -52,14 +52,12 @@ export default {
     },
     data() {
         return {
-            url:"api/auth/usuarios",
-            titlePage:'Usuarios',
-            routePage:'Usuarios',
+            url:"api/auth/roles",
+            titlePage:'Roles',
+            routePage:'Roles',
             create:false,
             title: '',
-            name: '',
-            email: '',
-            password: '',
+            display_name: '',
             errors: '',
             data: {},
             tableProps: {
@@ -81,13 +79,13 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'Name',
-                    name: 'name',
+                    label: 'Nombre',
+                    name: 'display_name',
                     orderable: true,
                 },
                 {
-                    label: 'Email',
-                    name: 'email',
+                    label: 'Fecha',
+                    name: 'created_at',
                     orderable: true,
                 },
             ],

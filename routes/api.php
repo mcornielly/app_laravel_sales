@@ -31,9 +31,10 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::get('dashboard', 'DashboardController');
 
         // Divisas
-        Route::group(['middleware' => ['role:Administrador']], function(){
+        Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios
             Route::get('usuarios', 'Admin\UsersController@index');
+            Route::get('roles', 'Admin\RolesController@index');
             Route::post('usuario', 'Admin\UsersController@store');
             Route::put('usuario/{usuario}', 'Admin\UsersController@update');
             // Divisa

@@ -178,7 +178,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <template v-if="currentUser.roles[0].name=='Administrador'">
+                        <template v-if="currentUser.roles[0].name=='admin'">
                             <!-- Usiuarios Roles  Permisos -->
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
@@ -200,7 +200,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <router-link
-                                            to="/usuarios"
+                                            to="/roles"
                                             class="nav-link"
                                         >
                                             <i

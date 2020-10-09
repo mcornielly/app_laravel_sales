@@ -14,7 +14,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, LaravelVueDatatableTrait, HasRoles;
 
-    protected $guard_name = 'web';
+    protected $guard_name = 'api';
 
     /**
     * The accessors to append to the model's array form.
