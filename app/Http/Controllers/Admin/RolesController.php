@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 // use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+// use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
