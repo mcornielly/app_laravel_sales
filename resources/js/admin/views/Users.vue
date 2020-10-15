@@ -41,6 +41,7 @@
 <script>
 
 import Vue from 'vue';
+import roleComponent from '../../components/roleComponent'
 import DataTable from 'laravel-vue-datatable';
 Vue.use(DataTable);
 // Import component
@@ -48,6 +49,7 @@ Vue.use(DataTable);
 
 export default {
     components:{
+        roleComponent
         // Loading
     },
     data() {
@@ -62,6 +64,7 @@ export default {
             password: '',
             errors: '',
             data: {},
+            roles:{},
             tableProps: {
                 search: '',
                 length: 10,
@@ -81,9 +84,15 @@ export default {
                     orderable: true,
                 },
                 {
-                    label: 'Name',
+                    label: 'Nombre',
                     name: 'name',
                     orderable: true,
+                },
+                {
+                    label: 'Roles',
+                    name: 'rol',
+                    orderable: true,
+                    component: roleComponent,
                 },
                 {
                     label: 'Email',
@@ -124,7 +133,8 @@ export default {
                 })
                 .then(response => {
                     this.data = response.data;
-                    console.log(this.data)
+                    this.roles=response.data;
+                    console.log(this.roles)
                 })
                 // eslint-disable-next-line
                 .catch(errors => {

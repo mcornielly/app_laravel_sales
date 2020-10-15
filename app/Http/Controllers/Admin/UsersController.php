@@ -23,8 +23,10 @@ class UsersController extends Controller
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = User::eloquentQuery($orderBy, $orderByDir, $searchValue);
-        $data = $query->paginate($length);
+        $query = User::orderBy($orderBy, $orderByDir)
+                ->paginate($length);
+        // $query = User::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        $data = $query;
         
         return new DataTableCollectionResource($data);
     }
