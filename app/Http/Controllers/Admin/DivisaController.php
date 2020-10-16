@@ -50,6 +50,8 @@ class DivisaController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', new Divisa); 
+
         $valido = $this->validate($request, [
             'price' => 'required|numeric'
         ]);
@@ -68,7 +70,9 @@ class DivisaController extends Controller
 
     public function update(Divisa $divisa, Request $request)
     {
-  
+
+        $this->authorize('update', $divisa);
+
         $valido = $this->validate($request, [
             'price' => 'required|numeric'
         ]);

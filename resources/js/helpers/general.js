@@ -22,12 +22,14 @@ export function initialize(store, router) {
     axios.interceptors.response.use(null, error => {
         const errorRequest = error.request.status;
         const currentUser = store.state.currentUser;
-  
+
         if(errorRequest == 403 && currentUser){
-            router.push("*"); 
+            router.push("/403"); 
         }else if(errorRequest == 401){
             store.commit("logout");
             router.push("/login");
+        }else{
+            router.push("*"); 
         }
         
         // if((error.response.status = 401)){

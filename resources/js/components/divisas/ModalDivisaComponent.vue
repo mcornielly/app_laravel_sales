@@ -107,7 +107,6 @@ export default {
             }
         },
         storeDivisa(){
-            alert(this.data.price)
             var url = "/api/divisas";
             axios.post(url,{
                 'price': this.data.price, 

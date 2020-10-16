@@ -51,7 +51,7 @@ Route::group(['middleware' => 'jwt.auth'], function($router){
     // Dashboard
     Route::get('dashboard', 'DashboardController');
 
-    Route::group(['middleware' => ['role:Administrador']], function(){
+    Route::group(['middleware' => ['role:admin']], function(){
         // Usuarios
         Route::get('usuarios', 'Admin\UsersController@index');
         Route::post('usuario', 'Admin\UsersController@store');
