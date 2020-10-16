@@ -28,7 +28,7 @@
                                 currentUser.name
                             }}</a>
                             <span>
-                                <small class="text-teal">{{currentUser.roles[0].name}}</small>     
+                                <small class="text-teal">{{currentUser.roles[0].display_name}}</small>     
                             </span>
                         </div>
                     </template>

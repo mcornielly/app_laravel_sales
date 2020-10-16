@@ -67402,7 +67402,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("span", [
                         _c("small", { staticClass: "text-teal" }, [
-                          _vm._v(_vm._s(_vm.currentUser.roles[0].name))
+                          _vm._v(_vm._s(_vm.currentUser.roles[0].display_name))
                         ])
                       ])
                     ])
