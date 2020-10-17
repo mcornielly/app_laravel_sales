@@ -67,7 +67,7 @@ export default {
     },
     data() {
         return {
-            url:"api/auth/divisas",
+            url:"api/divisas",
             titlePage:'Divisa',
             routePage:'Divisa',
             create:false,

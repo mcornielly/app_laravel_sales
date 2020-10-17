@@ -10,14 +10,21 @@ use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class DivisaController extends Controller
 {
-    public function index(Request $request)
+    // public function __construct()
+    // {
+    //     $this->middleware('jwt.auth');       
+    // }
+
+    public function index(Divisa $divisa, Request $request)
     {
+        $this->authorize('view', $divisa);
+
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = Divisa::with('user')->eloquentQuery($orderBy, $orderByDir, $searchValue);
+        $query = Divisa::allowed()->with('user')->eloquentQuery($orderBy, $orderByDir, $searchValue);
         // $query->load('user');
         
         if(request()->wantsJson())

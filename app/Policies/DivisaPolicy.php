@@ -39,7 +39,9 @@ class DivisaPolicy
      */
     public function view(User $user, Divisa $divisa)
     {
-        //
+        // return true;
+        // // dd($user->hasRole('admin'));
+        return $user->hasRole('admin') || $user->hasPermissionTo('view divisa');
     }
 
     /**

@@ -31,4 +31,13 @@ class Divisa extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeAllowed($query)
+    {
+
+        if(auth()->user()->can('view', $this))
+        {
+            return $query;
+        }
+    }
 }

@@ -22,9 +22,9 @@ export const routes = [
         path: "/divisas",
         name: "divisas",
         component: require("./admin/views/Divisas").default,
-        meta: {
-            requiresAuth: true
-        }
+        // meta: {
+        //     requiresAuth: true
+        // }
     },
     {
         path: '/categorias',
@@ -54,6 +54,9 @@ export const routes = [
         path: '/ingresos',
         name: 'incomes',
         component: require('./admin/views/Incomes').default,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/proveedores',

@@ -27,74 +27,115 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::post('logout', 'AuthController@logout');
         Route::post('me', 'AuthController@me');
 
-        // Dashboard
-        Route::get('dashboard', 'DashboardController');
-
-        // Divisas
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios
             Route::get('usuarios', 'Admin\UsersController@index');
-            Route::get('roles', 'Admin\RolesController@index');
             Route::post('usuario', 'Admin\UsersController@store');
             Route::put('usuario/{usuario}', 'Admin\UsersController@update');
-            // Divisa
-            Route::get('divisas', 'Admin\DivisaController@index');
-            Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
-            Route::post('divisas', 'Admin\DivisaController@store');
-            Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+            //Roles
+            Route::get('roles', 'Admin\RolesController@index');
         });
+
+        // // Dashboard
+        // Route::get('dashboard', 'DashboardController');
+
+        // Route::group(['middleware' => ['role:admin']], function(){
+        //     // Usuarios
+        //     // Route::get('usuarios', 'Admin\UsersController@index');
+        //     // Route::get('roles', 'Admin\RolesController@index');
+        //     // Route::post('usuario', 'Admin\UsersController@store');
+        //     // Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+        //     // // Divisa
+        //     // Route::get('divisas', 'Admin\DivisaController@index');
+        //     // Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+        //     // Route::post('divisas', 'Admin\DivisaController@store');
+        //     // Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+        // });
     });
+});
+// Vendedor
+// Route::group(['middleware' => ['role:storage']], function () {
+//     // Dashboard
+//     Route::get('dashboard', 'DashboardController');
+//     // Divisa
+//     Route::get('divisas', 'Admin\DivisaController@index');
+//     Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+//     Route::post('divisas', 'Admin\DivisaController@store');
+//     Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+// });
+// Administrador
+// Dashboard
+Route::get('dashboard', 'DashboardController');
+
+// Divisa
+Route::get('divisas', 'Admin\DivisaController@index');
+Route::post('divisas', 'Admin\DivisaController@store');
+Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+// Categorias
+Route::resource('categorias', 'Admin\CategoriesController', ['except' => 'show']);
+Route::get('categorias/restore/{id}', 'Admin\CategoriesController@restore');
+Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
+// Productos
+Route::resource('productos', 'Admin\ProductsController');
+Route::get('productos/restore/{id}', 'Admin\ProductsController@restore');
+Route::post('productos/validate', 'Admin\ProductsController@validate_step');
+Route::post('productos/validate/code', 'Admin\ProductsController@validate_code');
+// Lista de Precios
+Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
+Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
+// Fotos-Imagenes del Producto
+Route::resource('fotos', 'Admin\PhotosController');
+Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
+// Ingresos
+Route::resource('ingresos', 'Admin\IncomesController');
+Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
+Route::get('ingreso/num_factura', 'Admin\IncomesController@count_record');
+// Proveedores
+Route::resource('proveedores', 'Admin\ProvidersController');
+Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
+Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
+// Sales
+Route::resource('ventas', 'Admin\SalesController');
+Route::get('venta/num_factura', 'Admin\SalesController@count_record');
+Route::get('venta/pdf/{id}', 'Admin\SalesController@sale_pdf');
+// Clientes
+Route::resource('clientes', 'Admin\CustomersController');
+Route::get('cliente/restore/{id}', 'Admin\CustomersController@restore');
+Route::get('seleccionar-cliente', 'Admin\CustomersController@select_customer');
+
+
+
+// Vendedor
+// Route::group(['middleware' => ['role:saler']], function () {
+//     // Dashboard
+//     Route::get('dashboard', 'DashboardController');
+//     // Divisa
+//     Route::get('divisas', 'Admin\DivisaController@index');
+//     Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+//     Route::post('divisas', 'Admin\DivisaController@store');
+//     Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+// });
+
+// Route::group(['middleware' => 'jwt.auth'], function(){
     
-});
+    // // Vendedor
+    // Route::group(['middleware' => ['role:Saler']], function(){
+    //     // Dashboard
+    //     Route::get('dashboard', 'DashboardController');
+    //     // Divisa
+    //     Route::get('divisas', 'Admin\DivisaController@index');
+    //     Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
+    //     Route::post('divisas', 'Admin\DivisaController@store');
+    //     Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
+    // });
+    
 
-Route::group(['middleware' => 'jwt.auth'], function($router){
-    // Dashboard
-    Route::get('dashboard', 'DashboardController');
+// });
 
-    Route::group(['middleware' => ['role:admin']], function(){
-        // Usuarios
-        Route::get('usuarios', 'Admin\UsersController@index');
-        Route::post('usuario', 'Admin\UsersController@store');
-        Route::put('usuario/{usuario}', 'Admin\UsersController@update');
-        // Divisa
-        Route::get('divisas', 'Admin\DivisaController@index');
-        Route::post('divisas', 'Admin\DivisaController@store');
-        Route::put('divisa/{divisa}', 'Admin\DivisaController@update');
-        Route::get('divisa/precio', 'Admin\DivisaController@price_divisa');
-        // Categorias
-        Route::resource('categorias', 'Admin\CategoriesController', ['except' => 'show']);
-        Route::get('categorias/restore/{id}', 'Admin\CategoriesController@restore');
-        Route::get('categorias/lista', 'Admin\CategoriesController@list_categories');
-        // Productos
-        Route::resource('productos', 'Admin\ProductsController');
-        Route::get('productos/restore/{id}', 'Admin\ProductsController@restore');
-        Route::post('productos/validate', 'Admin\ProductsController@validate_step');
-        Route::post('productos/validate/code', 'Admin\ProductsController@validate_code');
-        // Lista de Precios
-        Route::put('producto/actualizar_costo/{id}', 'Admin\ProductsController@update_cost');
-        Route::get('producto/search/{code}', 'Admin\ProductsController@product_search');
-        // Fotos-Imagenes del Producto
-        Route::resource('fotos', 'Admin\PhotosController');
-        Route::post('fotos/url', 'Admin\PhotosController@delete_storage');
-        // Ingresos
-        Route::resource('ingresos', 'Admin\IncomesController');
-        Route::get('ingreso/pdf/{id}', 'Admin\IncomesController@income_pdf');
-        Route::get('ingreso/num_factura', 'Admin\IncomesController@count_record');
-        // Proveedores
-        Route::resource('proveedores', 'Admin\ProvidersController');
-        Route::get('proveedor/restore/{id}', 'Admin\ProvidersController@restore');
-        Route::get('seleccionar-proveedor', 'Admin\ProvidersController@select_provider');
-        // Sales
-        Route::resource('ventas', 'Admin\SalesController');
-        Route::get('venta/num_factura', 'Admin\SalesController@count_record');
-        Route::get('venta/pdf/{id}', 'Admin\SalesController@sale_pdf');
-        // Clientes
-        Route::resource('clientes', 'Admin\CustomersController');
-        Route::get('cliente/restore/{id}', 'Admin\CustomersController@restore');
-        Route::get('seleccionar-cliente', 'Admin\CustomersController@select_customer');
+// Route::group(['middleware' => 'jwt.auth'], function($router){
+// });
 
-    });
-});
 
 
 // Route::group(['middleware' => 'role:Administrador'], function () {

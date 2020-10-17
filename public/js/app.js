@@ -13343,7 +13343,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
   },
   data: function data() {
     return {
-      url: "api/auth/divisas",
+      url: "api/divisas",
       titlePage: 'Divisa',
       routePage: 'Divisa',
       create: false,
@@ -95082,10 +95082,10 @@ var routes = [{
 }, {
   path: "/divisas",
   name: "divisas",
-  component: __webpack_require__(/*! ./admin/views/Divisas */ "./resources/js/admin/views/Divisas.vue")["default"],
-  meta: {
-    requiresAuth: true
-  }
+  component: __webpack_require__(/*! ./admin/views/Divisas */ "./resources/js/admin/views/Divisas.vue")["default"] // meta: {
+  //     requiresAuth: true
+  // }
+
 }, {
   path: '/categorias',
   name: 'categories',
@@ -95110,7 +95110,10 @@ var routes = [{
 }, {
   path: '/ingresos',
   name: 'incomes',
-  component: __webpack_require__(/*! ./admin/views/Incomes */ "./resources/js/admin/views/Incomes.vue")["default"]
+  component: __webpack_require__(/*! ./admin/views/Incomes */ "./resources/js/admin/views/Incomes.vue")["default"],
+  meta: {
+    requiresAuth: true
+  }
 }, {
   path: '/proveedores',
   name: 'providers',
