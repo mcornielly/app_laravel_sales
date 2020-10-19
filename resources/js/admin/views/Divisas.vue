@@ -8,7 +8,9 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Cotización de la Divisa</h3>
-                    <a href="#" @click="createDivisa()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
+                        <div v-if="can('create divisa')">
+                            <a href="#" @click="createDivisa()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
+                        </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">

@@ -70,7 +70,16 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAllPermissionsAttribute()
     {
-        return $this->getAllPermissions();
+        return Auth::user()->getAllPermissions()->pluck('name');
+        // $permissions = [];
+        // foreach (Permission::all() as $permission) {
+        //   if (Auth::user()->can($permission->name)) {
+        //     $permissions[] = $permission->name;
+        //   }
+        // }
+
+        // return $permissions;
+        // return $this->getAllPermissions();
     }
 
     /**
@@ -109,6 +118,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function jsPermissions()
+    {
+        return json_encode([
+                'roles' => $this->getRoleNames(),
+                'permissions' => $this->getAllPermissions()->pluck('name'),
+            ]);
     }
 
 }

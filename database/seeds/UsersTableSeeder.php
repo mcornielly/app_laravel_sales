@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
         User::truncate();
 
         $adminRole = Role::create(['name' => 'admin', 'display_name' => 'Administrador']);
-        $salerRole = Role::create(['name' => 'seler', 'display_name' => 'Vendedor']);
+        $salerRole = Role::create(['name' => 'saler', 'display_name' => 'Vendedor']);
         $storerRole = Role::create(['name' => 'storage', 'display_name' => 'Almacen']);
 
         $admin = new User;

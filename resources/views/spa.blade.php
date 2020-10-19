@@ -64,6 +64,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{ mix('js/app.js') }}"></script>
+
+    <script type="text/javascript">
+        window.Laravel = {
+            csrfToken: "{{ csrf_token() }}",
+            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!};
+        };
+    </script>
 </body>
 
 </html>

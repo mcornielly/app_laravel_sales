@@ -29,6 +29,11 @@
 </template>
 
 <script>
+        window.Laravel = {
+            csrfToken: "{{ csrf_token() }}",
+            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!};
+        };
+
 export default {
     name: "main-app",
     data() {
@@ -53,6 +58,7 @@ export default {
     methods: {
         userLogin() {
             this.currentUser = this.$store.getters.currentUser;
+            console.log(this.currentUser)
         }
     }
 };

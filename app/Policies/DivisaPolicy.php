@@ -39,8 +39,6 @@ class DivisaPolicy
      */
     public function view(User $user, Divisa $divisa)
     {
-        // return true;
-        // // dd($user->hasRole('admin'));
         return $user->hasRole('admin') || $user->hasPermissionTo('view divisa');
     }
 
@@ -52,7 +50,7 @@ class DivisaPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->hasRole('admin') || $user->hasPermissionTo('create divisa');
     }
 
     /**
@@ -64,7 +62,7 @@ class DivisaPolicy
      */
     public function update(User $user, Divisa $divisa)
     {
-        return true;
+        return $user->hasRole('admin') || $user->hasPermissionTo('update divisa');
     }
 
     /**
@@ -76,7 +74,7 @@ class DivisaPolicy
      */
     public function delete(User $user, Divisa $divisa)
     {
-        //
+        return $user->hasRole('admin') || $user->hasPermissionTo('delete divisa');
     }
 
     /**
