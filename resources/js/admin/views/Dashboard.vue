@@ -160,6 +160,7 @@
 // $("body").addClass("sidebar-mini");
 
 export default {
+    name: "dashboard-app",
     mounted(){
         this.getData();
     },
@@ -180,7 +181,7 @@ export default {
     },
     computed:{
         currentUser() {
-            console.log(this.$store.getters.currentUser)
+            // console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
         }
     },

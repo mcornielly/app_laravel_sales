@@ -38,6 +38,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- CSS pages -->
+  <script type="text/javascript">
+    window.Laravel = {
+        csrfToken: "{{ csrf_token() }}",
+        jsPermissions: localStorage.getItem('user')
+        // jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!}
+    }
+    // console.log(window.Laravel)
+</script>
 </head>
 {{-- <body class="hold-transition sidebar-mini"> --}}
     <body class="hold-transition login-page">   
@@ -65,12 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="{{ mix('js/app.js') }}"></script>
 
-    <script type="text/javascript">
-        window.Laravel = {
-            csrfToken: "{{ csrf_token() }}",
-            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!};
-        };
-    </script>
+
 </body>
 
 </html>
