@@ -39,12 +39,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- CSS pages -->
   <script type="text/javascript">
+    // console.log(json_encode(Auth::user()->allPermissions()))
     window.Laravel = {
         csrfToken: "{{ csrf_token() }}",
-        jsPermissions: localStorage.getItem('user')
-        // jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!}
+        // jsPermissions: JSON.parse(localStorage.getItem('user'))
+        // Json.parse('localStorage.getItem('user')')
+        // jsPermissions: {{ Auth::user() }}
     }
-    // console.log(window.Laravel)
+    console.log(window.Laravel)
 </script>
 </head>
 {{-- <body class="hold-transition sidebar-mini"> --}}

@@ -10,10 +10,11 @@ use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable, LaravelVueDatatableTrait, HasRoles;
+    use Notifiable, LaravelVueDatatableTrait, HasRoles, LaravelPermissionToVueJS;
 
     protected $guard_name = 'api';
 
@@ -70,16 +71,14 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAllPermissionsAttribute()
     {
-        return Auth::user()->getAllPermissions()->pluck('name');
-        // $permissions = [];
-        // foreach (Permission::all() as $permission) {
-        //   if (Auth::user()->can($permission->name)) {
-        //     $permissions[] = $permission->name;
-        //   }
-        // }
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+          if (Auth::user()->can($permission->name)) {
+            $permissions[] = $permission->name;
+          }
+        }
 
-        // return $permissions;
-        // return $this->getAllPermissions();
+        return $permissions;
     }
 
     /**

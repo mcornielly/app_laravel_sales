@@ -124,12 +124,12 @@ Vue.filter("currency", function(value) {
     // return formatter.format(value);
 });
 
-Vue.prototype.can = function(value){
-    return window.Laravel.jsPermissions.permissions.includes(value);
-}
-Vue.prototype.is = function(value){
-    return window.Laravel.jsPermissions.roles.includes(value);
-}
+// Vue.prototype.can = function(value){
+//     return window.Laravel.jsPermissions.permissions.includes(value);
+// }
+// Vue.prototype.is = function(value){
+//     return window.Laravel.jsPermissions.roles.includes(value);
+// }
 
 const app = new Vue({
     el: "#app",

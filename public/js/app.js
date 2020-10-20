@@ -16243,11 +16243,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$store.dispatch("login");
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.user).then(function (response) {
-        console.log(response);
+        console.log('d' + response);
 
-        _this.$store.commit("loginSuccess", response);
+        _this.$store.commit("loginSuccess", response); // location.reload();     
 
-        location.reload();
+
         toastr["success"]("Validación exitosa..!!", "Inicio de Sesión", {
           "progressBar": true,
           "showDuration": "1000",
@@ -91962,15 +91962,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter("currency", function (value) {
 
   var val = (value / 1).toFixed(2).replace(".", ",");
   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // return formatter.format(value);
-});
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.can = function (value) {
-  return window.Laravel.jsPermissions.permissions.includes(value);
-};
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.is = function (value) {
-  return window.Laravel.jsPermissions.roles.includes(value);
-};
+}); // Vue.prototype.can = function(value){
+//     return window.Laravel.jsPermissions.permissions.includes(value);
+// }
+// Vue.prototype.is = function(value){
+//     return window.Laravel.jsPermissions.roles.includes(value);
+// }
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: "#app",
@@ -93569,15 +93566,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*****************************************************!*\
   !*** ./resources/js/components/layouts/MainApp.vue ***!
   \*****************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MainApp_vue_vue_type_template_id_ebefe0f2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MainApp.vue?vue&type=template&id=ebefe0f2& */ "./resources/js/components/layouts/MainApp.vue?vue&type=template&id=ebefe0f2&");
 /* harmony import */ var _MainApp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainApp.vue?vue&type=script&lang=js& */ "./resources/js/components/layouts/MainApp.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _MainApp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _MainApp_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -93607,7 +93603,7 @@ component.options.__file = "resources/js/components/layouts/MainApp.vue"
 /*!******************************************************************************!*\
   !*** ./resources/js/components/layouts/MainApp.vue?vue&type=script&lang=js& ***!
   \******************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -95055,6 +95051,7 @@ function login(credentials) {
       console.log(response.data);
       res(response.data);
       Object(_general__WEBPACK_IMPORTED_MODULE_0__["setAuthorization"])(response.data.access_token);
+      console.log(store.state.currentUser);
     })["catch"](function (err) {
       // const error = err.response.data.errors;
       rej(err); // rej("Wrong email or password");
@@ -95279,6 +95276,7 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
         token: payload.access_token
       });
       console.log(state.currentUser);
+      console.log(state.currentUser.permissions);
       localStorage.setItem("user", JSON.stringify(state.currentUser));
     },
     loginFailed: function loginFailed(state, payload) {

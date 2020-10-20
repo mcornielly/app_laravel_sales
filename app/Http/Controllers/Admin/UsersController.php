@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -29,6 +30,18 @@ class UsersController extends Controller
         $data = $query;
         
         return new DataTableCollectionResource($data);
+    }
+
+    public function permissions_user()
+    {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+          if (Auth::user()->can($permission->name)) {
+            $permissions[] = $permission->name;
+          }
+        }
+
+        return $permissions;
     }
 
     /**

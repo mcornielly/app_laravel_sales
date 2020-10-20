@@ -7,6 +7,7 @@ export function login(credentials) {
                 console.log(response.data)
                 res(response.data);
                 setAuthorization(response.data.access_token);
+                console.log(store.state.currentUser);
             })
             .catch((err) =>{
                 // const error = err.response.data.errors;
@@ -18,7 +19,7 @@ export function login(credentials) {
 
 export function getLocalUser() {
     const userStr = localStorage.getItem("user");
-
+    
     if(!userStr) {
         return null;
     }

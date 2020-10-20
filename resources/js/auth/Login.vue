@@ -118,9 +118,10 @@ export default {
 
             login(this.$data.user)
                 .then(response => {
-                    console.log(response);
+                    console.log('d'+ response);
+                
                     this.$store.commit("loginSuccess", response);
-                    location.reload();     
+                    // location.reload();     
                     toastr["success"]("Validación exitosa..!!", "Inicio de Sesión",
                     {
                         "progressBar": true,
