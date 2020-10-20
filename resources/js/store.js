@@ -8,7 +8,7 @@ export default {
         isLoggeIn: !!user,
         loading: false,
         auth_error: null,
-        divisa: []
+        permissions: []
     },
     getters: {
         isLoading(state) {
@@ -23,8 +23,8 @@ export default {
         authError(state) {
             return state.auth_error;
         },
-        divisa(state) {
-            return state.divisa;
+        permissions(state) {
+            return state.permissions;
         }
     },
     mutations: {
@@ -58,18 +58,22 @@ export default {
             state.isLoggeIn = false;
             state.currentUser = null;
         },
-        stateDivisa(state, payload) {
-            state.divisa = payload;
+        updatePermissions(state, payload) {
+            state.permissions = payload;
+            console.log(state.permissions)
+            localStorage.setItem("permissions", JSON.stringify(state.permissions));
         }
     },
     actions: {
         login(context) {
             context.commit("login");
         },
-        getCustomers(context) {
-            axios.get('/api/customers')
+        getPermissions(context) {
+            axios.get('/api/auth/permisos')
                 .then((response) => {
-                    context.commit('updateCustomers', response.data.customers);
+                    // console.log(response.data)
+                    context.commit('updatePermissions', response.data);
+                    
                 });
         }
 

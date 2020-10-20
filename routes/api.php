@@ -27,7 +27,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::group(['middleware' => 'jwt.auth'], function($router){
         Route::post('logout', 'AuthController@logout');
         Route::post('me', 'AuthController@me');
-        Route::get('usuarios/permisos', 'Admin\UsersController@permissions_user');
+        Route::get('permisos', 'Admin\UsersController@permissions_user');
 
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios

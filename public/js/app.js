@@ -13277,6 +13277,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_divisas_BtnDivisaComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/divisas/BtnDivisaComponent */ "./resources/js/components/divisas/BtnDivisaComponent.vue");
 /* harmony import */ var _components_divisas_ModalDivisaComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/divisas/ModalDivisaComponent */ "./resources/js/components/divisas/ModalDivisaComponent.vue");
 /* harmony import */ var _components_datatable_DataTableCurrencyCell__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/datatable/DataTableCurrencyCell */ "./resources/js/components/datatable/DataTableCurrencyCell.vue");
+/* harmony import */ var laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! laravel-permission-to-vuejs */ "./node_modules/laravel-permission-to-vuejs/index.js");
 //
 //
 //
@@ -13332,7 +13333,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a); // // Import component
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_5__["default"]); // // Import component
 // import Loading from 'vue-loading-overlay';
 // // Import stylesheet
 // import 'vue-loading-overlay/dist/vue-loading.css';
@@ -16243,9 +16246,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$store.dispatch("login");
       Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["login"])(this.$data.user).then(function (response) {
-        console.log('d' + response);
+        console.log(response);
 
-        _this.$store.commit("loginSuccess", response); // location.reload();     
+        _this.$store.commit("loginSuccess", response);
+
+        _this.$store.dispatch('getPermissions'); // location.reload();     
 
 
         toastr["success"]("Validación exitosa..!!", "Inicio de Sesión", {
@@ -91962,13 +91967,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter("currency", function (value) {
 
   var val = (value / 1).toFixed(2).replace(".", ",");
   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // return formatter.format(value);
-}); // Vue.prototype.can = function(value){
-//     return window.Laravel.jsPermissions.permissions.includes(value);
-// }
-// Vue.prototype.is = function(value){
-//     return window.Laravel.jsPermissions.roles.includes(value);
-// }
-
+});
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: "#app",
   router: router,
@@ -95244,7 +95243,7 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
     isLoggeIn: !!user,
     loading: false,
     auth_error: null,
-    divisa: []
+    permissions: []
   },
   getters: {
     isLoading: function isLoading(state) {
@@ -95259,8 +95258,8 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
     authError: function authError(state) {
       return state.auth_error;
     },
-    divisa: function divisa(state) {
-      return state.divisa;
+    permissions: function permissions(state) {
+      return state.permissions;
     }
   },
   mutations: {
@@ -95292,17 +95291,20 @@ var user = Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["getLocalUser"])();
       state.isLoggeIn = false;
       state.currentUser = null;
     },
-    stateDivisa: function stateDivisa(state, payload) {
-      state.divisa = payload;
+    updatePermissions: function updatePermissions(state, payload) {
+      state.permissions = payload;
+      console.log(state.permissions);
+      localStorage.setItem("permissions", JSON.stringify(state.permissions));
     }
   },
   actions: {
     login: function login(context) {
       context.commit("login");
     },
-    getCustomers: function getCustomers(context) {
-      axios.get('/api/customers').then(function (response) {
-        context.commit('updateCustomers', response.data.customers);
+    getPermissions: function getPermissions(context) {
+      axios.get('/api/auth/permisos').then(function (response) {
+        // console.log(response.data)
+        context.commit('updatePermissions', response.data);
       });
     } //     loginUser({}, user){
     //     axios.post("/api/auth/login",{

@@ -118,9 +118,9 @@ export default {
 
             login(this.$data.user)
                 .then(response => {
-                    console.log('d'+ response);
-                
+                    console.log(response);
                     this.$store.commit("loginSuccess", response);
+                    this.$store.dispatch('getPermissions');
                     // location.reload();     
                     toastr["success"]("Validación exitosa..!!", "Inicio de Sesión",
                     {

@@ -55,6 +55,8 @@ import BtnDivisaComponentVue from '../../components/divisas/BtnDivisaComponent';
 import ModalDivisaComponentVue from '../../components/divisas/ModalDivisaComponent';
 import DataTableCurrencyCell from '../../components/datatable/DataTableCurrencyCell';
 Vue.use(DataTable);
+import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
+Vue.use(LaravelPermissionToVueJS);
 // // Import component
 // import Loading from 'vue-loading-overlay';
 // // Import stylesheet
