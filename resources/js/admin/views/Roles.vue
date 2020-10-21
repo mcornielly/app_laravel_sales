@@ -44,9 +44,8 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 Vue.use(DataTable);
 // Import component
-// grac
-
 export default {
+    name: 'app-roles',
     components:{
         // Loading
     },

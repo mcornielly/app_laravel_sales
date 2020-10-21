@@ -65,6 +65,7 @@ Vue.use(LaravelPermissionToVueJS);
 // import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
+    name: 'divisa-app',
     components:{
         BtnDivisaComponentVue,
         DataTableCurrencyCell,

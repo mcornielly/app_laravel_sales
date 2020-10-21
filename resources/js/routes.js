@@ -1,5 +1,6 @@
 import Dashboard from "./admin/views/Dashboard";
 import Login from "./auth/Login";
+// import RolesIndex from './admin/views/roles/Index.vue';
 
 export const routes = [
     {
@@ -78,10 +79,24 @@ export const routes = [
         name: 'users',
         component: require('./admin/views/Users').default,
     },
+    // {
+    //     path: '/roles',
+    //     name: 'roles',
+    //     component: require('./admin/views/Roles').default,
+    // },
     {
         path: '/roles',
         name: 'roles',
-        component: require('./admin/views/Roles').default,
+        component: require('./admin/views/roles/Index').default,
+        meta: {
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: require('./admin/views/roles/List').default,
+            }
+        ]
     },
     {
         path: '/403',

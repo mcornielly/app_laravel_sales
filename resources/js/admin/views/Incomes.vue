@@ -238,6 +238,7 @@ import jsPDF from 'jspdf'
 // import html2canvas from 'html2canvas'
 
 export default {
+    name: 'income-app',
     components:{
         BtnIncomesComponentVue,
         StatusComponentVue,
