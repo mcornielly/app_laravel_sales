@@ -4,6 +4,7 @@ use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -17,9 +18,26 @@ class UsersTableSeeder extends Seeder
         Role::truncate();
         User::truncate();
 
+        // Super Admin
         $adminRole = Role::create(['name' => 'admin', 'display_name' => 'Administrador']);
+        $adminRole->givePermissionTo(['create divisa','view divisa','detail divisa','update divisa','delete divisa']);
+        $adminRole->givePermissionTo(['create category','view category','detail category','update category','delete category']);
+        $adminRole->givePermissionTo(['create product','view product','detail product','update product','delete product']);
+        $adminRole->givePermissionTo(['create income','view income','detail income','update income','delete income']);
+        $adminRole->givePermissionTo(['create provider','view provider','detail provider','update provider','delete provider']);
+        $adminRole->givePermissionTo(['create sale','view sale','detail sale','update sale','delete sale']);
+        $adminRole->givePermissionTo(['create customer','view customer','detail customer','update customer','delete customer']);
+        
+        // Vendedor
         $salerRole = Role::create(['name' => 'saler', 'display_name' => 'Vendedor']);
+        $salerRole->givePermissionTo(['create sale','view sale','detail sale','update sale','delete sale']);
+        $salerRole->givePermissionTo(['create customer','view customer','detail customer','update customer','delete customer']);
+        
+        // Almacén
         $storerRole = Role::create(['name' => 'storage', 'display_name' => 'Almacen']);
+        $storerRole->givePermissionTo(['create category','view category','detail category','update category','delete category']);
+        $storerRole->givePermissionTo(['create product','view product','detail product','update product','delete product']);
+        $storerRole->givePermissionTo(['create income','view income','detail income','update income','delete income']);
 
         $admin = new User;
         $admin->name = "Miguel Angel Cornielly";
@@ -28,6 +46,7 @@ class UsersTableSeeder extends Seeder
         $admin->save();
 
         $admin->assignRole($adminRole);
+        
 
         $saler = new User;
         $saler->name = "Joshua Miguel Cornielly";

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         $this->call([
+            PermissionsTableSeeder::class,
             UsersTableSeeder::class, 
             CategoriesTableSeeder::class,
             ProductsTableSeeder::class,
@@ -22,7 +23,6 @@ class DatabaseSeeder extends Seeder
             ProvidersTableSeeder::class,
             SalesTableSeeder::class,
             IncomeTableSeeder::class,
-            PermissionsTableSeeder::class,
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
