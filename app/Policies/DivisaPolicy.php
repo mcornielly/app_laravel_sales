@@ -16,7 +16,6 @@ class DivisaPolicy
         {
             return true;
         }
-        // return false;
     }
 
     /**
@@ -86,7 +85,7 @@ class DivisaPolicy
      */
     public function restore(User $user, Divisa $divisa)
     {
-        //
+        return $user->hasRole('admin') || $user->hasPermissionTo('restore divisa');
     }
 
     /**

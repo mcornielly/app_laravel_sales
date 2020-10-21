@@ -16,8 +16,10 @@ class CustomersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Customer $customer, Request $request)
     {
+        $this->authorize('view', $customer);
+
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir');
@@ -70,8 +72,10 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Customer $customer, Request $request)
     {
+        $this->authorize('create', $customer);
+        
         $valido = $this->validate($request,[
             'name' => 'required|min:3|unique:customers',
             'type_document' => 'required',
@@ -120,8 +124,10 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Customer $customer, Request $request, $id)
     {
+        $this->authorize('update', $customer);
+
         $valido = $this->validate($request,[
             'name' => 'required|unique:customers,name,'. $request->id,
             'type_document' => 'required',

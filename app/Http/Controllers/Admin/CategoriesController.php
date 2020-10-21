@@ -16,8 +16,9 @@ class CategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Category $category, Request $request)
     {
+        $this->authorize('view', $category);
         //Propiedades del DataTble
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
@@ -61,8 +62,10 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Category $category, Request $request)
     {
+        $this->authorize('create', $category);
+
         $valido = $this->validate($request,[
             'name' => 'required',
             'description' => 'required'
@@ -111,6 +114,8 @@ class CategoriesController extends Controller
      */
     public function update(Category $category, Request $request, $id)
     {
+        $this->authorize('update', $category);
+
         $valido = $this->validate($request,[
             'name' => 'required',
             'description' => 'required'
@@ -140,6 +145,8 @@ class CategoriesController extends Controller
      */
     public function destroy(Category $category, $id)
     {
+        $this->authorize('delete', $category);
+
         $category = Category::findOrFail($id);
         $category->status = '0';
         $category->save();
@@ -152,8 +159,10 @@ class CategoriesController extends Controller
         }
     }
 
-    public function restore($id)
+    public function restore(Category $category, $id)
     {
+        $this->authorize('restore', $category);
+
         $category = Category::withTrashed()->find($id); 
         $category->status = '1';
         $category->save();

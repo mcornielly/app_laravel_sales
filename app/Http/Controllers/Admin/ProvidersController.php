@@ -16,8 +16,9 @@ class ProvidersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Provider $provider, Request $request)
     {
+        $this->authorize('view', $provider);
 
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
@@ -39,16 +40,12 @@ class ProvidersController extends Controller
         ->orderBy($orderBy, $orderBydir)
         ->paginate($length);
 
-
         if(request()->wantsJson())
         {
             // $data = $query->paginate($length);         
             return new DataTableCollectionResource($data);
         }
 
-        $customers = $query;
-
-        return view('admin.providers.index', compact('providers'));
     }
 
     /**
@@ -67,8 +64,9 @@ class ProvidersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Provider $provider, Request $request)
     {
+        $this->authorize('create', $provider);
 
         $valido = $this->validate($request,[
             'name' => 'required|min:3|unique:customers',
@@ -132,10 +130,10 @@ class ProvidersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Provider $provider, Request $request, $id)
     {
+        $this->authorize('update', $provider);
         // return $request->all();
-
         $valido = $this->validate($request,[
             'name' => 'required|unique:customers,name,'. $request->customer_id,
             'type_document' => 'required',
@@ -188,7 +186,6 @@ class ProvidersController extends Controller
         // $providers = Provider::join('customers', 'providers.id', 'customers.id')
         //                 ->select('customers.id', 'customers.name', 'customers.num_document')
         //                 ->get();
-
         
         if(request()->wantsJson())
         {

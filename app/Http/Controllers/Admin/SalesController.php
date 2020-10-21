@@ -15,8 +15,9 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Sale $sale, Request $request)
     {
+        $this->authorize('view', $sale);
         //Propiedades del DataTble
         $searchValue = $request->input('search');
         $orderBy = $request->input('column'); //Index
@@ -97,8 +98,10 @@ class SalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Sale $sale, Request $request)
     {
+        $this->authorize('create', $sale);
+        
         $sale = new Sale;
         $sale->customer_id = $request->customer_id;
         $sale->user_id = $request->user_id;
@@ -186,8 +189,10 @@ class SalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Sale $sale, $id)
     {
+        $this->authorize('delete', $sale);
+
         $sale = Sale::findOrFail($id);
         $sale->status = '0';
         $sale->save();

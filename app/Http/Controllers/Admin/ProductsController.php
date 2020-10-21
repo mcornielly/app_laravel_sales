@@ -17,8 +17,9 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Product $product, Request $request)
     {
+        $this->authorize('view', $product);
         //Propiedades del DataTble
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
@@ -73,25 +74,19 @@ class ProductsController extends Controller
 
     public function validate_step(Request $request)
     {
-
         $this->validate($request, [
             'name' => 'required|min:3|unique:products',
             'category_id' => 'required|numeric|min:1',
             'description' => 'required',
         ]);
-
     }
-
 
     public function validate_code(Request $request)
     {
-
         $this->validate($request, [
             'code' => 'required|numeric|min:13|unique:products',
         ]);
-
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -99,8 +94,9 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Product $product, StoreProductRequest $request)
     {
+        $this->authorize('create', $product);
         
         $product = Product::create($request->all());
         // $product = new Product;
@@ -188,6 +184,7 @@ class ProductsController extends Controller
      */
     public function update(Request $request,Product $product, $id)
     {
+        $this->authorize('update', $product);
         // return $request->all();
         // $data = $request->all();
         $data = $this->validate($request,[
@@ -235,6 +232,8 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product, $id)
     {
+        $this->authorize('delete', $product);
+
         $product = Product::find($id);
         $product->status = '0';
         $product->save();
@@ -247,18 +246,20 @@ class ProductsController extends Controller
         }
     }
 
-    public function restore($id)
+    public function restore(Product $product, $id)
     {
-       $product = Product::withTrashed()->find($id); 
-       $product->status = '1';
-       $product->save();
-       $product->restore();
+        $this->authorize('restore', $product);
 
-       if(request()->wantsJson())
-       {
-           return $product;
-  
-       }
+        $product = Product::withTrashed()->find($id); 
+        $product->status = '1';
+        $product->save();
+        $product->restore();
+
+        if(request()->wantsJson())
+        {
+            return $product;
+    
+        }
     }
 
     public function last_id()

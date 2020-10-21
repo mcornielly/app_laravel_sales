@@ -19,9 +19,9 @@ class IncomesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Income $income, Request $request)
     {
-        
+        $this->authorize('view', $income);
         //Propiedades del DataTble
         $searchValue = $request->input('search');
         $orderBy = $request->input('column'); //Index
@@ -129,8 +129,10 @@ class IncomesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Income $income, Request $request)
     {
+        $this->authorize('create', $income);
+
         $income = new Income;
         $income->provider_id = $request->provider_id;
         $income->user_id = $request->user_id;
@@ -211,8 +213,10 @@ class IncomesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Income $income, $id)
     {
+        $this->authorize('view', $income);
+        
         $income = Income::findOrFail($id);
         $income->status = '0';
         $income->save();
