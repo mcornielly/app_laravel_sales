@@ -13078,6 +13078,7 @@ __webpack_require__.r(__webpack_exports__);
   name: "dashboard-app",
   mounted: function mounted() {
     this.getData();
+    var Laravel = window.Laravel.user;
   },
   data: function data() {
     return {
@@ -13328,6 +13329,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -13398,20 +13401,24 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_permission_to_vuejs__WEBP
 
     };
   },
-  created: function created() {
-    $("body").removeClass("login-page");
-    $("body").addClass("sidebar-mini");
+  mounted: function mounted() {
+    // $("body").removeClass("login-page");
+    // $("body").addClass("sidebar-mini");
     this.getData(this.url);
   },
   computed: {
-    // user(){
-    //     let user = document.head.querySelector('meta[name="user"]');
-    //     return JSON.parse(user.content);
-    // },
+    laravel: function laravel() {
+      var Laravel = window.Laravel.user;
+      return Laravel;
+    },
     currentUser: function currentUser() {
       console.log(this.$store.getters.currentUser);
       return this.$store.getters.currentUser;
-    }
+    } // user(){
+    //     let user = document.head.querySelector('meta[name="user"]');
+    //     return JSON.parse(user.content);
+    // },
+
   },
   methods: {
     getData: function getData() {
@@ -16250,9 +16257,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$store.commit("loginSuccess", response);
 
-        _this.$store.dispatch('getPermissions'); // location.reload();     
+        _this.$store.dispatch('getPermissions');
 
-
+        location.reload();
         toastr["success"]("Validación exitosa..!!", "Inicio de Sesión", {
           "progressBar": true,
           "showDuration": "1000",
@@ -17078,6 +17085,12 @@ __webpack_require__.r(__webpack_exports__);
     click: {},
     meta: {},
     classes: {}
+  },
+  computed: {
+    laravel: function laravel() {
+      var Laravel = window.Laravel.user;
+      return Laravel;
+    }
   }
 });
 
@@ -60808,7 +60821,7 @@ var render = function() {
             _c("div", { staticClass: "card-header" }, [
               _vm._m(0),
               _vm._v(" "),
-              _vm.can("create divisa")
+              _vm.laravel.can["create divisa"]
                 ? _c("div", [
                     _c(
                       "a",
@@ -60834,7 +60847,9 @@ var render = function() {
                           },
                           [_vm._v(" ")]
                         ),
-                        _vm._v(" Nuevo Precio")
+                        _vm._v(
+                          "\n                            Nueva Cotización\n                        "
+                        )
                       ]
                     )
                   ])
@@ -64077,32 +64092,34 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "a",
-      {
-        staticClass: "btn btn-link btn-sm",
-        attrs: {
-          href: "#",
-          title: "editar",
-          type: "button",
-          "data-toggle": "modal",
-          "data-target": "#modal-divisas"
-        },
-        on: {
-          click: function($event) {
-            return _vm.click(_vm.data)
-          }
-        }
-      },
-      [
-        _c("i", {
-          staticClass: "fas fa-edit text-primary",
-          attrs: { "aria-hidden": "true" }
-        })
-      ]
-    )
-  ])
+  return _vm.laravel.can["update divisa"]
+    ? _c("div", [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-link btn-sm",
+            attrs: {
+              href: "#",
+              title: "editar",
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-divisas"
+            },
+            on: {
+              click: function($event) {
+                return _vm.click(_vm.data)
+              }
+            }
+          },
+          [
+            _c("i", {
+              staticClass: "fas fa-edit text-primary",
+              attrs: { "aria-hidden": "true" }
+            })
+          ]
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -91856,7 +91873,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-the-mask */ "./node_modules/vue-the-mask/dist/vue-the-mask.js");
 /* harmony import */ var vue_the_mask__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_the_mask__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! laravel-permission-to-vuejs */ "./node_modules/laravel-permission-to-vuejs/index.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -91868,9 +91884,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+ // import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
+// Vue.use(LaravelPermissionToVueJS);
 
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_10__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_8___default.a, {
   color: 'rgb(143, 255, 58)',
   failedColor: 'red',
@@ -92078,6 +92094,7 @@ try {// window.Popper = require('popper.js').default;
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var user = document.head.querySelector('meta[name="user"]');
+console.log(user);
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -92788,14 +92805,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************************************!*\
   !*** ./resources/js/components/divisas/BtnDivisaComponent.vue ***!
   \****************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BtnDivisaComponent_vue_vue_type_template_id_8ab2bc30___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BtnDivisaComponent.vue?vue&type=template&id=8ab2bc30& */ "./resources/js/components/divisas/BtnDivisaComponent.vue?vue&type=template&id=8ab2bc30&");
 /* harmony import */ var _BtnDivisaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BtnDivisaComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/divisas/BtnDivisaComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _BtnDivisaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _BtnDivisaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -92825,7 +92843,7 @@ component.options.__file = "resources/js/components/divisas/BtnDivisaComponent.v
 /*!*****************************************************************************************!*\
   !*** ./resources/js/components/divisas/BtnDivisaComponent.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

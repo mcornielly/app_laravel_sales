@@ -10,11 +10,12 @@ use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
+// use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable, LaravelVueDatatableTrait, HasRoles, LaravelPermissionToVueJS;
+    // use Notifiable, LaravelVueDatatableTrait, HasRoles, LaravelPermissionToVueJS;
+    use Notifiable, LaravelVueDatatableTrait, HasRoles;
 
     protected $guard_name = 'api';
 
@@ -71,15 +72,19 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAllPermissionsAttribute()
     {
-        $permissions = [];
-        foreach (Permission::all() as $permission) {
-          if (Auth::user()->can($permission->name)) {
-            $permissions[] = $permission->name;
-          }
-        }
-
-        return $permissions;
+        return $this->getAllPermissions();
     }
+    // public function getAllPermissionsAttribute()
+    // {
+    //     $permissions = [];
+    //     foreach (Permission::all() as $permission) {
+    //       if (Auth::user()->can($permission->name)) {
+    //         $permissions[] = $permission->name;
+    //       }
+    //     }
+
+    //     return $permissions;
+    // }
 
     /**
      * Get all user permissions in a flat array.
@@ -119,12 +124,12 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function jsPermissions()
-    {
-        return json_encode([
-                'roles' => $this->getRoleNames(),
-                'permissions' => $this->getAllPermissions()->pluck('name'),
-            ]);
-    }
+    // public function jsPermissions()
+    // {
+    //     return json_encode([
+    //             'roles' => $this->getRoleNames(),
+    //             'permissions' => $this->getAllPermissions()->pluck('name'),
+    //         ]);
+    // }
 
 }

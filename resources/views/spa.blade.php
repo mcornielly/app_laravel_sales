@@ -42,8 +42,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     // console.log(json_encode(Auth::user()->allPermissions()))
     window.Laravel = {
         csrfToken: "{{ csrf_token() }}",
-        jsPermissions: JSON.parse(localStorage.getItem('permissions'))
-        // Json.parse('localStorage.getItem('user')')
+        user: JSON.parse(localStorage.getItem('user'))
+        // jsPermissions: JSON.parse(localStorage.getItem('permissions'))
         // jsPermissions: {{ Auth::user() }}
     }
     console.log(window.Laravel)

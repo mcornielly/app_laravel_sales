@@ -10,8 +10,8 @@ import {initialize} from  './helpers/general'
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import VueProgressBar from 'vue-progressbar'
 import VueTheMask from 'vue-the-mask'
-import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
-Vue.use(LaravelPermissionToVueJS);
+// import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
+// Vue.use(LaravelPermissionToVueJS);
 
 
 Vue.use(VueProgressBar, {

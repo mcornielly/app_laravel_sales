@@ -8,8 +8,10 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> Cotización de la Divisa</h3>
-                        <div v-if="can('create divisa')">
-                            <a href="#" @click="createDivisa()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a>
+                        <div v-if="laravel.can['create divisa']">
+                            <a href="#" @click="createDivisa()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i>
+                                Nueva Cotización
+                            </a>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -124,23 +126,26 @@ export default {
             ],
             selectedRow: {},
             // isLoading: false
-
         }
     },
-    created(){
-        $("body").removeClass("login-page");
-        $("body").addClass("sidebar-mini");
+    mounted(){
+        // $("body").removeClass("login-page");
+        // $("body").addClass("sidebar-mini");
         this.getData(this.url);
     },
     computed:{
-        // user(){
-        //     let user = document.head.querySelector('meta[name="user"]');
-        //     return JSON.parse(user.content);
-        // },
+        laravel(){
+            let Laravel = window.Laravel.user;
+            return Laravel;
+        },
         currentUser() {
             console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
         }
+        // user(){
+        //     let user = document.head.querySelector('meta[name="user"]');
+        //     return JSON.parse(user.content);
+        // },
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {

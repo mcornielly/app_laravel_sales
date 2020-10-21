@@ -163,6 +163,7 @@ export default {
     name: "dashboard-app",
     mounted(){
         this.getData();
+        let Laravel = window.Laravel.user;
     },
     data(){
         return {

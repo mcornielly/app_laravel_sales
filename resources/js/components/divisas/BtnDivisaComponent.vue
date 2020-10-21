@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="laravel.can['update divisa']">
         <a href="#"
             title="editar"
             type="button"
@@ -20,6 +20,12 @@ export default {
         click: {},
         meta: {},
         classes: {}
+    },
+    computed:{
+        laravel(){
+            let Laravel = window.Laravel.user;
+            return Laravel;
+        },
     }  
 }
 </script>

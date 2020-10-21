@@ -9,7 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "ahmedsaoud31/laravel-permission-to-vuejs": "dev-master",
         "barryvdh/laravel-dompdf": "^0.8.6",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",

@@ -23,6 +23,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 let user = document.head.querySelector('meta[name="user"]');
+console.log(user)
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

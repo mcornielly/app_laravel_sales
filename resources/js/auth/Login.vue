@@ -121,7 +121,7 @@ export default {
                     console.log(response);
                     this.$store.commit("loginSuccess", response);
                     this.$store.dispatch('getPermissions');
-                    // location.reload();     
+                    location.reload();     
                     toastr["success"]("Validación exitosa..!!", "Inicio de Sesión",
                     {
                         "progressBar": true,
