@@ -13,10 +13,15 @@
 </template>
 <script>
 import Vue from 'vue';
+import BtnRolComponentVue from '../../../components/roles/BtnRolComponent';
 import DataTable from 'laravel-vue-datatable';
 Vue.use(DataTable);
 
 export default {
+    name: 'role-list-app',
+    component:{
+        BtnRolComponentVue
+    },
     data(){
         return {
             url:"api/auth/roles",
@@ -55,7 +60,7 @@ export default {
                     orderable: false,
                     event: "click",
                     component: BtnRolComponentVue,     
-                    handler: this.editDivisa,
+                    handler: this.action,
                 },
             ],
             selectedRow: {},

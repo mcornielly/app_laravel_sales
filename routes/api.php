@@ -35,7 +35,9 @@ Route::group(['prefix' => 'auth'], function ($router) {
             Route::post('usuario', 'Admin\UsersController@store');
             Route::put('usuario/{usuario}', 'Admin\UsersController@update');
             //Roles
-            Route::get('roles', 'Admin\RolesController@index');
+            Route::resource('roles', 'Admin\RolesController');
+            // Route::get('roles', 'Admin\RolesController@index');
+            // Route::get('roles/', 'Admin\RolesController@show');
         });
 
     });

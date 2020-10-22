@@ -95,6 +95,10 @@ export const routes = [
             {
                 path: '/',
                 component: require('./admin/views/roles/List').default,
+            },
+            {
+                path: '/:id',
+                component: require('./admin/views/roles/View').default,
             }
         ]
     },
