@@ -1,5 +1,5 @@
 <template>
-    <div class="customer-info" v-if="customer">
+    <div class="customer-info" v-if="rol">
         <div class="user-img">
             <img src="" alt="">
         </div>
@@ -22,7 +22,7 @@
                     <td>{{ rol.created_at }}</td>
                 </tr>
             </table>
-            <router-link to="/customers">Volver</router-link>
+            <router-link to="/roles">Volver</router-link>
         </div>
     </div>
 </template>
@@ -35,7 +35,7 @@
         },
         data() {
             return {
-                url:'api/auth/roles/',
+                url:'api/auth/roles',
                 rol: null
             }
         },
@@ -46,7 +46,8 @@
         },
         methods:{
             showRol(){
-                let url = `${this.url}/${this.$route.params.id}`
+                let url = `api/auth/roles/${this.$route.params.role}`
+                console.log(url)
                 axios.get(url,{
                     headers: {
                         "Authorization": `Bearer ${this.currentUser.token}` 

@@ -1,6 +1,6 @@
 import Dashboard from "./admin/views/Dashboard";
 import Login from "./auth/Login";
-// import RolesIndex from './admin/views/roles/Index.vue';
+import RolView from './admin/views/roles/View';
 
 export const routes = [
     {
@@ -97,8 +97,10 @@ export const routes = [
                 component: require('./admin/views/roles/List').default,
             },
             {
-                path: '/:id',
-                component: require('./admin/views/roles/View').default,
+                path: ':role',
+                name: 'roleitem',
+                component: RolView,
+                props: true
             }
         ]
     },

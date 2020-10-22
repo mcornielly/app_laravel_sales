@@ -2,7 +2,7 @@
     <div>
         <router-link 
             title="ver"
-            :to="`/roles/${data.id}`"
+            :to="{name: 'roleitem', params: {role:data.id}}"
             class="btn btn-link btn-sm"
         >
             <i class="fas fa-eye text-success" aria-hidden="true"></i>

@@ -16135,7 +16135,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      url: 'api/auth/roles/',
+      url: 'api/auth/roles',
       rol: null
     };
   },
@@ -16148,7 +16148,8 @@ __webpack_require__.r(__webpack_exports__);
     showRol: function showRol() {
       var _this = this;
 
-      var url = "".concat(this.url, "/").concat(this.$route.params.id);
+      var url = "api/auth/roles/".concat(this.$route.params.role);
+      console.log(url);
       axios.get(url, {
         headers: {
           "Authorization": "Bearer ".concat(this.currentUser.token)
@@ -62813,7 +62814,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.customer
+  return _vm.rol
     ? _c("div", { staticClass: "customer-info" }, [
         _vm._m(0),
         _vm._v(" "),
@@ -62847,9 +62848,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("router-link", { attrs: { to: "/customers" } }, [
-              _vm._v("Volver")
-            ])
+            _c("router-link", { attrs: { to: "/roles" } }, [_vm._v("Volver")])
           ],
           1
         )
@@ -72141,7 +72140,10 @@ var render = function() {
         "router-link",
         {
           staticClass: "btn btn-link btn-sm",
-          attrs: { title: "ver", to: "/roles/" + _vm.data.id }
+          attrs: {
+            title: "ver",
+            to: { name: "roleitem", params: { role: _vm.data.id } }
+          }
         },
         [
           _c("i", {
@@ -95570,8 +95572,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return routes; });
 /* harmony import */ var _admin_views_Dashboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin/views/Dashboard */ "./resources/js/admin/views/Dashboard.vue");
 /* harmony import */ var _auth_Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth/Login */ "./resources/js/auth/Login.vue");
+/* harmony import */ var _admin_views_roles_View__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./admin/views/roles/View */ "./resources/js/admin/views/roles/View.vue");
 
- // import RolesIndex from './admin/views/roles/Index.vue';
+
 
 var routes = [{
   path: "/login",
@@ -95654,8 +95657,10 @@ var routes = [{
     path: '/',
     component: __webpack_require__(/*! ./admin/views/roles/List */ "./resources/js/admin/views/roles/List.vue")["default"]
   }, {
-    path: '/:id',
-    component: __webpack_require__(/*! ./admin/views/roles/View */ "./resources/js/admin/views/roles/View.vue")["default"]
+    path: ':role',
+    name: 'roleitem',
+    component: _admin_views_roles_View__WEBPACK_IMPORTED_MODULE_2__["default"],
+    props: true
   }]
 }, {
   path: '/403',
