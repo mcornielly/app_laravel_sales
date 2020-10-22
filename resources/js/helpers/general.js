@@ -29,7 +29,8 @@ export function initialize(store, router) {
             store.commit("logout");
             router.push("/login");
         }else{
-            router.push("*"); 
+            return Promise.reject(error);
+            // router.push("*"); 
         }
         
         // if((error.response.status = 401)){

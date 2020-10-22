@@ -57,7 +57,7 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role, Request $request, $id)
+    public function show(Request $request, Role $role, $id)
     {
         return $request->all();
     }

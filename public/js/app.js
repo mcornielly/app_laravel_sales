@@ -13278,7 +13278,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_divisas_BtnDivisaComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/divisas/BtnDivisaComponent */ "./resources/js/components/divisas/BtnDivisaComponent.vue");
 /* harmony import */ var _components_divisas_ModalDivisaComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/divisas/ModalDivisaComponent */ "./resources/js/components/divisas/ModalDivisaComponent.vue");
 /* harmony import */ var _components_datatable_DataTableCurrencyCell__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/datatable/DataTableCurrencyCell */ "./resources/js/components/datatable/DataTableCurrencyCell.vue");
-/* harmony import */ var laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! laravel-permission-to-vuejs */ "./node_modules/laravel-permission-to-vuejs/index.js");
 //
 //
 //
@@ -13336,9 +13335,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a);
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_permission_to_vuejs__WEBPACK_IMPORTED_MODULE_5__["default"]); // // Import component
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IMPORTED_MODULE_1___default.a); // import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
+// Vue.use(LaravelPermissionToVueJS);
+// // Import component
 // import Loading from 'vue-loading-overlay';
 // // Import stylesheet
 // import 'vue-loading-overlay/dist/vue-loading.css';
@@ -15961,12 +15960,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-index-app',
   data: function data() {
     return {
       titlePage: 'Roles',
-      routePage: 'Roles'
+      routePage: 'Roles',
+      titleCard: 'Lista Roles'
     };
   }
 });
@@ -16128,16 +16130,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-view-app',
-  created: function created() {
-    this.showRol();
-  },
   data: function data() {
     return {
-      url: 'api/auth/roles',
+      url: '/api/auth/roles',
+      titleCard: 'Detalle Rol',
       rol: null
     };
+  },
+  created: function created() {
+    this.showRol();
+    this.$emit('title', this.titleCard);
   },
   computed: {
     currentUser: function currentUser() {
@@ -16148,12 +16153,11 @@ __webpack_require__.r(__webpack_exports__);
     showRol: function showRol() {
       var _this = this;
 
-      var url = "api/auth/roles/".concat(this.$route.params.role);
+      var url = "/api/auth/roles/".concat(this.$route.params.role);
       console.log(url);
-      axios.get(url, {
-        headers: {
-          "Authorization": "Bearer ".concat(this.currentUser.token)
-        }
+      axios.get(url, {// headers: {
+        //     "Authorization": `Bearer ${this.currentUser.token}` 
+        // } 
       }).then(function (response) {
         console.log(response);
         _this.rol = response.data.role;
@@ -32654,71 +32658,6 @@ Nt="undefined"!=typeof self&&self||"undefined"!=typeof window&&window||"undefine
    */
 var Pt=function(){function t(){this.pos=0,this.bufferLength=0,this.eof=!1,this.buffer=null}return t.prototype={ensureBuffer:function(t){var e=this.buffer,n=e?e.byteLength:0;if(t<n)return e;for(var r=512;r<t;)r<<=1;for(var i=new Uint8Array(r),o=0;o<n;++o)i[o]=e[o];return this.buffer=i},getByte:function(){for(var t=this.pos;this.bufferLength<=t;){if(this.eof)return null;this.readBlock()}return this.buffer[this.pos++]},getBytes:function(t){var e=this.pos;if(t){this.ensureBuffer(e+t);for(var n=e+t;!this.eof&&this.bufferLength<n;)this.readBlock();var r=this.bufferLength;r<n&&(n=r)}else{for(;!this.eof;)this.readBlock();n=this.bufferLength}return this.pos=n,this.buffer.subarray(e,n)},lookChar:function(){for(var t=this.pos;this.bufferLength<=t;){if(this.eof)return null;this.readBlock()}return String.fromCharCode(this.buffer[this.pos])},getChar:function(){for(var t=this.pos;this.bufferLength<=t;){if(this.eof)return null;this.readBlock()}return String.fromCharCode(this.buffer[this.pos++])},makeSubStream:function(t,e,n){for(var r=t+e;this.bufferLength<=r&&!this.eof;)this.readBlock();return new Stream(this.buffer,t,e,n)},skip:function(t){t||(t=1),this.pos+=t},reset:function(){this.pos=0}},t}(),kt=function(){if("undefined"!=typeof Uint32Array){var k=new Uint32Array([16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15]),I=new Uint32Array([3,4,5,6,7,8,9,10,65547,65549,65551,65553,131091,131095,131099,131103,196643,196651,196659,196667,262211,262227,262243,262259,327811,327843,327875,327907,258,258,258]),C=new Uint32Array([1,2,3,4,65541,65543,131081,131085,196625,196633,262177,262193,327745,327777,393345,393409,459009,459137,524801,525057,590849,591361,657409,658433,724993,727041,794625,798721,868353,876545]),B=[new Uint32Array([459008,524368,524304,524568,459024,524400,524336,590016,459016,524384,524320,589984,524288,524416,524352,590048,459012,524376,524312,589968,459028,524408,524344,590032,459020,524392,524328,59e4,524296,524424,524360,590064,459010,524372,524308,524572,459026,524404,524340,590024,459018,524388,524324,589992,524292,524420,524356,590056,459014,524380,524316,589976,459030,524412,524348,590040,459022,524396,524332,590008,524300,524428,524364,590072,459009,524370,524306,524570,459025,524402,524338,590020,459017,524386,524322,589988,524290,524418,524354,590052,459013,524378,524314,589972,459029,524410,524346,590036,459021,524394,524330,590004,524298,524426,524362,590068,459011,524374,524310,524574,459027,524406,524342,590028,459019,524390,524326,589996,524294,524422,524358,590060,459015,524382,524318,589980,459031,524414,524350,590044,459023,524398,524334,590012,524302,524430,524366,590076,459008,524369,524305,524569,459024,524401,524337,590018,459016,524385,524321,589986,524289,524417,524353,590050,459012,524377,524313,589970,459028,524409,524345,590034,459020,524393,524329,590002,524297,524425,524361,590066,459010,524373,524309,524573,459026,524405,524341,590026,459018,524389,524325,589994,524293,524421,524357,590058,459014,524381,524317,589978,459030,524413,524349,590042,459022,524397,524333,590010,524301,524429,524365,590074,459009,524371,524307,524571,459025,524403,524339,590022,459017,524387,524323,589990,524291,524419,524355,590054,459013,524379,524315,589974,459029,524411,524347,590038,459021,524395,524331,590006,524299,524427,524363,590070,459011,524375,524311,524575,459027,524407,524343,590030,459019,524391,524327,589998,524295,524423,524359,590062,459015,524383,524319,589982,459031,524415,524351,590046,459023,524399,524335,590014,524303,524431,524367,590078,459008,524368,524304,524568,459024,524400,524336,590017,459016,524384,524320,589985,524288,524416,524352,590049,459012,524376,524312,589969,459028,524408,524344,590033,459020,524392,524328,590001,524296,524424,524360,590065,459010,524372,524308,524572,459026,524404,524340,590025,459018,524388,524324,589993,524292,524420,524356,590057,459014,524380,524316,589977,459030,524412,524348,590041,459022,524396,524332,590009,524300,524428,524364,590073,459009,524370,524306,524570,459025,524402,524338,590021,459017,524386,524322,589989,524290,524418,524354,590053,459013,524378,524314,589973,459029,524410,524346,590037,459021,524394,524330,590005,524298,524426,524362,590069,459011,524374,524310,524574,459027,524406,524342,590029,459019,524390,524326,589997,524294,524422,524358,590061,459015,524382,524318,589981,459031,524414,524350,590045,459023,524398,524334,590013,524302,524430,524366,590077,459008,524369,524305,524569,459024,524401,524337,590019,459016,524385,524321,589987,524289,524417,524353,590051,459012,524377,524313,589971,459028,524409,524345,590035,459020,524393,524329,590003,524297,524425,524361,590067,459010,524373,524309,524573,459026,524405,524341,590027,459018,524389,524325,589995,524293,524421,524357,590059,459014,524381,524317,589979,459030,524413,524349,590043,459022,524397,524333,590011,524301,524429,524365,590075,459009,524371,524307,524571,459025,524403,524339,590023,459017,524387,524323,589991,524291,524419,524355,590055,459013,524379,524315,589975,459029,524411,524347,590039,459021,524395,524331,590007,524299,524427,524363,590071,459011,524375,524311,524575,459027,524407,524343,590031,459019,524391,524327,589999,524295,524423,524359,590063,459015,524383,524319,589983,459031,524415,524351,590047,459023,524399,524335,590015,524303,524431,524367,590079]),9],j=[new Uint32Array([327680,327696,327688,327704,327684,327700,327692,327708,327682,327698,327690,327706,327686,327702,327694,0,327681,327697,327689,327705,327685,327701,327693,327709,327683,327699,327691,327707,327687,327703,327695,0]),5];return(t.prototype=Object.create(Pt.prototype)).getBits=function(t){for(var e,n=this.codeSize,r=this.codeBuf,i=this.bytes,o=this.bytesPos;n<t;)void 0===(e=i[o++])&&E("Bad encoding in flate stream"),r|=e<<n,n+=8;return e=r&(1<<t)-1,this.codeBuf=r>>t,this.codeSize=n-=t,this.bytesPos=o,e},t.prototype.getCode=function(t){for(var e=t[0],n=t[1],r=this.codeSize,i=this.codeBuf,o=this.bytes,a=this.bytesPos;r<n;){var s;void 0===(s=o[a++])&&E("Bad encoding in flate stream"),i|=s<<r,r+=8}var l=e[i&(1<<n)-1],h=l>>16,u=65535&l;return(0==r||r<h||0==h)&&E("Bad encoding in flate stream"),this.codeBuf=i>>h,this.codeSize=r-h,this.bytesPos=a,u},t.prototype.generateHuffmanTable=function(t){for(var e=t.length,n=0,r=0;r<e;++r)t[r]>n&&(n=t[r]);for(var i=1<<n,o=new Uint32Array(i),a=1,s=0,l=2;a<=n;++a,s<<=1,l<<=1)for(var h=0;h<e;++h)if(t[h]==a){var u=0,c=s;for(r=0;r<a;++r)u=u<<1|1&c,c>>=1;for(r=u;r<i;r+=l)o[r]=a<<16|h;++s}return[o,n]},t.prototype.readBlock=function(){function t(t,e,n,r,i){for(var o=t.getBits(n)+r;0<o--;)e[l++]=i}var e=this.getBits(3);if(1&e&&(this.eof=!0),0!=(e>>=1)){var n,r;if(1==e)n=B,r=j;else if(2==e){for(var i=this.getBits(5)+257,o=this.getBits(5)+1,a=this.getBits(4)+4,s=Array(k.length),l=0;l<a;)s[k[l++]]=this.getBits(3);for(var h=this.generateHuffmanTable(s),u=0,c=(l=0,i+o),f=new Array(c);l<c;){var p=this.getCode(h);16==p?t(this,f,2,3,u):17==p?t(this,f,3,3,u=0):18==p?t(this,f,7,11,u=0):f[l++]=u=p}n=this.generateHuffmanTable(f.slice(0,i)),r=this.generateHuffmanTable(f.slice(i,c))}else E("Unknown block type in flate stream");for(var d=(_=this.buffer)?_.length:0,g=this.bufferLength;;){var m=this.getCode(n);if(m<256)d<=g+1&&(d=(_=this.ensureBuffer(g+1)).length),_[g++]=m;else{if(256==m)return void(this.bufferLength=g);var y=(m=I[m-=257])>>16;0<y&&(y=this.getBits(y));u=(65535&m)+y;m=this.getCode(r),0<(y=(m=C[m])>>16)&&(y=this.getBits(y));var v=(65535&m)+y;d<=g+u&&(d=(_=this.ensureBuffer(g+u)).length);for(var w=0;w<u;++w,++g)_[g]=_[g-v]}}}else{var b,x=this.bytes,N=this.bytesPos;void 0===(b=x[N++])&&E("Bad block header in flate stream");var L=b;void 0===(b=x[N++])&&E("Bad block header in flate stream"),L|=b<<8,void 0===(b=x[N++])&&E("Bad block header in flate stream");var A=b;void 0===(b=x[N++])&&E("Bad block header in flate stream"),(A|=b<<8)!=(65535&~L)&&E("Bad uncompressed block length in flate stream"),this.codeBuf=0,this.codeSize=0;var S=this.bufferLength,_=this.ensureBuffer(S+L),F=S+L;this.bufferLength=F;for(var P=S;P<F;++P){if(void 0===(b=x[N++])){this.eof=!0;break}_[P]=b}this.bytesPos=N}},t}function E(t){throw new Error(t)}function t(t){var e=0,n=t[e++],r=t[e++];-1!=n&&-1!=r||E("Invalid header in flate stream"),8!=(15&n)&&E("Unknown compression method in flate stream"),((n<<8)+r)%31!=0&&E("Bad FCHECK in flate stream"),32&r&&E("FDICT bit set in flate stream"),this.bytes=t,this.bytesPos=2,this.codeSize=0,this.codeBuf=0,Pt.call(this)}}();window.tmp=kt});try{module.exports=jsPDF}catch(t){}
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./node_modules/laravel-permission-to-vuejs/index.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/laravel-permission-to-vuejs/index.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ({
-	install(Vue, options) {
-		Vue.prototype.can = function(value){
-			var permissions = window.Laravel.jsPermissions.permissions;
-			var _return = false;
-			if(!Array.isArray(permissions)){
-				return false;
-			}
-			if(value.includes('|')){
-				value.split('|').forEach(function (item) {
-					if(permissions.includes(item.trim())){
-						_return = true;
-					}
-				});
-			}else if(value.includes('&')){
-				_return = true;
-				value.split('&').forEach(function (item) {
-					if(!permissions.includes(item.trim())){
-						_return = false;
-					}
-				});
-			}else{
-				_return = permissions.includes(value.trim());
-			}
-			return _return;
-		}
-		
-		Vue.prototype.is = function(value){
-			var roles = window.Laravel.jsPermissions.roles;
-			var _return = false;
-			if(!Array.isArray(roles)){
-				return false;
-			}
-			if(value.includes('|')){
-				value.split('|').forEach(function (item) {
-					if(roles.includes(item.trim())){
-						_return = true;
-					}
-				});
-			}else if(value.includes('&')){
-				_return = true;
-				value.split('&').forEach(function (item) {
-					if(!roles.includes(item.trim())){
-						_return = false;
-					}
-				});
-			}else{
-				_return = roles.includes(value.trim());
-			}
-			return _return;
-		}
-	}
-});
 
 /***/ }),
 
@@ -62724,7 +62663,16 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-12" }, [
           _c("div", { staticClass: "card card-primary card-outline" }, [
-            _vm._m(0),
+            _c("div", { staticClass: "card-header" }, [
+              _c("h3", { staticClass: "card-title" }, [
+                _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
+                _vm._v(
+                  " \n                    " +
+                    _vm._s(_vm.titleCard) +
+                    "\n                    "
+                )
+              ])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [[_c("router-view")]], 2)
           ])
@@ -62734,19 +62682,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [
-        _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
-        _vm._v(" Lista Roles")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -62815,44 +62751,50 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.rol
-    ? _c("div", { staticClass: "customer-info" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "user-info" },
-          [
-            _c("table", { staticClass: "table table-striped" }, [
-              _c("tr", [
-                _c("th", [_vm._v("ID")]),
+    ? _c(
+        "div",
+        [
+          _c("template", { slot: "card-title" }, [_vm._v("Detalle Rol")]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "user-info" },
+            [
+              _c("table", { staticClass: "table table-striped" }, [
+                _c("tr", [
+                  _c("th", [_vm._v("ID")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.rol.id))])
+                ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.rol.id))])
+                _c("tr", [
+                  _c("th", [_vm._v("Nick")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.rol.name))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Nombre Rol")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.rol.display_name))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Fecha")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.rol.created_at))])
+                ])
               ]),
               _vm._v(" "),
-              _c("tr", [
-                _c("th", [_vm._v("Nick")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.rol.name))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("th", [_vm._v("Nombre Rol")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.rol.display_name))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("th", [_vm._v("Fecha")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.rol.created_at))])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("router-link", { attrs: { to: "/roles" } }, [_vm._v("Volver")])
-          ],
-          1
-        )
-      ])
+              _c("router-link", { attrs: { to: "/roles" } }, [_vm._v("Volver")])
+            ],
+            1
+          )
+        ],
+        2
+      )
     : _vm._e()
 }
 var staticRenderFns = [
@@ -95540,7 +95482,7 @@ function initialize(store, router) {
       store.commit("logout");
       router.push("/login");
     } else {
-      router.push("*");
+      return Promise.reject(error); // router.push("*"); 
     } // if((error.response.status = 401)){
     //         store.commit("logout");
     //         router.push("/login");
