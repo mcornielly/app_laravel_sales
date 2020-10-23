@@ -4,6 +4,7 @@ namespace App;
 
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -41,5 +42,10 @@ class Role extends Model
     protected $fillable = [
         'name', 'display_name'
     ];
+
+    public function permissions()
+    {
+        return $this->belongsTo(Permission::class);
+    }
 
 }

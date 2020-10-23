@@ -98,10 +98,16 @@ export const routes = [
             },
             {
                 path: ':role',
-                name: 'roleitem',
-                component: RolView,
+                name: 'role-show',
+                component: require('./admin/views/roles/View').default,
                 props: true
-            }
+            },
+            {
+                path: ':role/editar',
+                name: 'role-edit',
+                component:require('./admin/views/roles/Edit').default,
+                props: true
+            }    
         ]
     },
     {
@@ -109,7 +115,7 @@ export const routes = [
         component: require('./admin/views/403').default
     },
     {
-        path: '*',
+        path: '/404',
         component: require('./admin/views/404').default
     }
 ];

@@ -2,7 +2,7 @@
     <div>
         <router-link 
             title="ver"
-            :to="{name: 'roleitem', params: {role:data.id}}"
+            :to="{name: 'role-show', params: {role:data.id}}"
             class="btn btn-link btn-sm"
         >
             <i class="fas fa-eye text-success" aria-hidden="true"></i>
@@ -10,7 +10,7 @@
 
         <router-link 
             title="editar"
-            :to="`/roles/${data.id}`"
+            :to="{name: 'role-edit', params: {role:data.id}}"
             class="btn btn-link btn-sm"
         >
             <i class="fas fa-edit text-primary" aria-hidden="true"></i>

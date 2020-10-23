@@ -57,9 +57,11 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Role $role, $id)
+    public function show(Role $role)
     {
-        return $request->all();
+        if(request()->wantsJson()){
+            return $role;
+        }    
     }
 
     /**
@@ -68,9 +70,11 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        if(request()->wantsJson()){
+            return $role;
+        }  
     }
 
     /**

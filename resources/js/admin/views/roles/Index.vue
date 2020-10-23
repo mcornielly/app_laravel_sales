@@ -33,7 +33,7 @@ export default {
         return {
             titlePage:'Roles',
             routePage:'Roles',
-            titleCard:'Lista Roles'
+            titleCard:'Roles'
         }
     }
 }
