@@ -84,9 +84,19 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Role $role,$request)
     {
-        //
+        $data = $this->validate($request,[
+            'name' => 'required|unique:roles, name' . $request->id,
+            'display_name' => 'required|unique:roles, display_name' . $request->id,
+        ]);
+        
+        $role->update($data);
+
+        if(request()->wantsJson()){
+            return $role;
+        }
+
     }
 
     /**

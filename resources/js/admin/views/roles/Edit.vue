@@ -10,7 +10,7 @@
                       </span>
                   </div>
                   <input type="text" class="form-control text-capitalize" placeholder="Ingrese Nombre del Cliente" v-model="rol.name">
-                  <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors"></span>
+                  <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span>
                 </div>
           </div>
           <div class="form-group row">
@@ -22,7 +22,7 @@
                       </span>
                   </div>
                   <input type="text" class="form-control text-capitalize" placeholder="Ingrese Nombre del Cliente" v-model="rol.display_name">
-                  <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors"></span>
+                  <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.display_name[0]"></span>
               </div>
           </div>
       </div>
@@ -39,9 +39,11 @@
         data() {
             return {
                 url:'/api/auth/roles',
-                rol: null,
-                name:'',
-                display_name:''
+                rol: {
+                    name:'',
+                    display_name:'',
+                },
+                errors: null
             }
         },
         created() {
@@ -64,13 +66,21 @@
             updateRol(){
                 let url = `/api/auth/roles/${this.$route.params.role}`
                 console.log(url)
-                axios.put(url,{
-                  name: this.name,
-                  display_name: this.display_name
-                }).then((response) => {
-                    console.log(response)
-                    this.rol = response.data;
-                })
+                setTimeout(() => {
+                    this.$Progress.start()    
+                    axios.put(url,{
+                        name: this.rol.name,
+                        display_name: this.rol.display_name
+                    }).then((response) => {
+                        console.log(response)
+                        this.rol = response.data;
+                        this.$router.push({ path: "/roles" });
+                    }).catch(errors => {
+                        console.log(errors)
+                        this.$Progress.fail()
+                    })
+                this.$Progress.finish()
+                },1000)    
             }
         }
     }

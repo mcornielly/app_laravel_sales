@@ -13431,10 +13431,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
         _this.$Progress.start();
 
         axios.get(url, {
-          params: options,
-          headers: {
-            "Authorization": "Bearer ".concat(_this.currentUser.token)
-          }
+          params: options
         }).then(function (response) {
           _this.data = response.data;
           console.log(_this.data);
@@ -15974,9 +15971,11 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       url: '/api/auth/roles',
-      rol: null,
-      name: '',
-      display_name: ''
+      rol: {
+        name: '',
+        display_name: ''
+      },
+      errors: null
     };
   },
   created: function created() {
@@ -16003,13 +16002,27 @@ __webpack_require__.r(__webpack_exports__);
 
       var url = "/api/auth/roles/".concat(this.$route.params.role);
       console.log(url);
-      axios.put(url, {
-        name: this.name,
-        display_name: this.display_name
-      }).then(function (response) {
-        console.log(response);
-        _this2.rol = response.data;
-      });
+      setTimeout(function () {
+        _this2.$Progress.start();
+
+        axios.put(url, {
+          name: _this2.rol.name,
+          display_name: _this2.rol.display_name
+        }).then(function (response) {
+          console.log(response);
+          _this2.rol = response.data;
+
+          _this2.$router.push({
+            path: "/roles"
+          });
+        })["catch"](function (errors) {
+          console.log(errors);
+
+          _this2.$Progress.fail();
+        });
+
+        _this2.$Progress.finish();
+      }, 1000);
     }
   }
 });
@@ -16121,6 +16134,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
       columns: [{
         label: 'ID',
         name: 'id',
+        orderable: true
+      }, {
+        label: 'Rol',
+        name: 'name',
         orderable: true
       }, {
         label: 'Nombre',
@@ -62786,7 +62803,7 @@ var render = function() {
                 ? _c("span", {
                     staticClass: "invalid-feedback text-white",
                     attrs: { role: "alert" },
-                    domProps: { innerHTML: _vm._s(_vm.errors) }
+                    domProps: { innerHTML: _vm._s(_vm.errors.name[0]) }
                   })
                 : _vm._e()
             ])
@@ -62829,7 +62846,7 @@ var render = function() {
                 ? _c("span", {
                     staticClass: "invalid-feedback text-white",
                     attrs: { role: "alert" },
-                    domProps: { innerHTML: _vm._s(_vm.errors) }
+                    domProps: { innerHTML: _vm._s(_vm.errors.display_name[0]) }
                   })
                 : _vm._e()
             ])
@@ -92261,14 +92278,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************!*\
   !*** ./resources/js/admin/views/roles/Edit.vue ***!
   \*************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Edit_vue_vue_type_template_id_b01e6e8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=b01e6e8a& */ "./resources/js/admin/views/roles/Edit.vue?vue&type=template&id=b01e6e8a&");
 /* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/admin/views/roles/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -92298,7 +92316,7 @@ component.options.__file = "resources/js/admin/views/roles/Edit.vue"
 /*!**************************************************************************!*\
   !*** ./resources/js/admin/views/roles/Edit.vue?vue&type=script&lang=js& ***!
   \**************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

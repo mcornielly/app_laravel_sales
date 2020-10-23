@@ -45,6 +45,11 @@ export default {
                     orderable: true,
                 },
                 {
+                    label: 'Rol',
+                    name: 'name',
+                    orderable: true,
+                },
+                {
                     label: 'Nombre',
                     name: 'display_name',
                     orderable: true,

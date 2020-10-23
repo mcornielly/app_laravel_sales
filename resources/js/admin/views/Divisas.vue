@@ -156,9 +156,6 @@ export default {
                 axios.get(url,
                 {
                     params: options,
-                    headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
-                    }
                 })
                 .then(response => {
                     this.data = response.data;
