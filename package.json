@@ -29,6 +29,7 @@
     },
     "dependencies": {
         "@fullcalendar/core": "^5.1.0",
+        "bootstrap4-toggle": "^3.6.1",
         "html2canvas": "^1.0.0-rc.5",
         "jspdf": "^1.5.3",
         "laravel-vue-datatable": "^0.5.12",

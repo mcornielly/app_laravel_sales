@@ -9,7 +9,7 @@
                           <i class="fas fa-user-tag"></i>
                       </span>
                   </div>
-                  <input type="text" class="form-control text-capitalize" placeholder="Ingrese Nombre del Cliente" v-model="rol.name">
+                  <input type="text" class="form-control  text-lowercase" placeholder="Ingrese Nombre del Cliente" v-model="rol.name">
                   <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span>
                 </div>
           </div>
@@ -69,14 +69,20 @@
                 setTimeout(() => {
                     this.$Progress.start()    
                     axios.put(url,{
+                        id: this.$route.params.role,
                         name: this.rol.name,
                         display_name: this.rol.display_name
                     }).then((response) => {
                         console.log(response)
                         this.rol = response.data;
                         this.$router.push({ path: "/roles" });
-                    }).catch(errors => {
+                    }).catch(error => {
+                        let errors = error.response.data.errors;
                         console.log(errors)
+                        if (error.response.status == 422) {
+                            this.errors = errors;
+                            toastr.error("ERROR - En la validaciones.");
+                        }
                         this.$Progress.fail()
                     })
                 this.$Progress.finish()

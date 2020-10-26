@@ -28,6 +28,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::post('logout', 'AuthController@logout');
         Route::post('me', 'AuthController@me');
         Route::get('permisos', 'Admin\UsersController@permissions_user');
+        Route::resource('menus', 'MenusController');
+        Route::get('permisos/{role}', 'RolesPermissionsController@edit');
 
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios

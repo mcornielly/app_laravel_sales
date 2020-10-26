@@ -19,14 +19,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="https://rawgit.com/lykmapipo/themify-icons/master/css/themify-icons.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="/adminlte/plugins/daterangepicker/daterangepicker.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/adminlte/plugins/toastr/toastr.min.css">
     <!-- Theme style login -->
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
     
@@ -69,6 +71,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script> --}}
     <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
     <script src="/adminlte/plugins/sweetalert2/sweetalert_2.min.js"></script>
+    <!-- Bootstrap Switch -->
+    <script src="/adminlte/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/adminlte/js/adminlte.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>

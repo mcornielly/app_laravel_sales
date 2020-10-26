@@ -107,7 +107,13 @@ export const routes = [
                 name: 'role-edit',
                 component:require('./admin/views/roles/Edit').default,
                 props: true
-            }    
+            },
+            {
+                path: ':role/permisos',
+                name: 'role-permissions',
+                component:require('./admin/views/roles/Permissions').default,
+                props: true
+            }     
         ]
     },
     {

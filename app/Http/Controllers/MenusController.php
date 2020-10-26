@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Role;
-use App\Http\Controllers\Controller;
+use App\Menu;
 use Illuminate\Http\Request;
-use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Spatie\Permission\Models\Permission;
-// use Spatie\Permission\Models\Role;
-class RolesController extends Controller
+use Spatie\Permission\Models\Role;
+
+class MenusController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $length = $request->input('length');
-        $orderBy = $request->input('column'); //Index
-        $orderByDir = $request->input('dir', 'asc');
-        $searchValue = $request->input('search');
-
-        $query = Role::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        $menus = Menu::with('permissions')->where('hierarchy',0)->get();        
+        // $menus = Menu::with('permissions')->where('hierarchy',0)->get();
         
-        if(request()->wantsJson()){
-            $data = $query->paginate($length);
-            return new DataTableCollectionResource($data);
+        
+
+        if(request()->wantsJson())
+        {
+            return $menus;
         }
     }
 
@@ -57,11 +54,9 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        if(request()->wantsJson()){
-            return $role;
-        }    
+        //
     }
 
     /**
@@ -70,11 +65,15 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(Menu $menu,$id)
     {
-        if(request()->wantsJson()){
-            return $role;
-        }  
+        return $menu;    
+        $menus = Menu::where('hierarchy',0)->get();        
+
+        if(request()->wantsJson())
+        {
+            return $menus;
+        }
     }
 
     /**
@@ -84,20 +83,9 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-
-        $data = $this->validate($request,[
-            'name' => 'required|unique:roles,name,'. $request->id,
-            'display_name' => 'required|unique:roles,display_name,'. $request->id,
-        ]);
-        
-        $role->update($data);
-
-        if(request()->wantsJson()){
-            return $role;
-        }
-
+        //
     }
 
     /**
