@@ -11,19 +11,19 @@
                     <div class="card-body">
                         <template>
                             <div v-for="menu in menus" :key="menu.id">
-                                <div >
-                                    <ul  class="list-group">
+                                    <ul class="list-group">
+                                        <!-- <div v-for="rolepermission in permissions" :key="rolepermission.id"> -->
                                         <li class="list-group-item">{{ menu.name }}
-                                            <div v-for="permissionRoll in permissions" :key="permissionRoll.id">
-                                            <div class="custom-control custom-switch float-right" v-for="permission in menu.permissions" :key="permission.id">
-                                                <input type="checkbox" class="custom-control-input" :id="menu.id" name="menu.name">
-                                                <label class="custom-control-label" :for="menu.id"></label>
-                                            </div>   
+                                            <div v-for="permission in menu.permissions" :key="permission.id">
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" class="custom-control-input" :id="menu.id" :name="" value="checkedName">
+                                                    <label class="custom-control-label" :for="menu.id">{{checkedName }}</label>
+                                                </div>   
                                             </div>
                                         </li>
-                                        <div class="clearfix"></div>
+                                        <!-- </div> -->
                                     </ul>
-                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </template>
                     </div>
@@ -64,7 +64,7 @@
                 axios.get(url).then((response) => {
                     // console.log(response)
                     this.menus = response.data;
-                    console.log(response.data)
+                    // console.log(this.menus)
             
 
                 }) 
@@ -73,8 +73,9 @@
                 let url = `/api/auth/permisos/${this.$route.params.role}`
                 console.log(url)
                 axios.get(url).then((response) => {
-                    this.permissions = response.data;
                     // console.log(response)
+                    this.permissions = response.data;
+                    console.log(this.permissions)
                 }) 
             },
             updateRol(){

@@ -16282,8 +16282,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log(url);
       axios.get(url).then(function (response) {
         // console.log(response)
-        _this.menus = response.data;
-        console.log(response.data);
+        _this.menus = response.data; // console.log(this.menus)
       });
     },
     getPermissions: function getPermissions() {
@@ -16292,7 +16291,9 @@ __webpack_require__.r(__webpack_exports__);
       var url = "/api/auth/permisos/".concat(this.$route.params.role);
       console.log(url);
       axios.get(url).then(function (response) {
-        _this2.permissions = response.data; // console.log(response)
+        // console.log(response)
+        _this2.permissions = response.data;
+        console.log(_this2.permissions);
       });
     },
     updateRol: function updateRol() {
@@ -63183,99 +63184,8 @@ render._withStripped = true
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.menus
-    ? _c("div", [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("div", { staticClass: "card card-defaul card-outline" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _vm._l(_vm.menus, function(menu) {
-                    return _c("div", { key: menu.id }, [
-                      _c("div", [
-                        _c("ul", { staticClass: "list-group" }, [
-                          _c(
-                            "li",
-                            { staticClass: "list-group-item" },
-                            [
-                              _vm._v(
-                                _vm._s(menu.name) +
-                                  "\n                                        "
-                              ),
-                              _vm._l(_vm.permissions, function(permissionRoll) {
-                                return _c(
-                                  "div",
-                                  { key: permissionRoll.id },
-                                  _vm._l(menu.permissions, function(
-                                    permission
-                                  ) {
-                                    return _c(
-                                      "div",
-                                      {
-                                        key: permission.id,
-                                        staticClass:
-                                          "custom-control custom-switch float-right"
-                                      },
-                                      [
-                                        _c("input", {
-                                          staticClass: "custom-control-input",
-                                          attrs: {
-                                            type: "checkbox",
-                                            id: menu.id,
-                                            name: "menu.name"
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _c("label", {
-                                          staticClass: "custom-control-label",
-                                          attrs: { for: menu.id }
-                                        })
-                                      ]
-                                    )
-                                  }),
-                                  0
-                                )
-                              })
-                            ],
-                            2
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "clearfix" })
-                        ])
-                      ])
-                    ])
-                  })
-                ],
-                2
-              )
-            ])
-          ])
-        ])
-      ])
-    : _vm._e()
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [
-        _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
-        _vm._v(" MENÚ")
-      ])
-    ])
-  }
-]
-render._withStripped = true
+var render = function () {}
+var staticRenderFns = []
 
 
 

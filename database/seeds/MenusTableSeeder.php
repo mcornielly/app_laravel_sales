@@ -68,7 +68,7 @@ class MenusTableSeeder extends Seeder
         $submenu5->save();
 
         $menu5 = new Menu;
-        $menu5->name = "Venta";
+        $menu5->name = "Ventas";
         $menu5->order = 5;
         $menu5->save();
 
