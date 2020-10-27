@@ -11,17 +11,20 @@
                     <div class="card-body">
                         <template>
                             <div v-for="menu in menus" :key="menu.id">
-                        <ul class="list-group">
-                            <li class="list-group-item">{{ menu.name }} {{ menu.id }}
-                                <div class="custom-control custom-switch float-right">
-                                    <input type="checkbox" class="custom-control-input" :id="menu.id" v-model="permission" value="menu.id">
-                                    <label class="custom-control-label" :for="menu.id"></label>
-                                </div>   
-                            </li>
-                            <div class="clearfix"></div>
-                        </ul>
+                                <div >
+                                    <ul  class="list-group">
+                                        <li class="list-group-item">{{ menu.name }}
+                                            <div v-for="permissionRoll in permissions" :key="permissionRoll.id">
+                                            <div class="custom-control custom-switch float-right" v-for="permission in menu.permissions" :key="permission.id">
+                                                <input type="checkbox" class="custom-control-input" :id="menu.id" name="menu.name">
+                                                <label class="custom-control-label" :for="menu.id"></label>
+                                            </div>   
+                                            </div>
+                                        </li>
+                                        <div class="clearfix"></div>
+                                    </ul>
+                                </div>
                             </div>
-
                         </template>
                     </div>
                     <!-- /.card-body -->
@@ -59,8 +62,11 @@
                 let url = `/api/auth/menus`
                 console.log(url)
                 axios.get(url).then((response) => {
-                    console.log(response)
+                    // console.log(response)
                     this.menus = response.data;
+                    console.log(response.data)
+            
+
                 }) 
             },
             getPermissions(){
@@ -68,7 +74,7 @@
                 console.log(url)
                 axios.get(url).then((response) => {
                     this.permissions = response.data;
-                    console.log(response)
+                    // console.log(response)
                 }) 
             },
             updateRol(){

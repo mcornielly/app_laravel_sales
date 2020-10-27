@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Menu;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class MenusController extends Controller
 {
@@ -16,7 +15,7 @@ class MenusController extends Controller
      */
     public function index()
     {
-        $menus = Menu::with('permissions')->where('hierarchy',0)->get();        
+        $menus = Menu::with('permissions')->where('hierarchy',0)->get();
         
         if(request()->wantsJson())
         {
@@ -62,15 +61,9 @@ class MenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Menu $menu,$id)
+    public function edit($id)
     {
-        return $menu;    
-        $menus = Menu::where('hierarchy',0)->get();        
-
-        if(request()->wantsJson())
-        {
-            return $menus;
-        }
+        //
     }
 
     /**

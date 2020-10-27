@@ -16251,6 +16251,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-permissions-app',
   data: function data() {
@@ -16278,8 +16281,9 @@ __webpack_require__.r(__webpack_exports__);
       var url = "/api/auth/menus";
       console.log(url);
       axios.get(url).then(function (response) {
-        console.log(response);
+        // console.log(response)
         _this.menus = response.data;
+        console.log(response.data);
       });
     },
     getPermissions: function getPermissions() {
@@ -16288,8 +16292,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = "/api/auth/permisos/".concat(this.$route.params.role);
       console.log(url);
       axios.get(url).then(function (response) {
-        _this2.permissions = response.data;
-        console.log(response);
+        _this2.permissions = response.data; // console.log(response)
       });
     },
     updateRol: function updateRol() {
@@ -63197,74 +63200,56 @@ var render = function() {
                 [
                   _vm._l(_vm.menus, function(menu) {
                     return _c("div", { key: menu.id }, [
-                      _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(
-                            _vm._s(menu.name) +
-                              " " +
-                              _vm._s(menu.id) +
-                              "\n                            "
-                          ),
+                      _c("div", [
+                        _c("ul", { staticClass: "list-group" }, [
                           _c(
-                            "div",
-                            {
-                              staticClass:
-                                "custom-control custom-switch float-right"
-                            },
+                            "li",
+                            { staticClass: "list-group-item" },
                             [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.permission,
-                                    expression: "permission"
-                                  }
-                                ],
-                                staticClass: "custom-control-input",
-                                attrs: {
-                                  type: "checkbox",
-                                  id: menu.id,
-                                  value: "menu.id"
-                                },
-                                domProps: {
-                                  checked: Array.isArray(_vm.permission)
-                                    ? _vm._i(_vm.permission, "menu.id") > -1
-                                    : _vm.permission
-                                },
-                                on: {
-                                  change: function($event) {
-                                    var $$a = _vm.permission,
-                                      $$el = $event.target,
-                                      $$c = $$el.checked ? true : false
-                                    if (Array.isArray($$a)) {
-                                      var $$v = "menu.id",
-                                        $$i = _vm._i($$a, $$v)
-                                      if ($$el.checked) {
-                                        $$i < 0 &&
-                                          (_vm.permission = $$a.concat([$$v]))
-                                      } else {
-                                        $$i > -1 &&
-                                          (_vm.permission = $$a
-                                            .slice(0, $$i)
-                                            .concat($$a.slice($$i + 1)))
-                                      }
-                                    } else {
-                                      _vm.permission = $$c
-                                    }
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("label", {
-                                staticClass: "custom-control-label",
-                                attrs: { for: menu.id }
+                              _vm._v(
+                                _vm._s(menu.name) +
+                                  "\n                                        "
+                              ),
+                              _vm._l(_vm.permissions, function(permissionRoll) {
+                                return _c(
+                                  "div",
+                                  { key: permissionRoll.id },
+                                  _vm._l(menu.permissions, function(
+                                    permission
+                                  ) {
+                                    return _c(
+                                      "div",
+                                      {
+                                        key: permission.id,
+                                        staticClass:
+                                          "custom-control custom-switch float-right"
+                                      },
+                                      [
+                                        _c("input", {
+                                          staticClass: "custom-control-input",
+                                          attrs: {
+                                            type: "checkbox",
+                                            id: menu.id,
+                                            name: "menu.name"
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("label", {
+                                          staticClass: "custom-control-label",
+                                          attrs: { for: menu.id }
+                                        })
+                                      ]
+                                    )
+                                  }),
+                                  0
+                                )
                               })
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "clearfix" })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "clearfix" })
+                        ])
                       ])
                     ])
                   })
@@ -92772,14 +92757,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/admin/views/roles/Permissions.vue ***!
   \********************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Permissions_vue_vue_type_template_id_43246c3a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Permissions.vue?vue&type=template&id=43246c3a& */ "./resources/js/admin/views/roles/Permissions.vue?vue&type=template&id=43246c3a&");
 /* harmony import */ var _Permissions_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Permissions.vue?vue&type=script&lang=js& */ "./resources/js/admin/views/roles/Permissions.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Permissions_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Permissions_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -92809,7 +92795,7 @@ component.options.__file = "resources/js/admin/views/roles/Permissions.vue"
 /*!*********************************************************************************!*\
   !*** ./resources/js/admin/views/roles/Permissions.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

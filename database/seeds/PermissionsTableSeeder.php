@@ -14,53 +14,57 @@ class PermissionsTableSeeder extends Seeder
     {
         Permission::truncate();
         // Divisa
-        $createDivisa = Permission::create(['name' => 'create divisa', 'display_name' => 'Crear Cotización']);
-        $viewDivisa = Permission::create(['name' => 'view divisa','display_name' => 'Ver Cotización']);
-        $detailDivisa = Permission::create(['name' => 'detail divisa','display_name' => 'Detalle Cotización']);
-        $updateDivisa = Permission::create(['name' => 'update divisa', 'display_name' => 'Actualizar Cotización']);
-        $deleteDivisa = Permission::create(['name' => 'delete divisa', 'display_name' => 'Eliminar Cotización']);
+        $viewDashboard = Permission::create(['menu_id' => 1, 'name' => 'view dashboard','display_name' => 'Ver Dashboard', 'option' => 'menu']);
+        $viewDivisa = Permission::create(['menu_id' => 2, 'name' => 'view divisa','display_name' => 'Ver Cotización', 'option' => 'menu']);
+        $createDivisa = Permission::create(['menu_id' => 2, 'name' => 'create divisa', 'display_name' => 'Crear Cotización', 'option' => 'create']);
+        $detailDivisa = Permission::create(['menu_id' => 2, 'name' => 'detail divisa','display_name' => 'Detalle Cotización', 'option' => 'show']);
+        $updateDivisa = Permission::create(['menu_id' => 2, 'name' => 'update divisa', 'display_name' => 'Actualizar Cotización', 'option' => 'update']);
+        $deleteDivisa = Permission::create(['menu_id' => 2, 'name' => 'delete divisa', 'display_name' => 'Eliminar Cotización', 'option' => 'delete']);
         // Categorías
-        $createCategory = Permission::create(['name' => 'create category', 'display_name' => 'Crear Categoría']);
-        $viewCategory = Permission::create(['name' => 'view category','display_name' => 'Ver Categoría']);
-        $detailCategory = Permission::create(['name' => 'detail category','display_name' => 'Detalle Categoría']);
-        $updateCategory = Permission::create(['name' => 'update category', 'display_name' => 'Actualizar Categoría']);
-        $deleteCategory = Permission::create(['name' => 'delete category', 'display_name' => 'Eliminar Categoría']);
+        $createCategory = Permission::create(['menu_id' => 3,'name' => 'view storage', 'display_name' => 'Menú Almacén', 'option' => 'menu']);
+        $viewCategory = Permission::create(['menu_id' => 4,'name' => 'view category','display_name' => 'Ver Categoría','option' => 'menu']);
+        $createCategory = Permission::create(['menu_id' => 4,'name' => 'create category', 'display_name' => 'Crear Categoría', 'option' => 'create']);
+        $detailCategory = Permission::create(['menu_id' => 4,'name' => 'detail category','display_name' => 'Detalle Categoría','option' => 'show']);
+        $updateCategory = Permission::create(['menu_id' => 4,'name' => 'update category', 'display_name' => 'Actualizar Categoría','option' => 'update']);
+        $deleteCategory = Permission::create(['menu_id' => 4,'name' => 'delete category', 'display_name' => 'Eliminar Categoría','option' => 'delete']);
         // Productos
-        $createProduct = Permission::create(['name' => 'create product', 'display_name' => 'Crear Producto']);
-        $viewProduct = Permission::create(['name' => 'view product','display_name' => 'Ver Producto']);
-        $detailProduct = Permission::create(['name' => 'detail product','display_name' => 'Detalle Producto']);
-        $updateProduct = Permission::create(['name' => 'update product', 'display_name' => 'Actualizar Producto']);
-        $deleteProduct = Permission::create(['name' => 'delete product', 'display_name' => 'Eliminar Producto']);
+        $viewProduct = Permission::create(['menu_id' => 5,'name' => 'view product','display_name' => 'Ver Producto','option' => 'menu']);
+        $createProduct = Permission::create(['menu_id' => 5,'name' => 'create product', 'display_name' => 'Crear Producto','option' => 'create']);
+        $detailProduct = Permission::create(['menu_id' => 5,'name' => 'detail product','display_name' => 'Detalle Producto','option' => 'show']);
+        $updateProduct = Permission::create(['menu_id' => 5,'name' => 'update product', 'display_name' => 'Actualizar Producto','option' => 'update']);
+        $deleteProduct = Permission::create(['menu_id' => 5,'name' => 'delete product', 'display_name' => 'Eliminar Producto','option' => 'delete']);
         // Lista de Productos
-        $createListProduct = Permission::create(['name' => 'create list', 'display_name' => 'Crear list']);
-        $viewListProduct = Permission::create(['name' => 'view list','display_name' => 'Ver list']);
-        $detailListProduct = Permission::create(['name' => 'detail list','display_name' => 'Detalle list']);
-        $updateListProduct = Permission::create(['name' => 'update list', 'display_name' => 'Actualizar list']);
-        $deleteListProduct = Permission::create(['name' => 'delete list', 'display_name' => 'Eliminar list']);
+        $viewListProduct = Permission::create(['menu_id' => 6,'name' => 'view list','display_name' => 'Ver list','option' => 'menu']);
+        $createListProduct = Permission::create(['menu_id' => 6,'name' => 'create list', 'display_name' => 'Crear list','option' => 'create']);
+        $detailListProduct = Permission::create(['menu_id' => 6,'name' => 'detail list','display_name' => 'Detalle list','option' => 'show']);
+        $updateListProduct = Permission::create(['menu_id' => 6,'name' => 'update list', 'display_name' => 'Actualizar list','option' => 'update']);
+        $deleteListProduct = Permission::create(['menu_id' => 6,'name' => 'delete list', 'display_name' => 'Eliminar list','option' => 'delete']);
         // Ingresos
-        $createIncome = Permission::create(['name' => 'create income', 'display_name' => 'Crear Ingreso']);
-        $viewIncome = Permission::create(['name' => 'view income','display_name' => 'Ver Ingreso']);
-        $detailIncome = Permission::create(['name' => 'detail income','display_name' => 'detail Ingreso']);
-        $updateIncome = Permission::create(['name' => 'update income', 'display_name' => 'Actualizar Ingreso']);
-        $deleteIncome = Permission::create(['name' => 'delete income', 'display_name' => 'Eliminar Ingreso']);
+        $viewIncome = Permission::create(['menu_id' => 7,'name' => 'view shoppin','display_name' => 'Ver Ingreso','option' => 'menu']);
+        $viewIncome = Permission::create(['menu_id' => 8,'name' => 'view income','display_name' => 'Ver Ingreso','option' => 'menu']);
+        $createIncome = Permission::create(['menu_id' => 8,'name' => 'create income', 'display_name' => 'Crear Ingreso','option' => 'create']);
+        $detailIncome = Permission::create(['menu_id' => 8,'name' => 'detail income','display_name' => 'detail Ingreso','option' => 'show']);
+        $updateIncome = Permission::create(['menu_id' => 8,'name' => 'update income', 'display_name' => 'Actualizar Ingreso','option' => 'update']);
+        $deleteIncome = Permission::create(['menu_id' => 8,'name' => 'delete income', 'display_name' => 'Eliminar Ingreso','option' => 'delete']);
         // Proveeedores
-        $createProvider = Permission::create(['name' => 'create provider', 'display_name' => 'Crear Proveedor']);
-        $viewProvider = Permission::create(['name' => 'view provider','display_name' => 'Ver Proveedor']);
-        $detailProvider = Permission::create(['name' => 'detail provider','display_name' => 'Detalle Proveedor']);
-        $updateProvider = Permission::create(['name' => 'update provider', 'display_name' => 'Actualizar Proveedor']);
-        $deleteProvider = Permission::create(['name' => 'delete provider', 'display_name' => 'Eliminar Proveedor']);
-        // Ventas
-        $createSale = Permission::create(['name' => 'create sale', 'display_name' => 'Crear Venta']);
-        $viewSale = Permission::create(['name' => 'view sale','display_name' => 'Ver Venta']);
-        $detailSale = Permission::create(['name' => 'detail sale','display_name' => 'Detalle Venta']);
-        $updateSale = Permission::create(['name' => 'update sale', 'display_name' => 'Actualizar Venta']);
-        $deleteSale = Permission::create(['name' => 'delete sale', 'display_name' => 'Eliminar Venta']);
+        $viewProvider = Permission::create(['menu_id' => 9,'name' => 'view provider','display_name' => 'Ver Proveedor','option' => 'menu']);
+        $createProvider = Permission::create(['menu_id' => 9,'name' => 'create provider', 'display_name' => 'Crear Proveedor','option' => 'create']);
+        $detailProvider = Permission::create(['menu_id' => 9,'name' => 'detail provider','display_name' => 'Detalle Proveedor','option' => 'show']);
+        $updateProvider = Permission::create(['menu_id' => 9,'name' => 'update provider', 'display_name' => 'Actualizar Proveedor','option' => 'update']);
+        $deleteProvider = Permission::create(['menu_id' => 9,'name' => 'delete provider', 'display_name' => 'Eliminar Proveedor','option' => 'delete']);
+        // Ven,'option' => 'delettas
+        $viewSale = Permission::create(['menu_id' => 10,'name' => 'view sales','display_name' => 'Menú Venta','option' => 'menu']);
+        $viewSale = Permission::create(['menu_id' => 10,'name' => 'view sale','display_name' => 'Ver Venta','option' => 'menu']);
+        $createSale = Permission::create(['menu_id' => 10,'name' => 'create sale', 'display_name' => 'Crear Venta','option' => 'create']);
+        $detailSale = Permission::create(['menu_id' => 10,'name' => 'detail sale','display_name' => 'Detalle Venta','option' => 'show']);
+        $updateSale = Permission::create(['menu_id' => 10,'name' => 'update sale', 'display_name' => 'Actualizar Venta','option' => 'update']);
+        $deleteSale = Permission::create(['menu_id' => 10,'name' => 'delete sale', 'display_name' => 'Eliminar Venta','option' => 'delete']);
         // Clientes
-        $createCustomer = Permission::create(['name' => 'create customer', 'display_name' => 'Crear Cliente']);
-        $viewCustomer = Permission::create(['name' => 'view customer','display_name' => 'Ver Cliente']);
-        $detailCustomer = Permission::create(['name' => 'detail customer','display_name' => 'Detalle Cliente']);
-        $updateCustomer = Permission::create(['name' => 'update customer', 'display_name' => 'Actualizar Cliente']);
-        $deleteCustomer = Permission::create(['name' => 'delete customer', 'display_name' => 'Eliminar Cliente']);
+        $viewCustomer = Permission::create(['menu_id' => 12,'name' => 'view customer','display_name' => 'Ver Cliente','option' => 'menu']);
+        $createCustomer = Permission::create(['menu_id' => 12,'name' => 'create customer', 'display_name' => 'Crear Cliente','option' => 'create']);
+        $detailCustomer = Permission::create(['menu_id' => 12,'name' => 'detail customer','display_name' => 'Detalle Cliente','option' => 'show']);
+        $updateCustomer = Permission::create(['menu_id' => 12,'name' => 'update customer', 'display_name' => 'Actualizar Cliente','option' => 'update']);
+        $deleteCustomer = Permission::create(['menu_id' => 12,'name' => 'delete customer', 'display_name' => 'Eliminar Cliente','option' => 'delete']);
         // $adminRole = User::find(2);
         // $adminRole->givePermissionsTo($viewDivisa);
          
