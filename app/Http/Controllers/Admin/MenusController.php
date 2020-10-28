@@ -15,14 +15,15 @@ class MenusController extends Controller
      */
     public function index()
     {
-        $menus = Menu::with('permissions')->where('hierarchy',0)->get();
+        // $menus = Menu::with('permissions')->where('hierarchy',0)->get();
+    $menus = Menu::with('permissions')->where('hierarchy',0)->get();
         
         if(request()->wantsJson())
         {
             return $menus;
         }
     }
-
+            
     /**
      * Show the form for creating a new resource.
      *

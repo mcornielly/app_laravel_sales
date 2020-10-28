@@ -16259,6 +16259,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       data: {},
+      checkedPermissions: ['view provider'],
       permissions: null,
       menus: null,
       errors: null,
@@ -16282,7 +16283,8 @@ __webpack_require__.r(__webpack_exports__);
       console.log(url);
       axios.get(url).then(function (response) {
         // console.log(response)
-        _this.menus = response.data; // console.log(this.menus)
+        _this.menus = response.data;
+        console.log(_this.menus);
       });
     },
     getPermissions: function getPermissions() {
@@ -16292,8 +16294,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log(url);
       axios.get(url).then(function (response) {
         // console.log(response)
-        _this2.permissions = response.data;
-        console.log(_this2.permissions);
+        _this2.permissions = response.data; // console.log(this.permissions)
       });
     },
     updateRol: function updateRol() {
@@ -63184,8 +63185,131 @@ render._withStripped = true
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function () {}
-var staticRenderFns = []
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.menus
+    ? _c("div", [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "card card-defaul card-outline" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _vm._l(_vm.menus, function(menu) {
+                    return _c("div", { key: menu.id }, [
+                      _c(
+                        "ul",
+                        { staticClass: "list-group" },
+                        _vm._l(menu.permissions, function(permission) {
+                          return _c("div", { key: permission.id }, [
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(
+                                _vm._s(menu.name) +
+                                  " " +
+                                  _vm._s(permission.name) +
+                                  " " +
+                                  _vm._s(_vm.checkedPermissions) +
+                                  "\n                                    "
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "custom-control custom-switch float-right"
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.checkedPermissions,
+                                        expression: "checkedPermissions"
+                                      }
+                                    ],
+                                    staticClass: "custom-control-input",
+                                    attrs: { type: "checkbox", id: menu.name },
+                                    domProps: {
+                                      value: permission.name,
+                                      checked: Array.isArray(
+                                        _vm.checkedPermissions
+                                      )
+                                        ? _vm._i(
+                                            _vm.checkedPermissions,
+                                            permission.name
+                                          ) > -1
+                                        : _vm.checkedPermissions
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        var $$a = _vm.checkedPermissions,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = permission.name,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              (_vm.checkedPermissions = $$a.concat(
+                                                [$$v]
+                                              ))
+                                          } else {
+                                            $$i > -1 &&
+                                              (_vm.checkedPermissions = $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1)))
+                                          }
+                                        } else {
+                                          _vm.checkedPermissions = $$c
+                                        }
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("label", {
+                                    staticClass: "custom-control-label",
+                                    attrs: { for: menu.name }
+                                  })
+                                ]
+                              )
+                            ])
+                          ])
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "clearfix" })
+                    ])
+                  })
+                ],
+                2
+              )
+            ])
+          ])
+        ])
+      ])
+    : _vm._e()
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [
+        _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
+        _vm._v(" MENÚ")
+      ])
+    ])
+  }
+]
+render._withStripped = true
 
 
 

@@ -12,16 +12,16 @@
                         <template>
                             <div v-for="menu in menus" :key="menu.id">
                                     <ul class="list-group">
+                                        <div v-for="permission in menu.permissions" :key="permission.id">
+                                        <li class="list-group-item">{{ menu.name }} {{permission.name}} {{ checkedPermissions }}
                                         <!-- <div v-for="rolepermission in permissions" :key="rolepermission.id"> -->
-                                        <li class="list-group-item">{{ menu.name }}
-                                            <div v-for="permission in menu.permissions" :key="permission.id">
-                                                <div class="custom-control custom-switch float-right">
-                                                    <input type="checkbox" class="custom-control-input" :id="menu.id" :name="" value="checkedName">
-                                                    <label class="custom-control-label" :for="menu.id">{{checkedName }}</label>
-                                                </div>   
-                                            </div>
+                                            <div class="custom-control custom-switch float-right">
+                                                <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="checkedPermissions">
+                                                <label class="custom-control-label" :for="menu.name"></label>
+                                            </div>    
+                                        <!-- </div>  -->
                                         </li>
-                                        <!-- </div> -->
+                                        </div>
                                     </ul>
                                 <div class="clearfix"></div>
                             </div>
@@ -42,6 +42,7 @@
         data() {
             return {
                 data:{},
+                checkedPermissions:['view provider'],
                 permissions:null,
                 menus: null,
                 errors: null,
@@ -64,7 +65,7 @@
                 axios.get(url).then((response) => {
                     // console.log(response)
                     this.menus = response.data;
-                    // console.log(this.menus)
+                    console.log(this.menus)
             
 
                 }) 
@@ -75,7 +76,7 @@
                 axios.get(url).then((response) => {
                     // console.log(response)
                     this.permissions = response.data;
-                    console.log(this.permissions)
+                    // console.log(this.permissions)
                 }) 
             },
             updateRol(){
