@@ -1,10 +1,20 @@
 <template>
     <div v-if="menus">
         <div class="row">
+            <div class="col-12 pb-3">
+                <router-link            
+                    title="permisos"
+                    :to="{path: '/roles'}"
+                    class="btn btn-primary btn-sm float-right">
+                        <i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar
+                </router-link>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12">
-                <div class="card card-defaul card-outline">
+                <div class="card card-primary">
                     <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> MENÚ</h3>
+                    <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> MENÚ {{ permissions }}</h3>
                         <!-- <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
                     </div>
                     <!-- /.card-header -->
@@ -12,15 +22,17 @@
                         <template>
                             <div v-for="menu in menus" :key="menu.id">
                                     <ul class="list-group">
-                                        <div v-for="permission in menu.permissions" :key="permission.id">
-                                        <li class="list-group-item">{{ menu.name }} {{permission.name}} {{ checkedPermissions }}
-                                        <!-- <div v-for="rolepermission in permissions" :key="rolepermission.id"> -->
-                                            <div class="custom-control custom-switch float-right">
-                                                <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="checkedPermissions">
-                                                <label class="custom-control-label" :for="menu.name"></label>
-                                            </div>    
-                                        <!-- </div>  -->
-                                        </li>
+                                        <div v-for="permission in menu.menupermissions" :key="permission.id">
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <h6 class="col-sm-3 text-bold">{{ menu.name }}</h6>
+                                                    <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
+                                                    <div class="col-sm-2 custom-control custom-switch text-right">
+                                                        <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
+                                                        <label class="custom-control-label" :for="menu.name"></label>
+                                                    </div>    
+                                                </div>
+                                            </li>
                                         </div>
                                     </ul>
                                 <div class="clearfix"></div>
@@ -33,6 +45,44 @@
             </div>
             <!-- /.col -->
         </div>
+        <div v-for="menus_per in menus_all" :key="menus_per.id">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i>{{ menus_per.name }}</h3>
+                            <!-- <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <template>
+                                <ul class="list-group">
+                                    <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id">
+                                        <div v-if="menu_permissions.option != 'menu'">
+                                            <li class="list-group-item">
+                                                {{ menu_permissions.name }} {{ menu_permissions.option }}
+                                                <!-- <div class="row">
+                                                    <h6 class="col-sm-3 text-bold">{{ menus_all}}</h6>
+                                                    <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
+                                                    <div class="col-sm-2 custom-control custom-switch text-right">
+                                                        <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
+                                                        <label class="custom-control-label" :for="menu.name"></label>
+                                                    </div>    
+                                                </div> -->
+                                            </li>
+                                        </div>
+                                    </div>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </template>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -41,17 +91,20 @@
         name: 'role-permissions-app',
         data() {
             return {
+                urlCurrrent: this.$route.path,
                 data:{},
-                checkedPermissions:['view provider'],
-                permissions:null,
+                permissions:[],
                 menus: null,
+                menus_all: null,
                 errors: null,
-                checked: ''
+                checked: true,
+                urlCurrrent:''
             }
         },
         created() {
             this.getMenu();
             this.getPermissions();
+            this.urlCurrrent = this.$route.path;
         },
         computed: {
             currentUser(){
@@ -64,19 +117,24 @@
                 console.log(url)
                 axios.get(url).then((response) => {
                     // console.log(response)
-                    this.menus = response.data;
-                    console.log(this.menus)
-            
-
+                    this.menus = response.data.menus;
+                    this.menus_all = response.data.menus_all;
+                    console.log(this.menus_all)
                 }) 
             },
             getPermissions(){
                 let url = `/api/auth/permisos/${this.$route.params.role}`
                 console.log(url)
                 axios.get(url).then((response) => {
-                    // console.log(response)
-                    this.permissions = response.data;
-                    // console.log(this.permissions)
+                    console.log(response.data)
+                    // this.permissions = response.data;
+                    let permissions = [];
+                    permissions = response.data;
+                    permissions.forEach(element => {
+                        // console.log(element.name)
+                        this.permissions.push(element.name);
+                    });
+                    // console.log(this.permission)
                 }) 
             },
             updateRol(){

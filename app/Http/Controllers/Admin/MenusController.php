@@ -15,12 +15,14 @@ class MenusController extends Controller
      */
     public function index()
     {
-        // $menus = Menu::with('permissions')->where('hierarchy',0)->get();
-    $menus = Menu::with('permissions')->where('hierarchy',0)->get();
+    $menus_all = Menu::with('permissions')->get();
+    $menus = Menu::with('menupermissions')->where('hierarchy',0)->get();
         
         if(request()->wantsJson())
         {
-            return $menus;
+            return ['menus_all' => $menus_all,
+                    'menus' => $menus        
+                                            ];
         }
     }
             

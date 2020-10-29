@@ -16070,9 +16070,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-index-app',
   data: function data() {
@@ -16216,6 +16213,58 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_vue_datatable__WEBPACK_IM
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16257,18 +16306,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-permissions-app',
   data: function data() {
-    return {
+    return _defineProperty({
+      urlCurrrent: this.$route.path,
       data: {},
-      checkedPermissions: ['view provider'],
-      permissions: null,
+      permissions: [],
       menus: null,
+      menus_all: null,
       errors: null,
-      checked: ''
-    };
+      checked: true
+    }, "urlCurrrent", '');
   },
   created: function created() {
     this.getMenu();
     this.getPermissions();
+    this.urlCurrrent = this.$route.path;
   },
   computed: {
     currentUser: function currentUser() {
@@ -16283,8 +16334,9 @@ __webpack_require__.r(__webpack_exports__);
       console.log(url);
       axios.get(url).then(function (response) {
         // console.log(response)
-        _this.menus = response.data;
-        console.log(_this.menus);
+        _this.menus = response.data.menus;
+        _this.menus_all = response.data.menus_all;
+        console.log(_this.menus_all);
       });
     },
     getPermissions: function getPermissions() {
@@ -16293,8 +16345,14 @@ __webpack_require__.r(__webpack_exports__);
       var url = "/api/auth/permisos/".concat(this.$route.params.role);
       console.log(url);
       axios.get(url).then(function (response) {
-        // console.log(response)
-        _this2.permissions = response.data; // console.log(this.permissions)
+        console.log(response.data); // this.permissions = response.data;
+
+        var permissions = [];
+        permissions = response.data;
+        permissions.forEach(function (element) {
+          // console.log(element.name)
+          _this2.permissions.push(element.name);
+        }); // console.log(this.permission)
       });
     },
     updateRol: function updateRol() {
@@ -63105,11 +63163,7 @@ var render = function() {
             _c("div", { staticClass: "card-header" }, [
               _c("h3", { staticClass: "card-title" }, [
                 _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
-                _vm._v(
-                  " \n                    " +
-                    _vm._s(_vm.titleCard) +
-                    "\n                    "
-                )
+                _vm._v(" " + _vm._s(_vm.titleCard) + " ")
               ])
             ]),
             _vm._v(" "),
@@ -63190,125 +63244,218 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.menus
-    ? _c("div", [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("div", { staticClass: "card card-defaul card-outline" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _vm._l(_vm.menus, function(menu) {
-                    return _c("div", { key: menu.id }, [
-                      _c(
-                        "ul",
-                        { staticClass: "list-group" },
-                        _vm._l(menu.permissions, function(permission) {
-                          return _c("div", { key: permission.id }, [
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _vm._v(
-                                _vm._s(menu.name) +
-                                  " " +
-                                  _vm._s(permission.name) +
-                                  " " +
-                                  _vm._s(_vm.checkedPermissions) +
-                                  "\n                                    "
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "custom-control custom-switch float-right"
-                                },
-                                [
-                                  _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: _vm.checkedPermissions,
-                                        expression: "checkedPermissions"
-                                      }
-                                    ],
-                                    staticClass: "custom-control-input",
-                                    attrs: { type: "checkbox", id: menu.name },
-                                    domProps: {
-                                      value: permission.name,
-                                      checked: Array.isArray(
-                                        _vm.checkedPermissions
-                                      )
-                                        ? _vm._i(
-                                            _vm.checkedPermissions,
-                                            permission.name
-                                          ) > -1
-                                        : _vm.checkedPermissions
-                                    },
-                                    on: {
-                                      change: function($event) {
-                                        var $$a = _vm.checkedPermissions,
-                                          $$el = $event.target,
-                                          $$c = $$el.checked ? true : false
-                                        if (Array.isArray($$a)) {
-                                          var $$v = permission.name,
-                                            $$i = _vm._i($$a, $$v)
-                                          if ($$el.checked) {
-                                            $$i < 0 &&
-                                              (_vm.checkedPermissions = $$a.concat(
-                                                [$$v]
-                                              ))
-                                          } else {
-                                            $$i > -1 &&
-                                              (_vm.checkedPermissions = $$a
-                                                .slice(0, $$i)
-                                                .concat($$a.slice($$i + 1)))
-                                          }
-                                        } else {
-                                          _vm.checkedPermissions = $$c
-                                        }
-                                      }
-                                    }
-                                  }),
+    ? _c(
+        "div",
+        [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-12 pb-3" },
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-primary btn-sm float-right",
+                    attrs: { title: "permisos", to: { path: "/roles" } }
+                  },
+                  [
+                    _c(
+                      "i",
+                      {
+                        staticClass: "fas fa-angle-double-left",
+                        attrs: { "aria-hidden": "true" }
+                      },
+                      [_vm._v(" ")]
+                    ),
+                    _vm._v("Regresar\n            ")
+                  ]
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "card card-primary" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h3", { staticClass: "card-title" }, [
+                    _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
+                    _vm._v(" MENÚ " + _vm._s(_vm.permissions))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _vm._l(_vm.menus, function(menu) {
+                      return _c("div", { key: menu.id }, [
+                        _c(
+                          "ul",
+                          { staticClass: "list-group" },
+                          _vm._l(menu.menupermissions, function(permission) {
+                            return _c("div", { key: permission.id }, [
+                              _c("li", { staticClass: "list-group-item" }, [
+                                _c("div", { staticClass: "row" }, [
+                                  _c(
+                                    "h6",
+                                    { staticClass: "col-sm-3 text-bold" },
+                                    [_vm._v(_vm._s(menu.name))]
+                                  ),
                                   _vm._v(" "),
-                                  _c("label", {
-                                    staticClass: "custom-control-label",
-                                    attrs: { for: menu.name }
-                                  })
-                                ]
-                              )
+                                  _c(
+                                    "h6",
+                                    {
+                                      staticClass:
+                                        "col-sm-7 text-secundary text-left"
+                                    },
+                                    [_vm._v(_vm._s(permission.display_name))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "col-sm-2 custom-control custom-switch text-right"
+                                    },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.permissions,
+                                            expression: "permissions"
+                                          }
+                                        ],
+                                        staticClass: "custom-control-input",
+                                        attrs: {
+                                          type: "checkbox",
+                                          id: menu.name
+                                        },
+                                        domProps: {
+                                          value: permission.name,
+                                          checked: Array.isArray(
+                                            _vm.permissions
+                                          )
+                                            ? _vm._i(
+                                                _vm.permissions,
+                                                permission.name
+                                              ) > -1
+                                            : _vm.permissions
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            var $$a = _vm.permissions,
+                                              $$el = $event.target,
+                                              $$c = $$el.checked ? true : false
+                                            if (Array.isArray($$a)) {
+                                              var $$v = permission.name,
+                                                $$i = _vm._i($$a, $$v)
+                                              if ($$el.checked) {
+                                                $$i < 0 &&
+                                                  (_vm.permissions = $$a.concat(
+                                                    [$$v]
+                                                  ))
+                                              } else {
+                                                $$i > -1 &&
+                                                  (_vm.permissions = $$a
+                                                    .slice(0, $$i)
+                                                    .concat($$a.slice($$i + 1)))
+                                              }
+                                            } else {
+                                              _vm.permissions = $$c
+                                            }
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("label", {
+                                        staticClass: "custom-control-label",
+                                        attrs: { for: menu.name }
+                                      })
+                                    ]
+                                  )
+                                ])
+                              ])
                             ])
-                          ])
-                        }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "clearfix" })
-                    ])
-                  })
-                ],
-                2
-              )
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "clearfix" })
+                      ])
+                    })
+                  ],
+                  2
+                )
+              ])
             ])
-          ])
-        ])
-      ])
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.menus_all, function(menus_per) {
+            return _c("div", { key: menus_per.id }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-12" }, [
+                  _c("div", { staticClass: "card card-primary card-outline" }, [
+                    _c("div", { staticClass: "card-header" }, [
+                      _c("h3", { staticClass: "card-title" }, [
+                        _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
+                        _vm._v(_vm._s(menus_per.name))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "card-body" },
+                      [
+                        [
+                          _c(
+                            "ul",
+                            { staticClass: "list-group" },
+                            _vm._l(menus_per.permissions, function(
+                              menu_permissions
+                            ) {
+                              return _c("div", { key: menu_permissions.id }, [
+                                menu_permissions.option != "menu"
+                                  ? _c("div", [
+                                      _c(
+                                        "li",
+                                        { staticClass: "list-group-item" },
+                                        [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(menu_permissions.name) +
+                                              " " +
+                                              _vm._s(menu_permissions.option) +
+                                              "\n                                            "
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ])
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "clearfix" })
+                        ]
+                      ],
+                      2
+                    )
+                  ])
+                ])
+              ])
+            ])
+          })
+        ],
+        2
+      )
     : _vm._e()
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [
-        _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
-        _vm._v(" MENÚ")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
