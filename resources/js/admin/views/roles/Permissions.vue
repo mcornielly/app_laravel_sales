@@ -46,35 +46,38 @@
             <!-- /.col -->
         </div>
         <div v-for="menus_per in menus_all" :key="menus_per.id">
+            {{menus_per.hierarchy }}
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i>{{ menus_per.name }}</h3>
+                            <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i>{{ menus_per.name }} </h3>
                             <!-- <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <template>
-                                <ul class="list-group">
-                                    <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id">
-                                        <div v-if="menu_permissions.option != 'menu'">
-                                            <li class="list-group-item">
-                                                {{ menu_permissions.name }} {{ menu_permissions.option }}
-                                                <!-- <div class="row">
-                                                    <h6 class="col-sm-3 text-bold">{{ menus_all}}</h6>
-                                                    <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
-                                                    <div class="col-sm-2 custom-control custom-switch text-right">
-                                                        <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
-                                                        <label class="custom-control-label" :for="menu.name"></label>
-                                                    </div>    
-                                                </div> -->
-                                            </li>
-                                        </div>
+                                <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id">
+                                    <div v-if="menu_permissions.option =='sub-menu'">
+                                            {{ menu_permissions.menu_id }}
                                     </div>
-                                </ul>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            {{ menu_permissions.name }} {{ menu_permissions.option }}
+                                            <!-- <div class="row">
+                                                <h6 class="col-sm-3 text-bold">{{ menus_all}}</h6>
+                                                <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
+                                                <div class="col-sm-2 custom-control custom-switch text-right">
+                                                    <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
+                                                    <label class="custom-control-label" :for="menu.name"></label>
+                                                </div>    
+                                            </div> -->
+                                        </li>
+                                    </ul>
+                                </div>
                                 <div class="clearfix"></div>
                             </template>
+
                         </div>
                         <!-- /.card-body -->
                     </div>

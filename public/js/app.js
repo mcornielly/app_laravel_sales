@@ -16303,6 +16303,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'role-permissions-app',
   data: function data() {
@@ -63396,13 +63399,14 @@ var render = function() {
           _vm._v(" "),
           _vm._l(_vm.menus_all, function(menus_per) {
             return _c("div", { key: menus_per.id }, [
+              _vm._v("\n        " + _vm._s(menus_per.hierarchy) + "\n        "),
               _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col-12" }, [
                   _c("div", { staticClass: "card card-primary card-outline" }, [
                     _c("div", { staticClass: "card-header" }, [
                       _c("h3", { staticClass: "card-title" }, [
                         _c("i", { staticClass: "fas fa-bars" }, [_vm._v(" ")]),
-                        _vm._v(_vm._s(menus_per.name))
+                        _vm._v(_vm._s(menus_per.name) + " ")
                       ])
                     ]),
                     _vm._v(" "),
@@ -63411,34 +63415,33 @@ var render = function() {
                       { staticClass: "card-body" },
                       [
                         [
-                          _c(
-                            "ul",
-                            { staticClass: "list-group" },
-                            _vm._l(menus_per.permissions, function(
-                              menu_permissions
-                            ) {
-                              return _c("div", { key: menu_permissions.id }, [
-                                menu_permissions.option != "menu"
-                                  ? _c("div", [
-                                      _c(
-                                        "li",
-                                        { staticClass: "list-group-item" },
-                                        [
-                                          _vm._v(
-                                            "\n                                            " +
-                                              _vm._s(menu_permissions.name) +
-                                              " " +
-                                              _vm._s(menu_permissions.option) +
-                                              "\n                                            "
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  : _vm._e()
+                          _vm._l(menus_per.permissions, function(
+                            menu_permissions
+                          ) {
+                            return _c("div", { key: menu_permissions.id }, [
+                              menu_permissions.option == "sub-menu"
+                                ? _c("div", [
+                                    _vm._v(
+                                      "\n                                        " +
+                                        _vm._s(menu_permissions.menu_id) +
+                                        "\n                                "
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("ul", { staticClass: "list-group" }, [
+                                _c("li", { staticClass: "list-group-item" }, [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(menu_permissions.name) +
+                                      " " +
+                                      _vm._s(menu_permissions.option) +
+                                      "\n                                        "
+                                  )
+                                ])
                               ])
-                            }),
-                            0
-                          ),
+                            ])
+                          }),
                           _vm._v(" "),
                           _c("div", { staticClass: "clearfix" })
                         ]
