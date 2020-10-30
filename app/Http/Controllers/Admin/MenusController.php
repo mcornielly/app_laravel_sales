@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Menu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MenusController extends Controller
 {
@@ -17,12 +18,15 @@ class MenusController extends Controller
     {
     $menus_all = Menu::with('permissions')->get();
     $menus = Menu::with('menupermissions')->where('hierarchy',0)->get();
+    $submenus = Menu::with('permissions')->whereNotIn('hierarchy',[0])->get();
         
         if(request()->wantsJson())
         {
-            return ['menus_all' => $menus_all,
-                    'menus' => $menus        
-                                            ];
+            return [
+                'menus_all' => $menus_all,
+                'menus' => $menus,        
+                'submenus' => $submenus        
+            ];
         }
     }
             

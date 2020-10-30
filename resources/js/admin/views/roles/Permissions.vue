@@ -46,38 +46,70 @@
             <!-- /.col -->
         </div>
         <div v-for="menus_per in menus_all" :key="menus_per.id">
-            {{menus_per.hierarchy }}
-            <div class="row">
+            <div v-if="menus_per.hierarchy == 0" class="row">
                 <div class="col-12">
-                    <div class="card card-primary card-outline">
+                    <div  class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i>{{ menus_per.name }} </h3>
                             <!-- <a href="#" @click="createUser()" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                        <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id">
                             <template>
-                                <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id">
-                                    <div v-if="menu_permissions.option =='sub-menu'">
-                                            {{ menu_permissions.menu_id }}
+                                    <div v-for="submenu in sub_menus" :key="submenu.id">
+                                        <div v-if="menus_per.id == submenu.hierarchy">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card card-primary card-outline">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i>{{ submenu.name }}</h3>
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <ul class="list-group">
+                                                                    <div v-if="submenu.hierarchy > 0">
+                                                                        <div v-for="submenu_per in submenu.permissions" :key="submenu_per.id">
+                                                                            <li class="list-group-item">
+                                                                                <div class="row">
+                                                                                    <h6 class="col-sm-7 text-secundary text-left">{{ submenu_per.display_name }}</h6>
+                                                                                    <span class="col-sm-3 text-bold" v-if="submenu_per.name != 'sub-menu'">{{ submenu_per.name }}</span>
+                                                                                    <!-- <h6 class="col-sm-3 text-bold">{{ menu.name }}</h6> -->
+                                                                                    <div class="col-sm-2 custom-control custom-switch text-right">
+                                                                                        <input type="checkbox" class="custom-control-input" :id="submenu_per.id" :value="submenu_per.name" v-model="permissions">
+                                                                                        <label class="custom-control-label" :for="submenu_per.id"></label>
+                                                                                    </div>    
+                                                                                </div>
+                                                                            </li>
+                                                                        </div>
+                                                                    </div>
+                                                                </ul>
+                                                                <!-- </div> -->
+                                                            <div class="clearfix"></div> 
+                                                        </div>
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            {{ menu_permissions.name }} {{ menu_permissions.option }}
-                                            <!-- <div class="row">
-                                                <h6 class="col-sm-3 text-bold">{{ menus_all}}</h6>
-                                                <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
-                                                <div class="col-sm-2 custom-control custom-switch text-right">
-                                                    <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
-                                                    <label class="custom-control-label" :for="menu.name"></label>
-                                                </div>    
-                                            </div> -->
-                                        </li>
-                                    </ul>
-                                </div>
+                                    <!-- <div v-for="menu_permissions in menus_per.permissions" :key="menu_permissions.id"> -->
+                                            <ul class="list-group">
+                                                <div v-if="menu_permissions.option != 'menu'">
+                                                    <li class="list-group-item">
+                                                            {{ menu_permissions.name }} {{ menu_permissions.option }}
+                                                        <!-- <div class="row">
+                                                            <h6 class="col-sm-3 text-bold">{{ menus_all}}</h6>
+                                                            <h6 class="col-sm-7 text-secundary text-left">{{ permission.display_name }}</h6>
+                                                            <div class="col-sm-2 custom-control custom-switch text-right">
+                                                                <input type="checkbox" class="custom-control-input" :id="menu.name" :value="permission.name" v-model="permissions">
+                                                                <label class="custom-control-label" :for="menu.name"></label>
+                                                            </div>    
+                                                        </div> -->
+                                                    </li>
+                                                </div>
+                                            </ul>
                                 <div class="clearfix"></div>
                             </template>
-
+                        </div>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -99,6 +131,7 @@
                 permissions:[],
                 menus: null,
                 menus_all: null,
+                sub_menus: null,
                 errors: null,
                 checked: true,
                 urlCurrrent:''
@@ -122,6 +155,7 @@
                     // console.log(response)
                     this.menus = response.data.menus;
                     this.menus_all = response.data.menus_all;
+                    this.sub_menus = response.data.submenus;
                     console.log(this.menus_all)
                 }) 
             },
