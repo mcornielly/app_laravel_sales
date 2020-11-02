@@ -55,9 +55,9 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 form-control-label">Rol de Usuario</label>
                                             <div class="col-md-9">
-                                                <select class="form-control" :class="{'is-invalid' : errors}" v-model="user.rol">
+                                                <select class="form-control" :class="{'is-invalid' : errors}" v-model="roles.display_name">
                                                     <option value="">Seleccione un Tipo de Rol</option>
-                                                    <option v-for="rol in roles" :key="rol.id" :value="rol">{{ rol.display_name }}</option>
+                                                    <option v-for="rol in role" :key="rol.id" :value="rol">{{ rol.display_name }}</option>
                                                     <!-- <option v-for="item in types_doc" :key="item.id" :value="item.id_doc" v-text="data.type_document"></option> -->
                                                 </select>
                                                 <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
@@ -94,8 +94,8 @@ export default {
             user:{
                 name:'',
                 email:'',
-                rol:''
             },
+            rol:'',
             type_document: '',
             num_document: '',
             num_phone:'',
@@ -114,13 +114,14 @@ export default {
             console.log(url)
             axios.get(url).then((response) => {
                 console.log(response)
-                me.user = response.data.user;
-                me.roles = response.data.roles;
-                me.user.rol = response.data.roles[0];
+                me.user = response.data;
+                me.roles = me.user.roles[0];
+                // me.roles = response.data.role;
                 // me.all_permissions = response.data.all_permissions;
                 // me.permissions = response.data.permissions;
-                console.log(me.user)
                 console.log(me.roles)
+                // console.log(me.rol)
+                // console.log(me.roles)
                 // console.log(me.permissions.length)
             }).catch((error) => {
                 // me.errors = error.response.data.errros;

@@ -16452,9 +16452,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       permissions: []
     }, _defineProperty(_ref, "user", {
       name: '',
-      email: '',
-      rol: ''
-    }), _defineProperty(_ref, "type_document", ''), _defineProperty(_ref, "num_document", ''), _defineProperty(_ref, "num_phone", ''), _defineProperty(_ref, "email", ''), _defineProperty(_ref, "address", ''), _defineProperty(_ref, "errors", null), _ref;
+      email: ''
+    }), _defineProperty(_ref, "rol", ''), _defineProperty(_ref, "type_document", ''), _defineProperty(_ref, "num_document", ''), _defineProperty(_ref, "num_phone", ''), _defineProperty(_ref, "email", ''), _defineProperty(_ref, "address", ''), _defineProperty(_ref, "errors", null), _ref;
   },
   created: function created() {
     this.getData();
@@ -16466,13 +16465,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(url);
       axios.get(url).then(function (response) {
         console.log(response);
-        me.user = response.data.user;
-        me.roles = response.data.roles;
-        me.user.rol = response.data.roles[0]; // me.all_permissions = response.data.all_permissions;
+        me.user = response.data;
+        me.roles = me.user.roles[0]; // me.roles = response.data.role;
+        // me.all_permissions = response.data.all_permissions;
         // me.permissions = response.data.permissions;
 
-        console.log(me.user);
-        console.log(me.roles); // console.log(me.permissions.length)
+        console.log(me.roles); // console.log(me.rol)
+        // console.log(me.roles)
+        // console.log(me.permissions.length)
       })["catch"](function (error) {// me.errors = error.response.data.errros;
       });
     }
@@ -64747,8 +64747,8 @@ var render = function() {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.user.rol,
-                                    expression: "user.rol"
+                                    value: _vm.roles.display_name,
+                                    expression: "roles.display_name"
                                   }
                                 ],
                                 staticClass: "form-control",
@@ -64765,8 +64765,8 @@ var render = function() {
                                         return val
                                       })
                                     _vm.$set(
-                                      _vm.user,
-                                      "rol",
+                                      _vm.roles,
+                                      "display_name",
                                       $event.target.multiple
                                         ? $$selectedVal
                                         : $$selectedVal[0]
@@ -64779,7 +64779,7 @@ var render = function() {
                                   _vm._v("Seleccione un Tipo de Rol")
                                 ]),
                                 _vm._v(" "),
-                                _vm._l(_vm.roles, function(rol) {
+                                _vm._l(_vm.role, function(rol) {
                                   return _c(
                                     "option",
                                     { key: rol.id, domProps: { value: rol } },
