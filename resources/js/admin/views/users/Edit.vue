@@ -116,6 +116,7 @@ export default {
                 console.log(response)
                 me.user = response.data.user;
                 me.roles = response.data.roles;
+                me.user.rol = response.data.roles[0];
                 // me.all_permissions = response.data.all_permissions;
                 // me.permissions = response.data.permissions;
                 console.log(me.user)
