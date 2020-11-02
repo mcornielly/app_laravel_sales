@@ -24,9 +24,7 @@
                     </div>
                     <template v-if="currentUser">
                         <div class="info">
-                            <a href="#" class="d-block">{{
-                                currentUser.name
-                            }}</a>
+                            <a href="#" class="d-block">{{currentUser.name}}</a>
                             <span>
                                 <small class="text-teal">{{currentUser.roles[0].display_name}}</small>     
                             </span>

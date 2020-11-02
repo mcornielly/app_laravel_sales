@@ -71,9 +71,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user, Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        return $user;
     }
 
     /**
@@ -82,9 +83,17 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user, Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $roles = Role::all();
+
+        $data = [
+            'user' => $user,
+            'roles' => $roles
+        ];
+
+        return $data;
     }
 
     /**

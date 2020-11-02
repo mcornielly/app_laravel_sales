@@ -1,6 +1,5 @@
 import Dashboard from "./admin/views/Dashboard";
 import Login from "./auth/Login";
-import RolView from './admin/views/roles/View';
 
 export const routes = [
     {
@@ -74,10 +73,42 @@ export const routes = [
         name: 'clients',
         component: require('./admin/views/Customers').default,
     },
+    // {
+    //     path: '/usuarios',
+    //     name: 'users',
+    //     component: require('./admin/views/Users').default,
+    // },
     {
         path: '/usuarios',
         name: 'users',
-        component: require('./admin/views/Users').default,
+        component: require('./admin/views/users/Index').default,
+        meta: {
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: require('./admin/views/users/List').default, 
+            },
+            {
+                path: ':usuario',
+                name: 'user-show',
+                component: require('./admin/views/users/View').default,
+                props: true
+            },
+            {
+                path: ':usuario/editar',
+                name: 'user-edit',
+                component:require('./admin/views/users/Edit').default,
+                props: true
+            },
+            {
+                path: ':usuario',
+                name: 'user-crear',
+                component:require('./admin/views/users/Create').default,
+                props: true
+            }
+        ]
     },
     // {
     //     path: '/roles',

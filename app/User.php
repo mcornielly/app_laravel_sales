@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -131,5 +132,8 @@ class User extends Authenticatable implements JWTSubject
     //             'permissions' => $this->getAllPermissions()->pluck('name'),
     //         ]);
     // }
-
+    public function customer()
+    {
+        $this->belongsTo(Customer::class);
+    }    
 }

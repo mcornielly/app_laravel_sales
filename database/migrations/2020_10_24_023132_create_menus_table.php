@@ -18,6 +18,7 @@ class CreateMenusTable extends Migration
             $table->string('name');
             $table->integer('order');
             $table->integer('hierarchy')->default(0);
+            $table->string('icon');
             $table->timestamps();
         });
     }

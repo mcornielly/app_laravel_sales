@@ -33,9 +33,10 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios
-            Route::get('usuarios', 'Admin\UsersController@index');
-            Route::post('usuario', 'Admin\UsersController@store');
-            Route::put('usuario/{usuario}', 'Admin\UsersController@update');
+            Route::resource('usuarios', 'Admin\UsersController');
+            // Route::get('usuarios', 'Admin\UsersController@index');
+            // Route::post('usuario', 'Admin\UsersController@store');
+            // Route::put('usuario/{usuario}', 'Admin\UsersController@update');
             //Roles
             Route::resource('roles', 'Admin\RolesController');
             // Route::get('roles', 'Admin\RolesController@index');

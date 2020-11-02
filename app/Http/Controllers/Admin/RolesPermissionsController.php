@@ -76,7 +76,7 @@ class RolesPermissionsController extends Controller
             }
         }
 
-        return $MenuPermissions;
+        return $allPermissions;
     }
 
     /**

@@ -111,10 +111,6 @@ export default {
         this.getData(this.url);
     },
     computed:{
-        // user(){
-        //     let user = document.head.querySelector('meta[name="user"]');
-        //     return JSON.parse(user.content);
-        // }
         currentUser() {
             console.log(this.$store.getters.currentUser)
             return this.$store.getters.currentUser;
@@ -122,7 +118,6 @@ export default {
     },
     methods: {
         getData(url = this.url, options = this.tableProps) {
-            // this.isLoading = true;
             this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {

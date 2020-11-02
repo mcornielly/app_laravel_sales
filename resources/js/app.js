@@ -36,7 +36,8 @@ window.jsPDF = require("jspdf");
 Vue.use(VueFormWizard);
 Vue.use(VueRouter);
 Vue.use(Vuex);
-Vue.use(VueTheMask)
+Vue.use(VueTheMask);
+Vue.use(require('vue-moment'));
 
 const store = new Vuex.Store(StoreData);
 const router = new VueRouter({

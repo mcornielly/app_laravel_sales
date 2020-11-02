@@ -62,6 +62,7 @@ class UsersTableSeeder extends Seeder
         $storerRole->givePermissionTo(['view sale report','detail sale report']);
 
         $admin = new User;
+        $admin->id = 1;
         $admin->name = "Miguel Angel Cornielly";
         $admin->email = "mcornielly@gmail.com";
         $admin->password = Hash::make('123456789');
@@ -71,6 +72,7 @@ class UsersTableSeeder extends Seeder
         
 
         $saler = new User;
+        $saler->id = 2;
         $saler->name = "Joshua Miguel Cornielly";
         $saler->email = "jcornielly@gmail.com";
         $saler->password = Hash::make('123456789');
@@ -79,6 +81,7 @@ class UsersTableSeeder extends Seeder
         $saler->assignRole($salerRole);
 
         $storer = new User;
+        $storer->id = 3;
         $storer->name = "Magda Martinez";
         $storer->email = "mmartinez@gmail.com";
         $storer->password = Hash::make('123456789');

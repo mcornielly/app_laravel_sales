@@ -42,6 +42,7 @@
         "vue-has-error-laravel": "^0.1.16",
         "vue-imask": "^6.0.5",
         "vue-loading-overlay": "^3.3.2",
+        "vue-moment": "^4.1.0",
         "vue-numerals": "^3.0.8",
         "vue-progressbar": "^0.7.5",
         "vue-select": "^3.10.7",
