@@ -21,7 +21,7 @@
                                     <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center">{{ user.name }}</h3>
-                                <p class="text-muted text-center">{{ roles.display_name }}</p>
+                                <p class="text-muted text-center">{{ rol.display_name }}</p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
@@ -51,13 +51,39 @@
                                         </div>
                                     </li>
                                     <li class="list-group-item">
-                                        <!-- <b>Rol</b> <a href="#" class="float-right text-primary" v-text="roles.display_name" @click.prevent="showPermissionRol()"></a> -->
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label">Contraseña</label>
+                                            <div class="input-group col-md-9">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-key"></i>
+                                                        </span>
+                                                    </div>
+                                                <input type="password" class="form-control text-lowercase" v-model="password">
+                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span> -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label" >Confirmar Contraseña</label>
+                                            <div class="input-group col-md-9">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-key"></i>
+                                                        </span>
+                                                    </div>
+                                                <input type="password" class="form-control text-lowercase" v-model="repit_password">
+                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span> -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <!-- <b>Rol</b> <a href="#" class="float-right text-primary" v-text="rol.display_name" @click.prevent="showPermissionRol()"></a> -->
                                         <div class="form-group row">
                                             <label class="col-md-3 form-control-label">Rol de Usuario</label>
                                             <div class="col-md-9">
-                                                <select class="form-control" :class="{'is-invalid' : errors}" v-model="roles.display_name">
+                                                <select class="form-control" :class="{'is-invalid' : errors}" v-model="rol.display_name">
                                                     <option value="">Seleccione un Tipo de Rol</option>
-                                                    <option v-for="rol in role" :key="rol.id" :value="rol">{{ rol.display_name }}</option>
+                                                    <option v-for="role in roles" :key="role.id">{{ role.display_name }}</option>
                                                     <!-- <option v-for="item in types_doc" :key="item.id" :value="item.id_doc" v-text="data.type_document"></option> -->
                                                 </select>
                                                 <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
@@ -65,8 +91,7 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <router-link :to="{name: 'user-edit'}" class="btn btn-primary btn-block"><b>Actualizar Usuario</b></router-link>
-                                <!-- <a href="#" class="btn btn-primary btn-block"><b>Editar Perfil</b></a> -->
+                                <button type="button" class="btn btn-primary btn-sm btn-block" @click.prevent="updateUser(user.id)"><b>Actualizar Perfil</b></button>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -101,32 +126,64 @@ export default {
             num_phone:'',
             email:'',
             address:'',
-            errors: null
+            errors: null,
+            password:'',
+            repit_password: ''
         }
     },
     created(){
         this.getData();
+        this.getRoles();
     },
     methods:{
-    getData(){
+        getData(){
             let url = `${this.url}${this.user_id}/edit`
             let me = this;
-            console.log(url)
-            axios.get(url).then((response) => {
-                console.log(response)
-                me.user = response.data;
-                me.roles = me.user.roles[0];
-                // me.roles = response.data.role;
-                // me.all_permissions = response.data.all_permissions;
-                // me.permissions = response.data.permissions;
-                console.log(me.roles)
-                // console.log(me.rol)
-                // console.log(me.roles)
-                // console.log(me.permissions.length)
-            }).catch((error) => {
-                // me.errors = error.response.data.errros;
-            })
+            this.$Progress.start()
+            setTimeout(() => {
+                // console.log(url)
+                axios.get(url).then((response) => {
+                    // console.log(response)
+                    me.user = response.data;
+                    me.rol = response.data.roles[0];
+                }).catch((error) => {
+                    me.errors = error.response.data.errros;
+                    me.$Progress.fail();
+                })
+            this.$Progress.finish();
+            }, 1000);
         },
+        getRoles(){
+            let url = '/api/auth/roles';
+            let me = this;
+            // console.log(url)
+            axios.get(url).then((response) => {
+                // console.log(response)
+                me.roles = response.data.data;
+                console.log(me.roles)
+            }).catch((error) => {
+                me.errors = error.response.data.errros;
+                console.log(me.errors)
+            })
+
+        },
+        updateUser(id){
+            let me = this;
+            var url = `/api/auth/usuarios/${this.user_id}`;
+            axios.put(url,{
+                'id': this.user_id,
+                'name':this.user.name,
+                'email': this.user.email,
+            }).then(response => {
+                console.log(response)
+                me.$router.push({ path: "/usuarios" });
+                toastr.info('El Usuario fue actualizado.');
+            }).catch(error => {
+                console.log(error);
+                var errors = error.response.data.errors;
+                me.errors = errors;
+            });
+        }
     }
 }
 </script>

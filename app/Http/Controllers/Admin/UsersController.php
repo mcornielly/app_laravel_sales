@@ -83,9 +83,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user, $id)
+    public function edit(User $user, Request $request, $id)
     {
         $user = User::find($id);
+  
         // $data = [
         //     'role' => $role,
         //     'user' => $user,
@@ -103,7 +104,17 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|min:6|unique:users,id,' . $id
+        ]);
+        
+        $user = User::findOrFail($id);
+        $user->update($data);
+
+        if(request()->wantsJson()){
+            return $user;
+        }
     }
 
     /**

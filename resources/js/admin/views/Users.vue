@@ -121,10 +121,7 @@ export default {
             this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options,
-                    headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
-                    }
+                    params: options
                 })
                 .then(response => {
                     this.data = response.data;

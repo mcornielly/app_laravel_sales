@@ -18,7 +18,9 @@ class RolesPermissionsController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+
+        return $roles;
     }
 
     /**
