@@ -33,8 +33,8 @@
                                                         <i class="fas fa-user-tag"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
-                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
+                                                <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors.name}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
+                                                <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -45,8 +45,8 @@
                                                             <i class="fas fa-envelope"></i>
                                                         </span>
                                                     </div>
-                                                <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="user.email">
-                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
+                                                <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors.email}" placeholder="Ingrese Email" v-model="user.email">
+                                                <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -59,8 +59,8 @@
                                                             <i class="fas fa-key"></i>
                                                         </span>
                                                     </div>
-                                                <input type="password" class="form-control" :class="{'is-invalid' : errors, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password">
-                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
+                                                <input type="password" class="form-control" :class="{'is-invalid' : errors.password, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password">
+                                                <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -128,9 +128,9 @@ export default {
             address:'',
             password2: '',
             messagePass: '',
-            errors: [],
+            errors: '',
             errorPass: false,
-            validPass: false,
+            validPass: false
         }
     },
     created(){
@@ -184,8 +184,9 @@ export default {
             }).catch(error => {
                 let errors = error.response.data.errors;
                 if (error.response.status == 422) {
-                    this.errors = errors;
                     console.log(me.errors)
+                    me.errors = errors;
+                    me.validPass = false;
                     toastr.error("ERROR - En la validaciones.");
                 }
             });
