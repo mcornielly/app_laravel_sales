@@ -106,7 +106,8 @@ class UsersController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
-            'email' => 'required|min:6|unique:users,id,' . $id
+            'email' => 'required|min:6|unique:users,id,' . $id,
+            'password' => 'min:8'
         ]);
         
         $user = User::findOrFail($id);

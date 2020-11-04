@@ -132,6 +132,12 @@ class User extends Authenticatable implements JWTSubject
     //             'permissions' => $this->getAllPermissions()->pluck('name'),
     //         ]);
     // }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords($value);
+    }
+    
     public function customer()
     {
         $this->belongsTo(Customer::class);

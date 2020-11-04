@@ -20,8 +20,8 @@
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
                                 </div>
-                                <h3 class="profile-username text-center">{{ user.name }}</h3>
-                                <p class="text-muted text-center">{{ rol.display_name }}</p>
+                                <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
+                                <p class="text-muted text-center text-capitalize" v-text="rol.display_name"></p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
@@ -34,7 +34,7 @@
                                                     </span>
                                                 </div>
                                                 <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
-                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.name[0]"></span> -->
+                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -45,8 +45,8 @@
                                                             <i class="fas fa-envelope"></i>
                                                         </span>
                                                     </div>
-                                                <input type="text" class="form-control text-lowercase" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="user.email">
-                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span> -->
+                                                <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors}" placeholder="Ingrese Email" v-model="user.email">
+                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -59,8 +59,8 @@
                                                             <i class="fas fa-key"></i>
                                                         </span>
                                                     </div>
-                                                <input type="password" class="form-control text-lowercase" v-model="password">
-                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span> -->
+                                                <input type="password" class="form-control" :class="{'is-invalid' : errors, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password">
+                                                <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -71,8 +71,8 @@
                                                             <i class="fas fa-key"></i>
                                                         </span>
                                                     </div>
-                                                <input type="password" class="form-control text-lowercase" v-model="repit_password">
-                                                <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.email[0]"></span> -->
+                                                <input type="password" v-on:blur="validate" class="form-control" :class="{'is-invalid' : errorPass, 'is-valid' : validPass }" name="password_confirmation" v-model="password2" placeholder="Confirmar Password">
+                                                <span v-if="errorPass" class="invalid-feedback text-danger" role="alert" v-html="messagePass"></span>
                                             </div>
                                         </div>
                                     </li>
@@ -81,10 +81,9 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 form-control-label">Rol de Usuario</label>
                                             <div class="col-md-9">
-                                                <select class="form-control" :class="{'is-invalid' : errors}" v-model="rol.display_name">
+                                                <select class="form-control" v-model="rol.display_name">
                                                     <option value="">Seleccione un Tipo de Rol</option>
                                                     <option v-for="role in roles" :key="role.id">{{ role.display_name }}</option>
-                                                    <!-- <option v-for="item in types_doc" :key="item.id" :value="item.id_doc" v-text="data.type_document"></option> -->
                                                 </select>
                                                 <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
                                             </div>
@@ -119,6 +118,7 @@ export default {
             user:{
                 name:'',
                 email:'',
+                password:'',
             },
             rol:'',
             type_document: '',
@@ -126,17 +126,19 @@ export default {
             num_phone:'',
             email:'',
             address:'',
-            errors: null,
-            password:'',
-            repit_password: ''
+            password2: '',
+            messagePass: '',
+            errors: [],
+            errorPass: false,
+            validPass: false,
         }
     },
     created(){
-        this.getData();
+        this.getUser();
         this.getRoles();
     },
     methods:{
-        getData(){
+        getUser(){
             let url = `${this.url}${this.user_id}/edit`
             let me = this;
             this.$Progress.start()
@@ -174,15 +176,32 @@ export default {
                 'id': this.user_id,
                 'name':this.user.name,
                 'email': this.user.email,
+                'password': this.user.password,
             }).then(response => {
                 console.log(response)
                 me.$router.push({ path: "/usuarios" });
                 toastr.info('El Usuario fue actualizado.');
             }).catch(error => {
-                console.log(error);
-                var errors = error.response.data.errors;
-                me.errors = errors;
+                let errors = error.response.data.errors;
+                if (error.response.status == 422) {
+                    this.errors = errors;
+                    console.log(me.errors)
+                    toastr.error("ERROR - En la validaciones.");
+                }
             });
+        },
+        validate(){
+            // console.log(this.password === this.password2)
+            
+            if(this.user.password === this.password2 && this.password2 != ''){
+                this.errorPass = false;
+                this.validPass = true;
+                this.messagePass = "";
+            }else if(this.password2 != ''){
+                this.errorPass = true;
+                this.validPass = false;
+                this.messagePass = "Password no concuerda";
+            }
         }
     }
 }

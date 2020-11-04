@@ -20,8 +20,8 @@
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
                                 </div>
-                                <h3 class="profile-username text-center">{{ user.name }}</h3>
-                                <p class="text-muted text-center">{{ roles.display_name }}</p>
+                                <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
+                                <p class="text-muted text-center text-capitalize" v-text="roles.display_name"></p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
@@ -148,7 +148,7 @@ export default {
         }
     },
     created(){
-        this.getData();
+        this.getUser();
     },
     computed: {
         currentUser() {
@@ -157,19 +157,16 @@ export default {
         }
     },
     methods:{
-        getData(){
+        getUser(){
             let url = `/api/auth/usuarios/${this.user_id}`
             let me = this;
             console.log(url)
             axios.get(url).then((response) => {
-                console.log(response)
+                // console.log(response)
                 me.user = response.data;
                 me.roles = response.data.roles[0];
                 me.all_permissions = response.data.all_permissions;
                 me.permissions = response.data.permissions;
-                console.log(me.user)
-                console.log(me.all_permissions)
-                console.log(me.permissions.length)
             }) 
         },
         showPermissionRol(){
