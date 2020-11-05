@@ -30,6 +30,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::get('permisos', 'Admin\UsersController@permissions_user');
         Route::resource('menus', 'Admin\MenusController');
         Route::get('permisos/{role}', 'Admin\RolesPermissionsController@edit');
+        Route::put('usuarios/{usuario}/roles', 'Admin\UserRolesController@update');
 
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios

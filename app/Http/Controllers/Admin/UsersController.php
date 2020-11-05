@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -74,7 +75,11 @@ class UsersController extends Controller
     public function show(User $user, Request $request, $id)
     {
         $user = User::find($id);
-        return $user;
+        
+        if(request()->wantsJson()){
+
+            return $user;
+        }
     }
 
     /**
@@ -86,13 +91,10 @@ class UsersController extends Controller
     public function edit(User $user, Request $request, $id)
     {
         $user = User::find($id);
-  
-        // $data = [
-        //     'role' => $role,
-        //     'user' => $user,
-        // ];
-
-        return $user;
+        
+        if(request()->wantsJson()){
+            return $user;
+        }
     }
 
     /**
@@ -104,14 +106,21 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->validate([
+        $rules = $request->validate([
             'name' => 'required',
             'email' => 'required|min:6|unique:users,id,' . $id,
-            'password' => 'min:8'
         ]);
         
+        if($request->filled('password'))
+        {
+            $rules = $request->validate([
+                'password' => 'min:6',
+            ]);    
+           
+        }
+        
         $user = User::findOrFail($id);
-        $user->update($data);
+        $user->update($rules);
 
         if(request()->wantsJson()){
             return $user;

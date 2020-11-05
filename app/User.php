@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 // use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
@@ -136,6 +137,11 @@ class User extends Authenticatable implements JWTSubject
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = ucwords($value);
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = Hash::make($password);
     }
     
     public function customer()

@@ -23,10 +23,12 @@
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3 v-if="divisa">{{  divisa | currency }}</h3>    
-                        <h3 v-else>{{  0 | currency }}</h3>    
-                        <!-- <h3>190.000,00</h3> -->
+                    <div v-if="divisa == 0" class="inner">
+                        <h3>0,00</h3>    
+                        <p>Cotización del Dolar</p>
+                    </div>
+                    <div v-else class="inner">
+                        <h3>{{  divisa | currency }}</h3>    
                         <p>Cotización del Dolar</p>
                     </div>
                     <div class="icon">
