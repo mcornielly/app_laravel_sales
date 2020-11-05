@@ -222,7 +222,7 @@ export default {
                 console.log(response)
                 me.$router.push({ path: "/usuarios" });
                 toastr.info('El Usuario fue actualizado.');
-            }).catch(error => {
+            }).catch((error) => {
                 let errors = error.response.data.errors;
                 if (error.response.status == 422) {
                     console.log(me.errors)
@@ -231,16 +231,18 @@ export default {
                     toastr.error("ERROR - En la validaciones.");
                 }
             });
+       
         },
         updateRol(){
             let me = this;
             var url = `/api/auth/usuarios/${this.user_id}/roles`;
 
             this.role.push(this.rol.name);
-
+            this.$Progress.start()
+            setTimeout(() => {
             axios.put(url,{
                 'id': this.user_id,
-                'rol': this.role,
+                'role': this.role,
             }).then(response => {
                 console.log(response)
                 // me.$router.push({ path: "/usuarios" });
@@ -251,9 +253,14 @@ export default {
                     console.log(me.errors)
                     me.errors = errors;
                     me.validPass = false;
+                    me.$Progress.fail();
                     toastr.error("ERROR - En la validaciones.");
                 }
-            });
+            })
+            this.$Progress.finish();
+            }, 1000);
+            // this.getUser;
+            // location.reload();
         },
         validate(){
             // console.log(this.password === this.password2)

@@ -10,7 +10,6 @@ class UserRolesController extends Controller
 {
     public function update(Request $request, User $user)
     {
-        return $request->role; 
         $user = User::find($request->id);
         $user->syncRoles($request->role);
 
