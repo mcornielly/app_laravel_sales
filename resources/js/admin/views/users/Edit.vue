@@ -19,9 +19,19 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
+
                                 </div>
                                 <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
                                 <p class="text-muted text-center text-capitalize" v-text="rol.display_name"></p>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a class="btn btn-link float-right text-primary" id="edit-photo-profile" href="#" aria-selected="true" title="editar foto">
+                                            <i class="fas fa-user-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
 
                                 <div class="row">
                                     <div class="col-md-12 col-sm-6">
