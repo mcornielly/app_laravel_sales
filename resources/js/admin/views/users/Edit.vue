@@ -19,18 +19,43 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
-
+                                    <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto">
+                                        <i class="fas fa-user-edit"></i>
+                                    </a>
+                                                    <!-- <input type="file" name="images" @change="getImage" accept="image/*"> -->
+                                    <div class="row" style="margin-left: auto; margin-right: auto;">
+                                        <div class=""></div>
+                                        <div class="col-xs-12" >
+                                            <div class="form-group">    
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="s" name="photo_profile">
+                                                        <label class="custom-file-label" for="s"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="">Subir Imagen</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=""></div>
+                                    </div>                
+                                    <!-- <div class="row mt-3">
+                                        <div v-show="photo_profile" class="center">
+                                            <input class="form-control" type="file" name="image" accept="image/*">
+                                        </div>
+                                    </div> -->
                                 </div>
                                 <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
                                 <p class="text-muted text-center text-capitalize" v-text="rol.display_name"></p>
 
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-12">
                                         <a class="btn btn-link float-right text-primary" id="edit-photo-profile" href="#" aria-selected="true" title="editar foto">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
                                     </div>
-                                </div>
+                                </div> -->
 
 
                                 <div class="row">
@@ -160,6 +185,7 @@ export default {
             routePage:'Usuarios',
             titleCard:'Editar Usuario',
             user_id: this.$route.params.usuario,
+            photo_profile: false,
             user: [],
             rol:'',
             role: [],
@@ -284,7 +310,22 @@ export default {
                 this.validPass = false;
                 this.messagePass = "Password no concuerda";
             }
+        },
+        onInput(){
+
+            if(this.photo_profile == false){
+                this.photo_profile = true;
+            }else{
+                this.photo_profile = false;
+            }
         }
     }
 }
 </script>
+
+<style>
+.center {
+  max-width: 500px;
+  margin: auto;
+}
+</style>
