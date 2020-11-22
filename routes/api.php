@@ -31,6 +31,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::resource('menus', 'Admin\MenusController');
         Route::get('permisos/{role}', 'Admin\RolesPermissionsController@edit');
         Route::put('usuarios/{usuario}/roles', 'Admin\UserRolesController@update');
+        Route::post('usuarios/{usuario}/avatar', 'Admin\UsersController@img_profile');
 
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios

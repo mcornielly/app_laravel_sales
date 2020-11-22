@@ -67,7 +67,7 @@
                             <div class="card-body">
                                 <!-- /.card-header -->                  
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Código</label>
+                                    <label class="col-md-3 form-control-label">Código 1212</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" placeholder="Código de Barras" v-model="code">
                                         <barcode :value="code" :options="{ format: 'EAN-13'}">

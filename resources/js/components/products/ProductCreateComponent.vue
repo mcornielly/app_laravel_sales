@@ -187,7 +187,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                                     </div>
-                                                    <input ref="code" type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" v-imask="mask.code" maxlength="13">
+                                                    <input ref="code" type="text" class="form-control" :class="{'is-invalid' : errors.code}" placeholder="Código de Barras" v-model="code" v-imask="mask.code" maxlength="14">
                                                 </div>   
                                                 <small>Los números de código debe ser de 13 dígitos.</small>
                                                 <span v-if="errors.code" class="invalid-feedback" role="alert">{{ errors.code[0] }}</span>

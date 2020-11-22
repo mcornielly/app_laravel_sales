@@ -6,9 +6,11 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -135,5 +137,39 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function img_profile(Request $request, $id)
+    {
+        // // $request->file('image')->store('images');
+        // $file_data = $request->img;
+        // dd($request->all());
+        $file = $request->file('img');
+        $extension = $file->getClientOriginalExtension();
+        $filaName = explode(' ', $request->name);
+        $filaName= Str::lower($filaName[0]);
+        $fileName = $filaName . '_' . $id . '.' . $extension;
+    
+
+        $avatar = $request->file('img')->store('images/avatars','public');
+        $imageUrl = Storage::url($avatar);
+        // dd($imageUrl);
+        // $avatar = Storage::putFile($imageUrl);
+        // dd($avatar);
+        // $photos = $request->file('photo')->store('product','public');
+        // $avatar = Storage::putFile('public/images/avatars', $file);
+        // $avatar = Storage::url($file);
+        // $avatar = Storage::putFile('public/images/avatar/', base64_decode($file_data));
+   
+        $userAvatarUpdate = User::find($id);
+        $userAvatarUpdate->avatar = $imageUrl;
+        $userAvatarUpdate->update();
+    
+        return response()->json([
+                'userAvatarUpdate' => $userAvatarUpdate,
+                'status' => 'Muy bien!',
+                'msg' => 'Tu foto de perfil se actualizo.',
+            ], 200);
+    
     }
 }

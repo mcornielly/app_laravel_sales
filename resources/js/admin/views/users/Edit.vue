@@ -18,33 +18,42 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">
-                                    <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto">
-                                        <i class="fas fa-user-edit"></i>
-                                    </a>
-                                                    <!-- <input type="file" name="images" @change="getImage" accept="image/*"> -->
-                                    <div class="row" style="margin-left: auto; margin-right: auto;">
-                                        <div class=""></div>
-                                        <div class="col-xs-12" >
-                                            <div class="form-group">    
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="s" name="photo_profile">
-                                                        <label class="custom-file-label" for="s"><span class="text-center"> Seleccionar Imagen</span></label>
-                                                    </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text" id="">Subir Imagen</span>
+                                    <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
+                                    <div v-show="user.avatar">
+                                        <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
+                                        <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto">
+                                            <i class="fas fa-user-edit"></i>
+                                        </a>
+                                        <div v-show="user.avatar"  class="row" style="margin-left: auto; margin-right: auto;">
+                                            <div class=""></div>
+                                            <div class="col-xs-12" >
+                                                <div class="form-group">    
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
+                                                            <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" id="">
+                                                                <a href="#" @click.prevent="updateImg">Subir Imagen</a>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <figure v-show="img_profile">
+                                                    <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                </figure>
                                             </div>
-                                        </div>
-                                        <div class=""></div>
-                                    </div>                
-                                    <!-- <div class="row mt-3">
-                                        <div v-show="photo_profile" class="center">
-                                            <input class="form-control" type="file" name="image" accept="image/*">
-                                        </div>
-                                    </div> -->
+                                            <div class=""></div>
+                                        </div>                
+                                        <!-- <input type="file" name="images" @change="getImage" accept="image/*"> -->
+                                        <!-- <div class="row mt-3">
+                                            <div v-show="photo_profile" class="center">
+                                                <input class="form-control" type="file" name="image" accept="image/*">
+                                            </div>
+                                        </div> -->
+                                    </div>
+
                                 </div>
                                 <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
                                 <p class="text-muted text-center text-capitalize" v-text="rol.display_name"></p>
@@ -147,7 +156,7 @@
                                                                         <option value="">Seleccione un Tipo de Rol</option>
                                                                         <option v-for="role in roles" :key="role.id" :value="role.name">{{ role.display_name }}</option>
                                                                     </select>
-                                                                    <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
+                                                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -184,8 +193,8 @@ export default {
             titlePage:'Usuarios',
             routePage:'Usuarios',
             titleCard:'Editar Usuario',
+            pre_img:'',
             user_id: this.$route.params.usuario,
-            photo_profile: false,
             user: [],
             rol:'',
             role: [],
@@ -194,9 +203,11 @@ export default {
             permissions: [],
             user:{
                 name:'',
+                avatar: '',
                 email:'',
                 password:'',
             },
+            avatar:'',
             type_document: '',
             num_document: '',
             num_phone:'',
@@ -206,12 +217,20 @@ export default {
             messagePass: '',
             errors: '',
             errorPass: false,
+            loaded: false,
             validPass: false
         }
     },
     created(){
         this.getUser();
         this.getRoles();
+        this.avatar = this.user.avatar;
+        console.log('--->' + this.avatar);
+    },
+    computed:{
+        img_profile(){
+            return this.pre_img;
+        }
     },
     methods:{
         getUser(){
@@ -221,7 +240,7 @@ export default {
             setTimeout(() => {
                 // console.log(url)
                 axios.get(url).then((response) => {
-                    // console.log(response)
+                    console.log(response.data)
                     me.user = response.data;
                     me.rol = response.data.roles[0];
 
@@ -312,13 +331,47 @@ export default {
             }
         },
         onInput(){
-
-            if(this.photo_profile == false){
-                this.photo_profile = true;
+            console.log(this.loaded)
+            if(this.loaded == false){
+                this.loaded = true;
             }else{
-                this.photo_profile = false;
+                this.loaded = false;
             }
-        }
+        },
+        getImage(e){
+            let file = e.target.files[0];    
+            this.avatar = file;
+            this.preImage(file);
+        },
+        preImage(file){
+            let reader = new FileReader();
+
+            reader.onload = e => {
+                this.pre_img = e.target.result;
+            }
+
+            reader.readAsDataURL(file);
+
+        },
+        updateImg(){
+            let url = `/api/auth/usuarios/${this.user_id}/avatar`
+
+            let data = new FormData();
+            data.append('img', this.avatar);
+            data.append('name', this.user.name);
+
+            axios.post(url,data).then((response) =>{
+                console.log(response)
+                this.user.avatar = response.data.userAvatarUpdate.avatar;
+                // let title = response.data.status;
+                // let body = response.data.msg;
+                // this.displayNotificationSuccess(title, body);
+                toastr.info('La imagen fue actualizada.');
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        } 
     }
 }
 </script>
