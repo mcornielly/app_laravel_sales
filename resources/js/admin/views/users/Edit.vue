@@ -21,31 +21,33 @@
                                     <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
                                     <div v-show="user.avatar">
                                         <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
-                                        <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto">
+                                        <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto" data-toggle="modal" data-target="#modal-profile-img">
                                             <i class="fas fa-user-edit"></i>
                                         </a>
-                                        <div v-show="user.avatar"  class="row" style="margin-left: auto; margin-right: auto;">
+                                        <!-- <div v-show="user.avatar"  class="row" style="margin-left: auto; margin-right: auto;">
                                             <div class=""></div>
-                                            <div class="col-xs-12" >
-                                                <div class="form-group">    
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
-                                                            <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
-                                                        </div>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text" id="">
-                                                                <a href="#" @click.prevent="updateImg">Subir Imagen</a>
-                                                            </span>
+                                            <div class="row text-center">
+                                                <div class="col-12" >
+                                                    <div class="form-group">    
+                                                        <figure v-show="img_profile">
+                                                            <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                        </figure>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
+                                                                <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                            </div>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text" id="">
+                                                                    <a href="#" @click.prevent="updateImg">Subir Imagen</a>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <figure v-show="img_profile">
-                                                    <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
-                                                </figure>
                                             </div>
                                             <div class=""></div>
-                                        </div>                
+                                        </div>                 -->
                                         <!-- <input type="file" name="images" @change="getImage" accept="image/*"> -->
                                         <!-- <div class="row mt-3">
                                             <div v-show="photo_profile" class="center">
@@ -182,6 +184,51 @@
             </div>
             <!-- /.col -->
         </div>
+        <!-- Modal Img Profile -->
+        <template>
+            <div v-show="loaded">
+                <div class="modal fade show" id="modal-profile-img" style="display: block; padding-right: 16px;" aria-modal="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Editar Imagen de Usuario</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                </div>
+                            <div class="modal-body">
+                                <div class="row text-center">
+                                    <div class="col-12" >
+                                        <div class="form-group">    
+                                            <figure v-show="img_profile">
+                                                <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                            </figure>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
+                                                    <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="">
+                                                        <a href="#" @click.prevent="updateImg">Subir Imagen</a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer text-right">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"  @click.prevent="closeModal()">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            </div>
+                        </div>
+                    <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>                       
+            </div>
+        </template>    
     </section>
 </template>
 <script>
@@ -218,7 +265,8 @@ export default {
             errors: '',
             errorPass: false,
             loaded: false,
-            validPass: false
+            validPass: false,
+            img_profile:'/images/avatars/default.jpg'
         }
     },
     created(){
@@ -227,11 +275,15 @@ export default {
         this.avatar = this.user.avatar;
         console.log('--->' + this.avatar);
     },
-    computed:{
-        img_profile(){
-            return this.pre_img;
-        }
-    },
+    // computed:{
+    //     img_profile(){
+    //         if(this.img_profile == ''){
+    //             return "/images/avatars/default.jpg";
+    //         }else{
+    //             return this.pre_img;
+    //         }
+    //     }
+    // },
     methods:{
         getUser(){
             let url = `${this.url}${this.user_id}/edit`
@@ -348,8 +400,8 @@ export default {
 
             reader.onload = e => {
                 this.pre_img = e.target.result;
+                this.img_profile = this.pre_img;
             }
-
             reader.readAsDataURL(file);
 
         },
@@ -371,6 +423,10 @@ export default {
             .catch((error) => {
                 console.log(error)
             })
+        },
+        closeModal(){
+            this.loaded = false;
+            this.img_profile = '/images/avatars/default.jpg'
         } 
     }
 }

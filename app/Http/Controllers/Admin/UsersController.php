@@ -141,9 +141,10 @@ class UsersController extends Controller
 
     public function img_profile(Request $request, $id)
     {
-        // // $request->file('image')->store('images');
-        // $file_data = $request->img;
-        // dd($request->all());
+        $this->validate($request, [
+            'img' => 'required|image'
+        ]);
+    
         $file = $request->file('img');
         $extension = $file->getClientOriginalExtension();
         $filaName = explode(' ', $request->name);
@@ -153,7 +154,8 @@ class UsersController extends Controller
 
         $avatar = $request->file('img')->store('images/avatars','public');
         $imageUrl = Storage::url($avatar);
-        // dd($imageUrl);
+        dd($imageUrl);
+        Image::make($file)->fit(200, 200)->save($imageUrl);
         // $avatar = Storage::putFile($imageUrl);
         // dd($avatar);
         // $photos = $request->file('photo')->store('product','public');
