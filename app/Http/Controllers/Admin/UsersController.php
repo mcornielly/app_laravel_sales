@@ -154,8 +154,8 @@ class UsersController extends Controller
 
         $avatar = $request->file('img')->store('images/avatars','public');
         $imageUrl = Storage::url($avatar);
-        dd($imageUrl);
-        Image::make($file)->fit(200, 200)->save($imageUrl);
+        // dd($imageUrl);
+        // Image::make($file)->fit(200, 200)->save($imageUrl);
         // $avatar = Storage::putFile($imageUrl);
         // dd($avatar);
         // $photos = $request->file('photo')->store('product','public');
@@ -169,8 +169,8 @@ class UsersController extends Controller
     
         return response()->json([
                 'userAvatarUpdate' => $userAvatarUpdate,
-                'status' => 'Muy bien!',
-                'msg' => 'Tu foto de perfil se actualizo.',
+                // 'status' => 'Muy bien!',
+                // 'msg' => 'Tu foto de perfil se actualizo.',
             ], 200);
     
     }

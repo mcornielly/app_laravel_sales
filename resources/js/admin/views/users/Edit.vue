@@ -210,7 +210,7 @@
                                                 </div>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="">
-                                                        <a href="#" @click.prevent="updateImg">Subir Imagen</a>
+                                                        <a href="#" @click.prevent="updateImg" data-dismiss="modal">Subir Imagen</a>
                                                     </span>
                                                 </div>
                                             </div>
@@ -347,23 +347,23 @@ export default {
             this.role.push(this.rol.name);
             this.$Progress.start()
             setTimeout(() => {
-            axios.put(url,{
-                'id': this.user_id,
-                'role': this.role,
-            }).then(response => {
-                console.log(response)
-                // me.$router.push({ path: "/usuarios" });
-                toastr.info('El Rol del Usuario fue actualizado.');
-            }).catch(error => {
-                let errors = error.response.data.errors;
-                if (error.response.status == 422) {
-                    console.log(me.errors)
-                    me.errors = errors;
-                    me.validPass = false;
-                    me.$Progress.fail();
-                    toastr.error("ERROR - En la validaciones.");
-                }
-            })
+                axios.put(url,{
+                    'id': this.user_id,
+                    'role': this.role,
+                }).then(response => {
+                    console.log(response)
+                    // me.$router.push({ path: "/usuarios" });
+                    toastr.info('El Rol del Usuario fue actualizado.');
+                }).catch(error => {
+                    let errors = error.response.data.errors;
+                    if (error.response.status == 422) {
+                        console.log(me.errors)
+                        me.errors = errors;
+                        me.validPass = false;
+                        me.$Progress.fail();
+                        toastr.error("ERROR - En la validaciones.");
+                    }
+                })
             this.$Progress.finish();
             }, 1000);
             // this.getUser;
@@ -411,18 +411,23 @@ export default {
             let data = new FormData();
             data.append('img', this.avatar);
             data.append('name', this.user.name);
-
-            axios.post(url,data).then((response) =>{
-                console.log(response)
-                this.user.avatar = response.data.userAvatarUpdate.avatar;
-                // let title = response.data.status;
-                // let body = response.data.msg;
-                // this.displayNotificationSuccess(title, body);
-                toastr.info('La imagen fue actualizada.');
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+            this.$Progress.start()
+                setTimeout(() => {
+                axios.post(url,data).then((response) =>{
+                    console.log(response)
+                    this.closeModal();
+                    this.user.avatar = response.data.userAvatarUpdate.avatar;
+                    toastr.info('La imagen fue actualizada.');
+                    // let title = response.data.status;
+                    // let body = response.data.msg;
+                    // this.displayNotificationSuccess(title, body);
+                })
+                .catch((error) => {
+                    console.log(error)
+                    me.$Progress.fail();
+                })
+            this.$Progress.finish();
+            }, 1000);
         },
         closeModal(){
             this.loaded = false;
