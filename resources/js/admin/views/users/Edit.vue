@@ -201,12 +201,14 @@
                                     <div class="col-12" >
                                         <div class="form-group">    
                                             <figure v-show="img_profile">
-                                                <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                <img id="user_image" class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                <input id="img_user" type="hidden" name="img_user" v-model="pre_img">
                                             </figure>
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
+                                                    <input accept="image/*" type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="100000">
                                                     <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                    <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.img[0]"></span>
                                                 </div>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="">
@@ -266,14 +268,16 @@ export default {
             errorPass: false,
             loaded: false,
             validPass: false,
-            img_profile:'/images/avatars/default.jpg'
+            img_profile:'/images/avatars/default.jpg', 
+            img_width: 0,
+            img_height: 0,
+            size: 100000
         }
     },
     created(){
         this.getUser();
         this.getRoles();
         this.avatar = this.user.avatar;
-        console.log('--->' + this.avatar);
     },
     // computed:{
     //     img_profile(){
@@ -383,7 +387,6 @@ export default {
             }
         },
         onInput(){
-            console.log(this.loaded)
             if(this.loaded == false){
                 this.loaded = true;
             }else{
@@ -391,16 +394,64 @@ export default {
             }
         },
         getImage(e){
-            let file = e.target.files[0];    
-            this.avatar = file;
-            this.preImage(file);
+            let file = e.target.files[0];
+            let fileSize = parseInt(e.target.files[0].size/1024);
+            let img = new Image();
+            
+            // alert(fileSize)
+            // alert($('.custom-file-input').attr('size'))
+            if(fileSize >= 100){
+
+                this.avatar = file;
+                this.preImage(file);
+    
+                setTimeout(() => {                    
+                    let img_user =  $('#img_user').val(); 
+                    // console.log('ooooo '+img_user)
+                    img.onload = function(){
+                        setTimeout(() => {
+                            // console.log('img 1' + ' --- ' + this.height.toFixed(0))
+                                if(this.height.toFixed(0) >= 400 && this.width.toFixed(0) >= 400 
+                                    && this.height.toFixed(0) <= 700 && this.width.toFixed(0) <= 700){
+                                    $("#user_image").attr("src",img_user);
+                                    // this.img_profile = img_user;
+                                    // alert(this.img_height  + " / " + this.img_width) 
+                                    // this.img_profile = "";                       
+                                }else{
+                                    // console.log(this.pre_img)
+                                    this.errors.img[0] = 'Formato de Imagen no permitido'; 
+                                    $("#user_image").attr("src",'/images/avatars/default.jpg');
+                                    toastr.error("ERROR - Formato de Imagen Errado...!");
+                                    // alert('Formato Incorrecto..!')
+                                }
+                            }, 500)
+                            // this.img_width = img.width;
+                            // this.img_height = img.height;
+                        }
+                        
+                        img.src = URL.createObjectURL(file);
+                        // console.log('IMG 0' + img)
+                        // console.log('img 2' + ' --- ' + this.img_profile)
+                        // if(img_height >= 500 && img_width >= 500){
+                        // }else{
+                        //     alert('Formato incorrecto..!!')
+                        // }
+                }, 500)
+            }else{
+                // alert('error')
+                // this.errors.img[0] = 'Formato de Imagen no permitido'; 
+                $("#user_image").attr("src",'/images/avatars/default.jpg');
+                toastr.error("ERROR - Formato de Imagen Errado...!");
+            }
+
         },
         preImage(file){
             let reader = new FileReader();
 
             reader.onload = e => {
                 this.pre_img = e.target.result;
-                this.img_profile = this.pre_img;
+                $('#img_user').val(this.pre_img)
+                // this.img_profile = this.pre_img;
             }
             reader.readAsDataURL(file);
 
@@ -431,7 +482,8 @@ export default {
         },
         closeModal(){
             this.loaded = false;
-            this.img_profile = '/images/avatars/default.jpg'
+            this.img_profile = '/images/avatars/default.jpg';
+            $("#user_image").attr("src",'/images/avatars/default.jpg');
         } 
     }
 }
