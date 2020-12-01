@@ -100,7 +100,7 @@
                                                                         </span>
                                                                     </div>
                                                                     <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors.name}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
-                                                                    <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
+                                                                    <!-- <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span> -->
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -112,7 +112,7 @@
                                                                             </span>
                                                                         </div>
                                                                     <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors.email}" placeholder="Ingrese Email" v-model="user.email" autocomplete="off">
-                                                                    <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
+                                                                    <!-- <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span> -->
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -126,7 +126,7 @@
                                                                             </span>
                                                                         </div>
                                                                     <input type="password" class="form-control" :class="{'is-invalid' : errors.password, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password" autocomplete="off">
-                                                                    <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
+                                                                    <!-- <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span> -->
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -158,7 +158,7 @@
                                                                         <option value="">Seleccione un Tipo de Rol</option>
                                                                         <option v-for="role in roles" :key="role.id" :value="role.name">{{ role.display_name }}</option>
                                                                     </select>
-                                                                    <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span>
+                                                                    <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -197,18 +197,19 @@
                                 </button>
                                 </div>
                             <div class="modal-body">
-                                <div class="row text-center">
+                                <div class="row">
                                     <div class="col-12" >
                                         <div class="form-group">    
-                                            <figure v-show="img_profile">
-                                                <img id="user_image" class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
-                                                <input id="img_user" type="hidden" name="img_user" v-model="pre_img">
-                                            </figure>
+                                            <div class="row justify-content-center h-100">
+                                                <figure v-show="img_profile">
+                                                    <img id="user_image" class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                    <input id="img_user" type="hidden" name="img_user" v-model="pre_img">
+                                                </figure>
+                                            </div>
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input accept="image/*" type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="100000">
+                                                    <input accept="image/*" type="file" class="custom-file-input" :class="{'is-invalid' : errorsImg[0] }" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="1">
                                                     <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
-                                                    <span v-if="errors" class="invalid-feedback text-danger" role="alert" v-html="errors.img[0]"></span>
                                                 </div>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="">
@@ -216,6 +217,12 @@
                                                     </span>
                                                 </div>
                                             </div>
+                                            {{ errorsImg.img }}
+                                            <span class="text-left text-danger" role="alert">
+                                                <small>{{ errorsImg[0] }}</small>
+                                            </span>
+                                        </div>
+                                        <div>
                                         </div>
                                     </div>
                                 </div>
@@ -234,6 +241,8 @@
     </section>
 </template>
 <script>
+import validate from 'validate.js'
+
 export default {
     name: 'user-edit-app',
     data(){
@@ -264,7 +273,8 @@ export default {
             address:'',
             password_confirmation: '',
             messagePass: '',
-            errors: '',
+            errors: [],
+            errorsImg: [],
             errorPass: false,
             loaded: false,
             validPass: false,
@@ -399,12 +409,12 @@ export default {
             let img = new Image();
             
             // alert(fileSize)
-            // alert($('.custom-file-input').attr('size'))
+            // alert($('#img_profile').attr('size'))
+            this.errorsImg = [];
             if(fileSize >= 100){
-
                 this.avatar = file;
                 this.preImage(file);
-    
+        
                 setTimeout(() => {                    
                     let img_user =  $('#img_user').val(); 
                     // console.log('ooooo '+img_user)
@@ -419,7 +429,7 @@ export default {
                                     // this.img_profile = "";                       
                                 }else{
                                     // console.log(this.pre_img)
-                                    this.errors.img[0] = 'Formato de Imagen no permitido'; 
+                                    this.errorsImg.push('Formato de Imagen no permitido'); 
                                     $("#user_image").attr("src",'/images/avatars/default.jpg');
                                     toastr.error("ERROR - Formato de Imagen Errado...!");
                                     // alert('Formato Incorrecto..!')
@@ -439,11 +449,11 @@ export default {
                 }, 500)
             }else{
                 // alert('error')
-                // this.errors.img[0] = 'Formato de Imagen no permitido'; 
+                this.errorsImg.push('Formato de Imagen no permitido'); 
+                 console.log(this.errorsImg)
                 $("#user_image").attr("src",'/images/avatars/default.jpg');
                 toastr.error("ERROR - Formato de Imagen Errado...!");
-            }
-
+            }   
         },
         preImage(file){
             let reader = new FileReader();
@@ -458,29 +468,54 @@ export default {
         },
         updateImg(){
             let url = `/api/auth/usuarios/${this.user_id}/avatar`
-
             let data = new FormData();
+            console.log(' --->' + this.avatar)
+            // this.errorsImg = [];
+            // const constraints = this.getConstraints();
+            // const errors = validate(this.avatar, constraints);
+            
+            // if(errors){
+            //     this.errorsImg = errors;
+            //     console.log(this.errorsImg)
+            //     return;
+            // }
             data.append('img', this.avatar);
             data.append('name', this.user.name);
-            this.$Progress.start()
-                setTimeout(() => {
+            setTimeout(() => {
+                this.$Progress.start()
                 axios.post(url,data).then((response) =>{
-                    console.log(response)
+                    console.log('aquauau' + data)
                     this.closeModal();
                     this.user.avatar = response.data.userAvatarUpdate.avatar;
                     toastr.info('La imagen fue actualizada.');
+                    
                     // let title = response.data.status;
                     // let body = response.data.msg;
                     // this.displayNotificationSuccess(title, body);
                 })
-                .catch((error) => {
-                    console.log(error)
-                    me.$Progress.fail();
+                .catch(error => {
+                    let errors = error.response.data.errors;
+                    this.$Progress.fail();
+                    if (error.request.status == 422) {
+                        console.log(errors.img[0]);
+                        this.errorsImg.push(errors.img[0])
+                        toastr.error("ERROR - En la validaciones.");
+                        $("#modal-profile-img").modal("show");
+                    }
                 })
             this.$Progress.finish();
             }, 1000);
         },
+        getConstraints(){
+            return {
+                avatar: {
+                    presence: true,
+                }
+            }
+        },
         closeModal(){
+            this.avatar = '';
+            this.errorsImg = [];
             this.loaded = false;
             this.img_profile = '/images/avatars/default.jpg';
             $("#user_image").attr("src",'/images/avatars/default.jpg');
