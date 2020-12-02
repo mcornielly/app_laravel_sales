@@ -108,7 +108,7 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $rules = $request->validate([
-            'name' => 'required',
+            'name' => 'required|min:3',
             'email' => 'required|min:6|unique:users,id,' . $id,
         ]);
         

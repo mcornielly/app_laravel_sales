@@ -100,7 +100,7 @@
                                                                         </span>
                                                                     </div>
                                                                     <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors.name}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
-                                                                    <!-- <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span> -->
+                                                                    <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -112,7 +112,7 @@
                                                                             </span>
                                                                         </div>
                                                                     <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors.email}" placeholder="Ingrese Email" v-model="user.email" autocomplete="off">
-                                                                    <!-- <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span> -->
+                                                                    <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -126,7 +126,7 @@
                                                                             </span>
                                                                         </div>
                                                                     <input type="password" class="form-control" :class="{'is-invalid' : errors.password, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password" autocomplete="off">
-                                                                    <!-- <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span> -->
+                                                                    <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -143,7 +143,7 @@
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click.prevent="updateUser(user.id)"><b>Actualizar Perfil</b></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="updateUser(user.id)"><b>Actualizar Perfil</b></button>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
@@ -154,16 +154,20 @@
                                                             <div class="form-group row">
                                                                 <label class="col-md-3 form-control-label">Rol de Usuario</label>
                                                                 <div class="col-md-9">
-                                                                    <select class="form-control" v-model="rol.name">
+                                                                    <select class="form-control" v-model="role.name">
                                                                         <option value="">Seleccione un Tipo de Rol</option>
                                                                         <option v-for="role in roles" :key="role.id" :value="role.name">{{ role.display_name }}</option>
                                                                     </select>
-                                                                    <!-- <span v-if="errors" class="invalid-feedback text-white" role="alert" v-html="errors.rol[0]"></span> -->
+                                                                    <span v-if="errors.name" class="text-danger" role="alert">
+                                                                        <small>
+                                                                            {{ errors.name[0] }}
+                                                                        </small>
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click.prevent="updateRol()"><b>Actualizar Rol</b></button>
+                                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="updateRol()"><b>Actualizar Rol</b></button>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-three-messages" role="tabpanel" aria-labelledby="custom-tabs-three-messages-tab">
@@ -209,7 +213,7 @@
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input accept="image/*" type="file" class="custom-file-input" :class="{'is-invalid' : errorsImg[0] }" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="1">
-                                                    <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
+                                                    <label class="custom-file-label" for="img_profile"><span class="text-capitalize"> {{ nameImg }}</span></label>
                                                 </div>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="">
@@ -217,7 +221,6 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            {{ errorsImg.img }}
                                             <span class="text-left text-danger" role="alert">
                                                 <small>{{ errorsImg[0] }}</small>
                                             </span>
@@ -241,7 +244,6 @@
     </section>
 </template>
 <script>
-import validate from 'validate.js'
 
 export default {
     name: 'user-edit-app',
@@ -279,8 +281,7 @@ export default {
             loaded: false,
             validPass: false,
             img_profile:'/images/avatars/default.jpg', 
-            img_width: 0,
-            img_height: 0,
+            nameImg: 'Seleccionar Imagen',
             size: 100000
         }
     },
@@ -308,7 +309,7 @@ export default {
                 axios.get(url).then((response) => {
                     console.log(response.data)
                     me.user = response.data;
-                    me.rol = response.data.roles[0];
+                    me.role = response.data.roles[0];
 
                 }).catch((error) => {
                     me.errors = error.response.data.errros;
@@ -358,23 +359,23 @@ export default {
             let me = this;
             var url = `/api/auth/usuarios/${this.user_id}/roles`;
 
-            this.role.push(this.rol.name);
+            // this.role.push(this.role.name);
             this.$Progress.start()
             setTimeout(() => {
                 axios.put(url,{
                     'id': this.user_id,
-                    'role': this.role,
+                    'name': this.role.name,
                 }).then(response => {
                     console.log(response)
-                    // me.$router.push({ path: "/usuarios" });
+                    me.$router.push({ path: "/usuarios" });
                     toastr.info('El Rol del Usuario fue actualizado.');
                 }).catch(error => {
+                    this.$Progress.fail();
                     let errors = error.response.data.errors;
                     if (error.response.status == 422) {
-                        console.log(me.errors)
+                        console.log(errors)
                         me.errors = errors;
                         me.validPass = false;
-                        me.$Progress.fail();
                         toastr.error("ERROR - En la validaciones.");
                     }
                 })
@@ -408,8 +409,7 @@ export default {
             let fileSize = parseInt(e.target.files[0].size/1024);
             let img = new Image();
             
-            // alert(fileSize)
-            // alert($('#img_profile').attr('size'))
+            this.nameImg = file.name.toLowerCase();
             this.errorsImg = [];
             if(fileSize >= 100){
                 this.avatar = file;
@@ -417,40 +417,25 @@ export default {
         
                 setTimeout(() => {                    
                     let img_user =  $('#img_user').val(); 
-                    // console.log('ooooo '+img_user)
                     img.onload = function(){
                         setTimeout(() => {
-                            // console.log('img 1' + ' --- ' + this.height.toFixed(0))
                                 if(this.height.toFixed(0) >= 400 && this.width.toFixed(0) >= 400 
                                     && this.height.toFixed(0) <= 700 && this.width.toFixed(0) <= 700){
                                     $("#user_image").attr("src",img_user);
-                                    // this.img_profile = img_user;
-                                    // alert(this.img_height  + " / " + this.img_width) 
-                                    // this.img_profile = "";                       
                                 }else{
-                                    // console.log(this.pre_img)
+                                    this.nameImg = 'Seleccionar Imagen';
                                     this.errorsImg.push('Formato de Imagen no permitido'); 
                                     $("#user_image").attr("src",'/images/avatars/default.jpg');
                                     toastr.error("ERROR - Formato de Imagen Errado...!");
-                                    // alert('Formato Incorrecto..!')
                                 }
-                            }, 500)
-                            // this.img_width = img.width;
-                            // this.img_height = img.height;
+                            }, 300)
                         }
-                        
                         img.src = URL.createObjectURL(file);
-                        // console.log('IMG 0' + img)
-                        // console.log('img 2' + ' --- ' + this.img_profile)
-                        // if(img_height >= 500 && img_width >= 500){
-                        // }else{
-                        //     alert('Formato incorrecto..!!')
-                        // }
-                }, 500)
+
+                }, 300)
             }else{
-                // alert('error')
+                this.nameImg = 'Seleccionar Imagen';
                 this.errorsImg.push('Formato de Imagen no permitido'); 
-                 console.log(this.errorsImg)
                 $("#user_image").attr("src",'/images/avatars/default.jpg');
                 toastr.error("ERROR - Formato de Imagen Errado...!");
             }   
@@ -469,54 +454,35 @@ export default {
         updateImg(){
             let url = `/api/auth/usuarios/${this.user_id}/avatar`
             let data = new FormData();
-            console.log(' --->' + this.avatar)
-            // this.errorsImg = [];
-            // const constraints = this.getConstraints();
-            // const errors = validate(this.avatar, constraints);
-            
-            // if(errors){
-            //     this.errorsImg = errors;
-            //     console.log(this.errorsImg)
-            //     return;
-            // }
+
             data.append('img', this.avatar);
             data.append('name', this.user.name);
+
+            this.$Progress.start()
             setTimeout(() => {
-                this.$Progress.start()
                 axios.post(url,data).then((response) =>{
                     console.log('aquauau' + data)
                     this.closeModal();
                     this.user.avatar = response.data.userAvatarUpdate.avatar;
                     toastr.info('La imagen fue actualizada.');
-                    
-                    // let title = response.data.status;
-                    // let body = response.data.msg;
-                    // this.displayNotificationSuccess(title, body);
                 })
                 .catch(error => {
                     let errors = error.response.data.errors;
                     this.$Progress.fail();
                     if (error.request.status == 422) {
-                        console.log(errors.img[0]);
                         this.errorsImg.push(errors.img[0])
                         toastr.error("ERROR - En la validaciones.");
                         $("#modal-profile-img").modal("show");
                     }
                 })
             this.$Progress.finish();
-            }, 1000);
-        },
-        getConstraints(){
-            return {
-                avatar: {
-                    presence: true,
-                }
-            }
+            }, 500);
         },
         closeModal(){
             this.avatar = '';
             this.errorsImg = [];
             this.loaded = false;
+            this.nameImg = 'Seleccionar Imagen';
             this.img_profile = '/images/avatars/default.jpg';
             $("#user_image").attr("src",'/images/avatars/default.jpg');
         } 

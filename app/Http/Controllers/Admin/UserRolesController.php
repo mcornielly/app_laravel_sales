@@ -10,9 +10,17 @@ class UserRolesController extends Controller
 {
     public function update(Request $request, User $user)
     {
-        $user = User::find($request->id);
-        $user->syncRoles($request->role);
-
-        return $user;
+        // return $request->all();
+        $rules = $request->validate([
+            'name' => 'required',
+            ]);
+            
+        
+        $role = User::find($request->id);
+        $role->syncRoles($rules);
+            
+        if(request()->wantsJson()){
+            return $role;
+        }
     }
 }
