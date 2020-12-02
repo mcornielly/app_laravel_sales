@@ -367,7 +367,8 @@ export default {
                     'name': this.role.name,
                 }).then(response => {
                     console.log(response)
-                    me.$router.push({ path: "/usuarios" });
+                    me.errors = [];
+                    // me.$router.push({ path: "/usuarios" });
                     toastr.info('El Rol del Usuario fue actualizado.');
                 }).catch(error => {
                     this.$Progress.fail();

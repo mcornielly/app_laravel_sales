@@ -13,14 +13,14 @@ class UserRolesController extends Controller
         // return $request->all();
         $rules = $request->validate([
             'name' => 'required',
-            ]);
+        ]);
             
-        
-        $role = User::find($request->id);
-        $role->syncRoles($rules);
+        $user = User::find($request->id);
+        $user->roles()->detach();
+        $user->syncRoles($rules);
             
         if(request()->wantsJson()){
-            return $role;
+            return $user;
         }
     }
 }
