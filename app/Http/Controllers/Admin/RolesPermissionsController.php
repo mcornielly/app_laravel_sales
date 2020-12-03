@@ -90,7 +90,15 @@ class RolesPermissionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request->all();
+        $rol = Role::with('permissions')->find($request->id);
+        // $rol->permissions()->detach();
+
+        if($request->filled('permissions'))
+        {
+            $rol->syncPermissions($request->permissions);
+        }
+
     }
 
     /**

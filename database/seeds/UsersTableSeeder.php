@@ -56,7 +56,7 @@ class UsersTableSeeder extends Seeder
         $storerRole->givePermissionTo(['create product','view product','detail product','update product','delete product']);
         $storerRole->givePermissionTo(['view shopping']);
         $storerRole->givePermissionTo(['create income','view income','detail income','update income','delete income']);
-        $storerRole->givePermissionTo(['create customer','view customer','detail customer','update customer','delete customer']);
+        $storerRole->givePermissionTo(['create provider','view provider','detail provider','update provider','delete provider']);
         $storerRole->givePermissionTo(['view reports']);
         $storerRole->givePermissionTo(['view income report','detail income report']);
         $storerRole->givePermissionTo(['view sale report','detail sale report']);

@@ -119,7 +119,7 @@
             </div>
         </div>
         <div class="row">
-            <button class="btn btn-primary btn-sm btn-block">Actualizar Permisos</button>
+            <button class="btn btn-primary btn-sm btn-block" @click="updatePermissions(permissions)">Actualizar Permisos</button>
         </div>
     </div>
 </template>
@@ -158,15 +158,15 @@
                     this.menus = response.data.menus;
                     this.menus_all = response.data.menus_all;
                     this.sub_menus = response.data.submenus;
-                    console.log(this.menus_all)
+                    // console.log(this.menus_all)
                 }) 
             },
             getPermissions(){
                 let url = `/api/auth/permisos/${this.$route.params.role}`
                 console.log(url)
                 axios.get(url).then((response) => {
-                    console.log(response.data)
                     // this.permissions = response.data;
+                    // console.log(response.data)
                     let permissions = [];
                     permissions = response.data;
                     permissions.forEach(element => {
@@ -176,18 +176,19 @@
                     // console.log(this.permission)
                 }) 
             },
-            updateRol(){
-                let url = `/api/auth/roles/${this.$route.params.role}`
+            updatePermissions(){
+                console.log(this.permissions)
+                let url = `/api/auth/roles/${this.$route.params.role}/permisos`
                 console.log(url)
                 setTimeout(() => {
                     this.$Progress.start()    
                     axios.put(url,{
                         id: this.$route.params.role,
-                        name: this.rol.name,
-                        display_name: this.rol.display_name
+                        permissions: this.permissions,
                     }).then((response) => {
                         console.log(response)
                         this.rol = response.data;
+                        toastr.info('Los Permisos del Rol fueron actualizados.');
                         this.$router.push({ path: "/roles" });
                     }).catch(error => {
                         let errors = error.response.data.errors;

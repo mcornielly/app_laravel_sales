@@ -75,6 +75,7 @@
                     }).then((response) => {
                         console.log(response)
                         this.rol = response.data;
+                        toastr.info('Los Datos del Rol fueron actualizados.');
                         this.$router.push({ path: "/roles" });
                     }).catch(error => {
                         let errors = error.response.data.errors;
