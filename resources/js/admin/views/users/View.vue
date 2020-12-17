@@ -21,7 +21,7 @@
                                     <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
-                                <p class="text-muted text-center text-capitalize" v-text="roles.display_name"></p>
+                                <p class="text-primary text-center text-capitalize" v-text="roles.display_name"></p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
@@ -37,7 +37,7 @@
                                                    <h3 class="card-title"><i class="fas fa-user-shield">&nbsp;</i>Permisos Rol - {{ roles.display_name }}</h3> 
                                                 </div>
                                                 <div class="card-body">
-                                                    <template v-if="all_permissions.length">
+                                                    <template v-if="rol_permissions.length">
                                                         <table class="table table-striped">
                                                             <thead>
                                                                 <tr>
@@ -49,7 +49,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr v-for="(permission, index) in all_permissions" :key="permission.id">
+                                                                <tr v-for="(permission, index) in rol_permissions" :key="permission.id">
                                                                     <td>{{ index + 1 }}</td>
                                                                     <td><b>{{ permission.display_name }}</b></td>
                                                                     <td>{{ permission.name }}</td>
@@ -143,6 +143,7 @@ export default {
             roles: [],
             all_permissions: [],
             permissions: [],
+            rol_permissions: [],
             permission_rol: false,
             permission_user: false
         }
@@ -162,11 +163,14 @@ export default {
             let me = this;
             console.log(url)
             axios.get(url).then((response) => {
-                // console.log(response)
-                me.user = response.data;
-                me.roles = response.data.roles[0];
-                me.all_permissions = response.data.all_permissions;
-                me.permissions = response.data.permissions;
+                console.log(response)
+                me.user = response.data.user;
+                me.roles = response.data.user.roles[0];
+                me.all_permissions = response.data.user.all_permissions;
+                me.permissions = response.data.permissions_user;
+                me.rol_permissions = response.data.user.roles[0].permissions;
+            
+                // me.permissions = response.data.user.permissions;
             }) 
         },
         showPermissionRol(){

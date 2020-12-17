@@ -76,10 +76,28 @@ class UsersController extends Controller
     public function show(User $user, Request $request, $id)
     {
         $user = User::find($id);
-        
-        if(request()->wantsJson()){
+        $rol_id = $user->roles[0]->id;
+        $rol = Role::find($rol_id);
+        $permissions_rol = [];
+        $permissions_user = [];
 
-            return $user;
+        foreach($user->permissions as $permissions){
+            if($rol->hasPermissionTo($permissions)){
+                $permissions_rol[] = $permissions->name;         
+            }else{
+                // var_dump($permissions->name);
+                $permissions_user[] = $permissions;
+            }
+        };
+        
+        if(request()->wantsJson())
+        {
+                return [
+                    'user' => $user,
+                    'permissions_rol' => $permissions_rol,
+                    'permissions_user' => $permissions_user,
+                ];
+            
         }
     }
 
@@ -92,9 +110,28 @@ class UsersController extends Controller
     public function edit(User $user, Request $request, $id)
     {
         $user = User::find($id);
+        // $rol_id = $user->roles[0]->id;
+        // $rol = Role::find($rol_id);
+        // $permissions_rol = [];
+        // $permissions_user = [];
+
+        // foreach($user->permissions as $permissions){
+        //     if($rol->hasPermissionTo($permissions)){
+        //         $permissions_rol[] = $permissions->name;         
+        //     }else{
+        //         $permissions_user[] = $permissions;
+        //     }
+        // };
         
-        if(request()->wantsJson()){
+        if(request()->wantsJson())
+        {
             return $user;
+                // return [
+                //     'user' => $user,
+                //     'permissions_rol' => $permissions_rol,
+                //     'permissions_user' => $permissions_user,
+                // ];
+            
         }
     }
 

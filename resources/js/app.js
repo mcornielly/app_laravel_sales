@@ -100,6 +100,7 @@ Vue.component('sale-invoice', require('./components/sales/SaleInvoiceComponent.v
 Vue.component('modal-list-prod-sale', require('./components/sales/ModalListProductSaleComponent.vue').default);
 Vue.component('modal-customer', require('./components/customers/ModalCustomerComponent.vue').default);
 Vue.component('show-customer', require('./components/customers/ShowCustomerComponent.vue').default);
+Vue.component('permissions-component', require('./components/PermissionsComponent.vue').default);
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('btn-category', require('./components/categories/BtnCategoryComponent.vue').default);

@@ -33,6 +33,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::put('permisos/{role}/rol', 'Admin\RolesPermissionsController@update');
         Route::put('roles/{role}/permisos', 'Admin\RolesPermissionsController@update');
         Route::put('usuarios/{usuario}/roles', 'Admin\UserRolesController@update');
+        Route::put('usuarios/{usuario}/permisos', 'Admin\UserPermissionsController@update');
         Route::post('usuarios/{usuario}/avatar', 'Admin\UsersController@img_profile');
 
         Route::group(['middleware' => ['role:admin']], function(){
