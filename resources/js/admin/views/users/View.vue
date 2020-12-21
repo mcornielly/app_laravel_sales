@@ -17,24 +17,35 @@
                     <div class="col-md-12 pt-2">
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
-                                <div v-show="user.avatar" class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
+                                <!-- <div v-show="user.avatar" class="text-center"> -->
+                                    <!-- <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
                                 </div>
                                 <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
-                                <p class="text-primary text-center text-capitalize" v-text="roles.display_name"></p>
+                                <p class="text-primary text-center text-capitalize" v-text="roles.display_name"></p> -->
+                                <div class="text-center">
+                                    <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
+                                    <div v-show="user.avatar">
+                                        <img-profile
+                                            :user="user"
+                                            :role="role"
+                                            :editImg="editImg"
+                                        >
+                                        </img-profile>
+                                    </div>
+                                </div>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
                                         <b>Email</b> <a class="float-right text-primary" v-text="user.email"></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Rol</b> <a href="#" class="float-right text-primary" v-text="roles.display_name" @click.prevent="showPermissionRol()"></a>
+                                        <b>Rol</b> <a href="#" class="float-right text-primary" v-text="role.display_name" @click.prevent="showPermissionRol()"></a>
                                     </li>
                                     <transition name="fade">
                                         <li v-show="permission_rol" class="list-group-item">
                                             <div class="card card-primary card-outline">
                                                 <div class="card-header">
-                                                   <h3 class="card-title"><i class="fas fa-user-shield">&nbsp;</i>Permisos Rol - {{ roles.display_name }}</h3> 
+                                                   <h3 class="card-title"><i class="fas fa-user-shield">&nbsp;</i>Permisos Rol - {{ role.display_name }}</h3> 
                                                 </div>
                                                 <div class="card-body">
                                                     <template v-if="rol_permissions.length">
@@ -71,20 +82,20 @@
                                             </div>
                                         </li>
                                     </transition>
-                                    <li class="list-group-item">
-                                        <b>Permisos Extras</b>
-                                        <template v-if="permissions.length">
-                                            <a href="#" class="float-right text-primary" v-text="permissions.length" @click.prevent="showPermissionUser"></a>
-                                        </template> 
-                                        <template v-else>
-                                            <a class="text-muted float-right">Sin Permisos</a>
-                                        </template>
-                                    </li>
-                                     <transition name="fade">
+                                        <li class="list-group-item">
+                                            <b>Permisos Extras</b>
+                                            <template v-if="permissions.length">
+                                                <a href="#" class="float-right text-primary" v-text="permissions.length" @click.prevent="showPermissionUser"></a>
+                                            </template> 
+                                            <template v-else>
+                                                <a class="text-muted float-right">Sin Permisos</a>
+                                            </template>
+                                        </li>
+                                    <transition name="fade">
                                         <li v-show="permission_user" class="list-group-item">
                                             <div class="card card-primary card-outline">
                                                 <div class="card-header">
-                                                   <h3 class="card-title"><i class="fas fa-user-shield">&nbsp;</i>Permisos Extras Rol - {{ roles.display_name }}</h3> 
+                                                   <h3 class="card-title"><i class="fas fa-user-shield">&nbsp;</i>Permisos Extras Rol - {{ role.display_name }}</h3> 
                                                 </div>
                                                 <div class="card-body">
                                                     <table class="table table-striped">
@@ -139,8 +150,9 @@ export default {
             routePage:'Usuarios',
             titleCard:'Detalle de Usuario',
             user_id: this.$route.params.usuario,
+            editImg: false,
             user: [],
-            roles: [],
+            role: [],
             all_permissions: [],
             permissions: [],
             rol_permissions: [],
@@ -165,7 +177,7 @@ export default {
             axios.get(url).then((response) => {
                 console.log(response)
                 me.user = response.data.user;
-                me.roles = response.data.user.roles[0];
+                me.role = response.data.user.roles[0];
                 me.all_permissions = response.data.user.all_permissions;
                 me.permissions = response.data.permissions_user;
                 me.rol_permissions = response.data.user.roles[0].permissions;

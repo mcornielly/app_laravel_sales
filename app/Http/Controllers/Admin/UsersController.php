@@ -144,6 +144,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+       
         $rules = $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|min:6|unique:users,id,' . $id,
@@ -180,15 +181,15 @@ class UsersController extends Controller
     {
         $this->validate($request, [
             'img' => 'required|image'
-        ]);
-    
+            ]);
+            
         $file = $request->file('img');
         $extension = $file->getClientOriginalExtension();
         $filaName = explode(' ', $request->name);
         $filaName= Str::lower($filaName[0]);
         $fileName = $filaName . '_' . $id . '.' . $extension;
-    
-
+        
+        
         $avatar = $request->file('img')->store('images/avatars','public');
         $imageUrl = Storage::url($avatar);
         // dd($imageUrl);

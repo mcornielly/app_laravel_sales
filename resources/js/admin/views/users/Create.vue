@@ -13,6 +13,16 @@
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+                <div class="row">
+                    <div class="col-md-12 pt-2">
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div> 
+                </div>
             </div>
             <!-- /.col -->
         </div>
@@ -20,7 +30,7 @@
 </template>
 <script>
 export default {
-    name: 'user-index-app',
+    name: 'user-create-app',
     data(){
         return {
             titlePage:'Usuarios',

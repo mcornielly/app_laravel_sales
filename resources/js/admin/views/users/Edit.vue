@@ -20,44 +20,21 @@
                                 <div class="text-center">
                                     <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
                                     <div v-show="user.avatar">
-                                        <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
-                                        <a style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto" data-toggle="modal" data-target="#modal-profile-img">
-                                            <i class="fas fa-user-edit"></i>
-                                        </a>
-                                        <!-- <div v-show="user.avatar"  class="row" style="margin-left: auto; margin-right: auto;">
-                                            <div class=""></div>
-                                            <div class="row text-center">
-                                                <div class="col-12" >
-                                                    <div class="form-group">    
-                                                        <figure v-show="img_profile">
-                                                            <img class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
-                                                        </figure>
-                                                        <div class="input-group">
-                                                            <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="img_profile" ref="file" name="photo_profile" @change="getImage">
-                                                                <label class="custom-file-label" for="img_profile"><span class="text-center"> Seleccionar Imagen</span></label>
-                                                            </div>
-                                                            <div class="input-group-append">
-                                                                <span class="input-group-text" id="">
-                                                                    <a href="#" @click.prevent="updateImg">Subir Imagen</a>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class=""></div>
-                                        </div>                 -->
-                                        <!-- <input type="file" name="images" @change="getImage" accept="image/*"> -->
-                                        <!-- <div class="row mt-3">
-                                            <div v-show="photo_profile" class="center">
-                                                <input class="form-control" type="file" name="image" accept="image/*">
-                                            </div>
-                                        </div> -->
-                                        <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
-                                        <p class="text-primary text-center text-capitalize" v-text="role.display_name"></p>
+                                        <img-profile
+                                            :user="user"
+                                            :role="role"
+                                            :editImg="editImg"
+                                        >
+                                        </img-profile>
+                                                <!-- <div class="container">
+            <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
+                <a v-show="editImg" style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto" data-toggle="modal" data-target="#modal-profile-img">
+                    <i class="fas fa-user-edit"></i>
+                </a>
+            <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
+            <p class="text-primary text-center text-capitalize" v-text="role.display_name"></p>
+        </div> -->
                                     </div>
-
                                 </div>
 
                                 <!-- <div class="row">
@@ -197,7 +174,7 @@
             <!-- /.col -->
         </div>
         <!-- Modal Img Profile -->
-        <template>
+        <!-- <template>
             <div v-show="loaded">
                 <div class="modal fade show" id="modal-profile-img" style="display: block; padding-right: 16px;" aria-modal="true">
                     <div class="modal-dialog modal-lg">
@@ -241,14 +218,14 @@
                             <div class="modal-footer text-right">
                             <button type="button" class="btn btn-default" data-dismiss="modal"  @click.prevent="closeModal()">Close</button>
                             <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                            </div>
-                        </div>
+                            <!-- </div> -->
+                        <!-- </div> -->
                     <!-- /.modal-content -->
-                    </div>
+                    <!-- </div> -->
                     <!-- /.modal-dialog -->
-                </div>                       
-            </div>
-        </template>    
+                <!-- </div>                        -->
+            <!-- </div> -->
+        <!-- </template>    -->
     </section>
 </template>
 <script>
@@ -279,6 +256,7 @@ export default {
                 email:'',
                 password:'',
             },
+            editImg:true,
             avatar:'',
             type_document: '',
             num_document: '',
@@ -479,95 +457,95 @@ export default {
                 this.messagePass = "Password no concuerda";
             }
         },
-        onInput(){
-            if(this.loaded == false){
-                this.loaded = true;
-            }else{
-                this.loaded = false;
-            }
-        },
-        getImage(e){
-            let file = e.target.files[0];
-            let fileSize = parseInt(e.target.files[0].size/1024);
-            let img = new Image();
+        // onInput(){
+        //     if(this.loaded == false){
+        //         this.loaded = true;
+        //     }else{
+        //         this.loaded = false;
+        //     }
+        // },
+        // getImage(e){
+        //     let file = e.target.files[0];
+        //     let fileSize = parseInt(e.target.files[0].size/1024);
+        //     let img = new Image();
             
-            this.nameImg = file.name.toLowerCase();
-            this.errorsImg = [];
-            if(fileSize >= 100){
-                this.avatar = file;
-                this.preImage(file);
+        //     this.nameImg = file.name.toLowerCase();
+        //     this.errorsImg = [];
+        //     if(fileSize >= 100){
+        //         this.avatar = file;
+        //         this.preImage(file);
         
-                setTimeout(() => {                    
-                    let img_user =  $('#img_user').val(); 
-                    img.onload = function(){
-                        setTimeout(() => {
-                                if(this.height.toFixed(0) >= 400 && this.width.toFixed(0) >= 400 
-                                    && this.height.toFixed(0) <= 700 && this.width.toFixed(0) <= 700){
-                                    $("#user_image").attr("src",img_user);
-                                }else{
-                                    this.nameImg = 'Seleccionar Imagen';
-                                    this.errorsImg.push('Formato de Imagen no permitido'); 
-                                    $("#user_image").attr("src",'/images/avatars/default.jpg');
-                                    toastr.error("ERROR - Formato de Imagen Errado...!");
-                                }
-                            }, 300)
-                        }
-                        img.src = URL.createObjectURL(file);
+        //         setTimeout(() => {                    
+        //             let img_user =  $('#img_user').val(); 
+        //             img.onload = function(){
+        //                 setTimeout(() => {
+        //                         if(this.height.toFixed(0) >= 400 && this.width.toFixed(0) >= 400 
+        //                             && this.height.toFixed(0) <= 700 && this.width.toFixed(0) <= 700){
+        //                             $("#user_image").attr("src",img_user);
+        //                         }else{
+        //                             this.nameImg = 'Seleccionar Imagen';
+        //                             this.errorsImg.push('Formato de Imagen no permitido'); 
+        //                             $("#user_image").attr("src",'/images/avatars/default.jpg');
+        //                             toastr.error("ERROR - Formato de Imagen Errado...!");
+        //                         }
+        //                     }, 300)
+        //                 }
+        //                 img.src = URL.createObjectURL(file);
 
-                }, 300)
-            }else{
-                this.nameImg = 'Seleccionar Imagen';
-                this.errorsImg.push('Formato de Imagen no permitido'); 
-                $("#user_image").attr("src",'/images/avatars/default.jpg');
-                toastr.error("ERROR - Formato de Imagen Errado...!");
-            }   
-        },
-        preImage(file){
-            let reader = new FileReader();
+        //         }, 300)
+        //     }else{
+        //         this.nameImg = 'Seleccionar Imagen';
+        //         this.errorsImg.push('Formato de Imagen no permitido'); 
+        //         $("#user_image").attr("src",'/images/avatars/default.jpg');
+        //         toastr.error("ERROR - Formato de Imagen Errado...!");
+        //     }   
+        // },
+        // preImage(file){
+        //     let reader = new FileReader();
 
-            reader.onload = e => {
-                this.pre_img = e.target.result;
-                $('#img_user').val(this.pre_img)
-                // this.img_profile = this.pre_img;
-            }
-            reader.readAsDataURL(file);
+        //     reader.onload = e => {
+        //         this.pre_img = e.target.result;
+        //         $('#img_user').val(this.pre_img)
+        //         // this.img_profile = this.pre_img;
+        //     }
+        //     reader.readAsDataURL(file);
 
-        },
-        updateImg(){
-            let url = `/api/auth/usuarios/${this.user_id}/avatar`
-            let data = new FormData();
+        // },
+        // updateImg(){
+        //     let url = `/api/auth/usuarios/${this.user_id}/avatar`
+        //     let data = new FormData();
 
-            data.append('img', this.avatar);
-            data.append('name', this.user.name);
+        //     data.append('img', this.avatar);
+        //     data.append('name', this.user.name);
 
-            this.$Progress.start()
-            setTimeout(() => {
-                axios.post(url,data).then((response) =>{
-                    console.log('aquauau' + data)
-                    this.closeModal();
-                    this.user.avatar = response.data.userAvatarUpdate.avatar;
-                    toastr.info('La imagen fue actualizada.');
-                })
-                .catch(error => {
-                    let errors = error.response.data.errors;
-                    this.$Progress.fail();
-                    if (error.request.status == 422) {
-                        this.errorsImg.push(errors.img[0])
-                        toastr.error("ERROR - En la validaciones.");
-                        $("#modal-profile-img").modal("show");
-                    }
-                })
-            this.$Progress.finish();
-            }, 500);
-        },
-        closeModal(){
-            this.avatar = '';
-            this.errorsImg = [];
-            this.loaded = false;
-            this.nameImg = 'Seleccionar Imagen';
-            this.img_profile = '/images/avatars/default.jpg';
-            $("#user_image").attr("src",'/images/avatars/default.jpg');
-        } 
+        //     this.$Progress.start()
+        //     setTimeout(() => {
+        //         axios.post(url,data).then((response) =>{
+        //             console.log('aquauau' + data)
+        //             this.closeModal();
+        //             this.user.avatar = response.data.userAvatarUpdate.avatar;
+        //             toastr.info('La imagen fue actualizada.');
+        //         })
+        //         .catch(error => {
+        //             let errors = error.response.data.errors;
+        //             this.$Progress.fail();
+        //             if (error.request.status == 422) {
+        //                 this.errorsImg.push(errors.img[0])
+        //                 toastr.error("ERROR - En la validaciones.");
+        //                 $("#modal-profile-img").modal("show");
+        //             }
+        //         })
+        //     this.$Progress.finish();
+        //     }, 500);
+        // },
+        // closeModal(){
+        //     this.avatar = '';
+        //     this.errorsImg = [];
+        //     this.loaded = false;
+        //     this.nameImg = 'Seleccionar Imagen';
+        //     this.img_profile = '/images/avatars/default.jpg';
+        //     $("#user_image").attr("src",'/images/avatars/default.jpg');
+        // } 
     }
 }
 </script>
