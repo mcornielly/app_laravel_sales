@@ -16,13 +16,29 @@
             <i class="fas fa-edit text-primary" aria-hidden="true"></i>
         </router-link>
 
-                <router-link 
+        <router-link 
             title="permisos"
             :to="{name: 'role-permissions', params: {role:data.id}}"
             class="btn btn-link btn-sm"
         >
             <i class="fas fa-th-large text-warning" aria-hidden="true"></i>
         </router-link>
+
+        <!-- <router-link 
+            title="eliminar"
+            to="#"
+            @click="click(data.id,'delete')"
+            class="btn btn-link btn-sm"
+        >
+            <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+        </router-link> -->
+
+        <a href="#"
+            title="eliminar"
+            @click="click(data,'delete')"
+            class="btn btn-link btn-sm">
+            <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+        </a>
     </div>
 </template>
 

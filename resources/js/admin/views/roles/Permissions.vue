@@ -1,6 +1,6 @@
 <template>
     <div v-if="menus">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-12 pb-3">
                 <router-link            
                     title="permisos"
@@ -9,7 +9,7 @@
                         <i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i>Regresar
                 </router-link>
             </div>
-        </div>
+        </div> -->
         <permissions-component
             :permissions="permissions"
             :menus="menus"
@@ -29,6 +29,7 @@
         data() {
             return {
                 urlCurrrent: this.$route.path,
+                title: 'Lista de Permisos',
                 data:{},
                 permissions:[],
                 menus: null,
@@ -41,7 +42,8 @@
         created() {
             this.getMenu();
             this.getPermissions();
-            this.urlCurrrent = this.$route.path;
+            this.$emit('title', this.title);
+            this.$emit('path', this.$route.path);
         },
         computed: {
             currentUser(){

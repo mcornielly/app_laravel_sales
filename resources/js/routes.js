@@ -22,9 +22,9 @@ export const routes = [
         path: "/divisas",
         name: "divisas",
         component: require("./admin/views/Divisas").default,
-        // meta: {
-        //     requiresAuth: true
-        // }
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/categorias',
@@ -64,7 +64,7 @@ export const routes = [
         component: require('./admin/views/Providers').default,
     },
     {
-        path: '/ventas',
+        path: '/venta',
         name: 'sales',
         component: require('./admin/views/Sales').default,
     },
@@ -73,11 +73,6 @@ export const routes = [
         name: 'clients',
         component: require('./admin/views/Customers').default,
     },
-    // {
-    //     path: '/usuarios',
-    //     name: 'users',
-    //     component: require('./admin/views/Users').default,
-    // },
     {
         path: '/usuarios',
         name: 'users',
@@ -91,7 +86,7 @@ export const routes = [
                 component: require('./admin/views/users/List').default, 
             },
             {
-                path: ':usuario',
+                path: ':usuario/ver',
                 name: 'user-show',
                 component: require('./admin/views/users/View').default,
                 props: true
@@ -103,18 +98,13 @@ export const routes = [
                 props: true
             },
             {
-                path: ':usuario',
+                path: '/usuarios/crear',
                 name: 'user-crear',
                 component:require('./admin/views/users/Create').default,
                 props: true
             }
         ]
     },
-    // {
-    //     path: '/roles',
-    //     name: 'roles',
-    //     component: require('./admin/views/Roles').default,
-    // },
     {
         path: '/roles',
         name: 'roles',
@@ -127,6 +117,12 @@ export const routes = [
                 path: '/',
                 component: require('./admin/views/roles/List').default,
             },
+            {
+                path: '/role/crear',
+                name: 'role-crear',
+                component:require('./admin/views/roles/Create').default,
+                props: true
+            }, 
             {
                 path: ':role',
                 name: 'role-show',

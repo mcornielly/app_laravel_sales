@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
         User::truncate();
 
         // Super Admin
-        $adminRole = Role::create(['name' => 'admin', 'display_name' => 'Administrador']);
+        $adminRole = Role::create(['name' => 'admin', 'display_name' => 'Administrador','description' => 'El Usuario Administrador tiene el control total en la aplicación.']);
         $adminRole->givePermissionTo(['view dashboard']);
         $adminRole->givePermissionTo(['create divisa','view divisa','detail divisa','update divisa','delete divisa']);
         $adminRole->givePermissionTo(['view storage']);
@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
         $adminRole->givePermissionTo(['create role','view role','detail role','update role','delete role']);
         
         // Vendedor
-        $salerRole = Role::create(['name' => 'saler', 'display_name' => 'Vendedor']);
+        $salerRole = Role::create(['name' => 'saler', 'display_name' => 'Vendedor','description' => 'El Usuario Vendedor tiene el control en el porceso de ventas y reportes.']);
         $salerRole->givePermissionTo(['view dashboard']);
         $salerRole->givePermissionTo(['view storage']);
         $salerRole->givePermissionTo(['create list','view list','detail list','update list','delete list']);
@@ -49,7 +49,7 @@ class UsersTableSeeder extends Seeder
         $salerRole->givePermissionTo(['create customer','view customer','detail customer','update customer','delete customer']);
         
         // Almacén
-        $storerRole = Role::create(['name' => 'storage', 'display_name' => 'Almacen']);
+        $storerRole = Role::create(['name' => 'storage', 'display_name' => 'Almacen','description' => 'El Usuario Almacén tiene el control a los menú de ingresos, egresos y reportes.']);
         $storerRole->givePermissionTo(['view dashboard']);
         $storerRole->givePermissionTo(['view storage']);
         $storerRole->givePermissionTo(['create category','view category','detail category','update category','delete category']);
@@ -67,9 +67,9 @@ class UsersTableSeeder extends Seeder
         $admin->email = "mcornielly@gmail.com";
         $admin->password = '123456789';
         // $admin->password = Hash::make('123456789');
+        $admin->assignRole($adminRole->name);
         $admin->save();
 
-        $admin->assignRole($adminRole);
         
 
         $saler = new User;
@@ -78,9 +78,9 @@ class UsersTableSeeder extends Seeder
         $saler->email = "jcornielly@gmail.com";
         $saler->password = '123456789';
         // $saler->password = Hash::make('123456789');
+        $saler->assignRole($salerRole->name);
         $saler->save();
 
-        $saler->assignRole($salerRole);
 
         $storer = new User;
         $storer->id = 3;
@@ -88,9 +88,9 @@ class UsersTableSeeder extends Seeder
         $storer->email = "mmartinez@gmail.com";
         $storer->password = '123456789';
         // $storer->password = Hash::make('123456789');
+        $storer->assignRole($storerRole->name);
         $storer->save();
 
-        $storer->assignRole($storerRole);
 
     }
 }

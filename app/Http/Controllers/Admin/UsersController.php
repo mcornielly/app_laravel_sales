@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserCreateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -51,9 +52,33 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
 
+        return $request->all();
+        // $rule = $request->validate([
+        //     'name' => 'required|min:4',
+        //     'type_document' => 'required|numeric|min:1',
+        //     'num_document' => 'required|numeric',
+        //     'email' => 'required|email',
+        //     'num_phone' => 'required|digits:10',
+        //     'address' => 'required|min:6'
+        // ]);
+
+        // if(request()->wantsJson())
+        // {
+        //     return $rule;
+        // }
+        // if ($this->expectsJson()) {
+        //     response()->json(['error', 422]);
+        // }
+    }
+
+    public function validate_data_user(UserCreateRequest $request)
+    {
+        // if ($this->expectsJson()) {
+        //     response()->json(['error', 422]);
+        // }
     }
 
     /**
@@ -166,6 +191,12 @@ class UsersController extends Controller
         }
     }
 
+    public function validate_pass(Request $request){
+        $this->validate($request, [
+            'password' => 'required|min:8'
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -188,10 +219,16 @@ class UsersController extends Controller
         $filaName = explode(' ', $request->name);
         $filaName= Str::lower($filaName[0]);
         $fileName = $filaName . '_' . $id . '.' . $extension;
+
+        // return $request->img;
         
+        if($request->hasFile('img'))
+        {
+            $path_img = $request->img->store('public');
+            $imageUrl = Storage::url($path_img);
+        }
         
-        $avatar = $request->file('img')->store('images/avatars','public');
-        $imageUrl = Storage::url($avatar);
+        // $avatar = $request->file('img')->store('avatars','public');
         // dd($imageUrl);
         // Image::make($file)->fit(200, 200)->save($imageUrl);
         // $avatar = Storage::putFile($imageUrl);

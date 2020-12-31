@@ -155,7 +155,6 @@ class CategoriesController extends Controller
         if(request()->wantsJson())
         {
             return $category;
-   
         }
     }
 

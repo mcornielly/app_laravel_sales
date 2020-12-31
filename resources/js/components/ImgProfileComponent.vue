@@ -145,20 +145,20 @@
 
             },
             updateImg(){
+                let me = this;
                 let url = `/api/auth/usuarios/${this.user_id}/avatar`
                 let data = new FormData();
-            
+
                 data.append('img', this.avatar);
-                data.append('name', this.user.name);
-                console.log('111' + this.avatar)  
-                console.log(this.user.name)  
+                data.append('name', this.user.name); 
+                
                 this.$Progress.start()
                 setTimeout(() => {
                     axios.post(url,data).then((response) =>{
-                        console.log(data)
-                        this.closeModal();
-                        this.user.avatar = response.data.userAvatarUpdate.avatar;
+                        me.user.avatar = response.data.userAvatarUpdate.avatar;
+                        console.log(me.user.avatar)
                         toastr.info('La imagen del Usuario fue actualizada.');
+                        this.closeModal();
                     })
                     .catch(error => {
                         let errors = error.response.data.errors;

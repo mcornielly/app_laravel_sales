@@ -39,11 +39,14 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::group(['middleware' => ['role:admin']], function(){
             // Usuarios
             Route::resource('usuarios', 'Admin\UsersController');
+            Route::post('usuarios/validar_pass', 'Admin\UsersController@validate_pass');
+            Route::post('usuarios/validar_data', 'Admin\UsersController@validate_data_user');
             // Route::get('usuarios', 'Admin\UsersController@index');
             // Route::post('usuario', 'Admin\UsersController@store');
             // Route::put('usuario/{usuario}', 'Admin\UsersController@update');
             //Roles
             Route::resource('roles', 'Admin\RolesController');
+            Route::post('roles/validar_data', 'Admin\RolesController@validate_data_role');
             // Route::get('roles', 'Admin\RolesController@index');
             // Route::get('roles/', 'Admin\RolesController@show');
         });

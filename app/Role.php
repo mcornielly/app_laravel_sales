@@ -29,6 +29,9 @@ class Role extends Model
         'display_name' => [
             'searchable' => true,
         ],
+        'description' => [
+            'searchable' => true,
+        ],
         'created_at' => [
             'searchable' => true,
         ]
@@ -40,12 +43,12 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name'
+        'name', 'display_name', 'description', 'guard_name'
     ];
 
     public function permissions()
     {
-        return $this->belongsTo(Permission::class);
+        return $this->hasMany(Permission::class);
     }
 
 }

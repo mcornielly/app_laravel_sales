@@ -43,7 +43,8 @@ const store = new Vuex.Store(StoreData);
 const router = new VueRouter({
     routes,
     mode: "history",
-    linkExactActiveClass: "active"
+    // linkActiveClass: "active",
+    linkExactActiveClass: "active",
 });
 
 
@@ -102,6 +103,7 @@ Vue.component('modal-customer', require('./components/customers/ModalCustomerCom
 Vue.component('show-customer', require('./components/customers/ShowCustomerComponent.vue').default);
 Vue.component('permissions-component', require('./components/PermissionsComponent.vue').default);
 Vue.component('img-profile', require('./components/ImgProfileComponent.vue').default);
+Vue.component('error-flash', require('./components/layouts/ErrorFlashComponent.vue').default);
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('btn-category', require('./components/categories/BtnCategoryComponent.vue').default);

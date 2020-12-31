@@ -1,15 +1,13 @@
 <template>
-    <div>
-        <data-table
-            :data="data"
-            :theme="theme"
-            :columns="columns"
-            :translate="translate"
-            @onTablePropsChanged="reloadTable"
-            @loading="isLoading = true"
-            @finishedLoading="isLoading = false">
-        </data-table>
-    </div>
+    <data-table
+        :data="data"
+        :theme="theme"
+        :columns="columns"
+        :translate="translate"
+        @onTablePropsChanged="reloadTable"
+        @loading="isLoading = true"
+        @finishedLoading="isLoading = false">
+    </data-table>
 </template>
 <script>
 import Vue from 'vue';
@@ -25,12 +23,13 @@ export default {
     data(){
         return {
             url:"api/auth/roles",
+            title:'Lista de Roles',
             data: {},
             tableProps: {
                 search: '',
                 length: 10,
                 column: 'id',
-                dir: 'desc',
+                dir: 'asc',
             },
             translate:{
                 nextButton: 'Siguiente', 
@@ -65,7 +64,7 @@ export default {
                     orderable: false,
                     event: "click",
                     component: BtnRolComponentVue,     
-                    handler: this.action,
+                    handler: this.selectAction,
                 },
             ],
             selectedRow: {},
@@ -73,6 +72,8 @@ export default {
     },
     created(){
         this.getData(this.url);
+        this.$emit('title', this.title);
+        this.$emit('path', this.$route.path);
     },
     computed:{
         currentUser(){
@@ -85,10 +86,7 @@ export default {
             this.$Progress.start()
             setTimeout(() => {
                 axios.get(url, {
-                    params: options,
-                    headers: {
-                        "Authorization": `Bearer ${this.currentUser.token}`
-                    }
+                    params: options
                 })
                 .then(response => {
                     this.data = response.data;
@@ -106,6 +104,32 @@ export default {
         reloadTable(tableProps){
             this.getData(this.url, tableProps);
         },
+        selectAction(data, action){
+            switch(action){
+                case 'delete':
+                {
+                    this.deleteRole(data);
+                    break; 
+                }
+
+            }
+        },
+        deleteRole(data){
+            this.id = data.id;
+            console.log(this.id)
+            var url = `${this.url}/${this.id}`;
+            axios.delete(url).then(response => {
+                this.reloadTable();
+                this.destroy = false;
+                toastr.error('El Rol fue eliminado.');
+                // toastr["error"]("I do not think that means what you think it means.", "Eliminar");
+            }).catch(error => {
+                console.log(error);
+                var errors = error.response.data.errors;
+                this.errors = errors;
+            });
+        },
+
     }
 }
 </script>

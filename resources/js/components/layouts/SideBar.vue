@@ -60,7 +60,7 @@
                         </li>
                         <!-- Almacén -->
                         <li class="nav-item has-treeview">
-                            <router-link to="#" class="nav-link">
+                            <router-link to="/almacen" class="nav-link">
                                 <i class="nav-icon fas fa-boxes text-orange"></i>
                                 <p>
                                     Almacén
@@ -90,7 +90,7 @@
                         </li>
                         <!-- Compras -->
                         <li class="nav-item has-treeview">
-                            <router-link to="#" class="nav-link">
+                            <router-link to="/compras" class="nav-link">
                                 <i class="nav-icon fas fa-store text-purple"></i>
                                 <p>
                                     Compras
@@ -99,19 +99,13 @@
                             </router-link>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/ingresos"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/ingresos" class="nav-link">
                                         <i class="nav-icon fas fa-piggy-bank"></i>
                                         <p>Ingresos</p>
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/proveedores"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/proveedores" class="nav-link">
                                         <i class="nav-icon fas fa-industry"></i>
                                         <p>Proveedores</p>
                                     </router-link>
@@ -120,25 +114,22 @@
                         </li>
                         <!-- Ventas -->
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <router-link to="/ventas" class="nav-link">
                                 <i class="nav-icon far fa-handshake text-teal"></i>
                                 <p>
                                     Ventas
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
-                            </a>
+                            </router-link>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <router-link to="/ventas" class="nav-link">
+                                    <router-link to="/venta" class="nav-link">
                                         <i class="nav-icon fas fa-cash-register"></i>
                                         <p>Ventas</p>
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/clientes"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/clientes" class="nav-link">
                                         <i class="nav-icon fas fa-user-tie"></i>
                                         <p>Clientes</p>
                                     </router-link>
@@ -148,7 +139,7 @@
 
                         <!-- Reportes -->
                         <li class="nav-item has-treeview">
-                            <router-link to="#" class="nav-link">
+                            <router-link to="/reportes" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard text-gray"></i>
                                 <p>
                                     Reportes
@@ -157,19 +148,13 @@
                             </router-link>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <router-link
-                                        to="#"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/reportes-ingreso" class="nav-link">
                                         <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>Reportes Ingreso</p>
                                     </router-link>
                                 </li>
                                 <li class="nav-item">
-                                    <router-link
-                                        to="/usuarios"
-                                        class="nav-link"
-                                    >
+                                    <router-link to="/reportes-ventas" class="nav-link">
                                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                                         <p>Reportes Ventas</p>
                                     </router-link>
@@ -179,31 +164,23 @@
                         <template v-if="currentUser.roles[0].name=='admin'">
                             <!-- Usiuarios Roles  Permisos -->
                             <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
+                                <router-link to="/usuarios" class="nav-link">
                                     <i class="nav-icon fas fa-door-open text-lightblue"></i>
                                     <p>
                                         Accesos
                                         <i class="right fas fa-angle-left"></i>
                                     </p>
-                                </a>
+                                </router-link>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <router-link
-                                            to="/usuarios"
-                                            class="nav-link"
-                                        >
+                                        <router-link to="/usuarios" class="nav-link">
                                             <i class="nav-icon fas fa-users"></i>
                                             <p>Usurios</p>
                                         </router-link>
                                     </li>
                                     <li class="nav-item">
-                                        <router-link
-                                            to="/roles"
-                                            class="nav-link"
-                                        >
-                                            <i
-                                                class="nav-icon fas fa-users-cog"
-                                            ></i>
+                                        <router-link to="/roles" class="nav-link">
+                                            <i class="nav-icon fas fa-users-cog"></i>
                                             <p>Roles</p>
                                         </router-link>
                                     </li>
@@ -212,12 +189,7 @@
                         </template>
                         <!-- Logout -->
                         <li class="nav-item">
-                            <a
-                                id="logout"
-                                href="#/"
-                                class="nav-link"
-                                @click.prevent="logout"
-                            >
+                            <a id="logout" href="#/" class="nav-link" @click.prevent="logout">
                                 <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
                                 <p>Salir</p>
                             </a>

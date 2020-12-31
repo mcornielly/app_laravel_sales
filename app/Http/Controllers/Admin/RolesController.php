@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Role;
+// use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Spatie\Permission\Models\Permission;
-// use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
+use App\Http\Requests\RoleCreateRequest;
+// use Illuminate\Support\Collection;
+// use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Models\Role;
 class RolesController extends Controller
 {
+    // use HasPermissions;
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +27,7 @@ class RolesController extends Controller
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = Role::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        $query = \App\Role::eloquentQuery($orderBy, $orderByDir, $searchValue);
         
         if(request()->wantsJson()){
             $data = $query->paginate($length);
@@ -40,6 +45,13 @@ class RolesController extends Controller
         //
     }
 
+    public function validate_data_role(RoleCreateRequest $request)
+    {
+        // if ($this->expectsJson()) {
+        //     response()->json(['error', 422]);
+        // }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -48,7 +60,28 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'name' => 'required|min:5|unique:roles',
+            'display_name' => 'required|unique:roles',
+            'description' => 'required|min:10',
+        ]);
+            
+        $role = new Role();
+        $role->name = Str::lower($request->name);
+        $role->display_name = ucwords($request->display_name);
+        $role->description = $request->description;
+        $role->guard_name = $request->guard_name;
+        $role->save();
+
+        if($request->has('permissions')) {
+            $role->givePermissionTo($request->permissions);
+         }
+
+        if(request()->wantsJson()){
+            return $role;
+        }    
+
     }
 
     /**
@@ -90,6 +123,7 @@ class RolesController extends Controller
         $data = $this->validate($request,[
             'name' => 'required|unique:roles,name,'. $request->id,
             'display_name' => 'required|unique:roles,display_name,'. $request->id,
+            'description' => 'required|unique:roles,description,'. $request->id,
         ]);
         
         $role->update($data);
@@ -108,6 +142,15 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+        $role->permissions()->detach(); 
+        $role->save();
+        $role->delete();
+
+       if(request()->wantsJson())
+       {
+           return $role;
+  
+       }
     }
 }

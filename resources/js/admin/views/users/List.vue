@@ -1,28 +1,13 @@
 <template>
-    <div>
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ titleCard }} </h3>   
-                <router-link :to="{name: 'user-crear'}" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Usuario</router-link>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                <template>
-                    <data-table
-                        :data="data"
-                        :theme="theme"
-                        :columns="columns"
-                        :translate="translate"
-                        @onTablePropsChanged="reloadTable"
-                        @loading="isLoading = true"
-                        @finishedLoading="isLoading = false">
-                    </data-table>
-                </template>
-            </div>
-            <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-    </div>
+    <data-table
+        :data="data"
+        :theme="theme"
+        :columns="columns"
+        :translate="translate"
+        @onTablePropsChanged="reloadTable"
+        @loading="isLoading = true"
+        @finishedLoading="isLoading = false">
+    </data-table>
 </template>
 <script>
 import Vue from 'vue';
@@ -39,15 +24,8 @@ export default {
     },
     data(){
         return {
-            titlePage:'Usuarios',
-            routePage:'Usuarios',
-            titleCard:'Lista de Usuarios',
             url:"api/auth/usuarios",
-            title: '',
-            name: '',
-            email: '',
-            password: '',
-            errors: '',
+            title: 'Lista de Usuarios',
             data: {},
             roles:{},
             tableProps: {
@@ -98,6 +76,8 @@ export default {
     },
     created(){
         this.getData(this.url);
+        this.$emit('title', this.title);
+        this.$emit('path', this.$route.path);
     },
     computed:{
         currentUser(){
