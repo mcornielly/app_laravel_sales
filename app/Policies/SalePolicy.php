@@ -10,6 +10,14 @@ class SalePolicy
 {
     use HandlesAuthorization;
 
+    public function before($user)
+    {
+        if($user->hasRole('admin'))
+        {
+            return true;
+        }
+    }
+
     /**
      * Determine whether the user can view any sales.
      *

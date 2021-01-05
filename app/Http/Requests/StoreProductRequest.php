@@ -25,7 +25,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|unique:products',
-            'category_id' => 'required|numeric|min:1',
+            'category_id' => 'required|numeric',
             'description' => 'required',
             'code' => 'required'
             // 'price' => 'required|numeric|not_in:0',

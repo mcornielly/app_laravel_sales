@@ -1,141 +1,143 @@
 <template>
     <section>
-        <div class="row">
-            <div class="col-md-12 pt-2">
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
-                            <div v-show="user.avatar">
-                                <img-profile
-                                    :user="user"
-                                    :role="role"
-                                    :editImg="editImg"
-                                >
-                                </img-profile>
-                            </div>
+        <div class="col-md-12">
+                <!-- <img class="profile-user-img img-fluid img-circle" src="/adminlte/dist/img/user4-128x128.jpg" alt="User profile picture">C:\laragon\www\app_laravel_sales\public\images\avatars\default.jpg -->
+            <div v-show="user.avatar">
+                <img-profile
+                    :user="user"
+                    :role="role"
+                    :editImg="editImg"
+                >
+                </img-profile>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-6">
+                    <div class="card card-primary card-outline card-tabs">
+                        <div class="card-header p-0 pt-1 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true" @click="tabChange('dataUser')">Perfil del Usuario</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false" @click="tabChange('roleUser')">Rol del Usuario</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="false" @click="tabChange('permissionsUser')">Permisos</a>
+                            </li>
+                            </ul>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-6">
-                                <div class="card card-primary card-outline card-tabs">
-                                <div class="card-header p-0 pt-1 border-bottom-0">
-                                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">Perfil del Usuario</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Rol del Usuario</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="pill" href="#custom-tabs-three-messages" role="tab" aria-controls="custom-tabs-three-messages" aria-selected="false">Permisos</a>
-                                    </li>
-                                    </ul>
-                                </div>
-                                <div class="card-body">
-                                    <div class="tab-content" id="custom-tabs-three-tabContent">
-                                        <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
-                                            <div>
-                                                <ul class="list-group list-group-unbordered mb-3">
-                                                    <li class="list-group-item">
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 form-control-label">Nombre y Apellido</label>
-                                                            <div class="input-group col-md-9">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">
-                                                                        <i class="fas fa-user-tag"></i>
-                                                                    </span>
-                                                                </div>
-                                                                <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors.name}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
-                                                                <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
-                                                            </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-three-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                                    <div>
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Nombre y Apellido</label>
+                                                    <div class="input-group col-md-9">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">
+                                                                <i class="fas fa-user-tag"></i>
+                                                            </span>
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 form-control-label">Email</label>
-                                                            <div class="input-group col-md-9">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">
-                                                                            <i class="fas fa-envelope"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors.email}" placeholder="Ingrese Email" v-model="user.email" autocomplete="off">
-                                                                <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 form-control-label">Contraseña</label>
-                                                            <div class="input-group col-md-9">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">
-                                                                            <i class="fas fa-key"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                <input type="password" class="form-control" :class="{'is-invalid' : errors.password, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password" autocomplete="off">
-                                                                <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 form-control-label" >Confirmar Contraseña</label>
-                                                            <div class="input-group col-md-9">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">
-                                                                            <i class="fas fa-key"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                <input type="password" v-on:blur="validatePass" class="form-control" :class="{'is-invalid' : errorPass, 'is-valid' : validPass }" name="password_confirmation" v-model="password_confirmation" placeholder="Confirmar Password">
-                                                                <span v-if="errorPass" class="invalid-feedback text-danger" role="alert" v-html="messagePass"></span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <button type="button" class="btn btn-primary btn-sm btn-block" @click="updateUser(user.id)"><b>Actualizar Perfil</b></button>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
-                                            <div>
-                                                <ul> 
-                                                    <li class="list-group-item">
-                                                        <!-- <b>Rol</b> <a href="#" class="float-right text-primary" v-text="rol.display_name" @click.prevent="showPermissionRol()"></a> -->
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 form-control-label">Rol de Usuario</label>
-                                                            <div class="col-md-9">
-                                                                <select class="form-control" v-model="role.name">
-                                                                    <option value="">Seleccione un Tipo de Rol</option>
-                                                                    <option v-for="role in roles" :key="role.id" :value="role.name">{{ role.display_name }}</option>
-                                                                </select>
-                                                                <span v-if="errors.name" class="text-danger" role="alert">
-                                                                    <small>
-                                                                        {{ errors.name[0] }}
-                                                                    </small>
+                                                        <input type="text" class="form-control text-capitalize" :class="{'is-invalid' : errors.name}" placeholder="Ingrese Nombre del Usuario" v-model="user.name">
+                                                        <span v-if="errors.name" class="invalid-feedback text-danger" role="alert" v-html="errors.name[0]"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Email</label>
+                                                    <div class="input-group col-md-9">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="fas fa-envelope"></i>
                                                                 </span>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <button type="button" class="btn btn-primary btn-sm btn-block" @click="updateRol()"><b>Actualizar Rol</b></button>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="custom-tabs-three-messages" role="tabpanel" aria-labelledby="custom-tabs-three-messages-tab">
-                                            <permissions-component
-                                                :permissions="permissions"
-                                                :menus="menus"
-                                                :menus_all="menus_all"
-                                                :sub_menus="sub_menus"
-                                                @update-permissions="permissions = $event"
-                                            ></permissions-component>
-                                        <div class="row">
-                                            <button class="btn btn-primary btn-sm btn-block" @click="updatePermissions(permissions)">Actualizar Permisos</button>
-                                        </div>
-                                        </div>
+                                                        <input type="email" class="form-control text-lowercase" :class="{'is-invalid' : errors.email}" placeholder="Ingrese Email" v-model="user.email" autocomplete="off">
+                                                        <span v-if="errors.email" class="invalid-feedback text-danger" role="alert" v-html="errors.email[0]"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label">Contraseña</label>
+                                                    <div class="input-group col-md-9">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="fas fa-key"></i>
+                                                                </span>
+                                                            </div>
+                                                        <input type="password" class="form-control" :class="{'is-invalid' : errors.password, 'is-valid' : validPass }" name="password" v-model="user.password" placeholder="Ingrese Password" autocomplete="off">
+                                                        <span v-if="errors.password" class="invalid-feedback text-danger" role="alert" v-html="errors.password[0]"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 form-control-label" >Confirmar Contraseña</label>
+                                                    <div class="input-group col-md-9">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <i class="fas fa-key"></i>
+                                                                </span>
+                                                            </div>
+                                                        <input type="password" v-on:blur="validatePass" class="form-control" :class="{'is-invalid' : errorPass, 'is-valid' : validPass }" name="password_confirmation" v-model="password_confirmation" placeholder="Confirmar Password">
+                                                        <span v-if="errorPass" class="invalid-feedback text-danger" role="alert" v-html="messagePass"></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
                                     </div>
                                 </div>
-                                <!-- /.card -->
+                                <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                                    <div>
+                                        <ul> 
+                                            <li class="list-group-item">
+                                                <!-- <b>Rol</b> <a href="#" class="float-right text-primary" v-text="rol.display_name" @click.prevent="showPermissionRol()"></a> -->
+                                                <div class="row form-group">
+                                                    <label class="col-md-3 form-control-label">Rol de Usuario</label>
+                                                    <div class="col-md-9">
+                                                        <select class="form-control" v-model="role.name" @change="roleFind(role.name)">
+                                                            <option value="">Seleccione un Tipo de Rol</option>
+                                                            <option v-for="role in roles" :key="role.id" :value="role.name">{{ role.display_name }}</option>
+                                                        </select>
+                                                        <span v-if="errors.name" class="text-danger" role="alert">
+                                                            <small>
+                                                                {{ errors.name[0] }}
+                                                            </small>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <label class="col-md-3 form-control-label">Descripción</label>
+                                                    <div class="col-md-9">
+                                                        <div class="callout callout-info">
+                                                            <h6><dt>{{ role.display_name }} | <span class="text-muted">{{ role.name }}</span></dt></h6>
+
+                                                            <p><dd>{{ role.description }}</dd></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-messages" role="tabpanel" aria-labelledby="custom-tabs-three-messages-tab">
+                                    <permissions-component
+                                        :permissions="permissions"
+                                        :menus="menus"
+                                        :menus_all="menus_all"
+                                        :sub_menus="sub_menus"
+                                        @update-permissions="permissions = $event"
+                                    ></permissions-component>
                                 </div>
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <button v-if="item_tab=='dataUser'" type="button" class="btn btn-primary btn-sm btn-block" @click="updateUser(user.id)"><b>Actualizar Perfil</b></button>
+                            <button v-if="item_tab=='roleUser'" type="button" class="btn btn-primary btn-sm btn-block" @click="updateRol()"><b>Actualizar Rol</b></button>
+                            <button v-if="item_tab=='permissionsUser'" class="btn btn-primary btn-sm btn-block" @click="updatePermissions(permissions)">Actualizar Permisos</button>
+                        </div>    
+                    <!-- /.card -->
                     </div>
-                    <!-- /.card-body -->
                 </div>
             </div>
         </div>
@@ -151,9 +153,9 @@ export default {
             title:'Editar Perfil de Usuario',
             pre_img:'',
             user_id: this.$route.params.usuario,
-            user: [],
+            item_tab:'dataUser',
             rol:'',
-            role: [],
+            role: {},
             roles: [],
             menus: null,
             menus_all: null,
@@ -199,6 +201,13 @@ export default {
     //     }
     // },
     methods:{
+        roleFind(roleName){
+            if(roleName){
+                this.role = {};
+                this.role = this.roles.find(role => role.name === roleName);
+                this.getRoles();
+            }
+        },
         getUser(){
             let url = `${this.url}${this.user_id}/edit`
             let me = this;
@@ -364,95 +373,10 @@ export default {
                 this.messagePass = "Password no concuerda";
             }
         },
-        // onInput(){
-        //     if(this.loaded == false){
-        //         this.loaded = true;
-        //     }else{
-        //         this.loaded = false;
-        //     }
-        // },
-        // getImage(e){
-        //     let file = e.target.files[0];
-        //     let fileSize = parseInt(e.target.files[0].size/1024);
-        //     let img = new Image();
-            
-        //     this.nameImg = file.name.toLowerCase();
-        //     this.errorsImg = [];
-        //     if(fileSize >= 100){
-        //         this.avatar = file;
-        //         this.preImage(file);
-        
-        //         setTimeout(() => {                    
-        //             let img_user =  $('#img_user').val(); 
-        //             img.onload = function(){
-        //                 setTimeout(() => {
-        //                         if(this.height.toFixed(0) >= 400 && this.width.toFixed(0) >= 400 
-        //                             && this.height.toFixed(0) <= 700 && this.width.toFixed(0) <= 700){
-        //                             $("#user_image").attr("src",img_user);
-        //                         }else{
-        //                             this.nameImg = 'Seleccionar Imagen';
-        //                             this.errorsImg.push('Formato de Imagen no permitido'); 
-        //                             $("#user_image").attr("src",'/images/avatars/default.jpg');
-        //                             toastr.error("ERROR - Formato de Imagen Errado...!");
-        //                         }
-        //                     }, 300)
-        //                 }
-        //                 img.src = URL.createObjectURL(file);
+        tabChange(data){
+            this.item_tab = data;
+        }
 
-        //         }, 300)
-        //     }else{
-        //         this.nameImg = 'Seleccionar Imagen';
-        //         this.errorsImg.push('Formato de Imagen no permitido'); 
-        //         $("#user_image").attr("src",'/images/avatars/default.jpg');
-        //         toastr.error("ERROR - Formato de Imagen Errado...!");
-        //     }   
-        // },
-        // preImage(file){
-        //     let reader = new FileReader();
-
-        //     reader.onload = e => {
-        //         this.pre_img = e.target.result;
-        //         $('#img_user').val(this.pre_img)
-        //         // this.img_profile = this.pre_img;
-        //     }
-        //     reader.readAsDataURL(file);
-
-        // },
-        // updateImg(){
-        //     let url = `/api/auth/usuarios/${this.user_id}/avatar`
-        //     let data = new FormData();
-
-        //     data.append('img', this.avatar);
-        //     data.append('name', this.user.name);
-
-        //     this.$Progress.start()
-        //     setTimeout(() => {
-        //         axios.post(url,data).then((response) =>{
-        //             console.log('aquauau' + data)
-        //             this.closeModal();
-        //             this.user.avatar = response.data.userAvatarUpdate.avatar;
-        //             toastr.info('La imagen fue actualizada.');
-        //         })
-        //         .catch(error => {
-        //             let errors = error.response.data.errors;
-        //             this.$Progress.fail();
-        //             if (error.request.status == 422) {
-        //                 this.errorsImg.push(errors.img[0])
-        //                 toastr.error("ERROR - En la validaciones.");
-        //                 $("#modal-profile-img").modal("show");
-        //             }
-        //         })
-        //     this.$Progress.finish();
-        //     }, 500);
-        // },
-        // closeModal(){
-        //     this.avatar = '';
-        //     this.errorsImg = [];
-        //     this.loaded = false;
-        //     this.nameImg = 'Seleccionar Imagen';
-        //     this.img_profile = '/images/avatars/default.jpg';
-        //     $("#user_image").attr("src",'/images/avatars/default.jpg');
-        // } 
     }
 }
 </script>

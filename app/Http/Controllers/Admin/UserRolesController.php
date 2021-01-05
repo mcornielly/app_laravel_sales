@@ -15,6 +15,8 @@ class UserRolesController extends Controller
             'name' => 'required',
         ]);
             
+        return $rules;
+        
         $user = User::find($request->id);
         $user->roles()->detach();
         $user->syncRoles($rules);

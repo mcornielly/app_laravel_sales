@@ -100,7 +100,7 @@ class SalesController extends Controller
      */
     public function store(Sale $sale, Request $request)
     {
-        $this->authorize('create', $sale);
+        $this->authorize('create', new Sale);
         
         $sale = new Sale;
         $sale->customer_id = $request->customer_id;
@@ -144,6 +144,8 @@ class SalesController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $this->authorize('view', $sale);
+
         $sale = Sale::with('user','customer')->findOrFail($id);
 
         $detail_sales = DetailSale::join('products','detail_sales.product_id','products.id')

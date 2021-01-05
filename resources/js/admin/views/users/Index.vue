@@ -6,7 +6,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ titleCard }} </h3>   
-                <router-link v-if="path == '/usuarios'" :to="{name: 'role-crear'}" class="btn btn-sm btn-success float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Usuario</router-link>
+                <router-link v-if="path == '/usuarios'" :to="{name: 'user-crear'}" class="btn btn-sm btn-success float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Usuario</router-link>
                 <router-link v-else to="/usuarios" @click="titleIndex" class="btn btn-sm btn-secondary float-right"><i class="fas fa-angle-double-left" aria-hidden="true">&nbsp;</i> Regresar</router-link>
             </div>
             <!-- /.card-header -->
@@ -20,7 +20,8 @@
             <div class="col-12" style="min-height: 100vh">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-bars">&nbsp;</i> {{ title }} </h3>                   <!-- <a href="#" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
+                        <h3 v-if="path == '/usuarios'" class="card-title text-primary"><i class="fas fa-users">&nbsp;</i> {{ title }} </h3>                   <!-- <a href="#" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
+                        <h3 v-else class="card-title text-primary"><i :class="icon_user">&nbsp;</i> {{ title }} </h3>                   <!-- <a href="#" data-toggle="modal" data-target="#modal-divisas" class="btn btn-sm btn-primary float-right"><i class="fa fa-plus" aria-hidden="true">&nbsp;</i> Nuevo Precio</a> -->
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -29,12 +30,20 @@
                                 <router-view 
                                     @title="title = $event" 
                                     @path="path = $event" 
+                                    @namePage="name_page = $event" 
+                                    @iconUser="icon_user = $event" 
                                     @errorFlash="error_flash = $event">
                                 </router-view>
                             </transition>
                         </template>
                     </div>
                     <!-- /.card-body -->
+                    <!-- card footer -->
+                    <transition name="fade" mode="out-in"> 
+                        <div v-if="$route.name=='user-show'" class="card-footer">
+                            <router-link :to="{name: 'user-edit'}" class="btn btn-primary btn-block"><b>Editar Usuario</b></router-link>
+                        </div>
+                    </transition>
                 </div>
                 <!-- /.card -->
             </div>
@@ -50,6 +59,8 @@ export default {
             titlePage:'Usuarios',
             routePage:'Usuarios',
             titleCard:'Usuarios',
+            icon_user:'fas fa-users',
+            name_page:'',
             error_flash:'',
             title:'',
             path: ''
@@ -62,6 +73,7 @@ export default {
     methods:{
         currentPage(){
             this.path = this.$route.path;
+            this.name_page = this.$route.name;
         },
         titleIndex(){
             this.title = 'Lista de Roles';

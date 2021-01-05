@@ -9,6 +9,7 @@ use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+
 class Role extends Model
 {
     use LaravelVueDatatableTrait, HasRoles;
@@ -46,9 +47,9 @@ class Role extends Model
         'name', 'display_name', 'description', 'guard_name'
     ];
 
-    public function permissions()
-    {
-        return $this->hasMany(Permission::class);
-    }
+    // public function permissions()
+    // {
+    //     return $this->hasMany(Permission::class);
+    // }
 
 }

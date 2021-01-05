@@ -28,8 +28,9 @@ class UserCreateRequest extends FormRequest
             'type_document' => 'required|string|min:1',
             'num_document' => 'required|numeric|unique:customers',
             'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:customers',
             'num_phone' => 'required',
-            'address' => 'required|min:6'
+            'address' => 'required|min:6',
         ];
     }
 

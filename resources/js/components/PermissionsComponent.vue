@@ -57,6 +57,7 @@
             <!-- /.col -->
         </div>
         <div v-for="menus_per in menus_all" :key="menus_per.id">
+            <div v-if="menus_per.name != 'Dashboard'">
             <div v-if="menus_per.hierarchy == 0" class="row">
                 <div class="col-12">
                     <div v-if="role_name == 'admin'">
@@ -196,6 +197,7 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
+            </div>
             </div>
         </div>
     </div>

@@ -1,66 +1,68 @@
 <template>
     <section>
-        <div class="container">
-            <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
-                <a v-show="editImg" style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto" data-toggle="modal" data-target="#modal-profile-img">
-                    <i class="fas fa-user-edit"></i>
-                </a>
-            <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
-            <p class="text-primary text-center text-capitalize" v-text="role.display_name"></p>
-        </div>
-        <!-- Modal Img Profile -->
-        <template>
-            <div v-show="loaded">
-                <div class="modal fade show" id="modal-profile-img" style="display: block; padding-right: 16px;" aria-modal="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Editar Imagen de Usuario</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-12" >
-                                        <div class="form-group">    
-                                            <div class="row justify-content-center h-100">
-                                                <figure v-show="img_profile">
-                                                    <img id="user_image" class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
-                                                    <input id="img_user" type="hidden" name="img_user" v-model="pre_img">
-                                                </figure>
-                                            </div>
-                                            <div class="input-group">
-                                                <div class="custom-file">
-                                                    <input accept="image/*" type="file" class="custom-file-input" :class="{'is-invalid' : errorsImg[0] }" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="1">
-                                                    <label class="custom-file-label" for="img_profile"><span class="text-capitalize"> {{ nameImg }}</span></label>
+        <div class="border border-primary rounded text-center pt-4 pb-4 mb-4">
+            <div class="container">
+                <img class="profile-user-img img-fluid img-circle" :src="user.avatar" alt="User profile picture">
+                    <a v-show="editImg" style="position: absolute; padding-top: 75px; margin-left: -15px;" class="btn btn-link text-primary" @click.prevent="onInput" id="edit-photo-profile" href="#" title="editar foto" data-toggle="modal" data-target="#modal-profile-img">
+                        <i class="fas fa-user-edit"></i>
+                    </a>
+                <h3 class="profile-username text-center text-capitalize" v-text="user.name"></h3>
+                <p class="text-primary text-center text-capitalize" v-text="role.display_name"></p>
+            </div>
+            <!-- Modal Img Profile -->
+            <template>
+                <div v-show="loaded">
+                    <div class="modal fade show" id="modal-profile-img" style="display: block; padding-right: 16px;" aria-modal="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Editar Imagen de Usuario</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-12" >
+                                            <div class="form-group">    
+                                                <div class="row justify-content-center h-100">
+                                                    <figure v-show="img_profile">
+                                                        <img id="user_image" class="profile-user-img img-fluid img-circle" :src="img_profile" width="200" height="200" alt="Foto del Usuario">
+                                                        <input id="img_user" type="hidden" name="img_user" v-model="pre_img">
+                                                    </figure>
                                                 </div>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="">
-                                                        <a href="#" @click.prevent="updateImg" data-dismiss="modal">Subir Imagen</a>
-                                                    </span>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input accept="image/*" type="file" class="custom-file-input" :class="{'is-invalid' : errorsImg[0] }" id="img_profile" ref="file" name="photo_profile" @change="getImage" size="1">
+                                                        <label class="custom-file-label" for="img_profile"><span class="text-capitalize"> {{ nameImg }}</span></label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="">
+                                                            <a href="#" @click.prevent="updateImg" data-dismiss="modal">Subir Imagen</a>
+                                                        </span>
+                                                    </div>
                                                 </div>
+                                                <span class="text-left text-danger" role="alert">
+                                                    <small>{{ errorsImg[0] }}</small>
+                                                </span>
                                             </div>
-                                            <span class="text-left text-danger" role="alert">
-                                                <small>{{ errorsImg[0] }}</small>
-                                            </span>
-                                        </div>
-                                        <div>
+                                            <div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="modal-footer text-right">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"  @click.prevent="closeModal()">Close</button>
+                                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                </div>
                             </div>
-                            <div class="modal-footer text-right">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"  @click.prevent="closeModal()">Close</button>
-                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                            </div>
+                        <!-- /.modal-content -->
                         </div>
-                    <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>                       
-            </div>
-        </template>  
+                        <!-- /.modal-dialog -->
+                    </div>                       
+                </div>
+            </template>
+        </div>  
     </section>
 </template>
 

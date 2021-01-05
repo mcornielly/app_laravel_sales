@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use Illuminate\Http\Request;
@@ -20,8 +21,10 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(User $user, Request $request)
     {
+        $this->authorize('view', $user);
+
         $length = $request->input('length');
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir', 'asc');
@@ -54,31 +57,12 @@ class UsersController extends Controller
      */
     public function create(Request $request)
     {
-
-        return $request->all();
-        // $rule = $request->validate([
-        //     'name' => 'required|min:4',
-        //     'type_document' => 'required|numeric|min:1',
-        //     'num_document' => 'required|numeric',
-        //     'email' => 'required|email',
-        //     'num_phone' => 'required|digits:10',
-        //     'address' => 'required|min:6'
-        // ]);
-
-        // if(request()->wantsJson())
-        // {
-        //     return $rule;
-        // }
-        // if ($this->expectsJson()) {
-        //     response()->json(['error', 422]);
-        // }
+        //
     }
 
     public function validate_data_user(UserCreateRequest $request)
     {
-        // if ($this->expectsJson()) {
-        //     response()->json(['error', 422]);
-        // }
+        //
     }
 
     /**
@@ -87,8 +71,41 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
+        $this->authorize('create', new User);
+        $role = [
+            'name' => $request->role
+        ];
+
+        //Creamos el usuario como cliente
+        $customer = Customer::create($request->all()); 
+
+        //Creamos el usuario
+        $user_new = new User();
+        $user_new->id = $customer->id;
+        $user_new->name = $request->name;
+        $user_new->email = $request->email;
+        $user_new->password = $request->password;
+        $user_new->save();
+        
+        //Se llama el Usuario creado, para asignar el rol.
+        $user = User::find($customer->id); 
+                
+        //Asignamos los roles
+        if($request->filled('role')){
+            $user->assignRole($request->role);
+        }
+        
+        //Asignamos los permisos
+        if($request->filled('permissions')){
+            $user->givePermissionTo($request->permissions);
+        }
+
+        if(request()->wantsJson())
+        {
+            return $user;
+        }
 
     }
 
@@ -100,6 +117,8 @@ class UsersController extends Controller
      */
     public function show(User $user, Request $request, $id)
     {
+        $this->authorize('view', $user);
+
         $user = User::find($id);
         $rol_id = $user->roles[0]->id;
         $rol = Role::find($rol_id);
@@ -110,7 +129,6 @@ class UsersController extends Controller
             if($rol->hasPermissionTo($permissions)){
                 $permissions_rol[] = $permissions->name;         
             }else{
-                // var_dump($permissions->name);
                 $permissions_user[] = $permissions;
             }
         };
@@ -134,28 +152,13 @@ class UsersController extends Controller
      */
     public function edit(User $user, Request $request, $id)
     {
-        $user = User::find($id);
-        // $rol_id = $user->roles[0]->id;
-        // $rol = Role::find($rol_id);
-        // $permissions_rol = [];
-        // $permissions_user = [];
+        $this->authorize('update', $user); 
 
-        // foreach($user->permissions as $permissions){
-        //     if($rol->hasPermissionTo($permissions)){
-        //         $permissions_rol[] = $permissions->name;         
-        //     }else{
-        //         $permissions_user[] = $permissions;
-        //     }
-        // };
+        $user = User::find($id);
         
         if(request()->wantsJson())
         {
             return $user;
-                // return [
-                //     'user' => $user,
-                //     'permissions_rol' => $permissions_rol,
-                //     'permissions_user' => $permissions_user,
-                // ];
             
         }
     }
@@ -167,9 +170,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(User $user, Request $request, $id)
     {
-       
+        $this->authorize('update', $user);
+
         $rules = $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|min:6|unique:users,id,' . $id,
